@@ -2,14 +2,21 @@ import { observable, computed, action } from 'mobx';
 
 class StubStore {
     @observable stubValue = 5;
+    @observable message = 'test';
 
     @computed get stubValueString() {
         return this.stubValue.toString();
     }
 
     @action
-    increaseStubValue = () => {
-        this.stubValue++;
+    increaseStubValue(increase = 1) {
+        this.stubValue = this.stubValue + increase;
+    }
+    @action
+    updateWithMessage(msg) {
+        console.log('stubStore: updateWithMessage called');
+        console.log(msg);
+        this.message = msg;
     }
 }
 

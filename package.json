@@ -17,6 +17,8 @@
     "expo": "^29.0.0",
     "mobx": "^5.1.0",
     "mobx-react": "^5.2.5",
+    "pubnub": "^4.21.5",
+    "pubnub-react": "^1.2.0",
     "react": "^16.4.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz",
     "react-navigation": "^2.12.1"
