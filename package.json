@@ -13,6 +13,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "expo": "^29.0.0",
     "mobx": "^5.1.0",
     "mobx-react": "^5.2.5",
