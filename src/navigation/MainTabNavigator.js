@@ -11,13 +11,13 @@ import InvestmentScreen from '../screens/InvestmentScreen';
 import DepositHistoryScreen from '../screens/DepositHistoryScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
-const ExchangeStackNavigator = createStackNavigator(
+const ExchangeStack = createStackNavigator(
   {
     Exchange: ExchangeScreen,
   }
 );
 
-ExchangeStackNavigator.navigationOptions = {
+ExchangeStack.navigationOptions = {
   tabBarLabel: '거래소',
   tabBarIcon: ({tintColor, focused}) => (
     <Icon.Ionicons 
@@ -28,13 +28,13 @@ ExchangeStackNavigator.navigationOptions = {
   ),
 };
 
-ExchangeStackNavigator.headerMode = 'none';
+ExchangeStack.headerMode = 'none';
 
-const InvestmentStackNavigator = createStackNavigator({
+const InvestmentStack = createStackNavigator({
     Investment: InvestmentScreen
 });
 
-InvestmentStackNavigator.navigationOptions = {
+InvestmentStack.navigationOptions = {
   header: {
     visible: false,
   },
@@ -48,29 +48,29 @@ InvestmentStackNavigator.navigationOptions = {
   )
 };
 
-const DepositHistoryStackNavigator = createStackNavigator({
+const DepositHistoryStack = createStackNavigator({
   DepositHistory: DepositHistoryScreen
 });
 
-DepositHistoryStackNavigator.navigationOptions = {
-header: {
-  visible: false,
-},
-tabBarLabel: '입출금',
-tabBarIcon: ({tintColor, focused}) => (
-  <Icon.Ionicons 
-    focused={focused}
-    name="ios-swap-outline" 
-    color={tintColor} 
-    size={24} />
-)
+DepositHistoryStack.navigationOptions = {
+  header: {
+    visible: false,
+  },
+  tabBarLabel: '입출금',
+  tabBarIcon: ({tintColor, focused}) => (
+    <Icon.Ionicons 
+      focused={focused}
+      name="ios-swap-outline" 
+      color={tintColor} 
+      size={24} />
+  )
 };
 
-const ProfileStackNavigator = createStackNavigator({
+const ProfileStack = createStackNavigator({
     Profile: ProfileScreen
 });
 
-ProfileStackNavigator.navigationOptions = {
+ProfileStack.navigationOptions = {
   tabBarLabel: '내정보',
   tabBarIcon: ({tintColor, focused}) => (
     <Icon.Ionicons 
@@ -83,10 +83,10 @@ ProfileStackNavigator.navigationOptions = {
 
 export default createBottomTabNavigator(
   {
-    Exchange: ExchangeStackNavigator,
-    Investment: InvestmentStackNavigator,
-    DepositHistory: DepositHistoryStackNavigator,
-    Profile: ProfileStackNavigator
+    Exchange: ExchangeStack,
+    Investment: InvestmentStack,
+    DepositHistory: DepositHistoryStack,
+    Profile: ProfileStack
   },
   {
     initialRouteName: 'Exchange',

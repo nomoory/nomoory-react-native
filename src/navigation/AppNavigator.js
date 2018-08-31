@@ -9,7 +9,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SigninScreen from '../screens/SigninScreen';
 import MainTabNavigator from './MainTabNavigator';
 
-const AuthStackNavigator = createStackNavigator(
+const AuthStack = createStackNavigator(
   { 
     Login: LoginScreen,
     Signin: SigninScreen
@@ -19,7 +19,10 @@ const AuthStackNavigator = createStackNavigator(
 export default createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
-    Auth: AuthStackNavigator,
+    Auth: AuthStack,
     Main: MainTabNavigator,
+  },
+  {
+    initialRouteName: 'AuthLoading'
   }
 );
