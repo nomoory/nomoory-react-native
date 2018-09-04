@@ -6,9 +6,28 @@ export default class Pubnub {
             subscribeKey: Expo.Constants.manifest.extra.DEV_PUBNUB_SUBSCRIBE_KEY
         });
         this.stores = stores;
-        this._makeUpdateStoreOnReceiveMessage();
+        this._addListenerToUpdateStoreOnReceiveMessage();
         this.pubnub.init(container);
         this.subscribeCounts = {}; // channelName: count
+    }
+
+    /* 
+     * 이곳에 등록되는 channel이 message를 받았을 때 수행되길 원하는 
+     * store의 action을 호출하면 됩니다.
+     */
+    _onReceiveMessage = (message) => {
+        // let { type, UUID } = this._getTypeAndUUIDFromMessage(message);
+        let type = message.channel;
+        // store에 업데이트 시 method에 UUID를 넘깁니다.
+        // store에서 UUID와 authStore를 비교하여 업데이트 할지 여부를 결정합니다.
+        switch(type) {
+            case 'Channel-2b7qcypeg':
+                this.stores.stubStore.updateWithMessage(message.message.text);
+                this.stores.stubStore.increaseStubValue(message.message.value);
+                break;
+            default:
+                break;
+        }
     }
 
     /* 
@@ -33,21 +52,6 @@ export default class Pubnub {
         }
     }
 
-    /* 
-     * 이곳에 등록되는 channel이 message를 받았을 때 수행되길 원하는 
-     * store의 action을 호출하면 됩니다.
-     */
-    _onReceiveMessage = (message) => {
-        switch(message.channel) {
-            case 'Channel-2b7qcypeg':
-                this.stores.stubStore.updateWithMessage(message.message.text);
-                this.stores.stubStore.increaseStubValue(message.message.value);
-                break;
-            default:
-                break;
-        }
-    }
-
     _addSubscribeCountOnChannel(channel) {
         if (!this.subscribeCounts[channel]) {
             this.subscribeCounts[channel] = 0;
@@ -56,7 +60,7 @@ export default class Pubnub {
         }
     }
 
-    _makeUpdateStoreOnReceiveMessage() {
+    _addListenerToUpdateStoreOnReceiveMessage() {
         this.pubnub.addListener({
             message: this._onReceiveMessage
         });
