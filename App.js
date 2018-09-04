@@ -6,6 +6,10 @@ import AppNavigator from './src/navigation/AppNavigator';
 import api from './src/utils/api';
 import Pubnub from './src/utils/Pubnub';
 
+import { StyleProvider } from 'native-base';
+import getTheme from './native-base-theme/components';
+import material from './native-base-theme/variables/material';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -13,15 +17,17 @@ export default class App extends React.Component {
   }
   render() {
     return (
-      <Provider {...stores}
-        api={api}
-        pubnub={this.pubnub}
-      >
-        <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            <AppNavigator />
-        </View>
-      </Provider>
+      <StyleProvider style={getTheme(material)}>
+        <Provider {...stores}
+          api={api}
+          pubnub={this.pubnub}
+        >
+          <View style={styles.container}>
+              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              <AppNavigator />
+          </View>
+        </Provider>
+      </StyleProvider>
     );
   }
 }
