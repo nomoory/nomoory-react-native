@@ -43,7 +43,7 @@ InvestmentStack.navigationOptions = {
     <Icon.Ionicons 
       focused={focused}
       name="ios-clipboard-outline" 
-      color={tintColor} 
+      color={tintColor}
       size={24} />
   )
 };
@@ -101,6 +101,17 @@ export default createBottomTabNavigator(
         shadowOpacity: 0.5,
         elevation: 5
       }
-    }
+    },
+
+    /* Default header */
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#f4511e',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
   }
 );
