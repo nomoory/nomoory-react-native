@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "coblic-app",
+    "description": "This project is really great.",
+    "slug": "coblic-app",
+    "privacy": "public",
+    "sdkVersion": "29.0.0",
+    "platforms": ["ios", "android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "extra": {
+      "DEV_API_ENDPOINT": "localhost:4010",
+      "DEV_PUBNUB_SUBSCRIBE_KEY": "sub-c-9ef3f2c2-a9ba-11e8-89c5-e2f2efdc17a6",
+      "REACT_APP_API_ENDPOINT": "",
+      "REACT_APP_API_VERSION": ""
+    }
+  }
+}
