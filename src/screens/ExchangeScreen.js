@@ -3,6 +3,8 @@ import { Text, StyleSheet, View, Button } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 
+import TradingPairBox from '../components/TradingPairBox';
+
 @inject('pubnub', 'stubStore')
 @observer
 export default class ExchangeScreen extends Component {
@@ -32,11 +34,10 @@ export default class ExchangeScreen extends Component {
   render() {
     return (
       <View>
-        <Text> exchange {this.props.stubStore.message} </Text>
+        <TradingPairBox></TradingPairBox>
       </View>
     )
   }
-
 }
 
 const styles = StyleSheet.create({
