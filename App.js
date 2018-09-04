@@ -5,6 +5,7 @@ import stores from './src/stores';
 import AppNavigator from './src/navigation/AppNavigator';
 import api from './src/utils/api';
 import Pubnub from './src/utils/Pubnub';
+import CommonModal from './src/components/CommonModal';
 
 import { StyleProvider } from 'native-base';
 import getTheme from './native-base-theme/components';
@@ -25,6 +26,7 @@ export default class App extends React.Component {
           <View style={styles.container}>
               {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
               <AppNavigator />
+              <CommonModal />
           </View>
         </Provider>
       </StyleProvider>

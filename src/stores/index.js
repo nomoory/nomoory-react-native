@@ -1,7 +1,8 @@
 import stubStore from './stubStore';
-
+import modalStore from './modalStore';
 const stores = {
-    stubStore
+    stubStore,
+    modalStore
 };
 
 export default stores;

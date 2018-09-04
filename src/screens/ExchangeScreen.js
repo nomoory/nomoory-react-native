@@ -6,6 +6,7 @@ import { observable } from 'mobx';
 @inject('pubnub', 'stubStore')
 @observer
 export default class ExchangeScreen extends Component {
+
   constructor(props) {
     super(props);
     this.pubnubChannel = "Channel-2b7qcypeg";
@@ -22,10 +23,11 @@ export default class ExchangeScreen extends Component {
   render() {
     return (
       <View>
-        <Text onPress={()=>{console.log('exchange')}}> exchange {this.props.stubStore.message} </Text>
+        <Text> exchange {this.props.stubStore.message} </Text>
       </View>
     )
   }
+
 }
 
 const styles = StyleSheet.create({
