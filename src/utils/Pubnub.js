@@ -16,9 +16,8 @@ export default class Pubnub {
      * store의 action을 호출하면 됩니다.
      */
     _onReceiveMessage = (message) => {
-        // let { type, UUID } = this._getTypeAndUUIDFromMessage(message);
-        let type = message.channel;
-        // store에 업데이트 시 method에 UUID를 넘깁니다.
+        let [ type, identification ] = this._getTypeAndUUIDFromMessage(message);
+        // store에 업데이트 시 method에 identification을 넘깁니다.
         // store에서 UUID와 authStore를 비교하여 업데이트 할지 여부를 결정합니다.
         switch(type) {
             case 'Channel-2b7qcypeg':
@@ -72,5 +71,12 @@ export default class Pubnub {
         } else {
             this.subscribeCounts[channel] -= 1;
         }
+    }
+
+    _getTypeAndUUIDFromMessage(message) {
+        return [ 
+            message.channel,
+            null
+        ];
     }
 }
