@@ -8,8 +8,8 @@ import Pubnub from './src/utils/Pubnub';
 import CommonModal from './src/components/CommonModal';
 
 import { StyleProvider } from 'native-base';
-import getTheme from './native-base-theme/components';
-import material from './native-base-theme/variables/material';
+import getTheme from './src/styles/native-base-theme/components';
+import material from './src/styles/native-base-theme/variables/material';
 
 export default class App extends React.Component {
   constructor(props) {
