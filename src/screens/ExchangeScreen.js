@@ -23,7 +23,7 @@ export default class ExchangeScreen extends Component {
     this.pubnubChannel = "Channel-2b7qcypeg";
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.pubnub.subscribe(this.pubnubChannel);
   }
 

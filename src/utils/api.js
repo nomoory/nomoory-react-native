@@ -43,6 +43,10 @@ class API {
   logout() {
     return this.post(`users/`, data);
   }
+
+  getTradingPairs() {
+    return this.get(`trading_pairs/`);
+  }
   
   /* Base REST API method */
   get(url) {

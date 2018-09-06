@@ -12,43 +12,40 @@ import {
     inject, 
     observer 
 } from 'mobx-react';
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import SearchBar from './SearchBar';
+import TradingPairTable from './TradingPairTable';
 
-// @inject('')
+@inject('tradingPairStore', 'pubnub')
 @observer
 class TradingPairBox extends Component {
-  @observable searchingText = '';
+  // @computed
+
   constructor(props) {
     super(props);
+    this.pubnubChannel = ""; // TODO trading pairs 보내는 채널 정보 받기
   }
-  @computed
-  searchingTradingPairs = () => {
-    let tradingPairs = this.props.tradingPairStore.tradingPairs;
-    this.filteredTradingPairsWithSearchingText = this._filterWithSearchingText(tradingPairs);
+
+  componentDidMount() {
+    this.props.pubnub.subscribe(this.pubnubChannel);
+    this.props.tradingPairStore.loadTradingPairs();
+  }
+  componentWillUnmount() {
+    this.props.pubnub.unsubscribe(this.pubnubChannel);
+  }
+  static getDerivedStateFromProps(props, state) {
+    console.log(props.tradingPairStore);
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar search={this.search}></SearchBar>
+        <SearchBar></SearchBar>
         <ScrollView style={styles.tradingPairTableContainer}>
-          <TradingPairTable
-            tradingPairs={this.searchingTradingPairs}></TradingPairTable>
+          <TradingPairTable></TradingPairTable>
         </ScrollView>
       </View>
     );
-  }
-
-  search = (text) => {
-    
-  }
-
-  _filterWithSearchingText = (tradingPairs) => {
-    let searchingText = this.searchingText;
-    // TODO filter tradingPairs with text
-    let filteredTradingPairs = null;
-    return filteredTradingPairs;
   }
 }
 

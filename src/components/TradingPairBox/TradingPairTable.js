@@ -18,7 +18,6 @@ import TradingPairTableBody from './TradingPairTableBody';
 // @inject('')
 @observer
 class TradingPairTable extends Component {
-  @observable variable = 4;
   constructor(props) {
     super(props);
   }

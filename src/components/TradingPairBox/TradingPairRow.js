@@ -16,7 +16,6 @@ import { observable } from 'mobx';
 // @inject('')
 @observer
 class TradingPairRow extends Component {
-  @observable variable = 4;
   constructor(props) {
     super(props);
   }
@@ -24,7 +23,9 @@ class TradingPairRow extends Component {
   render() {
     return (
       <View style={styles.container}>
-      
+        <Text>
+          { JSON.stringify(this.props.tradingPair) }
+        </Text>
       </View>
     );
   }

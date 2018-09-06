@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Button, 
   Text, 
-  View, 
+  View,
+  TextInput,
   TouchableOpacity 
 } from 'react-native';
 import { } from 'native-base';
@@ -13,10 +14,9 @@ import {
 } from 'mobx-react';
 import { observable } from 'mobx';
 
-// @inject('')
+@inject('tradingPairStore')
 @observer
-class TradingPairHeader extends Component {
-  @observable variable = 4;
+class SearchBar extends Component {
   constructor(props) {
     super(props);
   }
@@ -24,8 +24,17 @@ class TradingPairHeader extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={this.onSearch}
+          value={this.props.tradingPairStore.searchKeyword}
+        />
       </View>
     );
+  }
+
+  onSearch = (searchKeyword) => {
+    this.props.tradingPairStore.updateSearchKeyword(searchKeyword);
   }
 }
 
@@ -34,4 +43,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },    
 })
-export default TradingPairHeader;
+export default SearchBar;
