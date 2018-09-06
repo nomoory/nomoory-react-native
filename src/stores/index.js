@@ -1,10 +1,17 @@
-import stubStore from './stubStore';
+import authStore from './authStore';
+import commonStore from './commonStore';
 import modalStore from './modalStore';
+// import stubStore from './stubStore';
 import tradingPairStore from './tradingPairStore';
+import userStore from './userStore';
+
 const stores = {
-    stubStore,
+    authStore,
+    commonStore,
     modalStore,
-    tradingPairStore
+    // stubStore,
+    tradingPairStore,
+    userStore
 };
 
 export default stores;

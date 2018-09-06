@@ -29,19 +29,23 @@ class API {
   /* APIs */
 
   // User and Auth
-  register(data) {
-    return this.post(`users/`, data);
+  signup(userInfo) {
+    return this.post(`signup/`, userInfo);
   }
 
   login(id, password) {
-    return this.post(`users/`, {
+    return this.post(`users/login/`, {
       id,
       password
     });
   }
 
   logout() {
-    return this.post(`users/`, data);
+    return this.delete(`users/logout/`);
+  }
+
+  getUser(userUUID) {
+    return this.get(`users/${userUUID}/`);
   }
 
   getTradingPairs() {
@@ -52,7 +56,6 @@ class API {
   get(url) {
     return this.axios
       .get(url, this.getRequestConfig())
-      .then(res => res.data)
       .catch(this.handleUnauthorizedError);
   }
   put(url, body) {
@@ -72,7 +75,7 @@ class API {
   }
   getRequestConfig() {
     let requestConfig = null;
-    let accessToken = AsyncStorage.getItem('access_token');
+    let accessToken = commonStore.token;
     if (accessToken) {
       requestConfig = { headers: { 'Authorization': `Bearer ${accessToken}` }};
     }
