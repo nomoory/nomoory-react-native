@@ -4,17 +4,19 @@ import { AsyncStorage } from "react-native"
 
 let REACT_APP_API_ENDPOINT = null;
 let REACT_APP_API_VERSION = null;
+// if (__DEV__) {
+//   REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.DEV_API_ENDPOINT;
+// } else {
+// REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
+// REACT_APP_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_API_VERSION;
+// }  
+REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
+REACT_APP_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_API_VERSION;
 
-if (__DEV__) {
-  REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.DEV_API_ENDPOINT;
-} else {
-  REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
-  REACT_APP_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_API_VERSION;
-}
-
-const API_ROOT = __DEV__ ?
-    `http://${REACT_APP_API_ENDPOINT}/` :
-    `${REACT_APP_API_ENDPOINT}/api/${REACT_APP_API_VERSION}/`;
+const API_ROOT = 
+  // __DEV__ ?
+  //   `http://${REACT_APP_API_ENDPOINT}/` :
+    `${REACT_APP_API_ENDPOINT}api/${REACT_APP_API_VERSION}`;
 
 class API {
   constructor(baseURL = null) {
