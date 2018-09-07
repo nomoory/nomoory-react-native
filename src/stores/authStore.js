@@ -1,98 +1,105 @@
-import { observable, action } from 'mobx';
-import commonStore from './commonStore';
+import { observable, action, reaction } from 'mobx';
 import userStore from './userStore';
 import api from '../utils/api';
+import { AsyncStorage } from "react-native"
 
 class AuthStore {
     @observable inProgress = false;
-    @observable errors = undefined;
+    @observable errors = null;
+    
+    @observable email = '';
+    @observable password = '';
+    @observable passwordConfirmation = '';
+    @observable accessToken = null;
 
-    @observable value = {
-        email: '',
-        password: '',
-        passwordConfirmation: ''
-    };
+    constructor() {
+        /*
+         * 다음의 코드를 통해 access_token을 얻어오는 경우를 제외하고는
+         * store의 accessToken을 set함으로 AsyncStorage가 갱신됩니다.
+         */
+
+        const tokenReaction = reaction(
+            () => this.token,
+            token => {
+                if (token) {
+                    AsyncStorage.setItem('access_token', token);
+                } else {
+                    AsyncStorage.removeItem('access_token');
+                }
+            }
+        );
+    }
 
     @action setEmail(email) {
-        this.value.email = email;
+        this.email = email;
     }
 
     @action setPassword(password) {
-        this.value.password = password;
+        this.password = password;
     }
 
     @action setPasswordConfirmation(password) {
-        this.value.passwordConfirmation = password;
+        this.passwordConfirmation = password;
     }
 
-    @action reset() {
-        this.values = {
-            email: '',
-            password: '',
-            passwordConfirmation: ''
-        };
+    @action clearIdAndPassword() {
+        this.email = '';
+        this.password = '';
+        this.passwordConfirmation = '';
     }
 
     @action register() {
         this.inProgress = true;
-        this.errors = undefined;
+        this.errors = null;
 
         api.signup({
-            id: this.values.id,
-            password: this.values.password,
-            passwordConfirmation: this.values.passwordConfirmation
+            id: this.id,
+            password: this.password,
+            passwordConfirmation: this.passwordConfirmation
         })
-        .then(action((response) => {
-            let user = response.data;
-            commonStore.setCommon(user.access_token, user.uuid);
-            userStore.saveUser(user);
-            this.reset();
-        }))
-        .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
-            throw err;
-        }))
-        .then(action(() => {
-            this.inProgress = false;
-        }));
+        .then(this._storeTokenAndUserAndClearIdAndPassword)
+        .catch(this._handleAuthError)
+        .then(this.doneProgress);
     }
 
     @action login() {
         this.inProgress = true;
-        this.errors = undefined;
+        this.errors = null;
 
         api.login(this.values)
-        .then(action((response) => {
-            let user = response.data;
-            commonStore.setCommon(user.access_token, user.uuid);
-            userStore.saveUser(user);
-            this.reset();
-        }))
-        .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
-            throw err;
-        }))
-        .then(action(() => {
-            this.inProgress = false;
-        }));
+        .then(this._storeTokenAndUserAndClearIdAndPassword)
+        .catch(this._handleAuthError)
+        .then(this.doneProgress);
     }
-
     @action logout() {
-        this.inProgress = true;
-        this.errors = undefined;
+        this.errors = null;
+        this.accessToken = null;
         
         api.logout()
-        .then(action((response) => {
-            commonStore.setCommon(undefined, undefined);
-            userStore.forgetUser();
-        }))
-        .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
-            throw err;
-        }))
-        .then(action(() => {
-            this.inProgress = false;
-        }));
+        .catch(this._handleAuthError);
+    }
+    @action _storeTokenAndUserAndClearIdAndPassword(response) {
+        let user = response.data;
+        this.accessToken = user.access_token;
+        delete user.access_token;
+        userStore.saveUser(user);
+        this.clearIdAndPassword();
+    }
+    @action hasAccessToken() {
+        return this.accessToken ? true : false;
+    }
+    @action setToken(token) {
+        this.token = token;
+    }
+    @action destroyToken() {
+        this.setToken(null);
+    }
+    @action _handleAuthError(err) {
+        this.errors = err.response && err.response.body && err.response.body.errors;
+        throw err;
+    }
+    @action doneProgress() {
+        this.inProgress = false;
     }
 }
 
