@@ -9,7 +9,7 @@ import CommonModal from './src/components/CommonModal';
 
 import { StyleProvider } from 'native-base';
 import getTheme from './src/styles/native-base-theme/components';
-import material from './src/styles/native-base-theme/variables/material';
+import commonColor from './src/styles/native-base-theme/variables/commonColor';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class App extends React.Component {
   }
   render() {
     return (
-      <StyleProvider style={getTheme(material)}>
+      <StyleProvider style={getTheme(commonColor)}>
         <Provider {...stores}
           api={api}
           pubnub={this.pubnub}
