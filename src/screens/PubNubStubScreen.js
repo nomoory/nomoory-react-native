@@ -5,12 +5,12 @@ import { observable } from 'mobx';
 
 import TradingPairBox from '../components/TradingPairBox';
 
-@inject('pubnub')
+@inject('pubnub', 'stubStore')
 @observer
 export default class ExchangeScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: '거래소',
+      title: 'header name',
       // headerLeft: (
       //   <Button onPress={ () => navigation.goback() }
       //   title={ "cancelButtonName" }></Button>
@@ -20,10 +20,20 @@ export default class ExchangeScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.pubnubChannel = "Channel-2b7qcypeg";
   }
+
+  componentDidMount() {
+    this.props.pubnub.subscribe(this.pubnubChannel);
+  }
+
+  componentWillUnmount() {
+    this.props.pubnub.unsubscribe(this.pubnubChannel);
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <TradingPairBox></TradingPairBox>
       </View>
     )
@@ -31,7 +41,5 @@ export default class ExchangeScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1
-    }
-});
+    
+})
