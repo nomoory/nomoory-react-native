@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { 
   StyleSheet,
-  Button, 
-  Text, 
   View,
-  TextInput,
-  TouchableOpacity 
 } from 'react-native';
-import { } from 'native-base';
+import { 
+  Input, 
+  Item, 
+  Label
+} from 'native-base';
 import { 
     inject, 
     observer 
@@ -23,23 +23,23 @@ class SearchBar extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={this.onSearch}
-          value={this.props.tradingPairStore.searchKeyword}
-        />
+      <View style={this.props.style || styles.container}>
+        <Item floatingLabel last>
+          <Label>코인명</Label>
+          <Input onChangeText={this.onChangeSearchBar}/>
+        </Item>
       </View>
     );
   }
 
-  onSearch = (searchKeyword) => {
-    this.props.tradingPairStore.updateSearchKeyword(searchKeyword);
+  onChangeSearchBar = (searchKeyword) => {
+    this.props.tradingPairStore.setSearchKeyword(searchKeyword);
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    height: 50,
     backgroundColor: 'white'
   },    
 })

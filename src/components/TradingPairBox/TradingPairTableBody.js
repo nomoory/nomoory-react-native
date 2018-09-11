@@ -24,13 +24,13 @@ class TradingPairTableBody extends Component {
   }
 
   render() {
-    console.log(this.props.tradingPairStore);
+    const tradingPairs = this.props.tradingPairStore.tradingPairs;
     return (
       <View style={styles.container}>
         {
-          // this.props.tradingPairStore.tradingPairs.foreah((tradingPair) =>
-          //   <TradingPairRow tradingPair={tradingPair}></TradingPairRow>
-          // )
+          tradingPairs.map((tradingPair, idx) => 
+            <TradingPairRow key={idx} tradingPair={tradingPair}></TradingPairRow>
+          )
         }
       </View>
     );
@@ -39,6 +39,7 @@ class TradingPairTableBody extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: 'white'
   },    
 })

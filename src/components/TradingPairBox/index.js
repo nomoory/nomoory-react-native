@@ -14,6 +14,7 @@ import {
 } from 'mobx-react';
 import { observable, computed } from 'mobx';
 import SearchBar from './SearchBar';
+import TradingPairTab from './TradingPairTab';
 import TradingPairTable from './TradingPairTable';
 
 @inject('tradingPairStore', 'pubnub')
@@ -27,34 +28,22 @@ class TradingPairBox extends Component {
   }
 
   componentDidMount() {
-    this.props.pubnub.subscribe(this.pubnubChannel);
-    this.props.tradingPairStore.loadTradingPairs();
+    // this.props.pubnub.subscribe(this.pubnubChannel);
+    // this.props.tradingPairStore.loadTradingPairs();
   }
   componentWillUnmount() {
-    this.props.pubnub.unsubscribe(this.pubnubChannel);
-  }
-  static getDerivedStateFromProps(props, state) {
-    console.log(props.tradingPairStore);
+    // this.props.pubnub.unsubscribe(this.pubnubChannel);
   }
 
   render() {
     return (
       <View style={styles.container}>
         <SearchBar></SearchBar>
-        <ScrollView style={styles.tradingPairTableContainer}>
+        <TradingPairTab></TradingPairTab>
+        <View style={styles.tradingPairTableContainer}>
           <TradingPairTable></TradingPairTable>
-        </ScrollView>
+        </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white'
-  },
-  tradingPairTableContainer: {
-
-  }
-})
-export default TradingPairBox;

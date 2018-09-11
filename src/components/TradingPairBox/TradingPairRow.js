@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { 
   StyleSheet,
-  Button, 
   Text, 
-  View, 
-  TouchableOpacity 
+  View
 } from 'react-native';
 import { } from 'native-base';
 import { 
@@ -21,10 +19,11 @@ class TradingPairRow extends Component {
   }
 
   render() {
+    let openPrice = this.props.tradingPair.open_price;
     return (
       <View style={styles.container}>
         <Text>
-          { JSON.stringify(this.props.tradingPair) }
+          { openPrice }
         </Text>
       </View>
     );
