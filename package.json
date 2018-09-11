@@ -15,6 +15,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "expo": "^29.0.0",
+    "hangul-js": "^0.2.5",
     "mobx": "^5.1.0",
     "mobx-react": "^5.2.5",
     "native-base": "^2.8.0",

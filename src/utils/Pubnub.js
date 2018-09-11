@@ -15,16 +15,17 @@ export default class Pubnub {
      * 이곳에 등록되는 channel이 message를 받았을 때 수행되길 원하는 
      * store의 action을 호출하면 됩니다.
      */
-    _onReceiveMessage = (message) => {
-        // let { type, UUID } = this._getTypeAndUUIDFromMessage(message);
-        let type = message.channel;
-        // store에 업데이트 시 method에 UUID를 넘깁니다.
+    _onReceiveMessage = (msg) => {
+        let [ type, identifier ] = this._retrieveTypeAndIdentifierFromMessage(msg);
+        // store에 업데이트 시 method에 identification을 넘깁니다.
         // store에서 UUID와 authStore를 비교하여 업데이트 할지 여부를 결정합니다.
         switch(type) {
             case 'Channel-2b7qcypeg':
-                this.stores.stubStore.updateWithMessage(message.message.text);
-                this.stores.stubStore.increaseStubValue(message.message.value);
+                this.stores.stubStore.updateWithMessage(msg.message.text);
+                this.stores.stubStore.increaseStubValue(msg.message.value);
                 break;
+            case 'TICKER':
+                this.stores.tradingPairStore.updateTickerInTradingPair(msg.message)
             default:
                 break;
         }
@@ -72,5 +73,12 @@ export default class Pubnub {
         } else {
             this.subscribeCounts[channel] -= 1;
         }
+    }
+
+    _retrieveTypeAndIdentifierFromMessage(message) {
+        return [ 
+            message.channel,
+            null
+        ];
     }
 }
