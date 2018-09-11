@@ -11,20 +11,36 @@ import {
 } from 'mobx-react';
 import { observable } from 'mobx';
 
-// @inject('')
+@inject('tradingPairStore')
 @observer
 class TradingPairRow extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
-    let openPrice = this.props.tradingPair.open_price;
+    const tradingPairStore = this.props.tradingPairStore;
+    const tradingPair = this.props.tradingPair;
+    const tokenNameForSelectedLanguage = tradingPairStore.languageForTokenName === 'ko' ?
+      tradingPair['quote_korean_name'] :
+      tradingPair['quote_english_name'];
+
     return (
       <View style={styles.container}>
-        <Text>
-          { openPrice }
-        </Text>
+        <View style={ this.props.columStyles[0] }>
+          <Text>
+            { tokenNameForSelectedLanguage + ' ' + tradingPair['name'] }
+          </Text>
+        </View>
+        {
+          tradingPairStore.sorts.map((sort, index) => ( 
+            this.props.columStyles[index + 1] ?
+            <View style={ this.props.columStyles[index + 1] }>
+              <Text>{ tradingPair[sort.name] }</Text>
+            </View> 
+            :
+            null
+          ))
+        }
       </View>
     );
   }
@@ -32,7 +48,9 @@ class TradingPairRow extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white'
-  },    
+    backgroundColor: 'white',
+    height: 30,
+    flexDirection: 'row'
+  }
 })
 export default TradingPairRow;

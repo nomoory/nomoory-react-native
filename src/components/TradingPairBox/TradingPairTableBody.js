@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Button, 
   Text, 
-  View, 
+  ScrollView, 
   TouchableOpacity 
 } from 'react-native';
 import { } from 'native-base';
@@ -26,13 +26,17 @@ class TradingPairTableBody extends Component {
   render() {
     const tradingPairs = this.props.tradingPairStore.tradingPairs;
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {
           tradingPairs.map((tradingPair, idx) => 
-            <TradingPairRow key={idx} tradingPair={tradingPair}></TradingPairRow>
+            <TradingPairRow 
+              key={idx} 
+              tradingPair={tradingPair} 
+              columStyles={this.props.columStyles} 
+            ></TradingPairRow>
           )
         }
-      </View>
+      </ScrollView>
     );
   }
 }

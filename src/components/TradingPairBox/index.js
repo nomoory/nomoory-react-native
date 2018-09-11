@@ -13,7 +13,7 @@ import {
     observer 
 } from 'mobx-react';
 import { observable, computed } from 'mobx';
-import SearchBar from './SearchBar';
+import TradingPairSearchBar from './TradingPairSearchBar';
 import TradingPairTab from './TradingPairTab';
 import TradingPairTable from './TradingPairTable';
 
@@ -38,7 +38,7 @@ class TradingPairBox extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar></SearchBar>
+        <TradingPairSearchBar></TradingPairSearchBar>
         <TradingPairTab></TradingPairTab>
         <View style={styles.tradingPairTableContainer}>
           <TradingPairTable></TradingPairTable>
@@ -47,3 +47,14 @@ class TradingPairBox extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  tradingPairTableContainer: {
+    flex: 1
+  }
+});
+
+export default TradingPairBox;

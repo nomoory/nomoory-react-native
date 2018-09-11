@@ -12,21 +12,20 @@ import {
     inject, 
     observer 
 } from 'mobx-react';
-import { observable } from 'mobx';
 
 @inject('tradingPairStore')
 @observer
-class SearchBar extends Component {
+class TradingPareSearchBar extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-      <View style={this.props.style || styles.container}>
+      <View style={ this.props.style || styles.container }>
         <Item floatingLabel last>
-          <Label>코인명</Label>
-          <Input onChangeText={this.onChangeSearchBar}/>
+          <Label>코인명/심볼검색</Label>
+          <Input onChangeText={ this.onChangeSearchBar }/>
         </Item>
       </View>
     );
@@ -43,4 +42,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },    
 })
-export default SearchBar;
+export default TradingPareSearchBar;
