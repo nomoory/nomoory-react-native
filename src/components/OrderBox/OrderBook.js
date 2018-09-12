@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { 
   StyleSheet,
-  View,
+  ScrollView,
+  View
 } from 'react-native';
-import { } from 'native-base';
+import { Text } from 'native-base';
 import { 
     inject, 
     observer 
 } from 'mobx-react';
 import { observable, computed } from 'mobx';
-import OrderBook from './OrderBook';
-import OrderForm from './OrderForm';
+import OrderRow from './OrderRow';
 
 // @inject('tradingPairStore')
 @observer
-class OrderBox extends Component {
+class OrderBook extends Component {
   // @computed
 
   constructor(props) {
@@ -31,9 +31,10 @@ class OrderBox extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <OrderBook></OrderBook>
-        <OrderForm></OrderForm>
+      <View style={ styles.container }>
+        <ScrollView>
+          sdf
+        </ScrollView>
       </View>
     );
   }
@@ -42,8 +43,7 @@ class OrderBox extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
   },
 });
 
-export default OrderBox;
+export default OrderBook;

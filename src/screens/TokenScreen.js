@@ -4,12 +4,15 @@ import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import OrderBox from '../components/OrderBox';
 
-@inject('pubnub')
+@inject('tradingPairStore')
 @observer
 export default class InvestmentScreen extends Component {
   static navigationOptions = ({ navigation }) => {
+    const tokenName = navigation.getParam('tokenName', '토큰');
+    const tradingPairName = navigation.getParam('tradingPairName', '');
     return {
-      title: '투자내역',
+      title: `${tokenName} ${tradingPairName}`,
+      tabBarVisible: false,
     };
   };
 
@@ -33,17 +36,11 @@ export default class InvestmentScreen extends Component {
           <Tab heading={ <TabHeading><Text>주문</Text></TabHeading>}>
             <OrderBox></OrderBox>
           </Tab>
-          <Tab heading={ <TabHeading><Text>호가</Text></TabHeading>}>
-            <View><Text>호가</Text></View>
-          </Tab>
           <Tab heading={ <TabHeading><Text>차트</Text></TabHeading>}>
             <View><Text>차트</Text></View>
           </Tab>
-          <Tab heading={ <TabHeading><Text>시세</Text></TabHeading>}>
-            <View><Text>시세</Text></View>
-          </Tab>
-          <Tab heading={ <TabHeading><Text>정보</Text></TabHeading>}>
-            <View><Text>정보</Text></View>
+          <Tab heading={ <TabHeading><Text>미체결</Text></TabHeading>}>
+            <View><Text>미체결</Text></View>
           </Tab>
         </Tabs>
       </Container>
@@ -52,7 +49,7 @@ export default class InvestmentScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1
-    }
+  container: {
+    flex: 1
+  }
 })
