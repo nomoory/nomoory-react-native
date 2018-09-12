@@ -19,12 +19,13 @@ export default class App extends React.Component {
   render() {
     return (
       <StyleProvider style={getTheme(commonColor)}>
-        <Provider {...stores}
+        <Provider 
+          {...stores}
           api={api}
           pubnub={this.pubnub}
         >
           <View style={styles.container}>
-              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              { Platform.OS === 'ios' && <StatusBar barStyle="default" /> }
               <AppNavigator />
               <CommonModal />
           </View>
