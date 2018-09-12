@@ -25,7 +25,7 @@ class TradingPairRow extends Component {
       tradingPair['quote_english_name'];
 
     return (
-      <View style={styles.container}>
+      <View style={ styles.container }>
         <View style={ this.props.columStyles[0] }>
           <Text>
             { tokenNameForSelectedLanguage + ' ' + tradingPair['name'] }
@@ -34,7 +34,7 @@ class TradingPairRow extends Component {
         {
           tradingPairStore.sorts.map((sort, index) => ( 
             this.props.columStyles[index + 1] ?
-            <View style={ this.props.columStyles[index + 1] }>
+            <View key={ sort.name } style={ this.props.columStyles[index + 1] }>
               <Text>{ tradingPair[sort.name] }</Text>
             </View> 
             :

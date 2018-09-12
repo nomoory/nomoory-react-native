@@ -19,8 +19,8 @@ class API {
 
   /* APIs */
   // User and Auth
-  signup(userInfo) {
-    return this.post(`signup/`, userInfo);
+  signup(payload) {
+    return this.post(`signup/`, payload);
   }
 
   login(id, password) {
@@ -43,6 +43,9 @@ class API {
     return this.get(`trading_pairs/`);
   }
   
+  registerOrder(payload) {
+    return this.post(`orders/`, payload);
+  }
   /* Base REST API method */
   get(url) {
     return this.axios
@@ -77,7 +80,7 @@ class API {
     if (error && error.response && error.response.status === 401) {
       authStore.logout();
     }
-    return error;
+    throw error;
   }
 }
 
