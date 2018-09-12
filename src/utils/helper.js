@@ -1,4 +1,4 @@
-import { Decimal } from './decimal.mjs';
+import { Decimal } from './decimal.js';
 
 const unitPriceTable = {
     "BTC": Decimal(0.00000001),

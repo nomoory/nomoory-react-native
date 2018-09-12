@@ -63,9 +63,7 @@ class TradingPairStore {
         tradingPairs = this._tab(tradingPairs);
         tradingPairs = this._filter(tradingPairs);
         tradingPairs = this._search(this.searchKeyword, tradingPairs);
-        console.log(tradingPairs);
         tradingPairs = this._sort(tradingPairs);
-        console.log(tradingPairs);
         return tradingPairs;
     }
     @action loadTradingPairs() {
@@ -89,8 +87,8 @@ class TradingPairStore {
                 this.inProgress = false;
             }));
     }
-    @action setSelecetedTradingPairByTradingPairName(tradingPairKeyName) {
-        this.selecetedTradingPair = this.getTradingPair(tradingPairKeyName);
+    @action setSelecetedTradingPairByTradingPairName(tradingPairName) {
+        this.selecetedTradingPair = this.getTradingPair(tradingPairName);
     }
     @action setSearchKeyword(keyword = '') {
         this.searchKeyword = keyword;
