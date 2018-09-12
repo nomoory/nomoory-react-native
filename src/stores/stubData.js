@@ -70,6 +70,41 @@ export default {
             "acc_trade_volume_24h": 35000
         }
     ],
+    stubAccounts: [
+        {
+            "uuid": "344268a4-5fff-4454-9e41-d2f1ff1aa09b",
+            "asset_symbol": "BTC",
+            "asset_english_name": "Bitcoin",
+            "asset_korean_name": "비트코인",
+            "balance": "99999981240.00000000000000000000",
+            "pending_order": "0.00000000000000000000",
+            "pending_withdrawal": "0.00000000000000000000",
+            "avg_fiat_buy_price": "0.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        },
+        {
+            "uuid": "2965b1cc-4c59-43cb-9bbd-9d4726a40974",
+            "asset_symbol": "KRW",
+            "asset_english_name": "Korean Won",
+            "asset_korean_name": "원화",
+            "balance": "100000374824.80000000000000000000",
+            "pending_order": "0.00000000000000000000",
+            "pending_withdrawal": "0.00000000000000000000",
+            "avg_fiat_buy_price": "0.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        },
+        {
+            "uuid": "76a00c6f-8593-42d9-a2f5-3784454ec557",
+            "asset_symbol": "ETH",
+            "asset_english_name": "Ethereum",
+            "asset_korean_name": "이더리움",
+            "balance": "100000000000.00000000000000000000",
+            "pending_order": "0.00000000000000000000",
+            "pending_withdrawal": "0.00000000000000000000",
+            "avg_fiat_buy_price": "0.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        }
+    ],
     stubOrders: [
         {
             "uuid": "5f65fab0-336d-44cd-bf06-55a207aa4a43",
