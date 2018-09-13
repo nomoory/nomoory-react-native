@@ -4,21 +4,26 @@ class ModalStore {
     @observable isModalVisible = false;
     @observable title = 'title';
     @observable content = 'content';
-    @observable cancelButtonName = 'cancel';
+    @observable confirmButtonName = '확인';
+    @observable afterClose = () => {};
 
     @action
-    openModal(title = null, content = null, cancelButtonName = 'cancel') {
+    openModal({title, content, confirmButtonName, afterClose}) {
         this.isModalVisible = true;
-        this.title = title;
-        this.content = content;
-        this.cancelButtonName = cancelButtonName;
+        this.title = title || '';
+        this.content = content || '';
+        this.afterClose = afterClose || (() => {});
+        
+        this.confirmButtonName = confirmButtonName || '확인';
+
     }
     @action
     closeModal() {
         this.isModalVisible = false;
-        this.title = null;
-        this.content = null;
-        this.cancelButtonName = 'cancel';
+        this.title = '';
+        this.content = '';
+        this.afterClose = (() => {});
+        this.confirmButtonName = '확인';
     }
 }
 
