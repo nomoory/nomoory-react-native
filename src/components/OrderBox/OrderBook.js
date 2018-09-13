@@ -12,9 +12,9 @@ import {
 import { observable, computed } from 'mobx';
 import OrderRow from './OrderRow';
 
-// @inject('tradingPairStore')
+@inject('orderbookStore')
 @observer
-class OrderBook extends Component {
+class Orderbook extends Component {
   // @computed
 
   constructor(props) {
@@ -30,20 +30,35 @@ class OrderBook extends Component {
   }
 
   render() {
+    const { sellOrders, buyOrders } = this.props.orderbookStore;
+
     return (
       <View style={ styles.container }>
-        <ScrollView>
-          sdf
+        <ScrollView style={ styles.scrollContainer }>
+          { 
+            sellOrders.map((order, index) => 
+              <OrderRow key={ 'sell_' + index } side={'SELL'} order={order}></OrderRow>
+            )
+          }
+          { 
+            buyOrders.map((order, index) => 
+              <OrderRow key={ 'buy_' + index } side={'BUY'} order={order}></OrderRow>
+            )
+          }
         </ScrollView>
       </View>
     );
   }
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  styleContainer: {
+    flex: 1
+  },
 });
 
-export default OrderBook;
+export default Orderbook;

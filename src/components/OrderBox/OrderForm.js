@@ -8,16 +8,23 @@ import {
     inject, 
     observer 
 } from 'mobx-react';
-import { observable, computed } from 'mobx';
+import { observable, computed, reaction } from 'mobx';
 
 @inject('tradingPairStore', 'orderStore')
 @observer
 class OrderForm extends Component {
-  // @computed
 
   constructor(props) {
     super(props);
     // this.pubnubChannel = "";
+
+    const inProgressReaction = reaction(
+      () => this.props.orderStore.inProgress,
+      (inProgress) => {
+        // inProgress 상태에 따라 Spinner를 보여줌
+      }
+    )
+
   }
 
   componentDidMount() {
@@ -28,63 +35,84 @@ class OrderForm extends Component {
   }
 
   render() {
-    const order = this.props.orderStore.order;
-    console.log(order);
+    const { tradingPairStore, orderStore } = this.props;
+    const { order, fee, amount} = orderStore;
+    const { 
+      base_symbol,
+      quote_symbol,
+    } = tradingPairStore.selectedTradingPair;
+    const isSideBuy = order.side === 'BUY';
+
     return (
       <Container style={ styles.container }>
         <View style={ styles.buttons }>
           <Button style={ styles.button } onPress={ this._onPressBuy }>
-            <Text style={ this._isSideBuy() ? styles.selected : styles.unselected }
+            <Text style={ isSideBuy ? styles.selected : styles.unselected }
             >매수</Text>
           </Button>
           <Button style={ styles.button } onPress={ this._onPressSell }>
-            <Text style={ this._isSideBuy() ? styles.unselected : styles.selected }
+            <Text style={ isSideBuy ? styles.unselected : styles.selected }
             >매도</Text>
           </Button>
         </View>
         <View style={ styles.available }>
           <Text>거래 가능</Text> 
-          <Text>14,400 KRW</Text>
+          <Text>14,400 { quote_symbol }</Text>
         </View>
         <View style={ styles.price }>
-          <Text>가격</Text> 
+          <Text>{ `가격 (${base_symbol})` }</Text> 
           <Item underline>
-            <Input value={ `${order.price}` } />
+            <Input 
+              onChangeText={ this.onChangePrice }
+              value={ `${order.price}` } 
+              keyboardType={ 'numeric' }
+            />
           </Item>
         </View>
         <View style={ styles.volume }>
-          <Text>수량</Text> 
+          <Text>{ `수량 (${quote_symbol})` }</Text> 
           <Item underline>
-            <Input value={ `${order.volume}` } />
+            <Input 
+              onChangeText={ this.onChangeVolume }
+              placeholder={`최소 ${0.01}`} 
+              keyboardType={ 'numeric' }   
+              value={ `${order.volume}` }
+            />
           </Item>
-        </View>        
+        </View>  
         <View style={ styles.limit }>
-          <Text>최소주문금액</Text> 
-          <Text>{ order.volumn }</Text>
-        </View>        
+          <Text>{ (isSideBuy ? '구매' : '판매') + ' 금액' }</Text> 
+          <Text>{ amount + ' ' + base_symbol }</Text>
+        </View>
         <View style={ styles.fee }>
           <Text>수수료(부가세 포함)</Text> 
-          <Text>{ order.fee }</Text>
+          <Text>{ fee + '%' }</Text>
         </View>
-        <Text style={  this._isSideBuy ? styles.selected : styles.unselected }
-        >매수</Text>
+        <Button onPress={ this._onPressOrder }>
+          <Text>{ isSideBuy ? '구매' : '판매' }</Text>
+        </Button>
       </Container>
-
     );
   }
 
   _onPressBuy = (e) => {
     this.props.orderStore.setSide('BUY');
-
   }
   _onPressSell = (e) => {
     this.props.orderStore.setSide('SELL');
   }
-  _isSideBuy = () => {
-    return this.props.orderStore.side === 'BUY';
+  _onPressOrder = (e) => {
+    this.props.orderStore.registerOrder();
   }
+  _onChangePrice = (text) => {
+    console.log(text);
 
-_
+    this.props.orderStore.setPrice(parseFloat(text));
+  }
+  _onChangeVolume = (text) => {
+    console.log(text);
+    this.props.orderStore.setVolume(parseFloat(text));
+  }
 }
 
 const styles = StyleSheet.create({

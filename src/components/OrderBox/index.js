@@ -9,7 +9,7 @@ import {
     observer 
 } from 'mobx-react';
 import { observable, computed } from 'mobx';
-import OrderBook from './OrderBook';
+import Orderbook from './Orderbook';
 import OrderForm from './OrderForm';
 
 // @inject('tradingPairStore')
@@ -32,7 +32,7 @@ class OrderBox extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <OrderBook></OrderBook>
+        <Orderbook></Orderbook>
         <OrderForm></OrderForm>
       </View>
     );

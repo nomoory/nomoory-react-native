@@ -43,9 +43,16 @@ class API {
     return this.get(`trading_pairs/`);
   }
   
+  // Order
   registerOrder(payload) {
     return this.post(`orders/`, payload);
   }
+
+  // Orderbook
+  getOrderbook(tradingPairName) {
+    return this.get(`trading_pairs/orderbook/?trading_pair_name=${tradingPairName}`);
+  }
+
   /* Base REST API method */
   get(url) {
     return this.axios

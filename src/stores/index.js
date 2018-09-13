@@ -2,7 +2,7 @@ import authStore from './authStore';
 import commonStore from './commonStore';
 import modalStore from './modalStore';
 import orderStore from './orderStore';
-// import OrderBookStore from './OrderBookStore';
+import orderbookStore from './orderbookStore';
 import tradingPairStore from './tradingPairStore';
 import userStore from './userStore';
 
@@ -11,6 +11,7 @@ const stores = {
     commonStore,
     modalStore,
     orderStore,
+    orderbookStore,
     tradingPairStore,
     userStore
 };

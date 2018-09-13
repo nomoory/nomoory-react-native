@@ -13,7 +13,7 @@ class TradingPairStore {
     @observable inProgress = false;
     @observable errors = null;
 
-    @observable selecetedTradingPair = null; // 거래소 스크린상에서 선택된 trading pair
+    @observable selectedTradingPairName = null; // 거래소 스크린상에서 선택된 trading pair
 
     @observable searchKeyword = '';
     @observable filters = {
@@ -26,8 +26,10 @@ class TradingPairStore {
         { name: 'acc_trade_value_24h', displayName: '거래대금', direction: null }, // 24시간 누적 거래대금
     ];
     @observable selectedTradingPairTab = 'KRW';
-
     @observable tradingPairsRegistry = observable.map();
+    @computed get selectedTradingPair() {
+        return this.getTradingPair(this.selectedTradingPairName);
+    }
 
     @computed get displayNameOfLanguageForTokenName() {
         if(this.languageForTokenName === 'ko') return '한글명';
@@ -36,12 +38,6 @@ class TradingPairStore {
     }
 
     constructor() {
-        const reactionTab = reaction(
-            () => this.searchKeyword,
-            (searchKeyword) => {
-                console.log(searchKeyword+'f');
-            }
-        );
         // TODO 테스트를 위해 stub 데이터를 활용했으므로 이를 지워야합니다.
         stubData.stubTradingPairs.forEach((tradingPair) => {
             this.tradingPairsRegistry.set(tradingPair.name, tradingPair);
@@ -80,15 +76,17 @@ class TradingPairStore {
                 // orderStore.setPriceForOrder();
             }))
             .catch(action((err) => {
-                this.errors = err.response && err.response.body && err.response.body.errors;
-                throw err;
+                this.errors = 
+                    err.response && 
+                    err.response.body && 
+                    err.response.body.errors;
             }))
             .then(action(() => {
                 this.inProgress = false;
             }));
     }
-    @action setSelecetedTradingPairByTradingPairName(tradingPairName) {
-        this.selecetedTradingPair = this.getTradingPair(tradingPairName);
+    @action setSelectedTradingPairName(tradingPairName) {
+        this.selectedTradingPairName = tradingPairName;
     }
     @action setSearchKeyword(keyword = '') {
         this.searchKeyword = keyword;
@@ -99,7 +97,8 @@ class TradingPairStore {
     @action updateTickerInTradingPair(ticker) {
         const tickerData = ticker.message
         if (this.tradingPairsRegistry.has(tickerData.trading_pair_name)) {
-            const tradingPair = this.tradingPairsRegistry.get(tickerData.trading_pair_name)
+            const tradingPair = 
+                this.tradingPairsRegistry.get(tickerData.trading_pair_name);
             Object.assign(tradingPair, tickerData);
         };
     }
@@ -107,7 +106,8 @@ class TradingPairStore {
         this.selectedTradingPairTab = baseSymbol;
     }
     @action toggleLanguageForTokenName() {
-        this.languageForTokenName = this.languageForTokenName === 'ko' ? 'en' : 'ko';
+        this.languageForTokenName = 
+            this.languageForTokenName === 'ko' ? 'en' : 'ko';
     }
     @action toggleSortDirectionOf(target) {
         this.sorts.forEach((sort) => {
@@ -135,7 +135,9 @@ class TradingPairStore {
     }
     _filter = (tradingPairs) => {
         if(this.filters.interest) { 
-            tradingPairs = tradingPairs.filter((tradingPair) => this._userHasInterestIn(tradingPair));
+            tradingPairs = tradingPairs.filter((tradingPair) => 
+                this._userHasInterestIn(tradingPair)
+            );
         }
         return tradingPairs;
     }

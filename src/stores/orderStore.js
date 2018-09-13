@@ -1,6 +1,6 @@
 import { observable, action, computed, reaction } from 'mobx';
 
-import commonStore from './commonStore'
+import modalStore from './modalStore';
 import tradingPairStore from './tradingPairStore';
 import { getUnitPrice } from '../utils/helper';
 import { Decimal } from '../utils/decimal';
@@ -14,34 +14,26 @@ const FEE = '0.05%';
 class OrderStore {
     @observable inProgress = false;
     @observable errors = null;
-
-    @observable tradingPair = DEFAULT_TRADING_PAIR;
-    @observable side = 'BUY';
-    @observable volume = 100;
-    @observable price = 1000;
-    @observable orderType = DEFAULT_ORDER_TYPE;
-    @observable unitPrice = Decimal(0.00000001);
-
-    @computed get amount() { return this.volume * this.price; }
-    @computed get order() {
-        return {
-            trading_pair: this.tradingPair,
-            side: this.side,
-            volume: this.volume,
-            price: this.price,
-            order_type: this.orderType,
-            unit_price: this.unitPrice,
-        };
+    
+    @observable order = {
+        tradingPairName: DEFAULT_TRADING_PAIR,
+        side: 'BUY',
+        volume: 100,
+        price: 1000,
+        orderType: DEFAULT_ORDER_TYPE,
+        unitPrice: Decimal(0.00000001)
     }
+    @computed get amount() { return this.order.volume * this.order.price; }
 
     constructor() {
         const reactionSelectedTradingPair = reaction(
-            () => tradingPairStore.selectedTradingPair,
-            (tradingPair) => {
-                if (!tradingPair) return;
-                this.tradingPair = tradingPair.name;
+            () => tradingPairStore.selectedTradingPairName,
+            (tradingPairName) => {
+                if (!tradingPairName) return;
+                let tradingPair = tradingPairStore.getTradingPair(tradingPairName);
+                this.tradingPair = tradingPairName;
                 this.price = tradingPair.close_price;
-                this.unitPrice = getUnitPrice(tradingPair.close_price, tradingPair.name);
+                this.unitPrice = getUnitPrice(tradingPair.close_price, tradingPairName);
             }
         );
 
@@ -49,36 +41,57 @@ class OrderStore {
             () => this.price,
             (price) => {
                 if (!price) return;
-                this.unitPrice = getUnitPrice(price, this.tradingPair);
+                this.unitPrice = getUnitPrice(price, this.tradingPairName);
             }        
         );
     }
 
-    @action setTradingPair(tradingPair) { this.tradingPair = tradingPair; }
-    @action setSide(side) { this.side = side; }
-    @action setVolume(volume) { this.volume = volume; }
+    @action setTradingPair(tradingPair) { this.order.tradingPair = tradingPair; }
+    @action setSide(side) { this.order.side = side; }
+    @action setVolume(volume) { this.order.volume = volume; }
     @action setPrice(price) { this.order.price = Decimal(price || 0); }
-    @action setOrder(tradingPair, side, volume, price, orderType){
-        this.tradingPair = tradingPair;
-        this.volume = volume;
-        this.price = price;
-        this.orderType = orderType;
+    @action setOrder({tradingPair, side, volume, price, orderType}){
+        this.tradingPair = tradingPair || this.tradingPair;
+        this.side = side || this.side;
+        this.volume = volume || this.volume;
+        this.price = price || this.price;
+        this.orderType = orderType || this.orderType;
     }
+
     @action registerOrder() {
         this.inProgress = true;
-
-        return api.registerOrder(this.order)
-        .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
-            throw err;
-        }))
-        .then(action(() => {
-            this.inProgress = false;
-        }));
+        let order = this._transformOrderJsonForServer(this.order);
+        modalStore.openModal({
+            title: '성공', 
+            content: '주문 등록에 성공하셨습니다.',
+            confirmButtonName: '확인'
+        });
+        // return api.registerOrder(order)
+        // .then(action((res) => {
+        //     // 성공 모달 보여주기
+        // }))
+        // .catch(action((err) => {
+        //     // 실패 모달 보여주기
+        //     this.errors = err.response && err.response.body && err.response.body.errors;
+        // }))
+        // .then(action(() => {
+        //     this.inProgress = false;
+        // }));
     }
 
     get fee() {
         return FEE;
+    }
+
+    _transformOrderJsonForServer(order) {
+        return {
+            trading_pair: order.tradingPairName,
+            side: order.side,
+            volume: order.volume,
+            price: order.price,
+            order_type: order.orderType,
+            unit_price: order.unitPrice,
+        };
     }
 }
 

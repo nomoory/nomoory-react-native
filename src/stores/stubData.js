@@ -346,5 +346,31 @@ export default {
             "order_type": "LIMIT",
             "created": "2018-09-11T10:11:25.405072Z"
         }
-    ]
+    ],
+    stubOrderbook: {
+        sells: [
+            { price: 15300, volume: 883},
+            { price: 15200, volume: 400},
+            { price: 15100, volume: 846},
+            { price: 15000, volume: 729},
+            { price: 14900, volume: 920},
+            { price: 14800, volume: 427},
+            { price: 14700, volume: 145},
+            { price: 14600, volume: 208},
+            { price: 14500, volume: 961},
+            { price: 14400, volume: 6},
+        ],
+        buys: [
+            { price: 14300, volume: 671},
+            { price: 14200, volume: 927},
+            { price: 14100, volume: 888},
+            { price: 14000, volume: 58},
+            { price: 13900, volume: 992},
+            { price: 13800, volume: 24},
+            { price: 13700, volume: 872},
+            { price: 13600, volume: 269},
+            { price: 13500, volume: 377},
+            { price: 13400, volume: 742},
+        ],
+    }
 };

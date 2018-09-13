@@ -53,11 +53,14 @@ class TradingPairRow extends Component {
 
   _onPressTradingPairRow = (e) => {
     const tradingPairName = this.props.tradingPair.name;
-    this._setSelectedTradingPair(tradingPairName);
+    this._setSelectedTradingPairName(tradingPairName);
     this._openTokenScreen();
   }
-  _setSelectedTradingPair = (tradingPairName) => {
-    this.props.tradingPairStore.setSelecetedTradingPairByTradingPairName(tradingPairName || this.props.tradingPair.name);
+  _setSelectedTradingPairName = (tradingPairName) => {
+    if (tradingPairName === null) {
+      throw new Error('TradingPairRow Component>_setSelectedTradingPairName>No trading pair name');
+    }
+    this.props.tradingPairStore.setSelectedTradingPairName(tradingPairName);
   }
   _openTokenScreen = () => {
     let tradingPair = this.props.tradingPair;

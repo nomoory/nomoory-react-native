@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Header, Tab, Tabs, TabHeading, Text } from 'native-base';
 import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
+import { reaction } from 'mobx';
 import OrderBox from '../components/OrderBox';
 
 @inject('tradingPairStore')
@@ -21,7 +22,7 @@ export default class InvestmentScreen extends Component {
     this.pubnubChannel = "";
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // this.props.pubnub.subscribe(this.pubnubChannel);
   }
 
