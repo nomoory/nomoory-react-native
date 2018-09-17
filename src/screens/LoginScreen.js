@@ -19,25 +19,24 @@ export default class LoginScreen extends Component {
           <Form>
             <Item floatingLabel>
               <Label>이메일</Label>
-              <Input onChangeText={this.onChangeEmail}/>
+              <Input onChangeText={ this.onChangeEmail }/>
             </Item>
             <Item floatingLabel last>
               <Label>비밀번호</Label>
-              <Input onChangeText={this.onChangePassword}/>
+              <Input onChangeText={ this.onChangePassword }/>
             </Item>
             <Button primary>
-              <Text onPress={this.onPressLoginButton}> 로그인 </Text>
+              <Text onPress={ this.onPressLoginButton }> 로그인 </Text>
             </Button>
           </Form>
-          <Text onPress={this.onPressResetPassword}>비밀번호 재설정</Text>
-          <Text onPress={this.onPressSignin}>회원가입</Text>
+          <Text onPress={ this.onPressResetPassword }>비밀번호 재설정</Text>
+          <Text onPress={ this.onPressSignin }>회원가입</Text>
         </Content>
       </Container>
     )
   }
   onChangeEmail = (text) => {
     this.props.authStore.setEmail(text);
-    console.log(this.props.authStore.value.email);
   }
   onChangePassword = (text) => {
     this.props.authStore.setPassword(text);

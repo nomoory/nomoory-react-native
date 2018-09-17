@@ -7,6 +7,7 @@ import {
 import { Icon } from 'expo';
 
 import ExchangeScreen from '../screens/ExchangeScreen';
+import TokenScreen from '../screens/TokenScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
 import DepositHistoryScreen from '../screens/DepositHistoryScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -14,6 +15,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 const ExchangeStack = createStackNavigator(
   {
     Exchange: ExchangeScreen,
+    Token: TokenScreen
   }
 );
 

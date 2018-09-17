@@ -33,7 +33,7 @@ export default class Pubnub {
 
     /* 
      * channel을 listen하고자하는 component에 pubnub을 @inject('pubnub')하고
-     * componentWillMount에 this.pubnub.subscribe(channel);을
+     * componentDidMount this.pubnub.subscribe(channel);을
      * componentWillUnmount에 this.pubnub.subscribe(channel);을 호출합니다.
      */
     subscribe(channel) {

@@ -22,7 +22,7 @@ class CommonModal extends Component {
   _closeModal = () => this.props.modalStore.closeModal();
 
   render() {
-    let { isModalVisible, title, content, cancelButtonName } = this.props.modalStore;
+    let { isModalVisible, title, content, confirmButtonName } = this.props.modalStore;
     return (
       <Modal isVisible={ isModalVisible }
         onBackdropPress={ this._closeModal }
@@ -32,7 +32,7 @@ class CommonModal extends Component {
           <Text>{ content }</Text>
           <TouchableOpacity >
             <Button onPress={ this._closeModal }
-            title={ cancelButtonName }></ Button>
+              title={ confirmButtonName }></Button>
           </TouchableOpacity>
         </View>
       </Modal>
