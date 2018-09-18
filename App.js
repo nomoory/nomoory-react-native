@@ -8,17 +8,19 @@ import Pubnub from './src/utils/Pubnub';
 import CommonModal from './src/components/CommonModal';
 
 import { StyleProvider } from 'native-base';
-import getTheme from './src/styles/native-base-theme/components';
-import commonColor from './src/styles/native-base-theme/variables/commonColor';
+import getTheme from './src/global/styles/native-base-theme/components';
+import commonColor from './src/global/styles/native-base-theme/variables/commonColor';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.pubnub = new Pubnub(this, stores);
   }
+  componentDidMount() {
+  }
   render() {
     return (
-      <StyleProvider style={getTheme(commonColor)}>
+      <StyleProvider style={ getTheme(commonColor) }>
         <Provider 
           {...stores}
           api={api}
