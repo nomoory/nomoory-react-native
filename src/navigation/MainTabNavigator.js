@@ -6,16 +6,19 @@ import {
 
 import { Icon } from 'expo';
 
-import ExchangeScreen from '../screens/ExchangeScreen';
-import TokenScreen from '../screens/TokenScreen';
+// import ExchangeScreen from '../screens/ExchangeScreen';
+// import TokenScreen from '../screens/TokenScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
 import DepositHistoryScreen from '../screens/DepositHistoryScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
+import StubScreen from '../screens/StubScreen';
+
+
 const ExchangeStack = createStackNavigator(
   {
-    Exchange: ExchangeScreen,
-    Token: TokenScreen
+    Exchange: StubScreen, //ExchangeScreen,
+    Token: StubScreen, //TokenScreen
   }
 );
 
@@ -91,7 +94,7 @@ export default createBottomTabNavigator(
     Profile: ProfileStack
   },
   {
-    initialRouteName: 'Exchange',
+    initialRouteName: 'Investment',
     tabBarOptions: {
       activeTintColor: 'black',
       inactiveTintColor: 'grey',
