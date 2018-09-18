@@ -33,7 +33,7 @@ export default class AssetsAndEvaluationRow extends Component {
         const evaluatedRevenueRatio = evaluatedRevenue / fiatBuyPrice;
 
         return (
-            <View style={ styles.contrainer }>
+            <View style={ styles.container }>
                 <View style={ styles.left }>
                     <Text style={ {} }>{ asset_korean_name }</Text>
                     <Text style={ {} }>{ asset_symbol }</Text>
