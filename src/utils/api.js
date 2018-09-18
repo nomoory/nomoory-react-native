@@ -53,6 +53,19 @@ class API {
     return this.get(`trading_pairs/orderbook/?trading_pair_name=${tradingPairName}`);
   }
 
+  // Account
+  loadAccounts(userUuid) {
+    return this.get(`users/${userUuid}/accounts/`);
+  }
+
+  deposit(accountUuid, payload) {
+    return this.put(`accounts/${accountUuid}/deposit/`, payload);
+  }
+
+  withdraw(accountUuid, payload) {
+    return this.put(`accounts/${accountUuid}/withdraw/`, payload);
+  }
+
   /* Base REST API method */
   get(url) {
     return this.axios

@@ -1,3 +1,4 @@
+import accountStore from './accountStore';
 import authStore from './authStore';
 import commonStore from './commonStore';
 import modalStore from './modalStore';
@@ -7,6 +8,7 @@ import tradingPairStore from './tradingPairStore';
 import userStore from './userStore';
 
 const stores = {
+    accountStore,
     authStore,
     commonStore,
     modalStore,

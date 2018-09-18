@@ -28,7 +28,7 @@ class TradingPairStore {
     @observable selectedTradingPairTab = 'KRW';
     @observable tradingPairsRegistry = observable.map();
     @computed get selectedTradingPair() {
-        return this.getTradingPair(this.selectedTradingPairName);
+        return this.getTradingPairByTradingPairName(this.selectedTradingPairName);
     }
 
     @computed get displayNameOfLanguageForTokenName() {
@@ -38,17 +38,18 @@ class TradingPairStore {
     }
 
     constructor() {
-        // TODO 테스트를 위해 stub 데이터를 활용했으므로 이를 지워야합니다.
-        stubData.stubTradingPairs.forEach((tradingPair) => {
-            this.tradingPairsRegistry.set(tradingPair.name, tradingPair);
-        });
+        if (__DEV__) {
+            stubData.stubTradingPairs.forEach((tradingPair) => {
+                this.tradingPairsRegistry.set(tradingPair.name, tradingPair);
+            });    
+        }
     }
     @action clear() {
         this.tradingPairsRegistry.clear();
     }
 
-    getTradingPair(name) {
-        return this.tradingPairsRegistry.get(name);
+    getTradingPairByTradingPairName(tradingPairName) {
+        return this.tradingPairsRegistry.get(tradingPairName);
     }
 
     @computed get tradingPairs() {

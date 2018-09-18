@@ -30,7 +30,7 @@ class OrderStore {
             () => tradingPairStore.selectedTradingPairName,
             (tradingPairName) => {
                 if (!tradingPairName) return;
-                let tradingPair = tradingPairStore.getTradingPair(tradingPairName);
+                let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
                 this.tradingPair = tradingPairName;
                 this.price = tradingPair.close_price;
                 this.unitPrice = getUnitPrice(tradingPair.close_price, tradingPairName);
