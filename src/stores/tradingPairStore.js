@@ -7,7 +7,6 @@ import {
 // import orderStore from './orderStore';
 import Hangul from 'hangul-js';
 import api from '../utils/api';
-import stubData from './stubData';
 
 class TradingPairStore {
     @observable inProgress = false;
@@ -36,14 +35,7 @@ class TradingPairStore {
         if(this.languageForTokenName === 'en') return '영문명';
         return '한글명';
     }
-
-    constructor() {
-        if (__DEV__) {
-            stubData.stubTradingPairs.forEach((tradingPair) => {
-                this.tradingPairsRegistry.set(tradingPair.name, tradingPair);
-            });    
-        }
-    }
+    
     @action clear() {
         this.tradingPairsRegistry.clear();
     }

@@ -2,7 +2,9 @@ import { observable, action, computed } from 'mobx';
 import Hangul from 'hangul-js';
 import api from '../utils/api';
 import tradingPairStore from './tradingPairStore';
-import stubData from './stubData';
+import userStore from './userStore';
+import { Decimal } from '../utils/decimal';
+import Helper from '../utils/Helper';
 
 class AccountStore {
     @observable inProgress = false;
@@ -21,49 +23,59 @@ class AccountStore {
         let accounts = [];
         const searcher = new Hangul.Searcher(this.searchKeyword);
         this.accountsRegistry.forEach((account) => {
-            if(this.hasSearchKeywordInAccount(searcher, account)) {
+            if(this._hasSearchKeywordInAccount(searcher, account)) {
                 const tradingPairName = account.asset_symbol + '-KRW';
                 let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
-                console.log(tradingPairStore);
-                console.log(tradingPair);
                 accounts.push({
                     uuid: account.uuid,
-                    balance: account.balance,
+                    balance: Helper.removeTrailingZeros(account.balance),
                     asset_symbol: account.asset_symbol,
                     asset_english_name: account.asset_english_name,
                     asset_korean_name: account.asset_korean_name,
-                    pending_order: account.pending_order,
-                    pending_withdrawl: account.pending_withdrawl,
-                    avg_fiat_buy_price: account.avg_fiat_buy_price,
+                    pending_order: Helper.removeTrailingZeros(account.pending_order),
+                    pending_withdrawal: Helper.removeTrailingZeros(account.pending_withdrawal),
+                    avg_fiat_buy_price: Helper.removeTrailingZeros(account.avg_fiat_buy_price),
                     is_avg_fiat_buy_price_modified: account.is_avg_fiat_buy_price_modified,
-                    asset_close_price: (tradingPair && tradingPair.close_price) || 1000
+                    asset_close_price: Helper.removeTrailingZeros(tradingPair ? tradingPair.close_price : '0')
                 })
             }
         });
         return accounts;
     };
 
-    constructor() {
-        if (__DEV__) {
-            stubData.stubAccounts.forEach((account) => {
-                this.accountsRegistry.set(account.asset_symbol, account);
-            });
-            this.totalAccountsCount = stubData.stubAccounts.length;
-        }
+    @computed get totalAssetsEvaluation() {
+        let totalEvaluatedValueInKRW = Decimal(0); // 자산 평가액(KRW)
+        let holdingKRW = Decimal(0) // 보유 KRW
+        let totalBuyingPrice = Decimal(0); // 총 매수 금액
+        let evaluatedPriceOfAccountsWithoutKRW = Decimal(0); // 평가 금액
+        let evaluatedRevenue = 0;
+        let evaluatedRevenueRatio = Decimal(0);
+        this.accounts.forEach((account) => {
+            if (account.asset_symbol === 'KRW') {
+                holdingKRW = Decimal(account.balance);
+            } else {
+                let buyingPrice = Decimal(account.balance) * Decimal(account.avg_fiat_buy_price);
+                totalBuyingPrice = totalBuyingPrice.add(buyingPrice);
+                let evaluatedPrice = Decimal(account.balance) * Decimal(account.asset_close_price);
+                evaluatedPriceOfAccountsWithoutKRW = evaluatedPriceOfAccountsWithoutKRW.add(evaluatedPrice);
+            }
+        });
+        evaluatedRevenue = evaluatedPriceOfAccountsWithoutKRW.minus(totalBuyingPrice);
+        if (totalBuyingPrice !== 0) evaluatedRevenueRatio = evaluatedRevenue / totalBuyingPrice;
+        totalEvaluatedValueInKRW = evaluatedPriceOfAccountsWithoutKRW.add(holdingKRW);
+        return {
+            totalEvaluatedValueInKRW: Helper.removeTrailingZeros(totalEvaluatedValueInKRW.toString()),
+            holdingKRW: Helper.removeTrailingZeros(holdingKRW.toString()),
+            totalBuyingPrice: Helper.removeTrailingZeros(totalBuyingPrice.toString()),
+            evaluatedPriceOfAccountsWithoutKRW: Helper.removeTrailingZeros(evaluatedPriceOfAccountsWithoutKRW.toString()),
+            evaluatedRevenue: Helper.removeTrailingZeros(evaluatedRevenue.toString()),
+            evaluatedRevenueRatio: Helper.removeTrailingZeros(evaluatedRevenueRatio.toString())
+        };
     }
 
     getAccountByAssetSymbol(assetSymbol) {
         const account = this.accountsRegistry.get(assetSymbol) || null;
         return account;
-    }
-
-    @computed get evaluatedTotalAssetsValueInKRW() {
-        let valueInKRW = 0;
-        this.accountsRegistry.forEach((account) => {
-            valueInKRW += parseFloat(account.balance) * parseFloat(account.avg_fiat_buy_price);
-        });
-        
-        return valueInKRW.toLocaleString();
     }
 
     /*
@@ -108,31 +120,32 @@ class AccountStore {
         this.accountsRegistry.set(accounts.message.asset_symbol, accounts.message);
     }
 
-    hasSearchKeywordInAccount(searcher, account) {
-        return (this.assetSymbolContainsSearchKeyword(searcher, account)
-        || this.assetKoreanNameContainsSearchKeyword(searcher, account)
-        || this.assetEnglishNameContainsSearchKeyword(searcher, account))
+    _hasSearchKeywordInAccount(searcher, account) {
+        return (this._assetSymbolContainsSearchKeyword(searcher, account)
+        || this._assetKoreanNameContainsSearchKeyword(searcher, account)
+        || this._assetEnglishNameContainsSearchKeyword(searcher, account))
         ? true
         : false;
     }
 
-    assetSymbolContainsSearchKeyword(searcher, account) {
+    _assetSymbolContainsSearchKeyword(searcher, account) {
         return searcher.search(account.asset_symbol.toLowerCase()) >= 0 ? true : false;
     }
 
-    assetKoreanNameContainsSearchKeyword(searcher, account) {
+    _assetKoreanNameContainsSearchKeyword(searcher, account) {
         return searcher.search(account.asset_korean_name) >= 0 ? true : false;
     }
 
-    assetEnglishNameContainsSearchKeyword(searcher, account) {
+    _assetEnglishNameContainsSearchKeyword(searcher, account) {
         return searcher.search(account.asset_english_name.toLowerCase()) >= 0 ? true : false;
     }
 
     @action loadAccounts() {
         this.inProgress = true;
         this.errors = null;
+        const userUuid = userStore.user && userStore.user.user_uuid;
 
-        return api.loadAccounts()
+        return api.getAccountsByUser(userUuid)
         .then(action((response) => {
             let accounts = response.data;
             this.accountsRegistry.clear();

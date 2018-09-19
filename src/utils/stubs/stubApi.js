@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import authStore from '../stores/authStore';
-import stubApi from './stubs/stubApi';
+import stubData from './stubData';
 
 const REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
 const REACT_APP_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_API_VERSION;
@@ -40,7 +39,7 @@ class API {
 
   // TradingPairs
   getTradingPairs() {
-    return this.get(`trading_pairs/`);
+    return this._delay(stubData.stubTradingPairs);
   }
   
   // Order
@@ -50,12 +49,12 @@ class API {
 
   // Orderbook
   getOrderbookByTradingPairName(tradingPairName) {
-    return this.get(`trading_pairs/orderbook/?trading_pair_name=${tradingPairName}`);
+    return this._delay(stubData.stubOrderbook);
   }
 
   // Account
   getAccountsByUser(userUuid) {
-    return this.get(`users/${userUuid}/accounts/`);
+    return this._delay(stubData.stubAccounts);
   }
 
   deposit(accountUuid, payload) {
@@ -98,18 +97,21 @@ class API {
   _handleError(error) {
     // error code에 따른 처리
     if (error && error.response && error.response.status === 401) {
-      authStore.logout();
     }
     throw error;
   }
+
+  _delay(data = {}, time = 500) {
+    // time후에 응답이 오는 response.data가 stubData인 stub 요청을 생성합니다.
+    return new Promise(function(resolve) { 
+        setTimeout(() => {
+          let response = { data };
+          resolve(response);
+        }, time);
+    });
+  }
 }
 
-let api;
-if (__DEV__ ) {
-  api = stubApi;
-} else {
-  api = new API(API_ROOT);
-}
-const constantApi = api;
+const api = new API(API_ROOT);
 
-export default constantApi;
+export default api;
