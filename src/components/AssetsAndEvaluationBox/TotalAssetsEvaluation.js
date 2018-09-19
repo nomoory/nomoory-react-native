@@ -13,9 +13,14 @@ export default class TotalAssetsEvaluation extends Component {
 
     render() {
         const { accountStore } = this.props;
-        const totalEvaluatedValueInKRW =  accountStore.evaluatedTotalAssetsValueInKRW;
-        const balanceOfKRW = accountStore.getAccountByAssetSymbol('KRW');
-
+        const {
+            totalEvaluatedValueInKRW,
+            holdingKRW,
+            totalBuyingPrice,
+            evaluatedPriceOfAccountsWithoutKRW,
+            evaluatedRevenue,
+            evaluatedRevenueRatio
+        } = accountStore.totalAssetsEvaluation;
         return (
             <View style={ styles.contrainer }>
                 <View style={ styles.header }>
@@ -24,19 +29,19 @@ export default class TotalAssetsEvaluation extends Component {
                 <View style={ styles.body }>
                     <View style={ styles.bodyLeft }>
                         <Text>자산 평가액 (KRW)</Text>
-                        <Text>{ '131,600' }</Text>
+                        <Text>{ totalEvaluatedValueInKRW }</Text>
                         <Text>보유 KRW</Text>
-                        <Text>{ '1,900' }</Text>
+                        <Text>{ holdingKRW }</Text>
                     </View>
                     <View style={ styles.bodyRight }>
                         <Text>매수 금액</Text>
-                        <Text>{ '131,600' }</Text>
+                        <Text>{ totalBuyingPrice }</Text>
                         <Text>평가 금액</Text>
-                        <Text>{ '129,700' }</Text>
+                        <Text>{ evaluatedPriceOfAccountsWithoutKRW }</Text>
                         <Text>평가 수익률</Text>
-                        <Text>{ '0.16%' }</Text> 
+                        <Text>{ evaluatedRevenueRatio }</Text> 
                         <Text>평가 손익</Text>
-                        <Text>{ '799' }</Text>
+                        <Text>{ evaluatedRevenue }</Text>
                     </View>
                 </View>
             </View>

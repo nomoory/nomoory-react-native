@@ -33,21 +33,22 @@ export default class InvestmentScreen extends Component {
 
   render() {
     return (
-      <Container style={ styles.container }>
+      <Container style={styles.container}>
         <Tabs>
-          <Tab heading={ <TabHeading><Text>보유자산</Text></TabHeading>}>
+          <Tab heading={<TabHeading><Text>보유자산</Text></TabHeading>}
+            styles={styles.tab}>
             <AssetsAndEvaluationBox></AssetsAndEvaluationBox>
           </Tab>
-          <Tab heading={ <TabHeading><Text>거래내역</Text></TabHeading>}>
+          <Tab heading={<TabHeading><Text>거래내역</Text></TabHeading>}>
             <View><Text>거래내역</Text></View>
           </Tab>
-          <Tab heading={ <TabHeading><Text>미체결</Text></TabHeading>}>
+          <Tab heading={<TabHeading><Text>미체결</Text></TabHeading>}>
             <View><Text>미체결</Text></View>
           </Tab>
-          <Tab heading={ <TabHeading><Text>배당내역</Text></TabHeading>}>
+          <Tab heading={<TabHeading><Text>배당내역</Text></TabHeading>}>
             <View><Text>배당내역</Text></View>
           </Tab>
-          <Tab heading={ <TabHeading><Text>채굴내역</Text></TabHeading>}>
+          <Tab heading={<TabHeading><Text>채굴내역</Text></TabHeading>}>
             <View><Text>채굴내역</Text></View>
           </Tab>
         </Tabs>
@@ -58,6 +59,9 @@ export default class InvestmentScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
+      flex: 1
+    },
+    tab: {
       flex: 1
     }
 })

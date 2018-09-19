@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
+import { View } from 'native-base';
 import TotalAssetsEvaluation from './TotalAssetsEvaluation';
 import AssetsAndEvaluationList from './AssetsAndEvaluationList';
 import { inject, observer } from 'mobx-react';
 
-@inject('accountStore')
 @observer
 export default class AssetsAndEvaluationBox extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ export default class AssetsAndEvaluationBox extends Component {
 
   render() {
     return (
-      <View style={ styles.contrainer }>
+      <View style={ styles.container }>
         <TotalAssetsEvaluation></TotalAssetsEvaluation>
         <AssetsAndEvaluationList></AssetsAndEvaluationList>
       </View>
