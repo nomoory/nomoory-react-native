@@ -1,4 +1,83 @@
 export default {
+    stubAccounts: [
+        {
+            "uuid": "a83e2480-b60a-4d15-a503-78ac997425a0",
+            "asset_symbol": "KRW",
+            "asset_english_name": "Korean Won",
+            "asset_korean_name": "원화",
+            "balance": "100000000000.00000000000000000000",
+            "pending_order_amount": "10.00000000000000000000",
+            "pending_withdrawal": "10.00000000000000000000",
+            "avg_fiat_buy_price": "0.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        },
+        {
+            "uuid": "37304cc8-e65a-4aef-aab7-aba6aad7dc0c",
+            "asset_symbol": "BTC",
+            "asset_english_name": "Bitcoin",
+            "asset_korean_name": "비트코인",
+            "balance": "100000000000.00000000000000000000",
+            "pending_order_amount": "10.00000000000000000000",
+            "pending_withdrawal": "10.00000000000000000000",
+            "avg_fiat_buy_price": "10.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        },
+        {
+            "uuid": "0be543ea-ddf4-42c6-aaf3-a822ecb2d904",
+            "asset_symbol": "ETH",
+            "asset_english_name": "Ethereum",
+            "asset_korean_name": "이더리움",
+            "balance": "100000000000.00000000000000000000",
+            "pending_order_amount": "20.00000000000000000000",
+            "pending_withdrawal": "20.00000000000000000000",
+            "avg_fiat_buy_price": "20.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        },
+        {
+            "uuid": "ca8cac86-74f5-483a-98c2-d2fbda11e62f",
+            "asset_symbol": "BCH",
+            "asset_english_name": "Bitcoin Cash",
+            "asset_korean_name": "비트코인 캐시",
+            "balance": "100000000000.00000000000000000000",
+            "pending_order_amount": "30.00000000000000000000",
+            "pending_withdrawal": "30.00000000000000000000",
+            "avg_fiat_buy_price": "30.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        },
+        {
+            "uuid": "4856cbf7-1b21-4e56-9fcc-853e59169da8",
+            "asset_symbol": "ETC",
+            "asset_english_name": "Ethereum Classic",
+            "asset_korean_name": "이더리움 클래식",
+            "balance": "100000000000.00000000000000000000",
+            "pending_order_amount": "40.00000000000000000000",
+            "pending_withdrawal": "40.00000000000000000000",
+            "avg_fiat_buy_price": "40.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        },
+        {
+            "uuid": "a2b8e3d6-4623-4fad-9d47-03d1dc80d033",
+            "asset_symbol": "NEO",
+            "asset_english_name": "NEO",
+            "asset_korean_name": "네오",
+            "balance": "100000000000.00000000000000000000",
+            "pending_order_amount": "50.00000000000000000000",
+            "pending_withdrawal": "50.00000000000000000000",
+            "avg_fiat_buy_price": "50.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        },
+        {
+            "uuid": "a84b279d-7ed6-4f3b-bd64-ce872e2c4d0c",
+            "asset_symbol": "ONT",
+            "asset_english_name": "Ontology",
+            "asset_korean_name": "온톨로지",
+            "balance": "100000000000.00000000000000000000",
+            "pending_order_amount": "60.00000000000000000000",
+            "pending_withdrawal": "60.00000000000000000000",
+            "avg_fiat_buy_price": "60.00000000000000000000",
+            "is_avg_fiat_buy_price_modified": false
+        }
+    ],
     stubTradingPairs: [
         {
             "uuid": "9b208459-390e-4334-84c4-3c00cabf3b59",
@@ -10,18 +89,18 @@ export default {
             "quote_english_name": "Ethereum",
             "quote_korean_name": "이더리움",
             "fee_rate": "0.00100000000000000000",
-            "open_price": 3000,
-            "high_price": null,
-            "low_price": null,
-            "close_price": 2000,
-            "change": "",
-            "change_price": null,
-            "change_rate": null,
-            "signed_change_price": null,
-            "signed_change_rate": null,
-            "trade_volume": null,
-            "acc_trade_value_24h": null,
-            "acc_trade_volume_24h": null
+            "open_price": "20.00000000000000000000",
+            "high_price": "20.00000000000000000000",
+            "low_price": "20.00000000000000000000",
+            "close_price": "20.00000000000000000000",
+            "change": "EVEN",
+            "change_price": "0.00000000000000000000",
+            "change_rate": "0.00000000000000000000",
+            "signed_change_price": "0.00000000000000000000",
+            "signed_change_rate": "0.00000000000000000000",
+            "trade_volume": "10.00000000000000000000",
+            "acc_trade_value_24h": "173200.00000000000000000000",
+            "acc_trade_volume_24h": "8660.00000000000000000000"
         },
         {
             "uuid": "b6e0d21e-245f-4265-8c2e-f46cbea4a93c",
@@ -56,53 +135,18 @@ export default {
             "quote_english_name": "Eos",
             "quote_korean_name": "이오스",
             "fee_rate": "0.00100000000000000000",
-            "open_price": 2000,
-            "high_price": 4000,
-            "low_price": 2000,
-            "close_price": 4000,
+            "open_price": '2000',
+            "high_price": '4000',
+            "low_price": '2000',
+            "close_price": '4000',
             "change": "RISE", // EVEN|RISE|FALL
-            "change_price": 1000,
-            "change_rate": 0.43,
-            "signed_change_price": 1000,
-            "signed_change_rate": 0.43,
-            "trade_volume": 350, //최근
-            "acc_trade_value_24h": 35000,
-            "acc_trade_volume_24h": 35000
-        }
-    ],
-    stubAccounts: [
-        {
-            "uuid": "344268a4-5fff-4454-9e41-d2f1ff1aa09b",
-            "asset_symbol": "BTC",
-            "asset_english_name": "Bitcoin",
-            "asset_korean_name": "비트코인",
-            "balance": "99999981240.00000000000000000000",
-            "pending_order": "0.00000000000000000000",
-            "pending_withdrawal": "0.00000000000000000000",
-            "avg_fiat_buy_price": "0.00000000000000000000",
-            "is_avg_fiat_buy_price_modified": false
-        },
-        {
-            "uuid": "2965b1cc-4c59-43cb-9bbd-9d4726a40974",
-            "asset_symbol": "KRW",
-            "asset_english_name": "Korean Won",
-            "asset_korean_name": "원화",
-            "balance": "100000374824.80000000000000000000",
-            "pending_order": "0.00000000000000000000",
-            "pending_withdrawal": "0.00000000000000000000",
-            "avg_fiat_buy_price": "0.00000000000000000000",
-            "is_avg_fiat_buy_price_modified": false
-        },
-        {
-            "uuid": "76a00c6f-8593-42d9-a2f5-3784454ec557",
-            "asset_symbol": "ETH",
-            "asset_english_name": "Ethereum",
-            "asset_korean_name": "이더리움",
-            "balance": "100000000000.00000000000000000000",
-            "pending_order": "0.00000000000000000000",
-            "pending_withdrawal": "0.00000000000000000000",
-            "avg_fiat_buy_price": "0.00000000000000000000",
-            "is_avg_fiat_buy_price_modified": false
+            "change_price": '1000',
+            "change_rate": '0.43',
+            "signed_change_price": '1000',
+            "signed_change_rate": '0.43',
+            "trade_volume": '350', //최근
+            "acc_trade_value_24h": '35000',
+            "acc_trade_volume_24h": '35000'
         }
     ],
     stubOrders: [
@@ -349,28 +393,28 @@ export default {
     ],
     stubOrderbook: {
         sells: [
-            { price: 15300, volume: 883},
-            { price: 15200, volume: 400},
-            { price: 15100, volume: 846},
-            { price: 15000, volume: 729},
-            { price: 14900, volume: 920},
-            { price: 14800, volume: 427},
-            { price: 14700, volume: 145},
-            { price: 14600, volume: 208},
-            { price: 14500, volume: 961},
-            { price: 14400, volume: 6},
+            { price: '15300', volume: '883' },
+            { price: '15200', volume: '400' },
+            { price: '15100', volume: '846' },
+            { price: '15000', volume: '729' },
+            { price: '14900', volume: '920' },
+            { price: '14800', volume: '427' },
+            { price: '14700', volume: '145' },
+            { price: '14600', volume: '208' },
+            { price: '14500', volume: '961' },
+            { price: '14400', volume: '6' },
         ],
         buys: [
-            { price: 14300, volume: 671},
-            { price: 14200, volume: 927},
-            { price: 14100, volume: 888},
-            { price: 14000, volume: 58},
-            { price: 13900, volume: 992},
-            { price: 13800, volume: 24},
-            { price: 13700, volume: 872},
-            { price: 13600, volume: 269},
-            { price: 13500, volume: 377},
-            { price: 13400, volume: 742},
+            { price: '14300', volume: '671' },
+            { price: '14200', volume: '927' },
+            { price: '14100', volume: '888' },
+            { price: '14000', volume: '58' },
+            { price: '13900', volume: '992' },
+            { price: '13800', volume: '24' },
+            { price: '13700', volume: '872' },
+            { price: '13600', volume: '269' },
+            { price: '13500', volume: '377' },
+            { price: '13400', volume: '742' },
         ],
     }
 };

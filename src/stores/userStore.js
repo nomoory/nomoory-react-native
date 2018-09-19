@@ -4,7 +4,7 @@ import api from '../utils/api';
 class UserStore {
     @observable inProgress;
     @observable errors;
-    @observable user = null;
+    @observable user = {};
 
     @action getUser() {
         this.inProgress = true;

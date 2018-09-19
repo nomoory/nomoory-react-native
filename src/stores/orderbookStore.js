@@ -6,8 +6,8 @@ import {
 } from 'mobx';
 
 import api from '../utils/api';
-import stubData from './stubData';
 import tradingPairStore from './tradingPairStore';
+import Helper from '../utils/Helper';
 
 class OrderbookStore {
     @observable inProgress = false;
@@ -15,15 +15,16 @@ class OrderbookStore {
 
     @observable buyOrdersRegistry = observable.array();
     @observable sellOrdersRegistry = observable.array();
+    @observable baseSymbolOfSelectedTradingPair = null;
 
     constructor() {
         /*
          * 선택한 trading pair가 변경될때마다 그에 맞는 orderbook을 load 합니다.
          */
-        const loadOrderbook = reaction(
+        const selectedTradingPairNameReaction = reaction(
             () => tradingPairStore.selectedTradingPairName,
-            (selectedTradingPairName) => { 
-                this.loadOrderbook(selectedTradingPairName);
+            (selectedTradingPairName) => {
+                this.loadOrderbookByTradingPairName(selectedTradingPairName);
             }
         );
     }
@@ -47,7 +48,7 @@ class OrderbookStore {
         const orders = orderbook.message;
         this._replaceOrderRegistries(orders);
     }
-    @action loadOrderbook(tradingPairName) {
+    @action loadOrderbookByTradingPairName(tradingPairName) {
         this.inProgress = true;
         this.errors = null;
         if (!tradingPairName) {
@@ -55,14 +56,8 @@ class OrderbookStore {
                 'orderbookStore>loadOrderbook>No param tradingPairName'
             );
         }
-
-        // TODO demo data를 이용한 부분입니다. (지워야함))
-        if (stubData.stubOrderbook) {
-            this._replaceOrderRegistries(stubData.stubOrderbook);
-            return;
-        }
         
-        return api.getOrderbook(tradingPairName)
+        return api.getOrderbookByTradingPairName(tradingPairName)
         .then(action((response) => {
             const orders = response.data;
             this._replaceOrderRegistries(orders);
@@ -78,10 +73,11 @@ class OrderbookStore {
         }));
     }
 
-    _reformatOrderForDisplay = (orderFromServer) => (
+    _reformatOrderForDisplay = (order) => (
         {
-            price: orderFromServer.price.toFixed(2),
-            volume: orderFromServer.volume.toFixed(3)
+            // TODO fix it for formating
+            price: Helper.getFixedPrice(order.price, this.baseSymbolOfSelectedTradingPair),
+            volume: Helper.getFixed(order.volume, 3)
         }
     );
 

@@ -27,6 +27,7 @@
     "react-navigation": "^2.12.1"
   },
   "devDependencies": {
-    "jest-expo": "^29.0.0"
+    "jest-expo": "^29.0.0",
+    "mobx-logger": "^0.7.1"
   }
 }
