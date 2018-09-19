@@ -11,12 +11,24 @@ import { StyleProvider } from 'native-base';
 import getTheme from './src/global/styles/native-base-theme/components';
 import commonColor from './src/global/styles/native-base-theme/variables/commonColor';
 
+import { enableLogging } from 'mobx-logger';
+
+enableLogging({
+  predicate: () => __DEV__ && Boolean(window.navigator.userAgent),
+  action: __DEV__ && Boolean(window.navigator.userAgent),
+  reaction: __DEV__ && Boolean(window.navigator.userAgent),
+  transaction: __DEV__ && Boolean(window.navigator.userAgent),
+  compute: __DEV__ && Boolean(window.navigator.userAgent)
+});
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.pubnub = new Pubnub(this, stores);
   }
-  componentDidMount() {
+  async componentDidMount() {
+    await stores.tradingPairStore.loadTradingPairs();
+    await stores.accountStore.loadAccounts();
   }
   render() {
     return (
