@@ -24,7 +24,7 @@ export default class ExchangeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TradingPairBox></TradingPairBox>
+        <TradingPairBox />
       </View>
     )
   }
