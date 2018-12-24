@@ -8,30 +8,30 @@ import TradingPairBox from '../components/TradingPairBox';
 @inject('pubnub')
 @observer
 export default class ExchangeScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: '거래소',
-      // headerLeft: (
-      //   <Button onPress={ () => navigation.goback() }
-      //   title={ "cancelButtonName" }></Button>
-      // ),
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: '거래소',
+            // headerLeft: (
+            //   <Button onPress={ () => navigation.goback() }
+            //   title={ "cancelButtonName" }></Button>
+            // ),
+        };
     };
-  };
 
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <TradingPairBox />
-      </View>
-    )
-  }
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (
+            <View style={styles.container}>
+                <TradingPairBox />
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1
+        flex: 1
     }
 });

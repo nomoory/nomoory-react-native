@@ -12,56 +12,56 @@ import UnmatchedOrderBox from '../components/UnmatchedOrderBox';
 @inject('pubnub')
 @observer
 export default class InvestmentScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: '투자내역',
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: '투자내역',
+        };
     };
-  };
 
-  constructor(props) {
-    super(props);
-    this.pubnubChannel = "";
-  }
+    constructor(props) {
+        super(props);
+        this.pubnubChannel = "";
+    }
 
-  componentDidMount() {
-    // this.props.pubnub.subscribe(this.pubnubChannel);
-  }
+    componentDidMount() {
+        // this.props.pubnub.subscribe(this.pubnubChannel);
+    }
 
-  componentWillUnmount() {
-    // this.props.pubnub.unsubscribe(this.pubnubChannel);
-  }
+    componentWillUnmount() {
+        // this.props.pubnub.unsubscribe(this.pubnubChannel);
+    }
 
-  render() {
-    return (
-      <Container style={styles.container}>
-        <Tabs>
-          <Tab heading={<TabHeading><Text>보유자산</Text></TabHeading>}
-            styles={styles.tab}>
-            <AssetsAndEvaluationBox></AssetsAndEvaluationBox>
-          </Tab>
-          <Tab heading={<TabHeading><Text>거래내역</Text></TabHeading>}>
-            <View><Text>거래내역</Text></View>
-          </Tab>
-          <Tab heading={<TabHeading><Text>미체결</Text></TabHeading>}>
-            <View><Text>미체결</Text></View>
-          </Tab>
-          <Tab heading={<TabHeading><Text>배당내역</Text></TabHeading>}>
-            <View><Text>배당내역</Text></View>
-          </Tab>
-          <Tab heading={<TabHeading><Text>채굴내역</Text></TabHeading>}>
-            <View><Text>채굴내역</Text></View>
-          </Tab>
-        </Tabs>
-      </Container>
-    )
-  }
+    render() {
+        return (
+            <Container style={styles.container}>
+                <Tabs>
+                    <Tab heading={<TabHeading><Text>보유자산</Text></TabHeading>}
+                        styles={styles.tab}>
+                        <AssetsAndEvaluationBox></AssetsAndEvaluationBox>
+                    </Tab>
+                    <Tab heading={<TabHeading><Text>거래내역</Text></TabHeading>}>
+                        <View><Text>거래내역</Text></View>
+                    </Tab>
+                    <Tab heading={<TabHeading><Text>미체결</Text></TabHeading>}>
+                        <View><Text>미체결</Text></View>
+                    </Tab>
+                    <Tab heading={<TabHeading><Text>배당내역</Text></TabHeading>}>
+                        <View><Text>배당내역</Text></View>
+                    </Tab>
+                    <Tab heading={<TabHeading><Text>채굴내역</Text></TabHeading>}>
+                        <View><Text>채굴내역</Text></View>
+                    </Tab>
+                </Tabs>
+            </Container>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1
+        flex: 1
     },
     tab: {
-      flex: 1
+        flex: 1
     }
 })

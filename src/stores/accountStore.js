@@ -23,7 +23,7 @@ class AccountStore {
         let accounts = [];
         const searcher = new Hangul.Searcher(this.searchKeyword);
         this.accountsRegistry.forEach((account) => {
-            if(this._hasSearchKeywordInAccount(searcher, account)) {
+            if (this._hasSearchKeywordInAccount(searcher, account)) {
                 const tradingPairName = account.asset_symbol + '-KRW';
                 let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
                 accounts.push({
@@ -83,8 +83,8 @@ class AccountStore {
      */
     @observable currency = 'KRW';
     @observable amount = 0;
-    @computed get depositPayload() { return {'base_symbol': this.currency, 'amount': this.amount}; };
-    @computed get withdrawPayload() { return {'base_symbol': this.currency, 'amount': this.amount}; };
+    @computed get depositPayload() { return { 'base_symbol': this.currency, 'amount': this.amount }; };
+    @computed get withdrawPayload() { return { 'base_symbol': this.currency, 'amount': this.amount }; };
 
     @action setCurrency(currency) {
         this.currency = currency === undefined ? 'KRW' : currency;
@@ -97,23 +97,23 @@ class AccountStore {
     @action deposit() {
         let account = this.getAccountByAssetSymbol(this.currency);
         return api.deposit(account.uuid, this.depositPayload)
-        .then(action((response) => {
-            this.accountsRegistry.set(this.currency, response.data);
-        }))
-        .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
-        }))
+            .then(action((response) => {
+                this.accountsRegistry.set(this.currency, response.data);
+            }))
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+            }))
     }
 
     @action withdraw() {
         let account = this.getAccountByAssetSymbol(this.currency);
         return api.withdraw(account.uuid, this.withdrawPayload)
-        .then(action((response) => {
-            this.accountsRegistry.set(this.currency, response.data);
-        }))
-        .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
-        }))
+            .then(action((response) => {
+                this.accountsRegistry.set(this.currency, response.data);
+            }))
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+            }))
     }
 
     @action setAccounts(accounts) {
@@ -122,10 +122,10 @@ class AccountStore {
 
     _hasSearchKeywordInAccount(searcher, account) {
         return (this._assetSymbolContainsSearchKeyword(searcher, account)
-        || this._assetKoreanNameContainsSearchKeyword(searcher, account)
-        || this._assetEnglishNameContainsSearchKeyword(searcher, account))
-        ? true
-        : false;
+            || this._assetKoreanNameContainsSearchKeyword(searcher, account)
+            || this._assetEnglishNameContainsSearchKeyword(searcher, account))
+            ? true
+            : false;
     }
 
     _assetSymbolContainsSearchKeyword(searcher, account) {
@@ -146,21 +146,21 @@ class AccountStore {
         const userUuid = userStore.user && userStore.user.user_uuid;
 
         return api.getAccountsByUser(userUuid)
-        .then(action((response) => {
-            let accounts = response.data;
-            this.accountsRegistry.clear();
-            accounts.forEach((account) => {
-                this.accountsRegistry.set(account.asset_symbol, account);
-            });
-            this.totalAccountsCount = accounts.length;
-        }))
-        .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
-        }))
-        .then(action(() => {
-            this.inProgress = false;
-            this.isLoadedOnce = true;
-        }));
+            .then(action((response) => {
+                let accounts = response.data;
+                this.accountsRegistry.clear();
+                accounts.forEach((account) => {
+                    this.accountsRegistry.set(account.asset_symbol, account);
+                });
+                this.totalAccountsCount = accounts.length;
+            }))
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+            }))
+            .then(action(() => {
+                this.inProgress = false;
+                this.isLoadedOnce = true;
+            }));
     }
 
     @action updateSearchKeyword(keyword) {
