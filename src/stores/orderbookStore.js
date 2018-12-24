@@ -7,7 +7,7 @@ import {
 
 import api from '../utils/api';
 import tradingPairStore from './tradingPairStore';
-import Helper from '../utils/Helper';
+import number from '../utils/number';
 
 class OrderbookStore {
     @observable inProgress = false;
@@ -76,8 +76,8 @@ class OrderbookStore {
     _reformatOrderForDisplay = (order) => (
         {
             // TODO fix it for formating
-            price: Helper.getFixedPrice(order.price, this.baseSymbolOfSelectedTradingPair),
-            volume: Helper.getFixed(order.volume, 3)
+            price: number.getFixedPrice(order.price, this.baseSymbolOfSelectedTradingPair),
+            volume: number.getFixed(order.volume, 3)
         }
     );
 

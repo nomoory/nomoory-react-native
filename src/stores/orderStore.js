@@ -2,7 +2,7 @@ import { observable, action, computed, reaction } from 'mobx';
 
 import modalStore from './modalStore';
 import tradingPairStore from './tradingPairStore';
-import Helper from '../utils/Helper';
+import number from '../utils/number';
 import api from '../utils/api';
 
 const DEFAULT_TRADING_PAIR = 'BTC-KRW';
@@ -34,7 +34,7 @@ class OrderStore {
                 let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
                 this.order.tradingPairName = tradingPairName;
                 this.order.price = tradingPair.close_price;
-                this.order.unitPrice = Helper.getUnitPrice(tradingPair.close_price, tradingPair.base_symbol);
+                this.order.unitPrice = number.getUnitPrice(tradingPair.close_price, tradingPair.base_symbol);
             }
         );
 
@@ -42,7 +42,7 @@ class OrderStore {
             () => this.order.price,
             (price) => {
                 if (!price) return;
-                this.order.unitPrice = Helper.getUnitPrice(price, this.baseSymbol);
+                this.order.unitPrice = number.getUnitPrice(price, this.baseSymbol);
             }        
         );
     }

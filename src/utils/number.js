@@ -1,14 +1,15 @@
 import { Decimal } from './decimal.js';
+const MAX_SAFE_INTEGER = 9007199254740991;
 
 const unitPriceTable = {
     "BTC": [
-        [Number.MAX_SAFE_INTEGER, '0.00000001'],
+        [MAX_SAFE_INTEGER, '0.00000001'],
     ],
     "ETH": [ 
-        [Number.MAX_SAFE_INTEGER, '0.00000001'],
+        [MAX_SAFE_INTEGER, '0.00000001'],
     ],
     "CT": [ 
-        [Number.MAX_SAFE_INTEGER, '0.01'],
+        [MAX_SAFE_INTEGER, '0.01'],
     ],
     "KRW": [
         [10, '0.01'],
@@ -19,7 +20,7 @@ const unitPriceTable = {
         [500000, '50'],
         [1000000, '100'], 
         [2000000, '500'],
-        [Number.MAX_SAFE_INTEGER, '1000']
+        [MAX_SAFE_INTEGER, '1000']
     ]
 }
 
@@ -36,7 +37,7 @@ const KOREAN_WON = '원';
  * 3) string과 decimal을 구분하기위해 post_fix로 _type을 붙였습니다.
  */
 
-class Helper {
+class Number {
     static getUnitPrice(price_string, baseSymbol){
         const price_decimal = Decimal(price_string);
         for (let maxPriceAndUnit of unitPriceTable[baseSymbol]) {
@@ -172,4 +173,4 @@ class Helper {
     }
 }
 
-export default Helper;
+export default Number;

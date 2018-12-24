@@ -4,7 +4,7 @@ import api from '../utils/api';
 import tradingPairStore from './tradingPairStore';
 import userStore from './userStore';
 import { Decimal } from '../utils/decimal';
-import Helper from '../utils/Helper';
+import number from '../utils/number';
 
 class AccountStore {
     @observable inProgress = false;
@@ -28,15 +28,15 @@ class AccountStore {
                 let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
                 accounts.push({
                     uuid: account.uuid,
-                    balance: Helper.removeTrailingZeros(account.balance),
+                    balance: number.removeTrailingZeros(account.balance),
                     asset_symbol: account.asset_symbol,
                     asset_english_name: account.asset_english_name,
                     asset_korean_name: account.asset_korean_name,
-                    pending_order: Helper.removeTrailingZeros(account.pending_order),
-                    pending_withdrawal: Helper.removeTrailingZeros(account.pending_withdrawal),
-                    avg_fiat_buy_price: Helper.removeTrailingZeros(account.avg_fiat_buy_price),
+                    pending_order: number.removeTrailingZeros(account.pending_order),
+                    pending_withdrawal: number.removeTrailingZeros(account.pending_withdrawal),
+                    avg_fiat_buy_price: number.removeTrailingZeros(account.avg_fiat_buy_price),
                     is_avg_fiat_buy_price_modified: account.is_avg_fiat_buy_price_modified,
-                    asset_close_price: Helper.removeTrailingZeros(tradingPair ? tradingPair.close_price : '0')
+                    asset_close_price: number.removeTrailingZeros(tradingPair ? tradingPair.close_price : '0')
                 })
             }
         });
@@ -64,12 +64,12 @@ class AccountStore {
         if (totalBuyingPrice !== 0) evaluatedRevenueRatio = evaluatedRevenue / totalBuyingPrice;
         totalEvaluatedValueInKRW = evaluatedPriceOfAccountsWithoutKRW.add(holdingKRW);
         return {
-            totalEvaluatedValueInKRW: Helper.removeTrailingZeros(totalEvaluatedValueInKRW.toString()),
-            holdingKRW: Helper.removeTrailingZeros(holdingKRW.toString()),
-            totalBuyingPrice: Helper.removeTrailingZeros(totalBuyingPrice.toString()),
-            evaluatedPriceOfAccountsWithoutKRW: Helper.removeTrailingZeros(evaluatedPriceOfAccountsWithoutKRW.toString()),
-            evaluatedRevenue: Helper.removeTrailingZeros(evaluatedRevenue.toString()),
-            evaluatedRevenueRatio: Helper.removeTrailingZeros(evaluatedRevenueRatio.toString())
+            totalEvaluatedValueInKRW: number.removeTrailingZeros(totalEvaluatedValueInKRW.toString()),
+            holdingKRW: number.removeTrailingZeros(holdingKRW.toString()),
+            totalBuyingPrice: number.removeTrailingZeros(totalBuyingPrice.toString()),
+            evaluatedPriceOfAccountsWithoutKRW: number.removeTrailingZeros(evaluatedPriceOfAccountsWithoutKRW.toString()),
+            evaluatedRevenue: number.removeTrailingZeros(evaluatedRevenue.toString()),
+            evaluatedRevenueRatio: number.removeTrailingZeros(evaluatedRevenueRatio.toString())
         };
     }
 
