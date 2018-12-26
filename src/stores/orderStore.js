@@ -3,7 +3,7 @@ import { observable, action, computed, reaction } from 'mobx';
 import modalStore from './modalStore';
 import tradingPairStore from './tradingPairStore';
 import number from '../utils/number';
-import api from '../utils/api';
+import agent from '../utils/agent';
 
 const DEFAULT_TRADING_PAIR = 'BTC-KRW';
 const DEFAULT_ORDER_TYPE = 'LIMIT';
@@ -62,7 +62,7 @@ class OrderStore {
     @action registerOrder() {
         this.inProgress = true;
         let order = this._transformOrderJsonForServer(this.order);
-        return api.postOrder(order)
+        return agent.postOrder(order)
         .then(action((res) => {
             modalStore.openModal({
                 title: '성공', 

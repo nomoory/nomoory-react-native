@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import Hangul from 'hangul-js';
-import api from '../utils/api';
+import agent from '../utils/agent';
 import tradingPairStore from './tradingPairStore';
 import userStore from './userStore';
 import { Decimal } from '../utils/decimal';
@@ -96,7 +96,7 @@ class AccountStore {
 
     @action deposit() {
         let account = this.getAccountByAssetSymbol(this.currency);
-        return api.deposit(account.uuid, this.depositPayload)
+        return agent.deposit(account.uuid, this.depositPayload)
             .then(action((response) => {
                 this.accountsRegistry.set(this.currency, response.data);
             }))
@@ -107,7 +107,7 @@ class AccountStore {
 
     @action withdraw() {
         let account = this.getAccountByAssetSymbol(this.currency);
-        return api.withdraw(account.uuid, this.withdrawPayload)
+        return agent.withdraw(account.uuid, this.withdrawPayload)
             .then(action((response) => {
                 this.accountsRegistry.set(this.currency, response.data);
             }))
@@ -145,7 +145,7 @@ class AccountStore {
         this.errors = null;
         const userUuid = userStore.user && userStore.user.user_uuid;
 
-        return api.getAccountsByUser(userUuid)
+        return agent.getAccountsByUser(userUuid)
             .then(action((response) => {
                 let accounts = response.data;
                 this.accountsRegistry.clear();

@@ -29,6 +29,7 @@ export default class LoginScreen extends Component {
                             <Text onPress={this.onPressLoginButton}> 로그인 </Text>
                         </Button>
                     </Form>
+                    
                     <Text onPress={this.onPressResetPassword}>비밀번호 재설정</Text>
                     <Text onPress={this.onPressSignin}>회원가입</Text>
                 </Content>

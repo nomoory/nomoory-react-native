@@ -1,25 +1,46 @@
 import { observable, action, reaction } from 'mobx';
 import userStore from './userStore';
-import api from '../utils/api';
+import agent from '../utils/agent';
 import { AsyncStorage } from "react-native"
 
 class AuthStore {
-    @observable inProgress = false;
+    @observable isLoading = false;
     @observable errors = null;
-    
-    @observable email = '';
-    @observable password = '';
-    @observable passwordConfirmation = '';
-    @observable accessToken = null;
 
     constructor() {
+        // needOtpVerificationToLogin이 true가 된지 2분 뒤에 temporaryLoaginValues를 reset함
+        reaction(
+            () => this.temporaryLoginValues.needOtpVerificationToLogin,
+            needOtpVerificationToLogin => {
+                if (needOtpVerificationToLogin) {
+                    //시간 카운트 다운 시작
+                    this.otpLoginTimeLimitValues.end = 
+                        moment()
+                        .add(parseInt(this.otpLoginTimeLimitValues.minutes), 'm')
+                        .add(parseInt(this.otpLoginTimeLimitValues.seconds), 's')
+                        .tz('Asia/Seoul');
+
+                    this.otpLoginTimeLimitValues.interval = setInterval(() => {
+                        this.setTimeLeft();
+                    }, 1000)
+                } else {
+                    this.clearOtpTimeInterval();
+                    this.otpLoginTimeLimitValues = {
+                        end: null,
+                        interval: null,
+                        minutes: '02',
+                        seconds: '00',
+                    };
+                }
+            }
+        )
         /*
          * 다음의 코드를 통해 access_token을 얻어오는 경우를 제외하고는
          * store의 accessToken을 set함으로 AsyncStorage가 갱신됩니다.
          */
 
         const tokenReaction = reaction(
-            () => this.token,
+            () => this.accessToken,
             token => {
                 if (token) {
                     AsyncStorage.setItem('access_token', token);
@@ -29,6 +50,18 @@ class AuthStore {
             }
         );
     }
+    @observable temporaryLoginValues = {
+        needOtpVerificationToLogin: false,
+        temporaryOtpToken: '',
+        temporaryEmail: '',
+    }
+    
+    @observable email = '';
+    @observable password = '';
+    @observable passwordConfirmation = '';
+
+    @observable accessToken = null;
+    @observable userUuid = null; // reset password 시 필요
 
     @action setEmail(email) {
         this.email = email;
@@ -42,32 +75,32 @@ class AuthStore {
         this.passwordConfirmation = password;
     }
 
-    @action clearIdAndPassword() {
+    @action clearEmailAndPassword() {
         this.email = '';
         this.password = '';
         this.passwordConfirmation = '';
     }
 
     @action register() {
-        this.inProgress = true;
+        this.isLoading = true;
         this.errors = null;
 
-        api.signup({
+        agent.signup({
             id: this.id,
             password: this.password,
             passwordConfirmation: this.passwordConfirmation
         })
-        .then(this._storeTokenAndUserAndClearIdAndPassword)
+        .then(this._storeTokenAndUserAndClearEmailAndPassword)
         .catch(this._handleAuthError)
         .then(this.doneProgress);
     }
 
     @action login() {
-        this.inProgress = true;
+        this.isLoading = true;
         this.errors = null;
 
-        api.login(this.values)
-        .then(this._storeTokenAndUserAndClearIdAndPassword)
+        agent.login(this.values)
+        .then(this._storeTokenAndUserAndClearEmailAndPassword)
         .catch(this._handleAuthError)
         .then(this.doneProgress);
     }
@@ -75,15 +108,15 @@ class AuthStore {
         this.errors = null;
         this.accessToken = null;
         
-        api.logout()
+        agent.logout()
         .catch(this._handleAuthError);
     }
-    @action _storeTokenAndUserAndClearIdAndPassword(response) {
+    @action _storeTokenAndUserAndClearEmailAndPassword(response) {
         let user = response.data;
         this.accessToken = user.access_token;
         delete user.access_token;
         userStore.saveUser(user);
-        this.clearIdAndPassword();
+        this.clearEmailAndPassword();
     }
     @action hasAccessToken() {
         return this.accessToken ? true : false;
@@ -99,7 +132,7 @@ class AuthStore {
         throw err;
     }
     @action doneProgress() {
-        this.inProgress = false;
+        this.isLoading = false;
     }
 }
 

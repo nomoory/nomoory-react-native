@@ -26,8 +26,10 @@
     "extra": {
       "DEV_API_ENDPOINT": "localhost:4010",
       "DEV_PUBNUB_SUBSCRIBE_KEY": "sub-c-9ef3f2c2-a9ba-11e8-89c5-e2f2efdc17a6",
-      "REACT_APP_API_ENDPOINT": "https://staging-api.coblic.com/",
-      "REACT_APP_API_VERSION": "v1.0/"
+      "REACT_APP_API_ENDPOINT": "https://staging-api.coblic.com",
+      "REACT_APP_API_VERSION": "v1.0",
+      "REACT_APP_DEV_API_ENDPOINT": "https://staging-api.coblic.com",
+      "REACT_APP_DEV_API_VERSION": "v1.0"
     }
   }
 }

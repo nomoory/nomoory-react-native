@@ -6,7 +6,7 @@ import {
 } from 'mobx';
 // import orderStore from './orderStore';
 import Hangul from 'hangul-js';
-import api from '../utils/api';
+import agent from '../utils/agent';
 
 class TradingPairStore {
     @observable inProgress = false;
@@ -58,7 +58,7 @@ class TradingPairStore {
     @action loadTradingPairs() {
         this.inProgress = true;
         this.errors = undefined;
-        api.getTradingPairs()
+        agent.getTradingPairs()
             .then(action((response) => {
                 let tradingPairs = response.data;
                 this.tradingPairsRegistry.clear();

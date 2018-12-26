@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Text, StyleSheet, View, Button } from 'react-native';
 import { inject, observer } from 'mobx-react';
 
-@inject('stubStore', 'api')
+@inject('stubStore')
 @observer
 export default class AuthLoadingScreen extends Component {
-
     constructor(props) {
         super(props);
         this.moveToMainStack = this.moveToMainStack.bind(this);

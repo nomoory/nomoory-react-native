@@ -5,7 +5,7 @@ import {
     reaction
 } from 'mobx';
 
-import api from '../utils/api';
+import agent from '../utils/agent';
 import tradingPairStore from './tradingPairStore';
 import number from '../utils/number';
 
@@ -57,7 +57,7 @@ class OrderbookStore {
             );
         }
         
-        return api.getOrderbookByTradingPairName(tradingPairName)
+        return agent.getOrderbookByTradingPairName(tradingPairName)
         .then(action((response) => {
             const orders = response.data;
             this._replaceOrderRegistries(orders);
