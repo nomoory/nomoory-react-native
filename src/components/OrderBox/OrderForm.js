@@ -105,12 +105,9 @@ class OrderForm extends Component {
     this.props.orderStore.registerOrder();
   }
   _onChangePrice = (text) => {
-    console.log(text);
-
     this.props.orderStore.setPrice(parseFloat(text));
   }
   _onChangeVolume = (text) => {
-    console.log(text);
     this.props.orderStore.setVolume(parseFloat(text));
   }
 }

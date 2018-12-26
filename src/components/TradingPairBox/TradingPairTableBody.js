@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { 
-  StyleSheet,
-  Button, 
-  Text, 
-  ScrollView, 
-  TouchableOpacity 
+import {
+    StyleSheet,
+    Button,
+    Text,
+    ScrollView,
+    TouchableOpacity
 } from 'react-native';
 import { } from 'native-base';
-import { 
-    inject, 
-    observer 
+import {
+    inject,
+    observer
 } from 'mobx-react';
 import { computed, observable } from 'mobx';
 import TradingPairRow from './TradingPairRow';
@@ -19,32 +19,29 @@ import TradingPairRow from './TradingPairRow';
 @inject('tradingPairStore')
 @observer
 class TradingPairTableBody extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const tradingPairs = this.props.tradingPairStore.tradingPairs;
-    return (
-      <ScrollView style={styles.container}>
-        {
-          tradingPairs.map((tradingPair, idx) => 
-            <TradingPairRow 
-              key={idx} 
-              tradingPair={tradingPair} 
-              columStyles={this.props.columStyles} 
-            ></TradingPairRow>
-          )
-        }
-      </ScrollView>
-    );
-  }
+    render() {
+        const { tradingPairs } = this.props.tradingPairStore || {};
+        return (
+            <ScrollView style={styles.container}>
+                {
+                    tradingPairs && 
+                    tradingPairs.map((tradingPair, idx) =>
+                        <TradingPairRow
+                            key={idx}
+                            tradingPair={tradingPair}
+                            columStyles={this.props.columStyles}
+                        />
+                    )
+                }
+            </ScrollView>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white'
-  },    
+    container: {
+        flex: 1,
+        backgroundColor: 'white'
+    },
 })
 export default TradingPairTableBody;

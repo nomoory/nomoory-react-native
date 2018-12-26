@@ -1,8 +1,18 @@
 {
-  "presets": ["babel-preset-expo"],
-  "env": {
-    "development": {
-      "plugins": ["@babel/transform-react-jsx-source"]
+    "presets": [
+        "babel-preset-expo"
+    ],
+    "env": {
+        "development": {
+            "plugins": [
+                "@babel/plugin-proposal-decorators",
+                [
+                    "@babel/plugin-proposal-class-properties",
+                    {
+                        "loose": true
+                    }
+                ]
+            ]
+        }
     }
-  }
 }

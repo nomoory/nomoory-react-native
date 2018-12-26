@@ -14,8 +14,6 @@ class StubStore {
     }
     @action
     updateWithMessage(msg) {
-        console.log('stubStore: updateWithMessage called');
-        console.log(msg);
         this.message = msg;
     }
 }

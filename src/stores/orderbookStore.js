@@ -57,7 +57,7 @@ class OrderbookStore {
             );
         }
         
-        return agent.getOrderbookByTradingPairName(tradingPairName)
+        return agent.loadOrderbookByTradingPairName(tradingPairName)
         .then(action((response) => {
             const orders = response.data;
             this._replaceOrderRegistries(orders);

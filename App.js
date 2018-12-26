@@ -18,22 +18,22 @@ enableLogging({
     transaction: __DEV__ && Boolean(window.navigator.userAgent),
     compute: __DEV__ && Boolean(window.navigator.userAgent)
 });
+const pubnub = new Pubnub(this, stores);
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        this.pubnub = new Pubnub(this, stores);
     }
     async componentDidMount() {
         await stores.tradingPairStore.loadTradingPairs();
-        await stores.accountStore.loadAccounts();
+        // await stores.accountStore.loadAccounts();
     }
     render() {
         return (
             <StyleProvider style={getTheme(commonColor)}>
                 <Provider
                     {...stores}
-                    pubnub={this.pubnub}
+                    pubnub={pubnub}
                 >
                     <View style={styles.container}>
                         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}

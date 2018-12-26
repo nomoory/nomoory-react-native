@@ -4,12 +4,12 @@ import {
     computed,
     reaction
 } from 'mobx';
-// import orderStore from './orderStore';
+import orderStore from './orderStore';
 import Hangul from 'hangul-js';
 import agent from '../utils/agent';
 
 class TradingPairStore {
-    @observable inProgress = false;
+    @observable isLoading = false;
     @observable errors = null;
 
     @observable selectedTradingPairName = null; // 거래소 스크린상에서 선택된 trading pair
@@ -18,19 +18,22 @@ class TradingPairStore {
     @observable filters = {
         'interest': false,
     };
-    @observable languageForTokenName = 'ko' || 'en';
+    @observable languageForTokenName = 'ko';
     @observable sorts = [ // direction: asc|desc|null
-        { name: 'close_price', displayName: '현재가', direction: null }, // 현재가
-        { name: 'signed_change_rate', displayName: '24시간대비', direction: null }, // 부호가 있는 변화율 (24시간 대비)
-        { name: 'acc_trade_value_24h', displayName: '거래대금', direction: null }, // 24시간 누적 거래대금
+        { name: 'close_price', direction: null }, // 현재가
+        { name: 'signed_change_rate', direction: null }, // 부호가 있는 변화율 (24시간 대비)
+        { name: 'acc_trade_value_24h', direction: null }, // 24시간 누적 거래대금
     ];
     @observable selectedTradingPairTab = 'KRW';
     @observable tradingPairsRegistry = observable.map();
-    @computed get selectedTradingPair() {
+
+    @computed 
+    get selectedTradingPair() {
         return this.getTradingPairByTradingPairName(this.selectedTradingPairName);
     }
 
-    @computed get displayNameOfLanguageForTokenName() {
+    @computed 
+    get displayNameOfLanguageForTokenName() {
         if(this.languageForTokenName === 'ko') return '한글명';
         if(this.languageForTokenName === 'en') return '영문명';
         return '한글명';
@@ -41,24 +44,26 @@ class TradingPairStore {
     }
 
     getTradingPairByTradingPairName(tradingPairName) {
-        return this.tradingPairsRegistry.get(tradingPairName);
+        return this.tradingPairsRegistry.get(tradingPairName) || null;
     }
 
-    @computed get tradingPairs() {
+    @computed 
+    get tradingPairs() {
         let tradingPairs = [];
         this.tradingPairsRegistry.forEach((tradingPair, key) => {
             tradingPairs.push(tradingPair);
-        })
-        tradingPairs = this._tab(tradingPairs);
+        });        
+        // tradingPairs = this._tab(tradingPairs);
         tradingPairs = this._filter(tradingPairs);
         tradingPairs = this._search(this.searchKeyword, tradingPairs);
         tradingPairs = this._sort(tradingPairs);
         return tradingPairs;
     }
+
     @action loadTradingPairs() {
-        this.inProgress = true;
+        this.isLoading = true;
         this.errors = undefined;
-        agent.getTradingPairs()
+        agent.loadTradingPairs()
             .then(action((response) => {
                 let tradingPairs = response.data;
                 this.tradingPairsRegistry.clear();
@@ -75,7 +80,7 @@ class TradingPairStore {
                     err.response.body.errors;
             }))
             .then(action(() => {
-                this.inProgress = false;
+                this.isLoading = false;
             }));
     }
     @action setSelectedTradingPairName(tradingPairName) {
@@ -103,20 +108,22 @@ class TradingPairStore {
             this.languageForTokenName === 'ko' ? 'en' : 'ko';
     }
     @action toggleSortDirectionOf(target) {
-        this.sorts.forEach((sort) => {
+        this.sorts = this.sorts.map((sort) => {
+            let newSort = { name: sort.name };
             if(sort.name !== target) {
-                sort.direction = null;
+                newSort.direction = null;
             } else {
                 if(!sort.direction){
-                    sort.direction = 'asc';
-                } else if(sort.direction === 'asc') {
-                    sort.direction = 'desc';
-                } else if(sort.direction === 'desc') {
-                    sort.direction = null;
+                    newSort.direction = 'asc';
+                } else if (sort.direction === 'asc') {
+                    newSort.direction = 'desc';
+                } else if (sort.direction === 'desc') {
+                    newSort.direction = null;
                 } else {
-                    sort.direction = null;
+                    newSort.direction = null;
                 }
             }
+            return newSort;
         });
     }    
 

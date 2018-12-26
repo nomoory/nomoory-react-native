@@ -27,16 +27,16 @@ class OrderStore {
     @computed get amount() { return this.order.volume * this.order.price; }
 
     constructor() {
-        const reactionSelectedTradingPair = reaction(
-            () => tradingPairStore.selectedTradingPairName,
-            (tradingPairName) => {
-                if (!tradingPairName) return;
-                let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
-                this.order.tradingPairName = tradingPairName;
-                this.order.price = tradingPair.close_price;
-                this.order.unitPrice = number.getUnitPrice(tradingPair.close_price, tradingPair.base_symbol);
-            }
-        );
+        // const reactionSelectedTradingPair = reaction(
+        //     () => tradingPairStore.selectedTradingPairName,
+        //     (tradingPairName) => {
+        //         if (!tradingPairName) return;
+        //         let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
+        //         this.order.tradingPairName = tradingPairName;
+        //         this.order.price = tradingPair.close_price;
+        //         this.order.unitPrice = number.getUnitPrice(tradingPair.close_price, tradingPair.base_symbol);
+        //     }
+        // );
 
         const reactionPrice = reaction(
             () => this.order.price,

@@ -12,7 +12,10 @@ import orderbookStore from '../stores/orderbookStore';
 export default class Pubnub {
     constructor(container, stores) {
         this.pubnub = new PubNubReact({
-            subscribeKey: Expo.Constants.manifest.extra.DEV_PUBNUB_SUBSCRIBE_KEY
+            subscribeKey: ''
+                // __DEV__ ? 
+                // Expo.Constants.manifest.extra.REACT_APP_DEV_PUBNUB_SUBSCRIBE_KEY :
+                // Expo.Constants.manifest.extra.REACT_APP_PUBNUB_SUBSCRIBE_KEY
         });
         this.stores = stores;
         this._addListenerToUpdateStoreOnReceiveMessage();
@@ -67,7 +70,6 @@ export default class Pubnub {
     _handleOrderByStatus = (personalOrder) => {
         let { order_status, price, volume_filled, trading_pair_name } = personalOrder;
         let quoteSymbol = trading_pair_name.split('-')[1];
-        // console.log('pubnub|_handleOrderByStatus: personalOrder',personalOrder)
         switch (order_status) {
             case 'PENDING':
                 // snackbarHelper.info(`성공적으로 주문을 등록하였습니다.`);
@@ -152,7 +154,6 @@ export default class Pubnub {
      */
     subscribe(channel) {
         channel = this._concatUserPubnubUuidOnPersonalSubscribe(channel);
-        console.log('pubnub|subscribe:', channel)
         this._loadDataByChannel(channel);
         this._addSubscribeCountOfChannel(channel);
         this.pubnub.subscribe({
@@ -162,8 +163,6 @@ export default class Pubnub {
     }
 
     unsubscribe(channel) {
-        console.log('pubnub|unsubscribe:', channel)
-        if (channel === 'ORDER') console.log(this.subscribeCounts);
         this._subtractSubscribeCountOnChannel(channel);
         if (this.subscribeCounts[channel] == 0) {
             this.pubnub.unsubscribe({
@@ -193,7 +192,6 @@ export default class Pubnub {
     }
 
     _addListenerToUpdateStoreOnReceiveMessage() {
-        console.log('pubnub|addListenerToUpdateStoreOnReceiveMessage');
         this.pubnub.addListener({
             message: this._onReceiveMessage
         });

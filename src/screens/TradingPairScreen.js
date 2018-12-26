@@ -7,12 +7,12 @@ import OrderBox from '../components/OrderBox';
 
 @inject('tradingPairStore')
 @observer
-export default class InvestmentScreen extends Component {
+export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
-        const tokenName = navigation.getParam('tokenName', '토큰');
+        const baseKoreanName= navigation.getParam('baseKoreanName', '토큰');
         const tradingPairName = navigation.getParam('tradingPairName', '');
         return {
-            title: `${tokenName} ${tradingPairName}`,
+            title: `${baseKoreanName} ${tradingPairName}`,
             tabBarVisible: false,
         };
     };
