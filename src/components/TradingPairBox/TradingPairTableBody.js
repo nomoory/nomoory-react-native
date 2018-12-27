@@ -20,7 +20,7 @@ import TradingPairRow from './TradingPairRow';
 @observer
 class TradingPairTableBody extends Component {
     render() {
-        const { tradingPairs } = this.props.tradingPairStore || {};
+        const { tradingPairs } = this.props.tradingPairStore;
         return (
             <ScrollView style={styles.container}>
                 {

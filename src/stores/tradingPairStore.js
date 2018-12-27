@@ -4,11 +4,24 @@ import {
     computed,
     reaction
 } from 'mobx';
-import orderStore from './orderStore';
+import orderbookStore from './orderbookStore';
 import Hangul from 'hangul-js';
 import agent from '../utils/agent';
 
 class TradingPairStore {
+    constructor() {
+        /*
+         * 선택한 trading pair가 변경될때마다 그에 맞는 orderbook을 load 합니다.
+         */
+        const selectedTradingPairNameReaction = reaction(
+            () => this.selectedTradingPairName,
+            async (selectedTradingPairName) => {
+                orderbookStore.clearOrderbook();
+                await orderbookStore.loadOrderbook(selectedTradingPairName);
+            }
+        );
+    }
+    
     @observable isLoading = false;
     @observable errors = null;
 
@@ -47,14 +60,13 @@ class TradingPairStore {
         return this.tradingPairsRegistry.get(tradingPairName) || null;
     }
 
-    @computed 
-    get tradingPairs() {
+    @computed get tradingPairs() {
         let tradingPairs = [];
         this.tradingPairsRegistry.forEach((tradingPair, key) => {
             tradingPairs.push(tradingPair);
-        });        
+        });
         // tradingPairs = this._tab(tradingPairs);
-        tradingPairs = this._filter(tradingPairs);
+        // tradingPairs = this._filter(tradingPairs);
         tradingPairs = this._search(this.searchKeyword, tradingPairs);
         tradingPairs = this._sort(tradingPairs);
         return tradingPairs;
@@ -86,12 +98,11 @@ class TradingPairStore {
     @action setSelectedTradingPairName(tradingPairName) {
         this.selectedTradingPairName = tradingPairName;
     }
+    
     @action setSearchKeyword(keyword = '') {
         this.searchKeyword = keyword;
     }
-    @action setTab(keyword = '') {
-        this.searchKeyword = keyword;
-    }
+
     @action updateTickerInTradingPair(ticker) {
         const tickerData = ticker.message
         if (this.tradingPairsRegistry.has(tickerData.trading_pair_name)) {
@@ -146,9 +157,7 @@ class TradingPairStore {
         return true;
     }
     _search = (searchKeyword, tradingPairs) => {
-        if (!searchKeyword) {
-            return tradingPairs;
-        }
+        if (!searchKeyword) { return tradingPairs; }
         const searcher = new Hangul.Searcher(searchKeyword.toLowerCase());
         return tradingPairs.filter((tradingPair) => {
             return this._hasSearchKeywordInTradingPair(searcher, tradingPair); 
@@ -166,6 +175,7 @@ class TradingPairStore {
         }
         return tradingPairs;
     }
+
     _hasSearchKeywordInTradingPair(searcher, tradingPair) {
         return (
             this._quoteSymbolContainsSearchKeyword(searcher, tradingPair) || 
@@ -175,15 +185,15 @@ class TradingPairStore {
     }
 
     _quoteSymbolContainsSearchKeyword(searcher, tradingPair) {
-        return searcher.search(tradingPair.quote_symbol && tradingPair.quote_symbol.toLowerCase()) >= 0 ? true : false;
+        return searcher.search(tradingPair.base_symbol && tradingPair.base_symbol.toLowerCase()) >= 0 ? true : false;
     }
 
     _quoteKoreanNameContainsSearchKeyword(searcher, tradingPair) {
-        return searcher.search(tradingPair.quote_korean_name) >= 0 ? true : false;
+        return searcher.search(tradingPair.base_korean_name) >= 0 ? true : false;
     }
 
     _quoteEnglishNameContainsSearchKeyword(searcher, tradingPair) {
-        return searcher.search(tradingPair.quote_english_name && tradingPair.quote_english_name.toLowerCase()) >= 0 ? true : false;
+        return searcher.search(tradingPair.base_english_name && tradingPair.base_english_name.toLowerCase()) >= 0 ? true : false;
     }
 
     _hasClickedBaseSymbolInTradingPair(baseSymbol) {

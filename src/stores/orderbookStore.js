@@ -1,33 +1,16 @@
-import {
-    observable,
-    action,
-    computed,
-    reaction
-} from 'mobx';
-
+import { observable, action, computed, reaction } from 'mobx';
 import agent from '../utils/agent';
-import tradingPairStore from './tradingPairStore';
+import Decimal from '../utils/decimal.js';
 import number from '../utils/number';
+import tradingPairStore from './tradingPairStore';
 
 class OrderbookStore {
-    @observable inProgress = false;
+    @observable isLoading = false;
     @observable errors = null;
 
     @observable buyOrdersRegistry = observable.array();
     @observable sellOrdersRegistry = observable.array();
     @observable baseSymbolOfSelectedTradingPair = null;
-
-    constructor() {
-        /*
-         * 선택한 trading pair가 변경될때마다 그에 맞는 orderbook을 load 합니다.
-         */
-        const selectedTradingPairNameReaction = reaction(
-            () => tradingPairStore.selectedTradingPairName,
-            (selectedTradingPairName) => {
-                this.loadOrderbookByTradingPairName(selectedTradingPairName);
-            }
-        );
-    }
 
     @computed get sellOrders() {
         let sellOrders = [];
@@ -36,6 +19,7 @@ class OrderbookStore {
         });
         return sellOrders;
     };
+
     @computed get buyOrders() {
         let buyOrders = [];
         this.buyOrdersRegistry.forEach((buyOrder) => {
@@ -44,46 +28,73 @@ class OrderbookStore {
         return buyOrders;
     };
 
-    @action setOrderbook(orderbook) { // set by pubnub message
-        const orders = orderbook.message;
-        this._replaceOrderRegistries(orders);
-    }
-    @action loadOrderbookByTradingPairName(tradingPairName) {
-        this.inProgress = true;
-        this.errors = null;
-        if (!tradingPairName) {
-            throw new Error(
-                'orderbookStore>loadOrderbook>No param tradingPairName'
-            );
-        }
-        
-        return agent.loadOrderbookByTradingPairName(tradingPairName)
-        .then(action((response) => {
-            const orders = response.data;
-            this._replaceOrderRegistries(orders);
-        }))
-        .catch(action((err) => {
-            this.errors = 
-                err.response && 
-                err.response.body && 
-                err.response.body.errors;
-        }))
-        .then(action(() => {
-            this.inProgress = false;
-        }));
-    }
-
     _reformatOrderForDisplay = (order) => (
         {
-            // TODO fix it for formating
-            price: number.getFixedPrice(order.price, this.baseSymbolOfSelectedTradingPair),
+            price: number.getFixedPrice(order.price, tradingPairStore.selectedTradingPair.base_symbol),
             volume: number.getFixed(order.volume, 3)
         }
     );
 
-    _replaceOrderRegistries = (orders) => {
-        this.sellOrdersRegistry.replace(orders.sells);
-        this.buyOrdersRegistry.replace(orders.buys);
+    @computed get buyOrdersSum_display() {
+        let volume_sum = Decimal(0);
+        this.buyOrdersRegistry.forEach((buyOrder) => {
+            let volume = Decimal(buyOrder.volume);
+            volume_sum = volume_sum.plus(volume);
+        });
+
+        return numberHelper.putComma(volume_sum.toFixed(3));
+    };
+
+    @computed get sellOrdersSum_display() {
+        let volume_sum = Decimal(0);
+        this.sellOrdersRegistry.forEach((sellOrder) => {
+            let volume = Decimal(sellOrder.volume);
+            volume_sum = volume_sum.plus(volume);
+        });
+
+        return numberHelper.putComma(volume_sum.toFixed(3))
+    };
+
+    @computed get maxOrderVolume() {
+        let maxOrderVolume = 0;
+        this.sellOrders.forEach(sellOrder => {
+            if (!sellOrder) return;
+            let volume = parseFloat(sellOrder.volume);
+            if (volume > maxOrderVolume) maxOrderVolume = volume;
+        });
+        this.buyOrders.forEach(buyOrder => {
+            if (!buyOrder) return;
+            let volume = parseFloat(buyOrder.volume);
+            if (volume > maxOrderVolume) maxOrderVolume = volume;
+        });
+
+        return maxOrderVolume;
+    }
+
+    @action clearOrderbook() {
+        this.buyOrdersRegistry.clear();
+        this.sellOrdersRegistry.clear();
+    }
+
+    @action setOrderbook(message) {
+        this.buyOrdersRegistry = message.buys;
+        this.sellOrdersRegistry = message.sells;
+    }
+
+    @action loadOrderbook(selectedTradingPairName) {
+        this.isLoading = true;
+        this.clearOrderbook();
+        return agent.loadOrderbookByTradingPairName(selectedTradingPairName || tradingPairStore.selectedTradingPairName)
+        .then(action((response) => {
+            this.buyOrdersRegistry = response.data.buys;
+            this.sellOrdersRegistry = response.data.sells;
+            this.isLoading = false;
+        }))
+        .catch(action((err) => {
+            this.errors = err.response && err.response.body && err.response.body.errors;
+            this.isLoading = false;
+            throw err;
+        }));
     }
 }
 

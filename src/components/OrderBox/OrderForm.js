@@ -40,7 +40,7 @@ class OrderForm extends Component {
     const { 
       base_symbol,
       quote_symbol,
-    } = tradingPairStore.selectedTradingPair;
+    } = tradingPairStore.selectedTradingPair || {};
     const isSideBuy = order.side === 'BUY';
 
     return (

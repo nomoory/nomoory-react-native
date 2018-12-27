@@ -14,8 +14,7 @@ import { withNavigation } from 'react-navigation';
 @observer
 class TradingPairRow extends Component {
     _onPressTradingPairRow = (e) => {
-        const tradingPairName = this.props.tradingPair.name;
-        this.props.tradingPairStore.setSelectedTradingPairName(tradingPairName);
+        this.props.tradingPairStore.setSelectedTradingPairName(this.props.tradingPair.name);
         this._openTradingPairScreen();
     }
 
@@ -31,8 +30,8 @@ class TradingPairRow extends Component {
         const tradingPairStore = this.props.tradingPairStore;
         const tradingPair = this.props.tradingPair;
         const tokenNameForSelectedLanguage = tradingPairStore.languageForTokenName === 'ko' ?
-            tradingPair['quote_korean_name'] :
-            tradingPair['quote_english_name'];
+            tradingPair['base_korean_name'] :
+            tradingPair['base_english_name'];
 
         return (
             <TouchableOpacity
