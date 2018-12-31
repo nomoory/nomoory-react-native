@@ -6,6 +6,8 @@ import orderStore from './orderStore';
 import orderbookStore from './orderbookStore';
 import tradingPairStore from './tradingPairStore';
 import userStore from './userStore';
+import orderFeeStore from './orderFeeStore';
+import cryptoWithdrawStore from './cryptoWithdrawStore';
 
 const stores = {
     accountStore,
@@ -15,7 +17,9 @@ const stores = {
     orderStore,
     orderbookStore,
     tradingPairStore,
-    userStore
+    userStore,
+    orderFeeStore,
+    cryptoWithdrawStore
 };
 
 export default stores;

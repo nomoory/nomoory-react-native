@@ -1,13 +1,13 @@
 import { observable, action, computed } from 'mobx';
 import Hangul from 'hangul-js';
 import agent from '../utils/agent';
-import tradingPairStore from './tradingPairStore';
 import userStore from './userStore';
-import { Decimal } from '../utils/decimal';
+import tradingPairStore from './tradingPairStore';
+import Decimal from '../utils/decimal';
 import number from '../utils/number';
 
 class AccountStore {
-    @observable inProgress = false;
+    @observable isLoading = false;
     @observable errors = null;
 
     /*
@@ -18,106 +18,171 @@ class AccountStore {
 
     @observable totalAccountsCount = 0;
     @observable searchKeyword = '';
+    @observable selectedAccountSymbol = 'BTC';
+
+    @action setSelectedAccountSymbol(symbol) {
+        if (symbol === undefined) {
+            this.selectedAccountSymbol = 'BTC';
+            whitelistedWithdrawalWalletAddressStore.setAssetSymbol('BTC');
+        } else {
+            this.selectedAccountSymbol = symbol;
+            whitelistedWithdrawalWalletAddressStore.setAssetSymbol(symbol);
+        }
+    }
+
+    @action clearCurrency() {
+        this.selectedAccountSymbol = '';
+    }
+
+    @action updateSearchKeyword(keyword) {
+        this.searchKeyword = keyword.toLowerCase();
+    }
 
     @computed get accounts() {
         let accounts = [];
         const searcher = new Hangul.Searcher(this.searchKeyword);
         this.accountsRegistry.forEach((account) => {
             if (this._hasSearchKeywordInAccount(searcher, account)) {
-                const tradingPairName = account.asset_symbol + '-KRW';
-                let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
-                accounts.push({
-                    uuid: account.uuid,
-                    balance: number.removeTrailingZeros(account.balance),
-                    asset_symbol: account.asset_symbol,
-                    asset_english_name: account.asset_english_name,
-                    asset_korean_name: account.asset_korean_name,
-                    pending_order: number.removeTrailingZeros(account.pending_order),
-                    pending_withdrawal: number.removeTrailingZeros(account.pending_withdrawal),
-                    avg_fiat_buy_price: number.removeTrailingZeros(account.avg_fiat_buy_price),
-                    is_avg_fiat_buy_price_modified: account.is_avg_fiat_buy_price_modified,
-                    asset_close_price: number.removeTrailingZeros(tradingPair ? tradingPair.close_price : '0')
-                })
+                account = this.getAccountByAssetSymbol(account.asset_symbol);
+                accounts.push(account);
             }
         });
+        accounts = this._sort(accounts);
+        accounts = this._putKRWInFront(accounts);
         return accounts;
     };
 
-    @computed get totalAssetsEvaluation() {
-        let totalEvaluatedValueInKRW = Decimal(0); // 자산 평가액(KRW)
-        let holdingKRW = Decimal(0) // 보유 KRW
-        let totalBuyingPrice = Decimal(0); // 총 매수 금액
-        let evaluatedPriceOfAccountsWithoutKRW = Decimal(0); // 평가 금액
-        let evaluatedRevenue = 0;
-        let evaluatedRevenueRatio = Decimal(0);
-        this.accounts.forEach((account) => {
-            if (account.asset_symbol === 'KRW') {
-                holdingKRW = Decimal(account.balance);
-            } else {
-                let buyingPrice = Decimal(account.balance) * Decimal(account.avg_fiat_buy_price);
-                totalBuyingPrice = totalBuyingPrice.add(buyingPrice);
-                let evaluatedPrice = Decimal(account.balance) * Decimal(account.asset_close_price);
-                evaluatedPriceOfAccountsWithoutKRW = evaluatedPriceOfAccountsWithoutKRW.add(evaluatedPrice);
+    _sort(accounts) {
+        accounts = accounts.sort((prev, next) => {
+            return Decimal(prev.evaluated_in_base_currency).lessThan(next.evaluated_in_base_currency);
+        });
+        return accounts;
+    }
+    _putKRWInFront(accounts) {
+        let indexOfKRW = accounts.findIndex(account => {
+            return account.asset_symbol === 'KRW';
+        });
+        if (indexOfKRW) {
+            let splicedAccounts = accounts.splice(indexOfKRW, 1);
+            if (splicedAccounts[0]){
+                accounts.unshift(splicedAccounts[0]);
+            }
+        }
+        return accounts;
+    }
+
+    @computed get portfolio() {
+        let portfolio = [];
+        let totalBought = Decimal(0);
+        let totalEvaluation = Decimal(0);
+        let totalChange = Decimal(0);
+        let totalChangeRate = Decimal(0);
+        this.accountsRegistry.forEach((account) => {
+            const trading_pair_name = account.asset_symbol + '-' + QUOTE_SYMBOL;
+            let trading_pair = tradingPairStore.getTradingPairByTradingPairName(trading_pair_name);
+            if (
+                account.asset_symbol !== QUOTE_SYMBOL //원화가 아니고
+                && Decimal(account.balance).greaterThan(0) // balance가 존재할 때
+            ) {
+                let value_bought = Decimal(account.avg_fiat_buy_price || 0).times(account.balance);
+                let value_present = trading_pair.close_price ?  Decimal(trading_pair.close_price).times(account.balance) : '';
+                let value_change = value_present ? value_present.minus(value_bought) : '';
+                let value_change_rate = value_change ? value_bought.equals(0) ? null : value_change.dividedBy(value_bought) : '';
+
+                totalBought = totalBought.plus(value_bought);
+                if (value_present)
+                    totalEvaluation = totalEvaluation.plus(value_present);
+
+                portfolio.push( {...account, ...{
+                    pending_order_amount: account.pending_order_amount || account.pending_order,
+                    // 해당 asset(ex. 비트코인, 이오스 등)의 close_price를 저장하여 후에 evaluation 시 사용합니다.
+                    asset_close_price: trading_pair ? trading_pair.close_price : '',
+                    value_bought: value_bought ? value_bought.toPrecision() : '',
+                    value_present: value_present ? value_present.toPrecision() : '',
+                    value_change: value_change ? value_change.toPrecision() : '',
+                    value_change_rate: value_change_rate ? value_change_rate.toPrecision() : ''
+                }});
             }
         });
-        evaluatedRevenue = evaluatedPriceOfAccountsWithoutKRW.minus(totalBuyingPrice);
-        if (totalBuyingPrice !== 0) evaluatedRevenueRatio = evaluatedRevenue / totalBuyingPrice;
-        totalEvaluatedValueInKRW = evaluatedPriceOfAccountsWithoutKRW.add(holdingKRW);
+        totalChange = totalEvaluation.minus(totalBought);
+        totalChangeRate = totalBought.equals(0) ? null : totalChange.dividedBy(totalBought) ;
+
         return {
-            totalEvaluatedValueInKRW: number.removeTrailingZeros(totalEvaluatedValueInKRW.toString()),
-            holdingKRW: number.removeTrailingZeros(holdingKRW.toString()),
-            totalBuyingPrice: number.removeTrailingZeros(totalBuyingPrice.toString()),
-            evaluatedPriceOfAccountsWithoutKRW: number.removeTrailingZeros(evaluatedPriceOfAccountsWithoutKRW.toString()),
-            evaluatedRevenue: number.removeTrailingZeros(evaluatedRevenue.toString()),
-            evaluatedRevenueRatio: number.removeTrailingZeros(evaluatedRevenueRatio.toString())
+            portfolio: portfolio,
+            summary: {
+                totalBought: totalBought.toPrecision(),
+                totalEvaluation: totalEvaluation.toPrecision(),
+                totalChange: totalChange.toPrecision(),
+                totalChangeRate: totalChangeRate ? totalChangeRate.toPrecision() : null
+            }
+        }
+    };
+
+    @computed get totalAssetsEvaluation() {
+        let total_evaluated_price_in_quote = Decimal(0); // 자산 평가액(base_symbol)
+        let holding_quote = Decimal(0) // 보유 base_symbol
+        let total_token_buying_price = Decimal(0); // 총 매수 금액
+        let total_tokens_evaluated_price_in_quote = Decimal(0); // 평가 금액
+        let evaluated_revenue = Decimal(0);
+        let evaluated_revenue_ratio = Decimal(0);
+    
+        this.accounts.forEach((account) => {
+            let { balance } = account;
+            if (account.asset_symbol !== QUOTE_SYMBOL) {
+                let holdingToken_decimal = Decimal(balance);
+                let buyingPriceOfToken = holdingToken_decimal.mul(account.avg_fiat_buy_price);
+                total_token_buying_price = total_token_buying_price.add(buyingPriceOfToken);
+
+                let evaluatedPriceOfToken = holdingToken_decimal.mul(account.close_price);
+                total_tokens_evaluated_price_in_quote = total_tokens_evaluated_price_in_quote.add(evaluatedPriceOfToken);
+            } else {
+                holding_quote = holding_quote.add(balance);
+            }
+        });
+
+        evaluated_revenue = total_tokens_evaluated_price_in_quote.minus(total_token_buying_price);
+        total_evaluated_price_in_quote = total_tokens_evaluated_price_in_quote.add(holding_quote);
+
+        if (!total_token_buying_price.equals(0)) evaluated_revenue_ratio = total_tokens_evaluated_price_in_quote.div(total_token_buying_price);
+        let result = {
+            total_evaluated_price_in_quote: total_evaluated_price_in_quote.toFixed(), // 총 평가액: 모든 토큰의 close_price 환산 평가 액 + 보유 base_symbol
+            holding_quote: holding_quote.toFixed(), // 보유 base_symbol
+            total_token_buying_price: total_token_buying_price.toFixed(), // 구매금액: 모든 토큰을 구매할 때 쓴 금액
+            total_tokens_evaluated_price_in_quote: total_tokens_evaluated_price_in_quote.toFixed(), // 모든 토큰의 close_price 환산 평가 액
+            evaluated_revenue: evaluated_revenue.toFixed(), // 총 평가 액 - 구매금액 = 수익
+            evaluated_revenue_ratio: evaluated_revenue_ratio.toFixed() // 수익률 = 수익 / 구매 금액
         };
+        return result;
     }
 
     getAccountByAssetSymbol(assetSymbol) {
-        const account = this.accountsRegistry.get(assetSymbol) || null;
+        const account = this.accountsRegistry.get(assetSymbol);
+        if (!account) return null;
+        let balance = (account && account.balance) || '0';
+
+        let close_price = '1'; // 원화일 경우 close_price는 1원
+        let evaluated_in_base_currency = '';
+        if ( asset_symbol !== QUOTE_SYMBOL ) {
+            let tradingPairName = asset_symbol + '-' + QUOTE_SYMBOL;
+            let tradingPair = tradingPairStore.getTradingPair(tradingPairName);
+            close_price = tradingPair ? (tradingPair.close_price || '0') : '0';
+            evaluated_in_base_currency = Decimal(close_price).mul(balance).toFixed();    
+        } else {
+            evaluated_in_base_currency = balance;
+        }
+
+        account = {
+            ...account,
+            // 해당 asset(ex. 비트코인, 이오스 등)의 close_price를 저장하여 후에 evaluation 시 사용합니다.
+            close_price: close_price,
+            evaluated_in_base_currency: evaluated_in_base_currency, // 평가금액
+        };
         return account;
     }
 
-    /*
-     * 입/출금
-     */
-    @observable currency = 'KRW';
-    @observable amount = 0;
-    @computed get depositPayload() { return { 'base_symbol': this.currency, 'amount': this.amount }; };
-    @computed get withdrawPayload() { return { 'base_symbol': this.currency, 'amount': this.amount }; };
-
-    @action setCurrency(currency) {
-        this.currency = currency === undefined ? 'KRW' : currency;
-    }
-
-    @action setAmount(amount) {
-        this.amount = amount;
-    }
-
-    @action deposit() {
-        let account = this.getAccountByAssetSymbol(this.currency);
-        return agent.deposit(account.uuid, this.depositPayload)
-            .then(action((response) => {
-                this.accountsRegistry.set(this.currency, response.data);
-            }))
-            .catch(action((err) => {
-                this.errors = err.response && err.response.body && err.response.body.errors;
-            }))
-    }
-
-    @action withdraw() {
-        let account = this.getAccountByAssetSymbol(this.currency);
-        return agent.withdraw(account.uuid, this.withdrawPayload)
-            .then(action((response) => {
-                this.accountsRegistry.set(this.currency, response.data);
-            }))
-            .catch(action((err) => {
-                this.errors = err.response && err.response.body && err.response.body.errors;
-            }))
-    }
-
-    @action setAccounts(accounts) {
-        this.accountsRegistry.set(accounts.message.asset_symbol, accounts.message);
+    @action setAccount(account) {
+        // pubnub 에서 넘어오는 정보에 누락이 있을 수 있기때문에 spread를 사용
+        this.accountsRegistry.set(account.asset_symbol, {...this.accountsRegistry.get(account.asset_symbol), ...account});
     }
 
     _hasSearchKeywordInAccount(searcher, account) {
@@ -141,31 +206,44 @@ class AccountStore {
     }
 
     @action loadAccounts() {
-        this.inProgress = true;
+        this.isLoading = true;
         this.errors = null;
-        const userUuid = userStore.user && userStore.user.user_uuid;
-
-        return agent.getAccountsByUser(userUuid)
+        return agent.loadAccounts()
             .then(action((response) => {
-                let accounts = response.data;
                 this.accountsRegistry.clear();
+                let accounts = response.data;
                 accounts.forEach((account) => {
                     this.accountsRegistry.set(account.asset_symbol, account);
+                    this.totalAccountsCount = accounts.length;
                 });
-                this.totalAccountsCount = accounts.length;
+                this.isLoading = false;
+                this.isLoadedOnce = true;
             }))
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
-            }))
-            .then(action(() => {
-                this.inProgress = false;
+                this.isLoading = false;
                 this.isLoadedOnce = true;
+                throw err;
             }));
     }
 
-    @action updateSearchKeyword(keyword) {
-        this.searchKeyword = keyword.toLowerCase();
+    @action createAndGetWarmWalletAddress(targetTokenSymbol) {
+        this.isLoading = true;
+        this.errors = undefined;
+
+        let account = this.getAccount(targetTokenSymbol);
+        return agent.createAndGetWarmWalletAddress(account.uuid)
+            .then(action((response) => {
+                this.accountsRegistry.set(targetTokenSymbol, { ...account, wallet_address: { address: response.data.address } });
+                this.isLoading = false;
+            }))
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+                this.isLoading = false;
+                throw err;
+            }));
     }
+
 }
 
 export default new AccountStore();

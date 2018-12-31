@@ -1,136 +1,74 @@
 import React, { Component } from 'react';
-import { 
-  StyleSheet,
-  View,
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Container, Header, Text, Button, Item, Input } from 'native-base';
-import { 
-    inject, 
-    observer 
-} from 'mobx-react';
-import { observable, computed, reaction } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { observable, computed, reaction, action } from 'mobx';
+import BuyOrderForm from './BuyOrderForm';
+import SellOrderForm from './SellOrderForm';
 
-@inject('tradingPairStore', 'orderStore')
+@inject('orderStore')
 @observer
-class OrderForm extends Component {
+export default class OrderForm extends Component {
+    @observable selectedTabType = 'BUY';
 
-  constructor(props) {
-    super(props);
-    // this.pubnubChannel = "";
+    _onPressBuy = action((e) => {
+        this.props.orderStore.setSide('BUY');
+        this.selectedTabType = 'BUY';
+    });
+    _onPressSell = action((e) => {
+        this.props.orderStore.setSide('SELL');
+        this.selectedTabType = 'SELL';
+    });
+    _onPressRealtimeTrade = action((e) => {
+        this.selectedTabType = 'REALTIME_TRADE';
+    });
 
-    const inProgressReaction = reaction(
-      () => this.props.orderStore.inProgress,
-      (inProgress) => {
-        // inProgress 상태에 따라 Spinner를 보여줌
-      }
-    )
-
-  }
-
-  componentDidMount() {
-    // this.props.pubnub.subscribe(this.pubnubChannel);
-  }
-  componentWillUnmount() {
-    // this.props.pubnub.unsubscribe(this.pubnubChannel);
-  }
-
-  render() {
-    const { tradingPairStore, orderStore } = this.props;
-    const { order, fee, amount} = orderStore;
-    const { 
-      base_symbol,
-      quote_symbol,
-    } = tradingPairStore.selectedTradingPair || {};
-    const isSideBuy = order.side === 'BUY';
-
-    return (
-      <Container style={ styles.container }>
-        <View style={ styles.buttons }>
-          <Button style={ styles.button } onPress={ this._onPressBuy }>
-            <Text style={ isSideBuy ? styles.selected : styles.unselected }
-            >매수</Text>
-          </Button>
-          <Button style={ styles.button } onPress={ this._onPressSell }>
-            <Text style={ isSideBuy ? styles.unselected : styles.selected }
-            >매도</Text>
-          </Button>
-        </View>
-        <View style={ styles.available }>
-          <Text>거래 가능</Text> 
-          <Text>14,400 { quote_symbol }</Text>
-        </View>
-        <View style={ styles.price }>
-          <Text>{ `가격 (${base_symbol})` }</Text> 
-          <Item underline>
-            <Input 
-              onChangeText={ this.onChangePrice }
-              value={ `${order.price}` } 
-              keyboardType={ 'numeric' }
-            />
-          </Item>
-        </View>
-        <View style={ styles.volume }>
-          <Text>{ `수량 (${quote_symbol})` }</Text> 
-          <Item underline>
-            <Input 
-              onChangeText={ this.onChangeVolume }
-              placeholder={`최소 ${0.01}`} 
-              keyboardType={ 'numeric' }   
-              value={ `${order.volume}` }
-            />
-          </Item>
-        </View>  
-        <View style={ styles.limit }>
-          <Text>{ (isSideBuy ? '구매' : '판매') + ' 금액' }</Text> 
-          <Text>{ amount + ' ' + base_symbol }</Text>
-        </View>
-        <View style={ styles.fee }>
-          <Text>수수료(부가세 포함)</Text> 
-          <Text>{ fee + '%' }</Text>
-        </View>
-        <Button onPress={ this._onPressOrder }>
-          <Text>{ isSideBuy ? '구매' : '판매' }</Text>
-        </Button>
-      </Container>
-    );
-  }
-
-  _onPressBuy = (e) => {
-    this.props.orderStore.setSide('BUY');
-  }
-  _onPressSell = (e) => {
-    this.props.orderStore.setSide('SELL');
-  }
-  _onPressOrder = (e) => {
-    this.props.orderStore.registerOrder();
-  }
-  _onChangePrice = (text) => {
-    this.props.orderStore.setPrice(parseFloat(text));
-  }
-  _onChangeVolume = (text) => {
-    this.props.orderStore.setVolume(parseFloat(text));
-  }
+    render() {
+        return (
+            <Container style={styles.container}>
+                <View style={styles.buttons}>
+                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'BUY' ? styles.selected : styles.unselected]} onPress={this._onPressBuy}>
+                        <Text style='button-text'>매수</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'SELL' ? styles.selected : styles.unselected]} onPress={this._onPressSell}>
+                        <Text style='button-text'>매도</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'REALTIME_TRADE' ? styles.selected : styles.unselected]} onPress={this._onPressRealtimeTrade}>
+                        <Text style='button-text'>실시간</Text>
+                    </TouchableOpacity>
+                </View>
+                { this.selectedTabType === 'BUY' && <BuyOrderForm />  }
+                { this.selectedTabType === 'SELL' && <SellOrderForm />  }
+                { this.selectedTabType === 'REALTIME_TRADE' && <View />  }
+            </Container>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    margin: 10,
-    flex: 1
-  },
-  selected: {
-    flex: 1
-  },
-  unselected: {
-    flex: 1
-  },
+    container: {
+        flex: 1,
+    },
+    buttons: {
+        height: 40,
+        width: '100%',
+        flexDirection: 'row',
+    },
+    button: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    selected: {
+        flex: 1,
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderColor: '#26282d',
+    },
+    unselected: {
+        flex: 1,   
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderColor: '#dedfe0',
+    },
 });
-
-export default OrderForm;

@@ -14,13 +14,13 @@ export default class TotalAssetsEvaluation extends Component {
     render() {
         const { accountStore } = this.props;
         const {
-            totalEvaluatedValueInKRW,
-            holdingKRW,
-            totalBuyingPrice,
-            evaluatedPriceOfAccountsWithoutKRW,
-            evaluatedRevenue,
-            evaluatedRevenueRatio
-        } = accountStore.totalAssetsEvaluation;
+            total_evaluated_price_in_quote,
+            holding_quote,
+            total_token_buying_price,
+            total_tokens_evaluated_price_in_quote,
+            evaluated_revenue_ratio,
+            evaluated_revenue,
+        } = accountStore.totalAssetsEvaluation || {};
         return (
             <View style={ styles.contrainer }>
                 <View style={ styles.header }>
@@ -29,19 +29,19 @@ export default class TotalAssetsEvaluation extends Component {
                 <View style={ styles.body }>
                     <View style={ styles.bodyLeft }>
                         <Text>자산 평가액 (KRW)</Text>
-                        <Text>{ totalEvaluatedValueInKRW }</Text>
+                        <Text>{ total_evaluated_price_in_quote }</Text>
                         <Text>보유 KRW</Text>
-                        <Text>{ holdingKRW }</Text>
+                        <Text>{ holding_quote }</Text>
                     </View>
                     <View style={ styles.bodyRight }>
                         <Text>매수 금액</Text>
-                        <Text>{ totalBuyingPrice }</Text>
+                        <Text>{ total_token_buying_price }</Text>
                         <Text>평가 금액</Text>
-                        <Text>{ evaluatedPriceOfAccountsWithoutKRW }</Text>
+                        <Text>{ total_tokens_evaluated_price_in_quote }</Text>
                         <Text>평가 수익률</Text>
-                        <Text>{ evaluatedRevenueRatio }</Text> 
+                        <Text>{ evaluated_revenue_ratio }</Text> 
                         <Text>평가 손익</Text>
-                        <Text>{ evaluatedRevenue }</Text>
+                        <Text>{ evaluated_revenue }</Text>
                     </View>
                 </View>
             </View>

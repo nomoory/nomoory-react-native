@@ -59,12 +59,15 @@ export default class TradingPairScreen extends Component {
                     <View style={styles.rightContainer}>
                     </View>
                 </View>
-                <Tabs>
+                <Tabs >
                     <Tab heading={<TabHeading><Text>주문</Text></TabHeading>}>
                         <OrderBox></OrderBox>
                     </Tab>
                     <Tab heading={<TabHeading><Text>차트</Text></TabHeading>}>
                         <View><Text>차트</Text></View>
+                    </Tab>
+                    <Tab heading={<TabHeading><Text>시세</Text></TabHeading>}>
+                        <View><Text>시세</Text></View>
                     </Tab>
                     <Tab heading={<TabHeading><Text>미체결</Text></TabHeading>}>
                         <View><Text>미체결</Text></View>
@@ -98,5 +101,4 @@ const styles = StyleSheet.create({
     tradingPairSubInfo: {
         flexDirection: 'row'
     }
-    
 })

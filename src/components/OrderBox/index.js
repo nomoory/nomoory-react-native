@@ -1,34 +1,11 @@
 import React, { Component } from 'react';
-import { 
-  StyleSheet,
-  View,
-} from 'react-native';
-import { } from 'native-base';
-import { 
-    inject, 
-    observer 
-} from 'mobx-react';
-import { observable, computed } from 'mobx';
+import { StyleSheet, View } from 'react-native';
+import { observer } from 'mobx-react';
 import Orderbook from './Orderbook';
 import OrderForm from './OrderForm';
 
-// @inject('tradingPairStore')
 @observer
-class OrderBox extends Component {
-  // @computed
-
-  constructor(props) {
-    super(props);
-    // this.pubnubChannel = "";
-  }
-
-  componentDidMount() {
-    // this.props.pubnub.subscribe(this.pubnubChannel);
-  }
-  componentWillUnmount() {
-    // this.props.pubnub.unsubscribe(this.pubnubChannel);
-  }
-
+export default class OrderBox extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -45,5 +22,3 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
-
-export default OrderBox;
