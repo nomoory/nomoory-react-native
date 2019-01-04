@@ -6,7 +6,7 @@ import Decimal from '../../utils/decimal';
 
 @inject('orderStore')
 @observer
-class OrderRow extends Component {
+export default class OrderRow extends Component {
 
     _onPressOrderRow = () => {
         const { side, order } = this.props;
@@ -79,5 +79,3 @@ const styles = StyleSheet.create({
     },
 
 });
-
-export default OrderRow;

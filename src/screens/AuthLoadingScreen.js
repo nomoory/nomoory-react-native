@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, Button } from 'react-native';
 import { inject, observer } from 'mobx-react';
+import { withNavigation } from 'react-navigation';
 
+@withNavigation
 @inject('stubStore')
 @observer
 export default class AuthLoadingScreen extends Component {

@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 
 // @inject('')
 @observer
-export default class DepositHistoryScreen extends Component {
+export default class AssetListScreen extends Component {
     render() {
         return (
             <View>

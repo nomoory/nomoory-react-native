@@ -22,8 +22,8 @@ export default class AssetsAndEvaluationBox extends Component {
   render() {
     return (
       <View style={ styles.container }>
-        <TotalAssetsEvaluation></TotalAssetsEvaluation>
-        <AssetsAndEvaluationList></AssetsAndEvaluationList>
+        <TotalAssetsEvaluation />
+        <AssetsAndEvaluationList />
       </View>
     )
   }

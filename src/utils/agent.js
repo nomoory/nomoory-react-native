@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import authStore from '../stores/authStore';
 // import stubApi from '../stubs/stubApi';
-import commonStore from '../stores/commonStore';
+import authStore from '../stores/authStore';
 import tradingPairStore from '../stores/tradingPairStore';
+import errorHelper from '../utils/errorHelper';
 
 
 const REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
@@ -13,10 +13,22 @@ const REACT_APP_DEV_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_DEV_AP
 const API_ROOT = `${REACT_APP_API_ENDPOINT}/api/${REACT_APP_API_VERSION}`;
 const DEV_API_ROOT = `${REACT_APP_DEV_API_ENDPOINT}/api/${REACT_APP_DEV_API_VERSION}`;
 
-
 class Agent {
     constructor(baseURL = null) {
+        
         this.axios = axios.create({ baseURL });
+        if (Platform.OS) {
+            this.axios.defaults.headers.common['User-Agent'] =                         
+                (
+                    Platform.OS === "ios" ? 
+                    "CoblicAppiOS/1.0.0" : 
+                    "CoblicAppAndroid/1.0.0" 
+                ) + ( 
+                    this.axios.defaults.headers.common['User-Agent'] ? 
+                    ' ' + this.axios.defaults.headers.common['User-Agent'] : 
+                    '' 
+                );
+        }
     }
 
     /** 
@@ -52,15 +64,15 @@ class Agent {
     }
 
     loadUser() {
-        return this.get(`users/${commonStore.user_uuid}/`);
+        return this.get(`users/${authStore.user_uuid}/`);
     }
 
     getOtpQrcodeUrl() {
-        return this.get(`/users/${commonStore.user_uuid}/otp_qrcode/`);
+        return this.get(`/users/${authStore.user_uuid}/otp_qrcode/`);
     }
 
     verifyOTP(otpInfo) {
-        return axios.post(`${API_ROOT}/verify/otp/?user_uuid=${commonStore.user_uuid}`, otpInfo).catch(this._handleError);
+        return axios.post(`${API_ROOT}/verify/otp/?user_uuid=${authStore.user_uuid}`, otpInfo).catch(this._handleError);
     }
 
     verifyOTPLogin(otpLoginInfo) {
@@ -93,23 +105,23 @@ class Agent {
 
     //TransactionHistory
     loadTransactionHistory(transaction_type, trading_pair_name) {
-        let url = `users/${commonStore.user_uuid}/transaction_histories/?transaction_type=${transaction_type}`;
+        let url = `users/${authStore.user_uuid}/transaction_histories/?transaction_type=${transaction_type}`;
         if (trading_pair_name) url += `&trading_pair_name=${trading_pair_name}`;
         return this.get(url);
     }
 
     // Accounts
     loadAccounts() {
-        return this.get(`users/${commonStore.user_uuid}/accounts/`);
+        return this.get(`users/${authStore.user_uuid}/accounts/`);
     }
 
     // Personal Trades
     loadPersonalTrades() {
-        return this.get(`users/${commonStore.user_uuid}/trades/?trading_pair_name=${tradingPairStore.selectedTradingPairName}`);
+        return this.get(`users/${authStore.user_uuid}/trades/?trading_pair_name=${tradingPairStore.selectedTradingPairName}`);
     }
 
     loadPersonalPlacedOrders() {
-        return this.get(`users/${commonStore.user_uuid}/orders/?trading_pair_name=${tradingPairStore.selectedTradingPairName}&order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
+        return this.get(`users/${authStore.user_uuid}/orders/?trading_pair_name=${tradingPairStore.selectedTradingPairName}&order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
     }
 
     createAndGetWarmWalletAddress(account_uuid) {
@@ -122,7 +134,7 @@ class Agent {
 
     // Email Verification
     requestActivateEmailAgain() {
-        return this.post(`/users/${commonStore.user_uuid}/resend_activate_email/`, null);
+        return this.post(`/users/${authStore.user_uuid}/resend_activate_email/`, null);
     }
 
     verifyEmail(activation_info, user_uuid) {
@@ -144,13 +156,13 @@ class Agent {
 
     // Bank account 
     loadBankAccount() {
-        return this.get(`/users/${commonStore.user_uuid}/bank_accounts/latest/`);
+        return this.get(`/users/${authStore.user_uuid}/bank_accounts/latest/`);
     }
     registerBankAccount(accountInfo) {
-        return this.post(`/users/${commonStore.user_uuid}/bank_accounts/`, accountInfo);
+        return this.post(`/users/${authStore.user_uuid}/bank_accounts/`, accountInfo);
     }
     deleteBankAccount(bankAccountUuid) {
-        return this.delete(`/users/${commonStore.user_uuid}/bank_accounts/${bankAccountUuid}/`);
+        return this.delete(`/users/${authStore.user_uuid}/bank_accounts/${bankAccountUuid}/`);
     }
 
     loadBankDepositHistory(account_uuid) {
@@ -183,27 +195,27 @@ class Agent {
     }
     // verification kyc
     uploadIdPhotoImage(data) {
-        return this.postFile(`/users/${commonStore.user_uuid}/upload_id_photo/`, data);
+        return this.postFile(`/users/${authStore.user_uuid}/upload_id_photo/`, data);
     }
 
     uploadKycPhotoImage(data) {
-        return this.postFile(`/users/${commonStore.user_uuid}/upload_kyc_photo/`, data);
+        return this.postFile(`/users/${authStore.user_uuid}/upload_kyc_photo/`, data);
     }
 
     updatePersonalIdentificationAgreement(agreements) {
-        return this.post(`/users/${commonStore.user_uuid}/identification_agreement/`, agreements);
+        return this.post(`/users/${authStore.user_uuid}/identification_agreement/`, agreements);
     }
 
     // Register referral code
     registerReferralCode(referralCodeInfo) {
-        return this.post(`/users/${commonStore.user_uuid}/referrals/`, referralCodeInfo);
+        return this.post(`/users/${authStore.user_uuid}/referrals/`, referralCodeInfo);
     }
     updatePersonalAgreement(agreements) {
-        return this.post(`/users/${commonStore.user_uuid}/phone_agreement/`, agreements);
+        return this.post(`/users/${authStore.user_uuid}/phone_agreement/`, agreements);
     }
     // load my rank
     loadMyRank() {
-        return this.get(`/users/${commonStore.user_uuid}/rank/me/`);
+        return this.get(`/users/${authStore.user_uuid}/rank/me/`);
     }
 
     // order fees
@@ -292,15 +304,19 @@ class Agent {
     }
     _getRequestConfig() {
         let requestConfig = null;
-        let accessToken = commonStore.token;
+        let accessToken = authStore.access_token;
         if (accessToken) {
-            requestConfig = { headers: { 'Authorization': `Bearer ${accessToken}` } };
+            requestConfig = { 
+                headers: { 
+                    'Authorization': `Bearer ${accessToken}`,
+                }
+            };
         }
         return requestConfig;
     }
     _getRequestConfigForFilePost() {
         let requestConfig = null;
-        let accessToken = commonStore.token;
+        let accessToken = authStore.access_token;
         if (accessToken) {
             requestConfig = {
                 headers: {
@@ -308,6 +324,18 @@ class Agent {
                     'Content-Type': 'multipart/form-data'
                 }
             };
+        } else {
+            let userAgentString =
+                Platform.OS === "ios" ? 
+                "CoblicAppiOS/1.0.0" : 
+                "CoblicAppAndroid/1.0.0" ;
+
+            requestConfig = {
+                headers: {
+                    'User-Agent': userAgentString,
+                    'user-agent': userAgentString,
+                }
+            }
         }
         return requestConfig;
     }
@@ -316,8 +344,8 @@ class Agent {
             // 서버 꺼져있을때 에러 핸들링
             throw error;
         }
-        // errorHelper.handleErrorCode(error.response);
-        console.log('handle error : ', error.response);
+        errorHelper.handleErrorCode(error.response);
+        console.log('handle error : ', error.request);
         // errorStore.setErrorInfo(error.response.data);
         // 로그아웃을 해야할 에러일때 처리.
         // if (error && error.response && error.response.status === 401) {
@@ -327,7 +355,7 @@ class Agent {
     }
 
     getPayFormValue = () => {
-        return `${API_ROOT}/verify/mcash/?user_uuid=${commonStore.user_uuid}`;
+        return `${API_ROOT}/verify/mcash/?user_uuid=${authStore.user_uuid}`;
     }
     getAPIRoot = () => {
         return API_ROOT;
@@ -335,9 +363,12 @@ class Agent {
 }
 
 let agent;
+console.log('is dev? :', __DEV__);
+console.log('is dev? :', __DEV__);
 if (__DEV__) {
     agent = new Agent(DEV_API_ROOT);
 } else {
     agent = new Agent(API_ROOT);
+    console.log('is API_ROOT :', DEV_API_ROOT);
 }
 export default agent;
