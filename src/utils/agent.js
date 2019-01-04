@@ -312,6 +312,7 @@ class Agent {
                 }
             };
         }
+
         return requestConfig;
     }
     _getRequestConfigForFilePost() {
@@ -363,7 +364,6 @@ class Agent {
 }
 
 let agent;
-console.log('is dev? :', __DEV__);
 console.log('is dev? :', __DEV__);
 if (__DEV__) {
     agent = new Agent(DEV_API_ROOT);

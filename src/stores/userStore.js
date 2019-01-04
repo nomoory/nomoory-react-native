@@ -73,9 +73,16 @@ class UserStore {
     @action saveUser(newUser) {
         accountStore.loadAccounts();
         this.currentUser = newUser;
+        console.log(newUser);
         // TODO react native 용으로 Sentry 적용 후 재 적용합니다.
         // Sentry.setUser(newUser);
     }
+    @action clear() {
+        this.currentUser = null;
+        // TODO react native 용으로 Sentry 적용 후 재 적용합니다.
+        // Sentry.setUser(newUser);
+    }
+
     @action forgetUser() { this.currentUser = null; }
 
     // verification

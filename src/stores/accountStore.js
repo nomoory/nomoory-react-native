@@ -20,12 +20,11 @@ class AccountStore {
 
     @observable totalAccountsCount = 0;
     @observable searchKeyword = '';
-    @observable selectedAccountSymbol = 'BTC';
+    @observable selectedAccountSymbol = '';
 
     @action setSelectedAccountSymbol(symbol) {
-        if (symbol === undefined) {
-            this.selectedAccountSymbol = 'BTC';
-            whitelistedWithdrawalWalletAddressStore.setAssetSymbol('BTC');
+        if (!symbol) {
+            this.selectedAccountSymbol = '';
         } else {
             this.selectedAccountSymbol = symbol;
             whitelistedWithdrawalWalletAddressStore.setAssetSymbol(symbol);
@@ -59,11 +58,6 @@ class AccountStore {
             try {
                 return Decimal(prev.evaluated_in_base_currency).lessThan(next.evaluated_in_base_currency);
             } catch (err) {
-                console.log('err on sorting account');
-                console.log(prev.evaluated_in_base_currency)
-                console.log(prev)
-                console.log('------------------------------');
-
                 return true;
             }
         });
