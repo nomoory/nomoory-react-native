@@ -15,16 +15,16 @@ class AuthStore {
          * 다음의 코드를 통해 access_token을 얻어오는 경우를 제외하고는
          * store의 access_token을 set함으로 AsyncStorage가 갱신됩니다.
          */
-        const tokenReaction = reaction(
-            () => this.access_token,
-            accessToken => {
-                if (accessToken) {
-                    AsyncStorage.setItem('access_token', accessToken);
-                } else {
-                    AsyncStorage.removeItem('access_token');
-                }
-            }
-        );
+        // const tokenReaction = reaction(
+        //     () => this.access_token,
+        //     accessToken => {
+        //         if (accessToken) {
+        //             AsyncStorage.setItem('access_token', accessToken);
+        //         } else {
+        //             AsyncStorage.removeItem('access_token');
+        //         }
+        //     }
+        // );
     }
 
     /* Login */
@@ -44,6 +44,9 @@ class AuthStore {
             password: ''
         };
     }
+    clearUser() {
+        userStore.clear();
+    }
 
     @action login() {
         this.isLoading = true;
@@ -52,7 +55,6 @@ class AuthStore {
         return agent.login(this.loginValues)
         .then(action((res) => {
             let user = res.data;
-            console.log('user: ', user)
             if (user.need_otp_verify === 'true') {
                 this.otpVerificationValues = {
                     needOtpVerificationToLogin: true,
@@ -63,6 +65,7 @@ class AuthStore {
             } else {
                 this.setAccessToken(user.access_token);
                 this.setUserUuid(user.uuid);
+                console.log('access_token: ', this.access_token)
                 delete user.access_token;
                 userStore.saveUser(user);
             }
@@ -119,6 +122,8 @@ class AuthStore {
         return agent.verifyOTPLogin(otp_login_info)
         .then(action((res) => {
             let user = res.data;
+            this.setAccessToken(user.access_token);
+            this.setUserUuid(user.uuid);
             userStore.saveUser(user);
             this.clearVerifyOtpValue();
             this.isLoading = false;
@@ -182,13 +187,21 @@ class AuthStore {
     /* Logout */
     @action logout() {
         this.errors = null;
-        this.destroyAccessToken();
-        this.clearLoginValues();
-        this.clearSignupValues();
         return agent.logout()
+        .then((res) => {
+            this.clearUser();
+            this.destroyAccessToken();
+            this.clearLoginValues();
+            this.clearSignupValues();
+        })
         .catch(action((err) => {
             this.errors = err.response && err.response.body && err.response.body.errors;
-            throw err;
+            this.clearUser();
+            this.destroyAccessToken();
+            this.clearLoginValues();
+            this.clearSignupValues();
+            // client 단에서 로그인 정보를 없애면 로그아웃과 동일하므로 에러를 따로 띄우지 않음
+            // throw err;
         }));
     }
 }

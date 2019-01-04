@@ -1,3 +1,4 @@
+import './init';
 import React from 'react';
 import { StyleSheet, View, StatusBar, Platform } from 'react-native';
 import { Provider } from 'mobx-react';

@@ -10,9 +10,7 @@ import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
 import AssetListScreen from '../screens/AssetListScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-
-import StubScreen from '../screens/StubScreen';
+import EtcScreen from '../screens/EtcScreen';
 
 const ExchangeStack = createStackNavigator(
     {
@@ -74,16 +72,16 @@ DepositWithdrawStack.navigationOptions = {
     )
 };
 
-const ProfileStack = createStackNavigator({
-    Profile: ProfileScreen
+const EtcStack = createStackNavigator({
+    EtcMain: EtcScreen
 });
 
-ProfileStack.navigationOptions = {
-    tabBarLabel: '내정보',
+EtcStack.navigationOptions = {
+    tabBarLabel: '더 보기',
     tabBarIcon: ({ tintColor, focused }) => (
         <Icon.Ionicons
             focused={focused}
-            name="ios-person"
+            name="ios-menu"
             color={tintColor}
             size={24} />
     )
@@ -94,7 +92,7 @@ export default createBottomTabNavigator(
         Exchange: ExchangeStack,
         Investment: InvestmentStack,
         DepositWithdraw: DepositWithdrawStack,
-        Profile: ProfileStack
+        Etc: EtcStack
     },
     {
         initialRouteName: 'Exchange',

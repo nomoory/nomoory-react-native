@@ -1,13 +1,13 @@
 import React from 'react';
 import { observable, action, computed } from 'mobx';
 
-import agent from '../agent';
+import agent from '../utils/agent';
 
 import WAValidator from 'wallet-address-validator';
 import modalStore from './modalStore';
 import userStore from './userStore';
 import accountStore from './accountStore';
-import i18next from 'i18next';
+import TRANSLATIONS from '../TRANSLATIONS';
 
 //'uuid', 'address', 'nickname', 'otp_code', 'asset_symbol'
 
@@ -230,7 +230,7 @@ class WhitelistedWithdrawalWalletAddressStore {
                     (() => {
                         return (
                             <div className={`form-warning ${this.isWalletValuesValid.state ? 'coblic-blue-text' : 'coblic-red-text'}`}>
-                                * {`${i18next.t(this.isWalletValuesValid.message_code)}`}.
+                                * {`${TRANSLATIONS[this.isWalletValuesValid.message_code]}`}.
                             </div>
                         );
                     })()

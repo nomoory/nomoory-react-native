@@ -10,7 +10,7 @@ import orderFeeStore from './orderFeeStore';
 import cryptoWithdrawStore from './cryptoWithdrawStore';
 import realtimeTradeHistoryStore from './realtimeTradeHistoryStore';
 import personalOrderHistoryStore from './personalOrderHistoryStore';
-import WhitelistedWithdrawalWalletAddressStore from './WhitelistedWithdrawalWalletAddressStore';
+import whitelistedWithdrawalWalletAddressStore from './whitelistedWithdrawalWalletAddressStore';
 
 const stores = {
     accountStore,
@@ -25,7 +25,7 @@ const stores = {
     cryptoWithdrawStore,
     realtimeTradeHistoryStore,
     personalOrderHistoryStore,
-    WhitelistedWithdrawalWalletAddressStore
+    whitelistedWithdrawalWalletAddressStore
 };
 
 export default stores;
