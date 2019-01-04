@@ -11,16 +11,11 @@ import Decimal from '../../utils/decimal';
 export default class BuyOrderForm extends Component {
     componentDidMount() {
         let { close_price } = this.props.tradingPairStore.selectedTradingPair || {};
-        this.props.orderStore.setPrice(close_price || '0');
+        this.props.orderStore.setPrice(close_price ? Decimal(close_price).toFixed() : '0');
         this.props.orderStore.setVolume('0');
     }
     
     @computed get maxFeePercentage() { return number.getRateAsFiexdPercentage(this.props.orderStore.maxFeeRate, 2); }
-    @computed get targetAccount() {
-        let { isBuy, baseSymbol, quoteSymbol } = this.props.orderStore;
-        let symbol = isBuy ? quoteSymbol : baseSymbol;
-        return this.props.accountStore.getAccountByAssetSymbol(symbol) || {};
-    }
 
     _onChangePrice = (text) => {
         this.props.orderStore.setPriceFromInput(text);
@@ -33,10 +28,13 @@ export default class BuyOrderForm extends Component {
     }
     _onPressIncreasePrice = (e) => { this.props.orderStore.increasePriceByButton(); }
     _onPressDecreasePrice = (e) => { this.props.orderStore.decreasePriceByButton(); }
-    _onPressSetVolumeByRate = (rate) => () => { if (this.props.userStore.isLoggedIn) this.props.orderStore.setVolumeByRate(rate); }
+    _onPressSetVolumeByRate = (rate) => () => {
+        if (this.props.userStore.isLoggedIn) {
+            this.props.orderStore.setVolumeByRate(rate); 
+        }
+    }
 
     render() {
-        const { tradingPairStore, orderStore } = this.props || {};
         let {
             values,
             baseSymbol,
@@ -45,14 +43,22 @@ export default class BuyOrderForm extends Component {
             maxFee,
             totalGain,
             minimumOrderAmount
-        } = orderStore || {};
+        } = this.props.orderStore || {};
         const { price, volume } = values || {};
+        const targetAccount = this.props.accountStore.getAccountByAssetSymbol(quoteSymbol)  || {}
 
+        console.log('targetAccount: ',targetAccount )
+        console.log('liquid: ',targetAccount.liquid )
+        console.log('liquid type: ',typeof targetAccount.liquid )
         return (
             <Container style={styles.container}>
                 <View style={[styles.liquidContainer]}>
                     <Text style={styles.liquidTitle}>구매가능</Text>
-                    <Text style={styles.liquidContent}>{this.targetAccount.liquid ? number.putComma(Decimal(this.targetAccount.liquid)) : '-' } {quoteSymbol}</Text>
+                    <Text style={styles.liquidContent}>{
+                        targetAccount.liquid ? 
+                        number.putComma(Decimal(targetAccount.liquid).toFixed()) 
+                        : '-' 
+                    } {quoteSymbol}</Text>
                 </View>
                 <View style={[styles.InputContainer, styles.priceInputContiner]}>
                     <Item>
@@ -98,24 +104,24 @@ export default class BuyOrderForm extends Component {
                 </View>
                 <View style={[styles.info, styles.feeContainer]}>
                     <Text>수수료</Text>
-                    <Text>{maxFee ? number.putComma(Decimal(maxFee).toFixed()) : '' } {baseSymbol}</Text>
+                    <Text>{maxFee ? number.putComma(Decimal(maxFee).toFixed()) : '-' } {baseSymbol}</Text>
                 </View>
                 <View style={styles.maxFeePercentageContainer}> 
                     <Text style={styles.maxFeePercentageContent}>
-                        { maxFee ? number.putComma(Decimal(this.maxFeePercentage).toFixed()) : '' } %
+                        { this.maxFeePercentage ? number.putComma(Decimal(this.maxFeePercentage).toFixed()) : '-' } %
                     </Text>
                 </View>
                 <View style={[styles.totalGainContainer, styles.info]}>
                     <Text style={styles.totalGainTitle}>수령량</Text>
-                    <Text style={styles.totalGainContent}>{totalGain ? number.putComma(Decimal(totalGain).toFixed()) : ''} {baseSymbol}</Text>
+                    <Text style={styles.totalGainContent}>{totalGain ? number.putComma(Decimal(totalGain).toFixed()) : '-'} {baseSymbol}</Text>
                 </View>
                 <View style={[styles.info, styles.fee]}>
                     <Text style={styles.liquidTitle}>총금액</Text>
-                    <Text style={styles.liquidContent}>{amount ? number.putComma(Decimal(amount).toFixed()) : ''} {quoteSymbol}</Text>
+                    <Text style={styles.liquidContent}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {quoteSymbol}</Text>
                 </View>
                 <View style={styles.minimumOrderAmountContainer}> 
                     <Text style={styles.minimumOrderAmountContent}>
-                        최소주문금액 {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '' } {quoteSymbol}
+                        최소주문금액 {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
                     </Text>
                 </View>
                 <Button style={[styles.buyButton, styles.coblicBlueButton]} onPress={this._onPressOrder}>

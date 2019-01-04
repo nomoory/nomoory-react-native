@@ -8,6 +8,9 @@ import tradingPairStore from './tradingPairStore';
 import userStore from './userStore';
 import orderFeeStore from './orderFeeStore';
 import cryptoWithdrawStore from './cryptoWithdrawStore';
+import realtimeTradeHistoryStore from './realtimeTradeHistoryStore';
+import personalOrderHistoryStore from './personalOrderHistoryStore';
+import WhitelistedWithdrawalWalletAddressStore from './WhitelistedWithdrawalWalletAddressStore';
 
 const stores = {
     accountStore,
@@ -19,7 +22,10 @@ const stores = {
     tradingPairStore,
     userStore,
     orderFeeStore,
-    cryptoWithdrawStore
+    cryptoWithdrawStore,
+    realtimeTradeHistoryStore,
+    personalOrderHistoryStore,
+    WhitelistedWithdrawalWalletAddressStore
 };
 
 export default stores;

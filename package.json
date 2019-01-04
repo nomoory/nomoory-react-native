@@ -19,12 +19,14 @@
     "hangul-js": "^0.2.5",
     "mobx": "^5.8.0",
     "mobx-react": "^5.4.3",
+    "moment": "^2.23.0",
+    "moment-timezone": "^0.5.23",
     "native-base": "^2.8.0",
     "pubnub": "^4.21.5",
     "pubnub-react": "^1.2.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
-    "react-native-modal": "^6.5.0",
+    "react-native-modal": "^7.0.2",
     "react-navigation": "^2.18.2"
   },
   "devDependencies": {

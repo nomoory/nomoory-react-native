@@ -4,8 +4,8 @@ import userStore from '../stores/userStore';
 import accountStore from '../stores/accountStore';
 import tradingPairStore from '../stores/tradingPairStore';
 import orderbookStore from '../stores/orderbookStore';
-// import realtimeTradeHistoryStore from '../stores/realtimeTradeHistoryStore';
-// import personalOrderHistoryStore from '../stores/personalOrderHistoryStore';
+import realtimeTradeHistoryStore from '../stores/realtimeTradeHistoryStore';
+import personalOrderHistoryStore from '../stores/personalOrderHistoryStore';
 // import coblicTokenStatusStore from '../stores/coblicTokenStatusStore';
 // import dividendStore from '../stores/dividendStore';
 
@@ -45,10 +45,10 @@ export default class Pubnub {
                 tradingPairStore.updateTickerInTradingPair(message);
                 break;
             case 'ORDER':
-                // message.forEach((personalOrder) => {
-                //     this._handleOrderByStatus(personalOrder);
-                //     personalOrderHistoryStore.setPersonalOrder(personalOrder);
-                // });
+                message.forEach((personalOrder) => {
+                    this._handleOrderByStatus(personalOrder);
+                    personalOrderHistoryStore.setPersonalOrder(personalOrder);
+                });
                 break;
             case 'TRADE':
                 // realtimeTradeHistoryStore.setRealTimeTrades(message);
@@ -108,10 +108,10 @@ export default class Pubnub {
                     tradingPairStore.loadTradingPairs();
                     break;
                 case 'ORDER':
-                    // personalOrderHistoryStore.loadPersonalOrders();
+                    personalOrderHistoryStore.load();
                     break;
                 case 'TRADE':
-                    // realtimeTradeHistoryStore.loadRealtimeTrades();
+                    realtimeTradeHistoryStore.loadRealtimeTrades();
                     break;
                 case 'ACCOUNT':
                     await accountStore.loadAccounts();

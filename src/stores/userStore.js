@@ -5,22 +5,7 @@ import accountStore from './accountStore';
 // import Sentry from '../utils/Sentry';
 
 class UserStore {
-    constructor() {
-        reaction(
-            () => this.currentUser,
-            currentUser => {
-                if (currentUser) {
-                    accountStore.loadAccounts();
-                }
-            }
-        )
-    }
-
-    @observable currentUser = null;
     @observable isLoading;
-
-    // currentUser
-    @computed get isLoggedIn() { return !!this.currentUser; }
 
     // Verification 부분
     @computed get isTokenTradable() {
@@ -82,7 +67,11 @@ class UserStore {
             }));
     }
 
+    // currentUser
+    @observable currentUser = null;
+    @computed get isLoggedIn() { return !!this.currentUser; }
     @action saveUser(newUser) {
+        accountStore.loadAccounts();
         this.currentUser = newUser;
         // TODO react native 용으로 Sentry 적용 후 재 적용합니다.
         // Sentry.setUser(newUser);

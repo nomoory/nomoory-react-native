@@ -6,19 +6,22 @@ import OrderForm from './OrderForm';
 
 @observer
 export default class OrderBox extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Orderbook></Orderbook>
-        <OrderForm></OrderForm>
-      </View>
-    );
-  }
+    componentDidMount() {
+        console.log('OrderBox is mounted |')
+    }
+    render() {
+        return (
+            <View style={styles.container}>
+                <Orderbook />
+                <OrderForm />
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-  },
+    container: {
+        flex: 1,
+        flexDirection: 'row',
+    },
 });

@@ -3,6 +3,25 @@ import { StyleSheet } from 'react-native';
 const coblicButton = {
 };
 
+const color = {
+    coblicBlue: '#0052f3',
+    coblicPaleBlue: '#81a6ef',
+    coblicRed: '#da5f6e',
+    coblicGrey: '#dedfe0'
+};
+
+const font = {
+    size: {
+        modalHeader: 22,
+        modalContent: 16,
+    },
+    weight: {
+        bold: '600',
+    }
+}
+
+export { color, font };
+
 export default StyleSheet.create({
     coblicBlueButton: { ...coblicButton,
         color: '#0052f3'

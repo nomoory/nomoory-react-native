@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Container, Header, Text, Button, Item, Input } from 'native-base';
+import { Container, Text } from 'native-base';
 import { inject, observer } from 'mobx-react';
-import { observable, computed, reaction, action } from 'mobx';
+import { observable, action } from 'mobx';
 import BuyOrderForm from './BuyOrderForm';
 import SellOrderForm from './SellOrderForm';
+import RealtimeTradeHistory from './RealtimeTradeHistory';
 
 @inject('orderStore')
 @observer
@@ -20,7 +21,7 @@ export default class OrderForm extends Component {
         this.selectedTabType = 'SELL';
     });
     _onPressRealtimeTrade = action((e) => {
-        this.selectedTabType = 'REALTIME_TRADE';
+        this.selectedTabType = 'REALTIME_TRADE_HISTORY';
     });
 
     render() {
@@ -33,13 +34,13 @@ export default class OrderForm extends Component {
                     <TouchableOpacity style={[styles.button, this.selectedTabType === 'SELL' ? styles.selected : styles.unselected]} onPress={this._onPressSell}>
                         <Text style='button-text'>매도</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'REALTIME_TRADE' ? styles.selected : styles.unselected]} onPress={this._onPressRealtimeTrade}>
+                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'REALTIME_TRADE_HISTORY' ? styles.selected : styles.unselected]} onPress={this._onPressRealtimeTrade}>
                         <Text style='button-text'>실시간</Text>
                     </TouchableOpacity>
                 </View>
-                { this.selectedTabType === 'BUY' && <BuyOrderForm />  }
-                { this.selectedTabType === 'SELL' && <SellOrderForm />  }
-                { this.selectedTabType === 'REALTIME_TRADE' && <View />  }
+                { this.selectedTabType === 'BUY' && <BuyOrderForm /> }
+                { this.selectedTabType === 'SELL' && <SellOrderForm /> }
+                { this.selectedTabType === 'REALTIME_TRADE_HISTORY' && <RealtimeTradeHistory /> }
             </Container>
         );
     }

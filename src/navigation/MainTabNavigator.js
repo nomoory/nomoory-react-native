@@ -9,18 +9,16 @@ import { Icon } from 'expo';
 import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
-import DepositHistoryScreen from '../screens/DepositHistoryScreen';
+import AssetListScreen from '../screens/AssetListScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 import StubScreen from '../screens/StubScreen';
 
-
 const ExchangeStack = createStackNavigator(
     {
         Exchange: ExchangeScreen,
-        TradingPair: TradingPairScreen
+        TradingPair: TradingPairScreen,
     }
-
     //   {
     //     Exchange: StubScreen, //ExchangeScreen,
     //     Token: StubScreen, //TradingPairScreen
@@ -58,11 +56,11 @@ InvestmentStack.navigationOptions = {
     )
 };
 
-const DepositHistoryStack = createStackNavigator({
-    DepositHistory: DepositHistoryScreen
+const DepositWithdrawStack = createStackNavigator({
+    AssetList: AssetListScreen
 });
 
-DepositHistoryStack.navigationOptions = {
+DepositWithdrawStack.navigationOptions = {
     header: {
         visible: false,
     },
@@ -95,7 +93,7 @@ export default createBottomTabNavigator(
     {
         Exchange: ExchangeStack,
         Investment: InvestmentStack,
-        DepositHistory: DepositHistoryStack,
+        DepositWithdraw: DepositWithdrawStack,
         Profile: ProfileStack
     },
     {

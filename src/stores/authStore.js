@@ -3,136 +3,193 @@ import userStore from './userStore';
 import agent from '../utils/agent';
 import { AsyncStorage } from "react-native"
 
+/* 정책
+ * 로그인시 > temporary_otp_token 및 email 발급 > otpVerificationValues에 저장
+ * otpVerificationValues를 와  받아옵니다
+ * OTP 인증 화면에서 벗어나면 로그인 정보, temp를 날리고 needOtpVerificationToLogin을 false로 만듭니다.
+ * 
+ */ 
 class AuthStore {
-    @observable isLoading = false;
-    @observable errors = null;
-
     constructor() {
-        // needOtpVerificationToLogin이 true가 된지 2분 뒤에 temporaryLoaginValues를 reset함
-        reaction(
-            () => this.temporaryLoginValues.needOtpVerificationToLogin,
-            needOtpVerificationToLogin => {
-                if (needOtpVerificationToLogin) {
-                    //시간 카운트 다운 시작
-                    this.otpLoginTimeLimitValues.end = 
-                        moment()
-                        .add(parseInt(this.otpLoginTimeLimitValues.minutes), 'm')
-                        .add(parseInt(this.otpLoginTimeLimitValues.seconds), 's')
-                        .tz('Asia/Seoul');
-
-                    this.otpLoginTimeLimitValues.interval = setInterval(() => {
-                        this.setTimeLeft();
-                    }, 1000)
-                } else {
-                    this.clearOtpTimeInterval();
-                    this.otpLoginTimeLimitValues = {
-                        end: null,
-                        interval: null,
-                        minutes: '02',
-                        seconds: '00',
-                    };
-                }
-            }
-        )
         /*
          * 다음의 코드를 통해 access_token을 얻어오는 경우를 제외하고는
-         * store의 accessToken을 set함으로 AsyncStorage가 갱신됩니다.
+         * store의 access_token을 set함으로 AsyncStorage가 갱신됩니다.
          */
-
         const tokenReaction = reaction(
-            () => this.accessToken,
-            token => {
-                if (token) {
-                    AsyncStorage.setItem('access_token', token);
+            () => this.access_token,
+            accessToken => {
+                if (accessToken) {
+                    AsyncStorage.setItem('access_token', accessToken);
                 } else {
                     AsyncStorage.removeItem('access_token');
                 }
             }
         );
     }
-    @observable temporaryLoginValues = {
-        needOtpVerificationToLogin: false,
-        temporaryOtpToken: '',
-        temporaryEmail: '',
-    }
-    
-    @observable email = '';
-    @observable password = '';
-    @observable passwordConfirmation = '';
 
-    @observable accessToken = null;
-    @observable userUuid = null; // reset password 시 필요
+    /* Login */
+    @observable isLoading = false;
+    @observable errors = null;
 
-    @action setEmail(email) {
-        this.email = email;
+    @observable loginValues = {
+        email: 'junhyek+app@coblic.com',
+        password: 'sdfsdf!!'
     }
 
-    @action setPassword(password) {
-        this.password = password;
-    }
-
-    @action setPasswordConfirmation(password) {
-        this.passwordConfirmation = password;
-    }
-
-    @action clearEmailAndPassword() {
-        this.email = '';
-        this.password = '';
-        this.passwordConfirmation = '';
-    }
-
-    @action register() {
-        this.isLoading = true;
-        this.errors = null;
-
-        agent.signup({
-            id: this.id,
-            password: this.password,
-            passwordConfirmation: this.passwordConfirmation
-        })
-        .then(this._storeTokenAndUserAndClearEmailAndPassword)
-        .catch(this._handleAuthError)
-        .then(this.doneProgress);
+    @action setEmailForLogin(email) { this.loginValues.email = email; }
+    @action setPasswordForLogin(password) { this.loginValues.password = password; }
+    @action clearLoginValues() {
+        this.loginValues = {
+            email: '',
+            password: ''
+        };
     }
 
     @action login() {
         this.isLoading = true;
         this.errors = null;
 
-        agent.login(this.values)
-        .then(this._storeTokenAndUserAndClearEmailAndPassword)
-        .catch(this._handleAuthError)
-        .then(this.doneProgress);
+        return agent.login(this.loginValues)
+        .then(action((res) => {
+            let user = res.data;
+            console.log('user: ', user)
+            if (user.need_otp_verify === 'true') {
+                this.otpVerificationValues = {
+                    needOtpVerificationToLogin: true,
+                    temporaryOtpToken: user.temporary_otp_token,
+                    temporaryEmail: user.email,
+                    otp_code: ''            
+                };
+            } else {
+                this.setAccessToken(user.access_token);
+                this.setUserUuid(user.uuid);
+                delete user.access_token;
+                userStore.saveUser(user);
+            }
+            this.clearLoginValues();
+            this.isLoading = false;
+            return user;
+        }))
+        .catch(action((err) => {
+            this.errors = err.response && err.response.body && err.response.body.errors;
+            this.isLoading = false;
+            throw err;
+        }));
     }
+
+    /* OTP Verification For Login */
+    @observable access_token = null;
+    @observable user_uuid = null; // login, otp인증시 token과 함게 저장하고 사용/ 새로운 유저 로그인시 변경
+
+    @action hasAccessToken() { return this.access_token ? true : false; }
+    @action setAccessToken(accessToken) { this.access_token = accessToken; }
+    @action setUserUuid(userUuid) { this.user_uuid = userUuid; }
+    @action destroyAccessToken() { this.setAccessToken(null); }
+
+    @observable otpVerificationValues = {
+        needOtpVerificationToLogin: false,
+        temporaryOtpToken: '',
+        temporaryEmail: '',
+        otp_code: ''
+    }
+
+    @action setOtpCode(code) {
+        this.otpVerificationValues.otp_code = code;
+    }
+    @action clearVerifyOtpValue() {
+        this.otpVerificationValues = {
+            needOtpVerificationToLogin: false,
+            temporaryOtpToken: '',
+            temporaryEmail: '',
+            otp_code: ''
+        };
+    }    
+
+    @action verifyOTPLogin() {
+        this.isLoading = true;
+        this.errors = undefined;
+
+        let otp_login_info = {
+            verification_type: 'otp', 
+            temporary_otp_token: this.otpVerificationValues.temporaryOtpToken,
+            email: this.otpVerificationValues.temporaryEmail,
+            verification_code: this.otpVerificationValues.otp_code
+        };
+
+        return agent.verifyOTPLogin(otp_login_info)
+        .then(action((res) => {
+            let user = res.data;
+            userStore.saveUser(user);
+            this.clearVerifyOtpValue();
+            this.isLoading = false;
+        }))
+        .catch(action((err) => {
+            this.errors = err.response && err.response.body && err.response.body.errors;
+            this.isLoading = false;
+            throw err;
+        }));
+    }
+
+    /* Signup */
+    @observable signupValues = {
+        email: '',
+        password: '',
+        passwordConfirmation: '',
+        agreesToContracts: false,
+        agreesToInstruction: false,
+        agreesToMarketing: false,
+    }
+
+    @action setEmailForSignup(email) { this.signupValues.email = email; }
+    @action setPasswordForSignup(password) { this.signupValues.password = password; }
+    @action setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
+    @action setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
+    @action setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
+
+    @action clearSignupValues() {
+        this.signupValues = {
+            email: '',
+            password: '',
+            password_confirmation: '',
+            agreesToContracts: false,
+            agreesToInstruction: false,
+            agreesToMarketing: false,
+        };
+    }
+    @action toggleCheckboxStatus(name) {
+        this.signupValues[name] = !this.signupValues[name];
+    }
+
+    @action signup() {
+        this.isLoading = true;
+        this.errors = null;
+
+        return agent.signup(this.signupValues)
+        .then(action((response) => {
+            let user = response.data;
+            this.setAccessToken(user.access_token);
+            delete user.access_token;
+            userStore.saveUser(user);
+            this.clearSignupValues();
+            this.isLoading = false;
+        }))
+        .catch(action((err) => {
+            this.errors = err.response && err.response.body && err.response.body.errors;
+            throw err;
+        }));
+    }
+
+    /* Logout */
     @action logout() {
         this.errors = null;
-        this.accessToken = null;
-        
-        agent.logout()
-        .catch(this._handleAuthError);
-    }
-    @action _storeTokenAndUserAndClearEmailAndPassword(response) {
-        let user = response.data;
-        this.accessToken = user.access_token;
-        delete user.access_token;
-        userStore.saveUser(user);
-        this.clearEmailAndPassword();
-    }
-    @action hasAccessToken() {
-        return this.accessToken ? true : false;
-    }
-    @action setToken(token) {
-        this.token = token;
-    }
-    @action destroyToken() {
-        this.setToken(null);
-    }
-    @action _handleAuthError(err) {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-    }
-    @action doneProgress() {
-        this.isLoading = false;
+        this.destroyAccessToken();
+        this.clearLoginValues();
+        this.clearSignupValues();
+        return agent.logout()
+        .catch(action((err) => {
+            this.errors = err.response && err.response.body && err.response.body.errors;
+            throw err;
+        }));
     }
 }
 

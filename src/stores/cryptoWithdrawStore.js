@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import accountStore from './accountStore';
+import Decimal from '../utils/decimal';
 
 // account가 선택되어야 이에 따른 출금이 가능하므로 accountStore에 종속적입니다.
 // 암호화폐 출금에 사용되는 store입니다.

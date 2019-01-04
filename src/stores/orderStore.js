@@ -5,7 +5,7 @@ import tradingPairStore from './tradingPairStore';
 import accountStore from './accountStore';
 import modalStore from './modalStore';
 import orderFeeStore from './orderFeeStore';
-import { Decimal } from './../utils/decimal.js';
+import Decimal from '../utils/decimal';
 import agent from '../utils/agent';
 import number from '../utils/number';
 
@@ -33,12 +33,12 @@ class OrderStore {
     }
     @computed get baseSymbol() {
         let tradingPairName = this.values.trading_pair || tradingPairStore.selectedTradingPairName;
-        return tradingPairName.split('-')[0];
+        return tradingPairName ? tradingPairName.split('-')[0] : '';
     }
 
     @computed get quoteSymbol() {
         let tradingPairName = this.values.trading_pair || tradingPairStore.selectedTradingPairName;
-        return tradingPairName.split('-')[1];
+        return tradingPairName ? tradingPairName.split('-')[1] : '';
     } 
 
     @computed get minimumOrderAmount() {
@@ -75,8 +75,8 @@ class OrderStore {
     }
 
     @computed get isValidOrder() {
-        let quoteAccount = accountStore.getAccount(this.quoteSymbol);
-        let baseAccount = accountStore.getAccount(this.baseSymbol);
+        let quoteAccount = accountStore.getAccountByAssetSymbol(this.quoteSymbol);
+        let baseAccount = accountStore.getAccountByAssetSymbol(this.baseSymbol);
         let liquid_decimal = Decimal(quoteAccount ? quoteAccount.liquid || 0 : 0 );
         let liquid_base_decimal = Decimal(baseAccount ? baseAccount.liquid || 0 : 0 );
         if (this.values.side === 'BUY') {
@@ -157,12 +157,13 @@ class OrderStore {
         let maximumOrderableVolume = '0';
         if (side === 'BUY') {
             let symbol = this.quoteSymbol;
-            let account  = accountStore.getAccount(symbol) || {};
+            let account  = accountStore.getAccountByAssetSymbol(symbol) || {};
             let liquid = account.liquid || '0';
-            maximumOrderableVolume = Decimal(liquid).div(price).mul(rate).toFixed(8, Decimal.ROUND_DOWN);
+
+            maximumOrderableVolume = Decimal(liquid).mul(rate).div(price).toFixed(8, Decimal.ROUND_DOWN);
         } else {
             let symbol = this.baseSymbol;
-            let account  = accountStore.getAccount(symbol) || {};
+            let account  = accountStore.getAccountByAssetSymbol(symbol) || {};
             let liquid = account.liquid;
             maximumOrderableVolume = Decimal(liquid).mul(rate).toFixed(8, Decimal.ROUND_DOWN);
         }
@@ -251,7 +252,7 @@ class OrderStore {
         this.values.price = number.getFixedPrice(this.values.price, this.quoteSymbol);
     }
     @action correctVolumeForSubmit() {
-        this.values.volume = number.getFixedVolume(this.values.volume, this.values.trading_pair.split('-')[0]);
+        this.values.volume = number.getFixedVolume(this.values.volume, this.baseSymbol);
     }
     @action setPrice(price) {
         this.values.price = price;
@@ -300,6 +301,7 @@ class OrderStore {
 
     _getOrderModalContent = () => {
         let { trading_pair, side, volume, price, order_type } = this.values;
+        trading_pair = trading_pair || tradingPairStore.selectedTradingPairName;
         let orderTypeString = order_type == 'LIMIT' ? '지정가' : '';
         let orderSideString = side == 'SELL' ? '판매' : '구매';
 
@@ -310,7 +312,7 @@ class OrderStore {
                     <div className='info'>
                         <div className='row'>
                             <div className='title'>{`거래 자산`}</div>
-                            <div className='value'>{`${trading_pair.split('-').join(' / ')}`}</div> 
+                            <div className='value'>{`${trading_pair ? trading_pair.split('-').join(' / ') : '-'}`}</div> 
                         </div>
                         <div className='row'> 
                             <div className='title'>{`주문 유형`}</div>
@@ -346,7 +348,7 @@ class OrderStore {
                     <div className='info'>
                         <div className='row'>
                             <div className='title'>{`거래 자산`}</div>
-                            <div className='value'>{`${trading_pair.split('-').join(' / ')}`}</div> 
+                            <div className='value'>{`${trading_pair ? trading_pair.split('-').join(' / ') : '-'}`}</div> 
                         </div>
                         <div className='row'> 
                             <div className='title'>{`주문 유형`}</div>

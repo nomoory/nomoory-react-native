@@ -1,6 +1,6 @@
 import { observable, action, computed, reaction } from 'mobx';
 import agent from '../utils/agent';
-import Decimal from '../utils/decimal.js';
+import Decimal from '../utils/decimal';
 import number from '../utils/number';
 import tradingPairStore from './tradingPairStore';
 
@@ -8,8 +8,8 @@ class OrderbookStore {
     @observable isLoading = false;
     @observable errors = null;
 
-    @observable buyOrdersRegistry = observable.array();
-    @observable sellOrdersRegistry = observable.array();
+    @observable buyOrdersRegistry = [];
+    @observable sellOrdersRegistry = [];
     @observable baseSymbolOfSelectedTradingPair = null;
 
     @computed get sellOrders() {
@@ -42,7 +42,7 @@ class OrderbookStore {
             volume_sum = volume_sum.plus(volume);
         });
 
-        return numberHelper.putComma(volume_sum.toFixed(3));
+        return number.putComma(volume_sum.toFixed(3));
     };
 
     @computed get sellOrdersSum_display() {
@@ -52,7 +52,7 @@ class OrderbookStore {
             volume_sum = volume_sum.plus(volume);
         });
 
-        return numberHelper.putComma(volume_sum.toFixed(3))
+        return number.putComma(volume_sum.toFixed(3))
     };
 
     @computed get maxOrderVolume() {
@@ -72,8 +72,8 @@ class OrderbookStore {
     }
 
     @action clearOrderbook() {
-        this.buyOrdersRegistry.clear();
-        this.sellOrdersRegistry.clear();
+        this.buyOrdersRegistry = [];
+        this.sellOrdersRegistry = [];
     }
 
     @action setOrderbook(message) {
