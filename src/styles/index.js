@@ -14,15 +14,15 @@ const font = {
     size: {
         modalHeader: 22,
         modalContent: 16,
+        tableContentNormal: 10,
     },
     weight: {
         bold: '600',
     }
 }
 
-export { color, font };
 
-export default StyleSheet.create({
+let commonStyles = {
     coblicBlueButton: { ...coblicButton,
         color: '#0052f3'
     },
@@ -40,5 +40,19 @@ export default StyleSheet.create({
     },
     SELL: {
         color: '#0052f3'
-    },
+    }
+};
+
+/*
+ * 위 font의 size에 있는 항목들을 style 화 시킴
+ * ex) font.size.yourFontSize = 20;
+ * => style= {[commonStyles.yourFontSizeText]} 로 사용 가능
+ */
+Object.keys(font.size).forEach((sizeName) => {
+    let size = font.size[sizeName];
+    commonStyles[sizeName + 'Text'] = { fontSize: size };
 });
+
+export { color, font };
+
+export default StyleSheet.create(commonStyles);

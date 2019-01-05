@@ -111,7 +111,7 @@ export default class Pubnub {
                     personalOrderHistoryStore.load();
                     break;
                 case 'TRADE':
-                    realtimeTradeHistoryStore.loadRealtimeTrades();
+                    realtimeTradeHistoryStore.load();
                     break;
                 case 'ACCOUNT':
                     await accountStore.loadAccounts();
