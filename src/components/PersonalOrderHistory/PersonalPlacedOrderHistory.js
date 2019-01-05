@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyle from '../../styles';
+import commonStyles, {font }from '../../styles';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Container, Header, Text, Button, Item, Input } from 'native-base';
 import { inject, observer } from 'mobx-react';
@@ -22,7 +22,7 @@ export default class PersonalPlacedOrderHistory extends Component {
         this.props.personalOrderHistoryStore.load();
     }
 
-    _onPressDeleteOrder = (order_uuid) => {
+    _onPressDeleteOrder = (order_uuid) => () => {
         this.props.personalOrderHistoryStore.deletePlacedOrder(order_uuid);
     }
     
@@ -31,36 +31,38 @@ export default class PersonalPlacedOrderHistory extends Component {
             <View style={[styles.head]}>
                 <View style={[styles.column]}>
                     <View style={[styles.columnItem]}>
-                        <Text style={[styles.columnText]}>주문유형</Text>
+                        <Text style={[styles.headColumnText]}>주문유형</Text>
                     </View>
                     <View style={[styles.columnItem]}>
-                        <Text style={[styles.columnText]}>주문시간</Text>
-                    </View>
-                </View>
-                <View style={[styles.column]}>
-                    <View style={[styles.columnItem]}>
-                        <Text style={[styles.columnText]}>가격</Text>
-                    </View>
-                    <View style={[styles.columnItem]}>
-                        <Text style={[styles.columnText]}>수량</Text>
+                        <Text style={[styles.headColumnText]}>주문시간</Text>
                     </View>
                 </View>
                 <View style={[styles.column]}>
                     <View style={[styles.columnItem]}>
-                        <Text style={[styles.columnText]}>체결량</Text>
+                        <Text style={[styles.headColumnText]}>가격</Text>
                     </View>
                     <View style={[styles.columnItem]}>
-                        <Text style={[styles.columnText]}>마체결</Text>
+                        <Text style={[styles.headColumnText]}>수량</Text>
+                    </View>
+                </View>
+                <View style={[styles.column]}>
+                    <View style={[styles.columnItem]}>
+                        <Text style={[styles.headColumnText]}>체결량</Text>
+                    </View>
+                    <View style={[styles.columnItem]}>
+                        <Text style={[styles.headColumnText]}>마체결</Text>
                     </View>
                 </View>
                 <View style={[styles.column, styles.columnItem]}>
-                    <Text style={[styles.columnText]}>취소</Text>
+                    <Text style={[styles.headColumnText]}>취소</Text>
                 </View>
             </View>
         );
     };
 
     _renderPersonalPlacedOrderHistoryBody() {
+        const tradingPair = this.props.tradingPairStore.selectedTradingPair;
+        const { base_symbol, quote_symbol } = tradingPair || {};
         return (
             <ScrollView style={[styles.body]}>
                 <View style={[styles.tuples]}>
@@ -69,44 +71,44 @@ export default class PersonalPlacedOrderHistory extends Component {
                         let dateAndTime_string = momentHelper.getLocaleDatetime(created);
                         let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
                         return (
-                            <View style={[styles.tuple, index % 2 ? styles['even'] : styles['odd'] ]} key={uuid}>
+                            <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
                                 <View style={[styles.column]}>
-                                    <View style={[styles.columnItem, styles[side]]}>
-                                        <Text style={[styles.columnText]}>
+                                    <View style={[styles.columnItem, commonStyles[side]]}>
+                                        <Text style={[styles.tupleColumnText, commonStyles[side]]}>
                                             { side === 'SELL' ? '매도' : '매수' }
                                         </Text>
                                     </View>
-                                    <View style={[styles.columnItem]}> 
-                                        <Text style={[styles.columnText, styles.dateText]}>{date}</Text>
-                                        <Text style={[styles.columnText, styles.timeText]}>{time}</Text> 
+                                    <View style={[styles.columnItem, styles.created]}> 
+                                        <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''} </Text>
+                                        <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
                                     </View>
                                 </View>
                                 <View style={[styles.column]}>
                                     <View style={[styles.columnItem, styles.price]}>
-                                        <Text style={[styles.columnText, styles.priceText]}>
+                                        <Text style={[styles.tupleColumnText, styles.priceText]}>
                                             {number.putComma(Decimal(Decimal(price).toFixed()).toFixed())} {quote_symbol}
                                         </Text>
                                     </View>
                                     <View style={[styles.columnItem, styles.volume]}>
-                                        <Text style={[styles.columnText, styles.volumeText]}>
+                                        <Text style={[styles.tupleColumnText, styles.volumeText]}>
                                             {number.putComma(Decimal(volume).toFixed())} {base_symbol}
                                         </Text>
                                     </View>               
                                 </View>
                                 <View style={[styles.column]}>
                                     <View style={[styles.columnItem, styles.filled ]}>
-                                        <Text style={[styles.columnText, styles.volumeText]}>
+                                        <Text style={[styles.tupleColumnText, styles.volumeText]}>
                                             {number.putComma(Decimal(volume_filled).toFixed())} {base_symbol}
                                         </Text>
                                     </View>
                                     <View style={[styles.columnItem, styles.remaining]}>
-                                        <Text style={[styles.columnText, styles.volumeText]}>
+                                        <Text style={[styles.tupleColumnText, styles.volumeText]}>
                                             {number.putComma(Decimal(volume_remaining).toFixed())} {base_symbol}
                                         </Text>
                                     </View>        
                                 </View>
                                 <View style={[styles.column, styles.columnItem]}>{
-                                    <Button onPress={this._onPressDeleteOrder(uuid)}>취소</Button>
+                                    <Button onPress={this._onPressDeleteOrder(uuid)} title={'취소'}></Button>
                                 }</View>
                             </View>
                         );
@@ -121,9 +123,6 @@ export default class PersonalPlacedOrderHistory extends Component {
     }
 
     render() {
-        const { t } = this.props;
-        const tradingPair = this.props.tradingPairStore.selectedTradingPair
-        const { base_symbol, quote_symbol } = tradingPair || {};
         return (
             <Container style={[styles.container]}>
                 {/* <Loading isOpened={this.props.personalOrderHistoryStore.isLoading} /> */}
@@ -144,7 +143,14 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 70,
         flexDirection: 'row',
-        backgroundColor: "#f7f8fa"
+        backgroundColor: "#f7f8fa",
+
+        borderStyle: 'solid',
+        borderBottomWidth: 1,
+        borderBottomColor: '#dedfe0',
+        borderTopWidth: 1,
+        borderTopColor: '#dedfe0',
+        
     },
     column: {
         flex: 1,
@@ -153,7 +159,7 @@ const styles = StyleSheet.create({
     }, 
     columnItem: {
         borderStyle: 'solid',
-        borderWidth: 1,
+        borderWidth: 0.5,
         borderColor: '#dedfe0',
 
         flex: 1,
@@ -161,9 +167,26 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     tuple: {        
+        width: '100%',
+        height: 70,
+        flexDirection: 'row',
         borderStyle: 'solid',
         borderRightWidth: 1,
         borderRightColor: '#dedfe0',
     },
-
+    odd: {
+        backgroundColor: '#f7f8fa',
+    },
+    tupleColumnText: {
+        fontSize: 10
+    },
+    created: {
+        flexDirection: 'row'
+    },
+    dateText: {
+        color: '#333'
+    },
+    timeText: {
+        color: '#747474'
+    }
 });

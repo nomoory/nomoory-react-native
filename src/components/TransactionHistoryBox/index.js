@@ -7,21 +7,25 @@ import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
 import Decimal from '../../utils/decimal';
 import { reaction, computed } from 'mobx';
+import TRANSLATIONS from '../../TRANSLATIONS'
 
 @inject('pubnub', 'transactionHistoryStore', 'tradingPairStore')
 @observer
-export default class PersonalCompletedOrderHistory extends Component {
+export default class TransactionHistoryBox extends Component {
     componentDidMount() {
-        reaction(
-            () => this.props.tradingPairStore.selectedTradingPairName,
-            (selectedTradingPairName) => {
-                this.props.transactionHistoryStore.load('TRADE');
-            }
-        );
-        this.props.transactionHistoryStore.load('TRADE');
-    }
-    componentWillUnmount() {
-        this.props.transactionHistoryStore.clear()
+        // this.reaciton = reaction(
+        //     () => this.props.tradingPairStore.selectedTradingPairName,
+        //     (selectedTradingPairName) => {
+        //         this.props.transactionHistoryStore.load(this.props.type);
+        //     }
+        // );
+        
+        /* 
+         *  mount시 내부에 필요한 데이터를 호출하는게 아닌, 외부 tab에 의해 호출합니다. 
+         *  TODO tab 형태가 변경되면 로드해오는 방식도 변경할 여지가 있습니다.
+         */
+        // this.props.transactionHistoryStore.clear();
+        // this.props.transactionHistoryStore.load(this.props.type || 'ALL_TRANSACTIONS');
     }
     
     @computed get personalCompletedOrderHistoryHead() {
@@ -36,13 +40,16 @@ export default class PersonalCompletedOrderHistory extends Component {
                     </View>
                 </View>
                 <View style={[styles.column, styles.columnItem]}>
-                    <Text style={[styles.headColumnText]}>체결가격</Text>
+                    <Text style={[styles.headColumnText]}>가격</Text>
                 </View>
                 <View style={[styles.column, styles.columnItem]}>
-                    <Text style={[styles.headColumnText]}>체결수량</Text>
+                    <Text style={[styles.headColumnText]}>수량</Text>
                 </View>
                 <View style={[styles.column, styles.columnItem]}>
-                    <Text style={[styles.headColumnText]}>체결금액</Text>
+                    <Text style={[styles.headColumnText]}>수수료</Text>
+                </View>
+                <View style={[styles.column, styles.columnItem]}>
+                    <Text style={[styles.headColumnText]}>총금액</Text>
                 </View>
             </View>
         );
@@ -52,13 +59,13 @@ export default class PersonalCompletedOrderHistory extends Component {
         return (
             <ScrollView style={[styles.body]}>
                 <View style={[styles.tuples]}>
-                    {this.props.transactionHistoryStore.transactionHistory.map((completedOrder, index) => {
+                    {this.props.transactionHistoryStore.transactionHistory.map((transaction, index) => {
                         let { 
                             uuid, 
-                            amount, price, volume, 
+                            amount, price, volume, fee,
                             base_symbol, quote_symbol, 
                             transaction_created, transaction_type 
-                        } = completedOrder;
+                        } = transaction;
                         let dateAndTime_string = momentHelper.getLocaleDatetime(transaction_created);
                         let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
                         return (
@@ -66,7 +73,7 @@ export default class PersonalCompletedOrderHistory extends Component {
                                 <View style={[styles.column]}>
                                     <View style={[styles.columnItem, commonStyles[transaction_type]]}>
                                         <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>
-                                            { transaction_type === 'SELL' ? '매도' : '매수' }
+                                            { TRANSLATIONS[transaction_type] }
                                         </Text>
                                     </View>
                                     <View style={[styles.columnItem, styles.created]}> 
@@ -82,6 +89,11 @@ export default class PersonalCompletedOrderHistory extends Component {
                                 <View style={[styles.column, styles.columnItem, styles.volume ]}>
                                     <Text style={[styles.tupleColumnText, styles.volumeText]}>
                                         {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+                                    </Text>
+                                </View>
+                                <View style={[styles.column, styles.columnItem, styles.fee]}>
+                                    <Text style={[styles.tupleColumnText, styles.feeText]}>
+                                        {number.putComma(Decimal(fee).toFixed())} { transaction_type === 'SELL' ? quote_symbol : base_symbol }
                                     </Text>
                                 </View>
                                 <View style={[styles.column, styles.columnItem, styles.amount]}>

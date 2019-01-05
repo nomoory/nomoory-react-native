@@ -1,24 +1,24 @@
 import tradingPairStore from './tradingPairStore';
 import { observable, action, computed } from 'mobx';
 
-import agent from '../agent';
-import i18next from 'i18next';
+import agent from '../utils/agent';
+import TRANSLATIONS from '../TRANSLATIONS';
 
 
 class TransactionHistoryStore {
     @observable isLoading = false;
     @observable errors = undefined;
     @observable options = [
-        { value: 'ALL_TRANSACTIONS', label: i18next.t('ALL_TRANSACTIONS') },
-        { value: 'BUY', label: i18next.t('BUY') },
-        { value: 'SELL', label: i18next.t('SELL') },
-        { value: 'WITHDRAW', label: i18next.t('WITHDRAW') },
-        { value: 'DEPOSIT', label: i18next.t('DEPOSIT') },
-        { value: 'MINING', label: i18next.t('MINING') },
-        // { value: 'INVITATION_MINING', label: i18next.t('INVITATION_MINING') },
-        { value: 'DIVIDEND', label: i18next.t('DIVIDEND') },
-        { value: 'TAKEAWAY', label: i18next.t('TAKEAWAY') },
-        { value: 'GIVEAWAY', label: i18next.t('GIVEAWAY') },
+        { value: 'ALL_TRANSACTIONS', label: TRANSLATIONS['ALL_TRANSACTIONS'] },
+        { value: 'BUY', label: TRANSLATIONS['BUY'] },
+        { value: 'SELL', label: TRANSLATIONS['SELL'] },
+        { value: 'WITHDRAW', label: TRANSLATIONS['WITHDRAW'] },
+        { value: 'DEPOSIT', label: TRANSLATIONS['DEPOSIT'] },
+        { value: 'MINING', label: TRANSLATIONS['MINING'] },
+        // { value: 'INVITATION_MINING', label: TRANSLATIONS['INVITATION_MINING'] },
+        { value: 'DIVIDEND', label: TRANSLATIONS['DIVIDEND'] },
+        { value: 'TAKEAWAY', label: TRANSLATIONS['TAKEAWAY'] },
+        { value: 'GIVEAWAY', label: TRANSLATIONS['GIVEAWAY'] },
     ];
     @observable loadMoreValues = {
         isLoading: false,
@@ -31,34 +31,31 @@ class TransactionHistoryStore {
         this.loadMoreValues.selectedOption = selectedOption;
     }
 
-    @observable transactionHistoryRegistry = observable.array();
+    @observable registry = observable.array();
 
     @computed get transactionHistory() {
         let transactionHistory = [];
-        this.transactionHistoryRegistry.forEach((transaction) => {
-            transactionHistory.push({
-                uuid: transaction.uuid,
-                transaction_created: transaction.transaction_created,
-                quote_symbol: transaction.quote_symbol,
-                base_symbol: transaction.base_symbol,
-                transaction_type: transaction.transaction_type,
-                volume: transaction.volume,
-                price: transaction.price,
-                amount: transaction.amount,
-                fee: transaction.fee,
-                adjusted_amount: transaction.adjusted_amount                
-            });
+        this.registry.forEach((transaction) => {
+            transactionHistory.push(transaction);
         });
         return transactionHistory;
     }
 
-    @action clearTransactionHistory() {
-        this.transactionHistoryRegistry.clear();
-        this.bankWithdrawHistoryLoadValues = {
-            isFirstLoad: true,
+    @action clearRegistry() {
+        this.registry.clear();
+    }
+
+    @action clearLoadMoreValues() {
+        this.loadMoreValues = {
+            isLoading: false,
+            selectedOption: this.options[0].value,
             nextUrl: null,
-            isLoading: false
+            isFirstLoad: true
         };
+    }
+    @action clear() {
+        this.clearRegistry();
+        this.clearLoadMoreValues();
     }
 
     @computed get isLoadable() {
@@ -74,7 +71,7 @@ class TransactionHistoryStore {
             };
         }
         if (!isFirstLoad && !nextUrl) { // 이후 로드할 내역이 더이상 없을 때: 로드 불가
-            if (this.transactionHistoryRegistry.length == 0) {
+            if (this.registry.length == 0) {
                 return {
                     status: false,
                     message_code: 'no_more_load'
@@ -104,20 +101,22 @@ class TransactionHistoryStore {
         if (
             scrollHeight - (clientHeight + scrollTop) < 100 && 
             this.loadMoreValues.isLoading === false) {
-            this.loadNextTransactionHistory();
+            this.loadNext();
         }
     }
 
-    @action loadTransactionHistory() {
+    @action load(selectedOption) {
+        if (selectedOption) this.changeSelectedOption(selectedOption);
+        selectedOption  = selectedOption || this.loadMoreValues.selectedOption;
         this.loadMoreValues.isLoading = true;
         this.errors = null;
         let trading_pair_name = null;
-        if (this.loadMoreValues.selectedOption === 'TRADE') trading_pair_name = tradingPairStore.selectedTradingPairName;
+        if (selectedOption === 'TRADE') trading_pair_name = tradingPairStore.selectedTradingPairName;
         
-        return agent.loadTransactionHistory(this.loadMoreValues.selectedOption, trading_pair_name)
+        return agent.loadTransactionHistory(selectedOption, trading_pair_name)
         .then(action((response) => {
             let { results, next, previous } = response.data;
-            this.transactionHistoryRegistry.replace(results);
+            this.registry.replace(results);
             this.loadMoreValues = {
                 isFirstLoad: false,
                 nextUrl: next,
@@ -130,13 +129,13 @@ class TransactionHistoryStore {
             throw err;
         }));
     }
-    @action loadNextTransactionHistory() {
+    @action loadNext() {
         if(this.loadMoreValues.nextUrl) {
             this.loadMoreValues.isLoading = true;
             return agent.get(this.loadMoreValues.nextUrl)
             .then(action((response) => {
                 let { results, next, previous } = response.data;
-                this.transactionHistoryRegistry.replace([...this.transactionHistoryRegistry, ...results]);
+                this.registry.replace([...this.registry, ...results]);
                 this.loadMoreValues = {
                     isFirstLoad: false,
                     nextUrl: next,

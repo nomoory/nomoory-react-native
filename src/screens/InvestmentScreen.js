@@ -9,9 +9,10 @@ import TradeHistoryBox from '../components/TradeHistoryBox';
 import UnmatchedOrderBox from '../components/UnmatchedOrderBox';
 // import DividendHistoryBox from '../components/DividenHistroyBox';
 // import MiningHistoryBox from '../components/MiningHistoryBox';
+import TransactionHistoryBox from '../components/TransactionHistoryBox';
 
 @withNavigation
-@inject('pubnub', 'userStore')
+@inject('pubnub', 'userStore', 'transactionHistoryStore')
 @observer
 export default class InvestmentScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -37,26 +38,34 @@ export default class InvestmentScreen extends Component {
     componentWillUnmount() {
         // this.props.pubnub.unsubscribe(this.pubnubChannel);
     }
+    _onChangeTab = (e) => {
+        this.props.transactionHistoryStore.clear();
+        try {
+            this.props.transactionHistoryStore.load(e.ref.props.children.props.type);
+        } catch (err) {
+
+        }
+    }
 
     render() {
         return (
             <Container style={styles.container}>
-                <Tabs>
+                <Tabs onChangeTab={this._onChangeTab}>
                     <Tab heading={<TabHeading><Text>보유자산</Text></TabHeading>}
                         styles={styles.tab}>
-                        <AssetsAndEvaluationBox></AssetsAndEvaluationBox>
+                        <AssetsAndEvaluationBox />
                     </Tab>
                     <Tab heading={<TabHeading><Text>거래내역</Text></TabHeading>}>
-                        <View><Text>거래내역</Text></View>
+                        <TransactionHistoryBox type='ALL_TRANSACTIONS'/>
                     </Tab>
                     <Tab heading={<TabHeading><Text>채굴내역</Text></TabHeading>}>
-                        <View><Text>채굴내역</Text></View>
+                        <TransactionHistoryBox type='MINING'/>
                     </Tab>
                     <Tab heading={<TabHeading><Text>배당내역</Text></TabHeading>}>
-                        <View><Text>배당내역</Text></View>
+                        <TransactionHistoryBox type='DIVIDEND'/>
                     </Tab>
                     <Tab heading={<TabHeading><Text>미체결</Text></TabHeading>}>
-                        <View><Text>미체결</Text></View>
+                       <TransactionHistoryBox type='TRADE'/>
                     </Tab>
                 </Tabs>
             </Container>

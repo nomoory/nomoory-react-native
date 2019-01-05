@@ -127,15 +127,15 @@ class AccountStore {
     };
 
     @computed get totalAssetsEvaluation() {
-        let total_evaluated_price_in_quote = Decimal(0); // 자산 평가액(base_symbol)
-        let holding_quote_decimal = Decimal(0) // 보유 base_symbol
-        let total_token_buying_price = Decimal(0); // 총 매수 금액
-        let total_tokens_evaluated_price_in_quote = Decimal(0); // 평가 금액
-        let evaluated_revenue = Decimal(0);
-        let evaluated_revenue_ratio = Decimal(0);
-    
-        this.accounts.forEach((account) => {
-            try {
+        try {
+            let total_evaluated_price_in_quote = Decimal(0); // 자산 평가액(base_symbol)
+            let holding_quote_decimal = Decimal(0) // 보유 base_symbol
+            let total_token_buying_price = Decimal(0); // 총 매수 금액
+            let total_tokens_evaluated_price_in_quote = Decimal(0); // 평가 금액
+            let evaluated_revenue = Decimal(0);
+            let evaluated_revenue_ratio = Decimal(0);
+        
+            this.accounts.forEach((account) => {
                 let { balance } = account || {};
                 if (balance) {
                     if (account.asset_symbol !== QUOTE_SYMBOL) {
@@ -149,25 +149,32 @@ class AccountStore {
                         holding_quote_decimal = holding_quote_decimal.add(balance);
                     }
                 }
-            } catch (err) {
-                console.log('err on get totalAssetsEvaluation of account: ', account)
-            }
+            });
 
-        });
+            evaluated_revenue = total_tokens_evaluated_price_in_quote.minus(total_token_buying_price);
+            total_evaluated_price_in_quote = total_tokens_evaluated_price_in_quote.add(holding_quote_decimal);
 
-        evaluated_revenue = total_tokens_evaluated_price_in_quote.minus(total_token_buying_price);
-        total_evaluated_price_in_quote = total_tokens_evaluated_price_in_quote.add(holding_quote_decimal);
-
-        if (!total_token_buying_price.equals(0)) evaluated_revenue_ratio = total_tokens_evaluated_price_in_quote.div(total_token_buying_price);
-        let result = {
-            total_evaluated_price_in_quote: total_evaluated_price_in_quote.toFixed(), // 총 평가액: 모든 토큰의 close_price 환산 평가 액 + 보유 base_symbol
-            holding_quote: holding_quote_decimal.toFixed(), // 보유 base_symbol
-            total_token_buying_price: total_token_buying_price.toFixed(), // 구매금액: 모든 토큰을 구매할 때 쓴 금액
-            total_tokens_evaluated_price_in_quote: total_tokens_evaluated_price_in_quote.toFixed(), // 모든 토큰의 close_price 환산 평가 액
-            evaluated_revenue: evaluated_revenue.toFixed(), // 총 평가 액 - 구매금액 = 수익
-            evaluated_revenue_ratio: evaluated_revenue_ratio.toFixed() // 수익률 = 수익 / 구매 금액
-        };
-        return result;
+            if (!total_token_buying_price.equals(0)) evaluated_revenue_ratio = total_tokens_evaluated_price_in_quote.div(total_token_buying_price);
+            let result = {
+                total_evaluated_price_in_quote: total_evaluated_price_in_quote.toFixed(), // 총 평가액: 모든 토큰의 close_price 환산 평가 액 + 보유 base_symbol
+                holding_quote: holding_quote_decimal.toFixed(), // 보유 base_symbol
+                total_token_buying_price: total_token_buying_price.toFixed(), // 구매금액: 모든 토큰을 구매할 때 쓴 금액
+                total_tokens_evaluated_price_in_quote: total_tokens_evaluated_price_in_quote.toFixed(), // 모든 토큰의 close_price 환산 평가 액
+                evaluated_revenue: evaluated_revenue.toFixed(), // 총 평가 액 - 구매금액 = 수익
+                evaluated_revenue_ratio: evaluated_revenue_ratio.toFixed() // 수익률 = 수익 / 구매 금액
+            } 
+        } catch (err) {
+            console.log('err on get totalAssetsEvaluation of account: ', account)
+            let result = {
+                total_evaluated_price_in_quote: null,
+                holding_quote: null,
+                total_token_buying_price: null,
+                total_tokens_evaluated_price_in_quote: null,
+                evaluated_revenue: null,
+                evaluated_revenue_ratio: null,
+            };
+            return result;
+        }
     }
 
     getAccountByAssetSymbol(assetSymbol) {

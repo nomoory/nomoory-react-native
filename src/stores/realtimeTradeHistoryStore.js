@@ -56,7 +56,7 @@ class RealtimeTradeHistoryStore {
         // }
     }
 
-    @action loadRealtimeTrades() {
+    @action load() {
         this.LoadValues.isLoading = true;
         return agent.loadRealtimeTrades(tradingPairStore.selectedTradingPairName)
         .then(action((response) => {

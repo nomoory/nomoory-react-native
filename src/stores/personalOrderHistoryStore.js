@@ -71,13 +71,17 @@ class PersonalOrderHistoryStore {
 
     @action load() {
         this.loadValues.isLoading = true;
+        console.log('requested')
         return agent.loadPersonalPlacedOrders(tradingPairStore.selectedTradingPairName)
         .then(action((response) => {
+            console.log('success')
             let { results, next, previous } = response.data;
             this.placedOrdersRegistry.clear();
-            results.forEach((placedOrder) => {
+            console.log(results)
+            results.map((placedOrder) => {
                 this.placedOrdersRegistry.set(placedOrder.uuid, placedOrder);
             });
+            console.log('placedOrdersRegistry', this.placedOrdersRegistry);
             this.loadValues = {
                 isFirstLoad: false,
                 isLoading: false,
@@ -85,6 +89,8 @@ class PersonalOrderHistoryStore {
             };
         }))
         .catch(action((err) => {
+            console.log(err)
+
             this.errors = err.response && err.response.body && err.response.body.errors;
             this.loadValues = {
                 isFirstLoad: false,

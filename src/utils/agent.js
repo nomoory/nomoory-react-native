@@ -271,26 +271,34 @@ class Agent {
 
     /* Base REST API method */
     get(url) {
+        console.log('request get | ', url);
         return this.axios
             .get(url, this._getRequestConfig())
             .catch(this._handleError);
     }
     put(url, body) {
+        console.log('request put | ', url);
         return this.axios
             .put(url, body, this._getRequestConfig())
             .catch(this._handleError);
     }
     patch(url, body) {
+        console.log('request patch | ', url);
+
         return this.axios
             .patch(url, body, this._getRequestConfig())
             .catch(this._handleError);
     }
     post(url, body) {
+        console.log('request post | ', url);
+
         return this.axios
             .post(url, body, this._getRequestConfig())
             .catch(this._handleError);
     }
     delete(url) {
+        console.log('request delete | ', url);
+
         return this.axios
             .delete(url, this._getRequestConfig())
             .catch(this._handleError);
