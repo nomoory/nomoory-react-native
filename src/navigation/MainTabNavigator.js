@@ -9,7 +9,7 @@ import { Icon } from 'expo';
 import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
-import AssetListScreen from '../screens/AssetListScreen';
+import AccountListScreen from '../screens/AccountListScreen';
 import EtcScreen from '../screens/EtcScreen';
 
 const ExchangeStack = createStackNavigator(
@@ -55,7 +55,7 @@ InvestmentStack.navigationOptions = {
 };
 
 const DepositWithdrawStack = createStackNavigator({
-    AssetList: AssetListScreen
+    Accounts: AccountListScreen
 });
 
 DepositWithdrawStack.navigationOptions = {
@@ -95,7 +95,7 @@ export default createBottomTabNavigator(
         Etc: EtcStack
     },
     {
-        initialRouteName: 'Exchange',
+        initialRouteName: 'DepositWithdraw',
         tabBarOptions: {
             activeTintColor: 'black',
             inactiveTintColor: 'grey',
