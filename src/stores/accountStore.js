@@ -163,6 +163,7 @@ class AccountStore {
                 evaluated_revenue: evaluated_revenue.toFixed(), // 총 평가 액 - 구매금액 = 수익
                 evaluated_revenue_ratio: evaluated_revenue_ratio.toFixed() // 수익률 = 수익 / 구매 금액
             } 
+            return result;
         } catch (err) {
             console.log('err on get totalAssetsEvaluation of account: ', account)
             let result = {
