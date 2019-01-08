@@ -5,18 +5,23 @@ import { inject, observer } from 'mobx-react';
 import Decimal from '../../utils/decimal.js';
 import number from '../../utils/number';
 import images from './images';
+import { withNavigation } from 'react-navigation';
 
-
+@withNavigation
 @inject('accountStore')
 @observer
 export default class AccountItem extends Component {
-    _clickBalanceItemrRow = (currency) => async (e) => {
-        console.log('test');
-        // await this.props.accountStore.loadAccounts();
-        // this.props.history.push({
-        //     pathname: '/balances/',
-        //     search: `?currency=${currency}`
-        // });
+    _onPressBalanceItemrRow = (currency) => (e) => {
+        console.log(currency)
+        this.props.accountStore.setSelectedAccountSymbol(currency);
+        this._openDepositWithdrawScreen(currency);
+    }
+
+    _openDepositWithdrawScreen = (currency) => {
+        console.log('cur', currency)
+        this.props.navigation.navigate('AccountDepositWithdraw', {
+            currency: currency,
+        });
     }
     render() {
         const { account, accountStore } = this.props;
@@ -30,7 +35,7 @@ export default class AccountItem extends Component {
         console.log(account)
         return (
             <TouchableOpacity style={[styles.container]}
-                onPress={this._clickBalanceItemrRow(asset_symbol)}
+                onPress={this._onPressBalanceItemrRow(asset_symbol)}
             >
                 <View style={[styles.left]}>
                     <Image

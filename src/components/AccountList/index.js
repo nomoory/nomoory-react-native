@@ -33,8 +33,8 @@ export default class AccountList extends Component {
     render() {
         console.log('accounts', this.props.accountStore.accounts)
         return (
-            <Container style={styles.container}>
-                <View >
+            <Container style={[styles.container]}>
+                <View>
                     {/* <View style={styles.header}>
                         <View style={[styles.test]}><Text style={[styles.test]}>코인명</Text></View>
                         <View style={[styles.test]}><Text style={[styles.test]}>보유수량(평가금액)</Text></View>

@@ -10,6 +10,7 @@ import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
 import AccountListScreen from '../screens/AccountListScreen';
+import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScreen';
 import EtcScreen from '../screens/EtcScreen';
 
 const ExchangeStack = createStackNavigator(
@@ -55,14 +56,15 @@ InvestmentStack.navigationOptions = {
 };
 
 const DepositWithdrawStack = createStackNavigator({
-    Accounts: AccountListScreen
+    Accounts: AccountListScreen, 
+    AccountDepositWithdraw:  AccountDepositWithdrawScreen
 });
 
 DepositWithdrawStack.navigationOptions = {
     header: {
         visible: false,
     },
-    tabBarLabel: '입출금',
+    tabBarLabel: '입금', // '입출금',
     tabBarIcon: ({ tintColor, focused }) => (
         <Icon.Ionicons
             focused={focused}

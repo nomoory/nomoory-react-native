@@ -1,12 +1,12 @@
 import { observable, action, computed } from 'mobx';
 import Hangul from 'hangul-js';
 import agent from '../utils/agent';
-import userStore from './userStore';
 import tradingPairStore from './tradingPairStore';
+import whitelistedWithdrawalWalletAddressStore from './whitelistedWithdrawalWalletAddressStore';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
 
-const QUOTE_SYMBOL = 'KRW';
+export const QUOTE_SYMBOL = 'KRW';
 
 class AccountStore {
     @observable isLoading = false;
@@ -21,6 +21,10 @@ class AccountStore {
     @observable totalAccountsCount = 0;
     @observable searchKeyword = '';
     @observable selectedAccountSymbol = '';
+    @computed get selectedAccount() {
+        return this.getAccountByAssetSymbol(this.selectedAccountSymbol);
+    }
+
 
     @action setSelectedAccountSymbol(symbol) {
         if (!symbol) {
