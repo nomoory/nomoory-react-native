@@ -41,7 +41,9 @@ let commonStyles = {
     },
     SELL: {
         color: '#0052f3'
-    }
+    },
+    color,
+    font    
 };
 
 /*

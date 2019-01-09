@@ -33,7 +33,6 @@ class RealtimeTradeHistoryStore {
         this.clearRegistry();
         this.clearLoadValues();
     }
-
     @action setRealTimeTrades(trades) {
         if (trades.length > 20){
             this.realtimeTradeRegistry = trades.splice(trades.length - 20, 20);

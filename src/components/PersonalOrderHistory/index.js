@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyle, { color } from '../../styles';
+import commonStyle, { color } from '../../styles/commonStyle';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Container, Header, Text, Button, Item, Input } from 'native-base';
 import { inject, observer } from 'mobx-react';

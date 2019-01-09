@@ -32,7 +32,6 @@ export default class Pubnub {
         let message = msg.message;
         // store에 업데이트 시 method에 identification을 넘깁니다.
         // store에서 UUID와 authStore를 비교하여 업데이트 할지 여부를 결정합니다.
-        // debugger;            
 
         switch (channelScope) {
             case 'ORDERBOOK':
@@ -51,7 +50,7 @@ export default class Pubnub {
                 });
                 break;
             case 'TRADE':
-                // realtimeTradeHistoryStore.setRealTimeTrades(message);
+                realtimeTradeHistoryStore.setRealTimeTrades(message);
                 break;
             case 'ACCOUNT':
                 accountStore.setAccount(message);
@@ -153,7 +152,6 @@ export default class Pubnub {
      * componentWillUnmount에 this.pubnub.subscribe(channel);을 호출합니다.
      */
     subscribe(channel) {
-        channel = this._concatUserPubnubUuidOnPersonalSubscribe(channel);
         this._loadDataByChannel(channel);
         this._addSubscribeCountOfChannel(channel);
         this.pubnub.subscribe({
@@ -168,18 +166,6 @@ export default class Pubnub {
             this.pubnub.unsubscribe({
                 channels: [channel]
             });
-        }
-    }
-
-    _concatUserPubnubUuidOnPersonalSubscribe(channel) {
-        let { currentUser } = userStore || {};
-        switch (channel) {
-            case 'ORDER':
-                return channel + `_${currentUser.personal_pubnub_uuid}`;
-            case 'ACCOUNT':
-                return channel + `_${currentUser.personal_pubnub_uuid}`;
-            default:
-                return channel
         }
     }
 

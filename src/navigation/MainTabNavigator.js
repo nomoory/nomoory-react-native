@@ -5,6 +5,7 @@ import {
 } from 'react-navigation';
 
 import { Icon } from 'expo';
+import commonStyle from '../styles/commonStyle'
 
 import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
@@ -18,10 +19,6 @@ const ExchangeStack = createStackNavigator(
         Exchange: ExchangeScreen,
         TradingPair: TradingPairScreen,
     }
-    //   {
-    //     Exchange: StubScreen, //ExchangeScreen,
-    //     Token: StubScreen, //TradingPairScreen
-    //   }
 );
 
 ExchangeStack.navigationOptions = {
@@ -97,7 +94,7 @@ export default createBottomTabNavigator(
         Etc: EtcStack
     },
     {
-        initialRouteName: 'DepositWithdraw',
+        initialRouteName: 'Exchange',
         tabBarOptions: {
             activeTintColor: 'black',
             inactiveTintColor: 'grey',
@@ -114,7 +111,7 @@ export default createBottomTabNavigator(
         /* Default header */
         navigationOptions: {
             headerStyle: {
-                backgroundColor: '#f4511e',
+                backgroundColor: commonStyle.color.coblicBlue,
             },
             headerTintColor: '#fff',
             headerTitleStyle: {

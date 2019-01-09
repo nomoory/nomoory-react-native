@@ -5,7 +5,7 @@ import { Container } from 'native-base';
 import { action, observable } from 'mobx';
 import number from '../utils/number';
 import Decimal from '../utils/decimal';
-import commonStyle, { color, font } from '../styles';
+import commonStyle, { color, font } from '../styles/commonStyle';
 import AccountList from '../components/AccountList';
 
 @inject('accountStore')

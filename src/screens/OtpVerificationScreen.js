@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, TextInput } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { Container, Content, Form, Item, Label, Button } from 'native-base';
 import { Linking } from 'react-native';
-import { color } from '../styles';
+import { color } from '../styles/commonStyle';
 import { action, observable } from 'mobx';
 import { withNavigation } from 'react-navigation';
 

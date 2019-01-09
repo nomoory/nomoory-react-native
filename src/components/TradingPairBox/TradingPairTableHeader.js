@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    Button,
-    Text,
-    View,
-    TouchableOpacity
-} from 'react-native';
-import { } from 'native-base';
-import {
-    inject,
-    observer
-} from 'mobx-react';
+import { StyleSheet, Text, View } from 'react-native';
+import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 
 @inject('tradingPairStore')

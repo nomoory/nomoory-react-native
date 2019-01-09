@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyles, {font }from '../../styles';
+import commonStyles, {font }from '../../styles/commonStyle';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Container, Header, Text, Button, Item, Input } from 'native-base';
 import { inject, observer } from 'mobx-react';
