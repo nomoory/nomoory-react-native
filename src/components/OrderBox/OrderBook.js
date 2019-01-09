@@ -3,14 +3,15 @@ import { StyleSheet, ScrollView, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import OrderRow from './OrderRow';
 
-@inject('pubnub', 'orderbookStore')
+@inject('pubnub', 'orderbookStore', 'tradingPairStore')
 @observer
 export default class Orderbook extends Component {
     constructor(props) {
         super(props);
-        this.pubnubChannel = "ORDERBOOK";
+        this.pubnubChannel = `ORDERBOOK_${this.props.tradingPairStore.selectedTradingPairName}`;
+        this.props.pubnub.subscribe(this.pubnubChannel);
     }
-    componentDidMount() { this.props.pubnub.subscribe(this.pubnubChannel); }
+    
     componentWillUnmount() { this.props.pubnub.unsubscribe(this.pubnubChannel); }
 
     render() {
