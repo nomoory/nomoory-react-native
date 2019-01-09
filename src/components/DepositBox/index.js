@@ -35,7 +35,7 @@ export default class DepositBox extends Component {
                 </TouchableOpacity>
                 <View style={[styles.addAddressDescription]}>
                     <Text>
-                    {`버튼을 클릭하시면, 
+                    {`버튼을 클릭하시면,
                     회원님 고유의 ${asset_korean_name}(${asset_symbol}) 입금주소가 발급됩니다.`}
                     </Text>
                 </View>
@@ -82,6 +82,7 @@ export default class DepositBox extends Component {
             asset_symbol,
             asset_tx_required_confirmations
         } = account || {};
+        console.log(account)
 
         if (['KRW', 'CT'].includes(this.props.accountStore.selectedAccountSymbol)) {
             // 현재 입금을 지원하지 않는 asset입니다.
@@ -103,7 +104,7 @@ export default class DepositBox extends Component {
                                 {`나의 ${asset_korean_name} 입금주소`}
                             </Text>
                         </View>
-                        { /* 입금 오픈시 이 주석을 풀고 아래 주석을 */
+                        { /* 입금 오픈시 */
                             wallet_address ?
                                 this._renderCopyAddress(wallet_address.address) :
                                 this._renderIssueAddress()

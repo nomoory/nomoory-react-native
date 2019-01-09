@@ -30,7 +30,6 @@ export default class App extends React.Component {
     }
 
     async componentDidMount() {
-        console.log('tests');
         // 유저가 등록되면 ORDER pubnub을 subscribe함
 
         // ORDER: 주문의 발생으로 인한 알림이 언제나 떠야하기에 아래의 reaction을 넣음

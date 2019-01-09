@@ -47,7 +47,7 @@ export default class AccountList extends Component {
                     </ScrollView>
                 </View>
             </Container>
-        )
+        );
     }
 }
 
