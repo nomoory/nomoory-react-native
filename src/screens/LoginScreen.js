@@ -5,7 +5,7 @@ import { action, observable } from 'mobx';
 import { Container, Button } from 'native-base';
 import { Linking } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import { color } from '../styles';
+import { color } from '../styles/commonStyle';
 
 let from = 'Exchagne';
 @withNavigation

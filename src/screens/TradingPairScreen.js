@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyle from '../styles';
+import commonStyle from '../styles/commonStyle';
 import { Container, Header, Tab, Tabs, TabHeading, Text } from 'native-base';
 import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
@@ -12,15 +12,28 @@ import number from '../utils/number';
 @inject('pubnub', 'tradingPairStore')
 @observer
 export default class TradingPairScreen extends Component {
-
     static navigationOptions = ({ navigation }) => {
         this.baseKoreanName= navigation.getParam('baseKoreanName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
+
         return {
             title: `${this.baseKoreanName} ${this.tradingPairName}`,
             tabBarVisible: false, 
         };
     };
+
+    constructor(props) {
+        super(props);
+        this.pubnubChannel = `ORDERBOOK_${this.tradingPairName}`;
+        this.props.pubnub.subscribe(this.pubnubChannel);
+    }
+
+    componentWillMount() { console.log('TradingPairScreen will mount |'); }
+    componentWillUnmount() { 
+        console.log('TradingPairScreen | will unmount |');
+        this.props.pubnub.unsubscribe(this.pubnubChannel); 
+    }
+
     @computed get changeRate() {
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let { change_rate, change } = tradingPair || {};
@@ -32,20 +45,8 @@ export default class TradingPairScreen extends Component {
         return ` ${change === 'RICE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_price ? number.putComma(Decimal(change_price).toFixed()) : '-'} 원`
     }
 
-    constructor(props) {
-        super(props);
-        this.pubnubChannel = "TEMP|TICKER";
-    }
-
-    componentWillMount() { console.log('TradingPairScreen will mount |'); }
-    componentDidMount() { 
-        console.log('TradingPairScreen did mount |')
-        this.props.pubnub.subscribe(this.pubnubChannel); 
-    }
-    componentWillUnmount() { this.props.pubnub.unsubscribe(this.pubnubChannel); }
-
     render() {
-        console.log('TradingPairScreen is on render |')
+        console.log('TradingPairScreen | render |')
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let {
             close_price,

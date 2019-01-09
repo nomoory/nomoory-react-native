@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { color, font } from '../styles';
+import { color, font } from '../styles/commonStyle';
 import { StyleSheet, Button, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import Modal from "react-native-modal";
 import { inject, observer } from 'mobx-react';

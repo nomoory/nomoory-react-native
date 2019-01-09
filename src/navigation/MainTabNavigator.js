@@ -5,11 +5,13 @@ import {
 } from 'react-navigation';
 
 import { Icon } from 'expo';
+import commonStyle from '../styles/commonStyle'
 
 import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
-import AssetListScreen from '../screens/AssetListScreen';
+import AccountListScreen from '../screens/AccountListScreen';
+import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScreen';
 import EtcScreen from '../screens/EtcScreen';
 
 const ExchangeStack = createStackNavigator(
@@ -17,10 +19,6 @@ const ExchangeStack = createStackNavigator(
         Exchange: ExchangeScreen,
         TradingPair: TradingPairScreen,
     }
-    //   {
-    //     Exchange: StubScreen, //ExchangeScreen,
-    //     Token: StubScreen, //TradingPairScreen
-    //   }
 );
 
 ExchangeStack.navigationOptions = {
@@ -55,14 +53,15 @@ InvestmentStack.navigationOptions = {
 };
 
 const DepositWithdrawStack = createStackNavigator({
-    AssetList: AssetListScreen
+    Accounts: AccountListScreen, 
+    AccountDepositWithdraw:  AccountDepositWithdrawScreen
 });
 
 DepositWithdrawStack.navigationOptions = {
     header: {
         visible: false,
     },
-    tabBarLabel: '입출금',
+    tabBarLabel: '입금', // '입출금',
     tabBarIcon: ({ tintColor, focused }) => (
         <Icon.Ionicons
             focused={focused}
@@ -112,7 +111,7 @@ export default createBottomTabNavigator(
         /* Default header */
         navigationOptions: {
             headerStyle: {
-                backgroundColor: '#f4511e',
+                backgroundColor: commonStyle.color.coblicBlue,
             },
             headerTintColor: '#fff',
             headerTitleStyle: {

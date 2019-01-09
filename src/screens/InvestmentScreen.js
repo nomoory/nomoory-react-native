@@ -42,9 +42,7 @@ export default class InvestmentScreen extends Component {
         this.props.transactionHistoryStore.clear();
         try {
             this.props.transactionHistoryStore.load(e.ref.props.children.props.type);
-        } catch (err) {
-
-        }
+        } catch (err) { }
     }
 
     render() {

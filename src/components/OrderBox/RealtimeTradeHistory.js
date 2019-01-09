@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyle from '../../styles';
+import commonStyle from '../../styles/commonStyle';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Container, Header, Text, Button, Item, Input } from 'native-base';
 import { inject, observer } from 'mobx-react';
@@ -12,7 +12,7 @@ import { reaction } from 'mobx';
 export default class RealtimeTradeHistory extends Component {
     constructor(props) {
         super(props);
-        const trading_pair_reaction = reaction(
+        this.trading_pair_reaction = reaction(
             () => props.tradingPairStore.selectedTradingPairName,
             (tradingPairName) => {
                 this.props.pubnub.unsubscribe(this.pubnub_channel);
@@ -26,7 +26,7 @@ export default class RealtimeTradeHistory extends Component {
     
     componentWillUnmount() {
         this.props.pubnub.unsubscribe(this.pubnub_channel);
-    }
+C    }
 
     render() {
         let { realtimeTrades } = this.props.realtimeTradeHistoryStore;

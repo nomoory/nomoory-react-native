@@ -19,6 +19,7 @@ class TransactionHistoryStore {
         { value: 'DIVIDEND', label: TRANSLATIONS['DIVIDEND'] },
         { value: 'TAKEAWAY', label: TRANSLATIONS['TAKEAWAY'] },
         { value: 'GIVEAWAY', label: TRANSLATIONS['GIVEAWAY'] },
+        // { value: 'TRADE', label: TRANSLATIONS['TRADE'] },
     ];
     @observable loadMoreValues = {
         isLoading: false,
