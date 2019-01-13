@@ -40,14 +40,14 @@ class TradingPairTableHeader extends Component {
                                     onPress={this._toggleSortDirectionOf(sort.name)}>
                                     {this._renderDisplayNameByName(sort.name) + ' '}
                                     {
-                                        sort.direction === 'asc' ? 
+                                        sort.direction === 'desc' ? 
                                         <Image style={{ width: 10, height: 13 }} 
                                             source={require('../../../assets/images/exchange/ic_arow_up_s.png')} /> 
                                             :
                                         null
                                     }
                                     {
-                                        sort.direction === 'desc' ? 
+                                        sort.direction === 'asc' ? 
                                         <Image style={{ width: 10, height: 13 }} 
                                             source={require('../../../assets/images/exchange/ic_arow_down_s.png')} /> 
                                             :

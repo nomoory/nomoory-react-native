@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
+import headerStyle from '../styles/headerStyle';
 import { Container, Header, Tab, Tabs, TabHeading, Text } from 'native-base';
 import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
@@ -19,6 +20,7 @@ export default class TradingPairScreen extends Component {
         return {
             title: `${this.baseKoreanName} ${this.tradingPairName}`,
             tabBarVisible: false, 
+            ...headerStyle.white
         };
     };
 

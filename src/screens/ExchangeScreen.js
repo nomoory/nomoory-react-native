@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, Button } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 import commonStyle from '../styles/commonStyle';
-
+import headerStyle from '../styles/headerStyle';
 import TradingPairBox from '../components/TradingPairBox';
 
 @inject('pubnub')
@@ -16,14 +16,7 @@ export default class ExchangeScreen extends Component {
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
             // ),
-            headerStyle: {
-                backgroundColor: commonStyle.color.coblicBlue,
-                height: 50,
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-                fontWeight: 'bold',
-            },
+            ...headerStyle.blue
         };
     };
 
