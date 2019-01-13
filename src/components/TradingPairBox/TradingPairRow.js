@@ -33,7 +33,7 @@ class TradingPairRow extends Component {
     render() {
         const { 
             close_price, signed_change_rate, acc_trade_value_24h, 
-            base_korean_name, base_english_name, name, base_symbol } = this.props.tradingPair || {};
+            base_korean_name, base_english_name, name } = this.props.tradingPair || {};
         const tokenNameForSelectedLanguage = this.props.tradingPairStore.languageForTokenName === 'ko' ?
             base_korean_name :
             base_english_name;

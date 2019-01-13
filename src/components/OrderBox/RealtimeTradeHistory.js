@@ -26,7 +26,7 @@ export default class RealtimeTradeHistory extends Component {
     
     componentWillUnmount() {
         this.props.pubnub.unsubscribe(this.pubnub_channel);
-C    }
+    }
 
     render() {
         let { realtimeTrades } = this.props.realtimeTradeHistoryStore;

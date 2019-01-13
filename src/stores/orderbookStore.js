@@ -28,12 +28,14 @@ class OrderbookStore {
         return buyOrders;
     };
 
-    _reformatOrderForDisplay = (order) => (
-        {
-            price: number.getFixedPrice(order.price, tradingPairStore.selectedTradingPair.base_symbol),
+    _reformatOrderForDisplay = (order) => {
+        return {
+            price: tradingPairStore.selectedTradingPair ? 
+                number.getFixedPrice(order.price, tradingPairStore.selectedTradingPair.base_symbol) :
+                Decimal(order.price).toFixed(),
             volume: number.getFixed(order.volume, 3)
-        }
-    );
+        };
+    };
 
     @computed get buyOrdersSum_display() {
         let volume_sum = Decimal(0);

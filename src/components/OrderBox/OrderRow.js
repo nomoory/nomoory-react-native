@@ -3,37 +3,51 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Text } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import Decimal from '../../utils/decimal';
+import number from '../../utils/number';
 
-@inject('orderStore')
+@inject('orderStore', 'orderbookStore')
 @observer
 export default class OrderRow extends Component {
-
-    _onPressOrderRow = () => {
+    _onPressOrderPrice = () => {
         const { side, order } = this.props;
-        this._changeOrderPrice(side, order);
+        this.props.orderStore.setSide(side);
+        this.props.orderStore.setPrice(order.price);
     }
-    _changeOrderPrice = (side, order) => {
-        const { orderStore } = this.props;
-        orderStore.setSide(side);
-        orderStore.setPrice(order.price);
+
+    _onPressOrderVolume = () => {
+        const { side, order } = this.props;
+        this.props.orderStore.setSide(side);
+        this.props.orderStore.setVolume(order.volume);
     }
 
     render() {
         const { side, order } = this.props;
         const isSellOrder = side === 'SELL';
         const orderRowStyle = isSellOrder ? styles.sellOrderRow : styles.buyOrderRow;
+        const { maxOrderVolume } = this.props.orderbookStore;
+        const dynamicStyle = 
+            StyleSheet.create({
+                volumnBar: {
+                    width: 
+                        order.volume && maxOrderVolume ? 
+                        Decimal(order.volume).div(maxOrderVolume).mul(100).toFixed(0, Decimal.ROUND_FLOOR) + '%' :
+                        0
+                }
+            });
         return (
-            <TouchableOpacity
-                style={[styles.container, orderRowStyle, styles[this.props.side]]}
-                onPress={this._onPressOrderRow}
+            <View
+                style={[styles.container, orderRowStyle, styles[this.props.side], 
+                    order.price && this.props.closePrice && Decimal(order.price).equals(this.props.closePrice) ? 
+                    styles.recentlyTraded : null]}
             >
-                <View style={styles.price}>
-                    <Text style={styles.priceText}>{Decimal(order.price).toFixed()}</Text>
-                </View>
-                <View style={styles.volume}>
-                    <Text style={styles.volumeText}>{Decimal(order.volume).toFixed()}</Text>
-                </View>
-            </TouchableOpacity>
+                <TouchableOpacity style={[styles.price]} onPress={this._onPressOrderPrice}>
+                    <Text style={styles.priceText}>{number.putComma(Decimal(order.price).toFixed())}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.volume} onPress={this._onPressOrderVolume}>
+                    <View style={[dynamicStyle.volumnBar, styles['volumeBar'], styles['volumeBar_' + side]]} />
+                    <Text style={styles.volumeText}>{number.putComma(Decimal(order.volume).toFixed())}</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 }
@@ -65,17 +79,29 @@ const styles = StyleSheet.create({
         borderRightColor: '#dedfe0',
     },
     priceText: {
-        fontSize: 12
+        fontSize: 13,
+        fontWeight: '600',
     },
     volume: {
-        flex: 3,
+        flex: 5,
         alignItems: 'flex-start',
         height: '100%',
         justifyContent: 'center',
         paddingLeft: 4,
     },
+    volumeBar: {
+        position: 'absolute',
+        height: '100%',
+    },
+    volumeBar_SELL: {
+        backgroundColor: '#cbf5fe'
+    },
+    volumeBar_BUY: {
+        backgroundColor: '#ffdeea'
+    },
     volumeText: {
-        fontSize: 12
+        fontSize: 11,
+        fontWeight: '500',
     },
 
 });

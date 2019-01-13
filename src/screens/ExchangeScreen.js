@@ -6,7 +6,7 @@ import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import TradingPairBox from '../components/TradingPairBox';
 
-@inject('pubnub')
+@inject('pubnub', 'tradingPairStore')
 @observer
 export default class ExchangeScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -25,6 +25,16 @@ export default class ExchangeScreen extends Component {
         console.log('ExchangeScreen | construct |');
         this.pubnubChannel = `TEMP|TICKE`;
         this.props.pubnub.subscribe(this.pubnubChannel);
+
+        this._openBTCKRWForDevelopTradingPairScreen();
+    }
+
+    _openBTCKRWForDevelopTradingPairScreen = () => {
+        this.props.tradingPairStore.setSelectedTradingPairName('TOKA-KRW');
+        this.props.navigation.navigate('TradingPair', {
+            baseKoreanName: '토카',
+            tradingPairName: 'TOKA-KRW'
+        });
     }
 
     componentWillUnmount() { 

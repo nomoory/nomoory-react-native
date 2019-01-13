@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
-import { Container, Header, Tab, Tabs, TabHeading, Text } from 'native-base';
-import { StyleSheet, View } from 'react-native';
+
+import { Container, Tab, Tabs, TabHeading} from 'native-base';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { reaction, computed } from 'mobx';
 import OrderBox from '../components/OrderBox';
 import PersonalOrderHistory from '../components/PersonalOrderHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
+import riseIcon from '../../assets/images/exchange/ic_up_s.png';
+import fallIcon from '../../assets/images/exchange/ic_down_s.png';
+
 
 @inject('pubnub', 'tradingPairStore')
 @observer
@@ -39,12 +43,12 @@ export default class TradingPairScreen extends Component {
     @computed get changeRate() {
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let { change_rate, change } = tradingPair || {};
-        return ` ${change === 'RICE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_rate ? number.putComma(Decimal(change_rate).mul(100).toFixed(2)) : '-'}`
+        return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_rate ? number.putComma(Decimal(Decimal(change_rate).mul(100).toFixed(2)).toFixed()) : '- '}`
     }
     @computed get changePrice() {
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let { change, change_price } = tradingPair || {};
-        return ` ${change === 'RICE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_price ? number.putComma(Decimal(change_price).toFixed()) : '-'} 원`
+        return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_price ? number.putComma(Decimal(change_price).toFixed()) : '- '}`
     }
 
     render() {
@@ -52,7 +56,7 @@ export default class TradingPairScreen extends Component {
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let {
             close_price,
-            change, // 'RICE' | 'FALL'
+            change, // 'RISE' | 'FALL'
         } = tradingPair || {};
         return (
             <Container style={styles.container}>
@@ -64,9 +68,19 @@ export default class TradingPairScreen extends Component {
                             </Text>
                         </View>
                         <View style={styles.tradingPairSubInfo}>
-                            <Text>24시간대비</Text>
-                            <Text style={commonStyle[change]}>{this.changeRate}</Text>
-                            <Text style={commonStyle[change]}>{this.changePrice}</Text>
+                            <Text style={[styles.subText]}>24시간대비</Text>                            
+                            <Text style={[styles.subText, commonStyle[change]]}>
+                                {this.changeRate}%
+                            </Text>
+                            {   (change === 'FALL' || change === 'RISE') ? 
+                                <Image
+                                    style={{ width: 16, height: 8 }}                                
+                                    source={ change === 'FALL' ? fallIcon : riseIcon }
+                                /> : null
+                            }
+                            <Text style={[styles.subText, commonStyle[change]]}>
+                                {this.changePrice}원
+                            </Text>
                         </View>
                     </View>
                     <View style={styles.rightContainer}>
@@ -98,14 +112,24 @@ const styles = StyleSheet.create({
     tradingPairSummaryContainer: {
         height: 60,
         width: '100%',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        padding: 6,
+        paddingLeft: 12
     },
     closePriceText: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
         color: '#000000'
     },
+    subText: {
+        fontSize: 16,
+        fontWeight: '500',
+        marginRight: 10
+    },
+
     tradingPairSubInfo: {
-        flexDirection: 'row'
+        marginTop: 4,
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 })
