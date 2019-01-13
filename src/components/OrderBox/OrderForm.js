@@ -28,27 +28,143 @@ export default class OrderForm extends Component {
         return (
             <Container style={styles.container}>
                 <View style={styles.buttons}>
-                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'BUY' ? styles.selected : styles.unselected]} onPress={this._onPressBuy}>
-                        <Text style='button-text'>매수</Text>
+                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'BUY' ? styles.selectedBuy : styles.unselected]} onPress={this._onPressBuy}>
+                        <Text style={[styles.buttonText, this.selectedTabType === 'BUY' ? styles.selectedBuyText : null ]}>매수</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'SELL' ? styles.selected : styles.unselected]} onPress={this._onPressSell}>
-                        <Text style='button-text'>매도</Text>
+                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'SELL' ? styles.selectedSell : styles.unselected]} onPress={this._onPressSell}>
+                        <Text style={[styles.buttonText, this.selectedTabType === 'SELL' ? styles.selectedSellText : null ]}>매도</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'REALTIME_TRADE_HISTORY' ? styles.selected : styles.unselected]} onPress={this._onPressRealtimeTrade}>
-                        <Text style='button-text'>실시간</Text>
+                    <TouchableOpacity style={[styles.button, this.selectedTabType === 'REALTIME_TRADE_HISTORY' ? styles.selectedHistory : styles.unselected]} onPress={this._onPressRealtimeTrade}>
+                        <Text style={[styles.buttonText, this.selectedTabType === 'REALTIME_TRADE_HISTORY' ? styles.selectedHistoryText : null]}>실시간</Text>
                     </TouchableOpacity>
                 </View>
-                { this.selectedTabType === 'BUY' && <BuyOrderForm /> }
-                { this.selectedTabType === 'SELL' && <SellOrderForm /> }
+                { this.selectedTabType === 'BUY' && <BuyOrderForm orderFormStyle={orderFormStyle}/> }
+                { this.selectedTabType === 'SELL' && <SellOrderForm orderFormStyle={orderFormStyle}/> }
                 { this.selectedTabType === 'REALTIME_TRADE_HISTORY' && <RealtimeTradeHistory /> }
             </Container>
         );
     }
 }
 
+const orderFormStyle = StyleSheet.create({
+    // liquid
+    liquidContainer: {
+        flexDirection: 'column',
+        marginTop: 5
+    },
+    liquidTitle: {
+        fontWeight: '600',
+        fontSize: 16,
+    },
+    liquidContentContainer: {
+        marginTop: 6,
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+    },
+    liquidContentText: {
+        fontWeight: '400',
+        fontSize: 15
+    },
+    liquidContentUnitText: {
+        fontWeight: '600',
+        fontSize: 15,
+        color: '#747474',
+        marginLeft: 6
+    },
+
+    // price text input
+    inputContainer: {
+        marginTop: 10,
+        width: '100%',
+        flexDirection: 'row',
+    },
+    textInput: {
+        width: '100%',
+        paddingRight: 46,
+        borderWidth: 1,
+        textAlign: 'right',
+        height: 36,
+        borderRadius: 4,
+        backgroundColor: '#ffffff',
+        borderColor: '#a2abb6',
+        backgroundWidth: 0.5,
+    },
+    inputTitleContainer: {
+        left: 10,
+        top: 10,
+        position: 'absolute',
+    },
+    inputTitle: {
+        color: '#747474',
+        fontWeight: '500',
+    },
+    inputUnitContainer: {
+        right: 10,
+        top: 9.5,
+        position: 'absolute',
+    },
+    inputUnit: {
+        color: '#747474',
+        fontWeight: '500',
+    },
+    setPriceButtonsContainer: {
+        marginTop: 6,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        width: '100%',
+    },
+    setPriceButtons: {
+        flexDirection: 'row',
+        borderRadius: 5,
+        borderWidth: 1.5,
+        borderColor: '#d8dbde',
+    },
+    emptySpace: {
+        flex: 1,
+    },
+    priceButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#d8dbde',
+        width: 36,
+        height: 36,
+    },
+    minusButton: {
+        borderLeftWidth: 1.5,
+        borderLeftColor: '#d8dbde',
+    },
+    // set volume buttons
+    setVolumeButtons: {
+        marginTop: 6,
+        flexDirection: 'row',
+        borderRadius: 5,
+        borderWidth: 1.5,
+        borderColor: '#d8dbde',
+        width: '100%',
+        height: 36,
+        alignItems: 'cneter'
+    },
+    setVolumeButton: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+    },
+    setVolumeButtonNotInFirst: {
+        borderLeftWidth: 1.5,
+        borderLeftColor: '#d8dbde',
+    },
+    setVolumeButtonText: {
+    },
+    
+
+})
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 14,
+        padding: 10
     },
     buttons: {
         height: 40,
@@ -59,8 +175,34 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        height: 30
     },
-    selected: {
+    buttonText: {
+        color: '#747474',
+        fontSize: 15
+    },
+    selectedBuyText: {
+        color: '#da5f6e',
+    },
+    selectedSellText: {
+        color: '#0042b7',
+    },
+    selectedHistoryText: {
+
+    },
+    selectedBuy: {
+        flex: 1,
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderColor: '#da5f6e',
+    },
+    selectedSell: {
+        flex: 1,
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderColor: '#0042b7',
+    },
+    selectedHistory: {
         flex: 1,
         borderStyle: 'solid',
         borderWidth: 2,
@@ -69,7 +211,7 @@ const styles = StyleSheet.create({
     unselected: {
         flex: 1,   
         borderStyle: 'solid',
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: '#dedfe0',
     },
 });

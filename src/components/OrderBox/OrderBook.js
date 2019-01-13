@@ -16,18 +16,19 @@ export default class Orderbook extends Component {
 
     render() {
         const { sellOrders, buyOrders } = this.props.orderbookStore;
-
+        const { close_price } = this.props.tradingPairStore.selectedTradingPair || {};
+    
         return (
             <View style={styles.container}>
                 <ScrollView style={styles.scrollContainer}>
                     {
                         sellOrders.map((order, index) =>
-                            <OrderRow key={'sell_' + index} side={'SELL'} order={order} />
+                            <OrderRow key={'sell_' + index} side={'SELL'} order={order} closePrice={close_price} />
                         )
                     }
                     {
                         buyOrders.map((order, index) =>
-                            <OrderRow key={'buy_' + index} side={'BUY'} order={order} />
+                            <OrderRow key={'buy_' + index} side={'BUY'} order={order} closePrice={close_price}/>
                         )
                     }
                 </ScrollView>
