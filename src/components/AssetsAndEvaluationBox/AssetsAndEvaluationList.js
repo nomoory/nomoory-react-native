@@ -14,22 +14,19 @@ class AssetsAndEvaluationList extends Component {
     }
 
     render() {
-        const { accountStore } = this.props;
-        const accountlist = accountStore.accounts.filter(
-            account => account.asset_symbol !== 'KRW'
-        ).map(
-            account => (
-                <AssetsAndEvaluationRow key={ account.uuid } account={ account }>
-                </AssetsAndEvaluationRow>
+        const { portfolio } = this.props.accountStore.portfolio || {};
+        const accountList = portfolio.map(
+            portfolio => (
+                <AssetsAndEvaluationRow key={ portfolio.uuid } portfolio={ portfolio } />
             )
         );
         return (
             <View style={ styles.container }>
-                <View style={ styles.header }>
+                {/* <View style={ styles.header }>
                     <Text style={ styles.title }>보유 자산별 손익</Text>
-                </View>
+                </View> */}
                 <ScrollView>
-                    { accountlist }
+                    { accountList }
                 </ScrollView>
             </View>
         )

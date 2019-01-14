@@ -57,8 +57,7 @@ export default class TotalAssetsEvaluation extends Component {
                             (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)                        
                         ]}>
                             { 
-                                evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : 
-                                (evaluatedRevenueRatio_decimal.lessThan(0) ? '-' : '')
+                                evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : ''
                             }
                             { evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).toFixed(2)).toFixed()) : '-'}%</Text>
                         <Text style={[styles.investInfoTitle]}>평가 손익</Text>
@@ -67,8 +66,7 @@ export default class TotalAssetsEvaluation extends Component {
                             (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)                        
                         ]}>
                             { 
-                                evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : 
-                                (evaluatedRevenueRatio_decimal.lessThan(0) ? '-' : '')
+                                evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : ''
                             }
                             { evaluated_revenue ? number.putComma(Decimal(evaluated_revenue).toFixed(0)) : '-'}원
                         </Text>
@@ -82,9 +80,10 @@ export default class TotalAssetsEvaluation extends Component {
 const styles = StyleSheet.create({
     container: {
         padding: 15,
-        paddingTop: 18,
+        paddingTop: 22,
+        paddingBottom: 20,
         borderBottomColor: '#dedfe0',
-        borderBottomWidth: '1',
+        borderBottomWidth: '2',
     },
     assetInfoTitleContainer: {
 
@@ -127,6 +126,7 @@ const styles = StyleSheet.create({
         color: '#747474'
     },
     investInfoValue: {
+        marginTop: 4,
         textAlign: 'left',
     },
     rise: {
