@@ -117,30 +117,30 @@ export default class BuyOrderForm extends Component {
                         <Text style={orderFormStyle.setVolumeButtonText}>100%</Text>
                     </TouchableOpacity> 
                 </View>
-                <View style={[styles.info, styles.feeContainer]}>
-                    <Text>수수료</Text>
-                    <Text>{maxFee ? number.putComma(Decimal(maxFee).toFixed()) : '-' } {baseSymbol}</Text>
+                <View style={[styles.feeContainer, orderFormStyle.infoContainer]}>
+                    <Text style={[orderFormStyle.infoTitle]}>수수료</Text>
+                    <Text style={[orderFormStyle.infoContent]}>{maxFee ? number.putComma(Decimal(maxFee).toFixed()) : '-' } {baseSymbol}</Text>
                 </View>
-                <View style={styles.maxFeePercentageContainer}> 
-                    <Text style={styles.maxFeePercentageContent}>
+                <View style={orderFormStyle.maxFeePercentageContainer}> 
+                    <Text style={orderFormStyle.maxFeePercentageContent}>
                         { this.maxFeePercentage ? number.putComma(Decimal(this.maxFeePercentage).toFixed()) : '-' } %
                     </Text>
                 </View>
-                <View style={[styles.totalGainContainer, styles.info]}>
-                    <Text style={styles.totalGainTitle}>수령량</Text>
-                    <Text style={styles.totalGainContent}>{totalGain ? number.putComma(Decimal(totalGain).toFixed()) : '-'} {baseSymbol}</Text>
+                <View style={[styles.totalGainContainer, orderFormStyle.infoContainer]}>
+                    <Text style={[styles.totalGainTitle, orderFormStyle.infoTitle]}>수령량</Text>
+                    <Text style={[styles.totalGainContent, orderFormStyle.infoContent]}>{totalGain ? number.putComma(Decimal(totalGain).toFixed()) : '-'} {baseSymbol}</Text>
                 </View>
-                <View style={[styles.info, styles.fee]}>
-                    <Text style={styles.liquidTitle}>총금액</Text>
-                    <Text style={styles.liquidContent}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {quoteSymbol}</Text>
+                <View style={[styles.fee, orderFormStyle.infoContainer]}>
+                    <Text style={[styles.liquidTitle, orderFormStyle.infoTitle]}>총금액</Text>
+                    <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {quoteSymbol}</Text>
                 </View>
-                <View style={styles.minimumOrderAmountContainer}> 
-                    <Text style={styles.minimumOrderAmountContent}>
+                <View style={orderFormStyle.minimumOrderAmountContainer}> 
+                    <Text style={orderFormStyle.minimumOrderAmountContent}>
                         최소주문금액 {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
                     </Text>
                 </View>
-                <TouchableOpacity style={[styles.buyButton, styles.coblicBlueButton]} onPress={this._onPressOrder}>
-                    <Text>구매</Text>
+                <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressOrder}>
+                    <Text style={[orderFormStyle.buttonText]}>구매</Text>
                 </TouchableOpacity>
             </View>
         );

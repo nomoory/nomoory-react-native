@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import commonStyle from '../../styles/commonStyle';
 import { StyleSheet, View, TouchableOpacity, TextInput, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
@@ -113,30 +114,30 @@ export default class SellOrderForm extends Component {
                         <Text style={orderFormStyle.setVolumeButtonText}>100%</Text>
                     </TouchableOpacity> 
                 </View>
-                <View style={[styles.amountContainer, styles.info]}>
-                    <Text style={styles.amountTitle}>판매금액</Text>
-                    <Text style={styles.amountContent}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {baseSymbol}</Text>
+                <View style={[styles.amountContainer, orderFormStyle.infoContainer]}>
+                    <Text style={[styles.amountTitle, orderFormStyle.infoTitle]}>판매금액</Text>
+                    <Text style={[styles.amountContent, orderFormStyle.infoContent]}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {baseSymbol}</Text>
                 </View>
-                <View style={[styles.info, styles.feeContainer]}>
-                    <Text>수수료</Text>
-                    <Text>{maxFee ? number.putComma(Decimal(maxFee).toFixed()) : '-' } {baseSymbol}</Text>
+                <View style={[styles.feeContainer, orderFormStyle.infoContainer]}>
+                    <Text style={[orderFormStyle.infoTitle]}>수수료</Text>
+                    <Text style={[orderFormStyle.infoContent]}>{maxFee ? number.putComma(Decimal(maxFee).toFixed()) : '-' } {baseSymbol}</Text>
                 </View>
-                <View style={styles.maxFeePercentageContainer}> 
-                    <Text style={styles.maxFeePercentageContent}>
+                <View style={orderFormStyle.maxFeePercentageContainer}> 
+                    <Text style={orderFormStyle.maxFeePercentageContent}>
                         { this.maxFeePercentage ? number.putComma(Decimal(this.maxFeePercentage).toFixed()) : '-' } %
                     </Text>
                 </View>
-                <View style={[styles.totalGainContainer, styles.info]}>
-                    <Text style={styles.totalGainTitle}>수령총액</Text>
-                    <Text style={styles.totalGainContent}>{totalGain ? number.putComma(Decimal(totalGain).toFixed()) : '-'} {quoteSymbol}</Text>
+                <View style={[styles.totalGainContainer, orderFormStyle.infoContainer]}>
+                    <Text style={[styles.totalGainTitle, orderFormStyle.infoTitle]}>수령총액</Text>
+                    <Text style={[styles.totalGainContent, orderFormStyle.infoContent]}>{totalGain ? number.putComma(Decimal(totalGain).toFixed()) : '-'} {quoteSymbol}</Text>
                 </View>
-                <View style={styles.minimumOrderAmountContainer}> 
-                    <Text style={styles.minimumOrderAmountContent}>
+                <View style={orderFormStyle.minimumOrderAmountContainer}>
+                    <Text style={orderFormStyle.minimumOrderAmountContent}>
                         최소주문금액 {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
                     </Text>
                 </View>
-                <TouchableOpacity style={[styles.buyButton, styles.coblicBlueButton]} onPress={this._onPressOrder}>
-                    <Text>판매</Text>
+                <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.redButton]} onPress={this._onPressOrder}>
+                    <Text style={[orderFormStyle.buttonText]}>판매</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -147,29 +148,4 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-
-    price : {
-        
-    },
-    info: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    liquidContent: {
-        alignSelf: 'flex-end'
-    },
-    maxFeePercentageContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
-    },
-    maxFeePercentageContent: {
-        fontSize: 12,
-    },
-    minimumOrderAmountContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
-    },
-    minimumOrderAmountContent: {
-        fontSize: 12        
-    }
 });

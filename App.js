@@ -25,9 +25,6 @@ const pubnub = new Pubnub(this, stores);
 export default class App extends React.Component {
     @observable order_pubnub_channel = null;
     @observable accuount_pubnub_channel = null;
-    constructor(props) {
-        super(props);
-    }
 
     async componentDidMount() {
         // 유저가 등록되면 ORDER pubnub을 subscribe함
