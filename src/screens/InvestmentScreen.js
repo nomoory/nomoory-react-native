@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import headerStyle from '../styles/headerStyle';
+import commonStyle from '../styles/commonStyle';
 import { Container, Header, Tab, Tabs, TabHeading, Text } from 'native-base';
 import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
@@ -12,12 +14,13 @@ import UnmatchedOrderBox from '../components/UnmatchedOrderBox';
 import TransactionHistoryBox from '../components/TransactionHistoryBox';
 
 @withNavigation
-@inject('pubnub', 'userStore', 'transactionHistoryStore')
+@inject('pubnub', 'userStore', 'transactionHistoryStore', 'authStore')
 @observer
 export default class InvestmentScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: '투자내역',
+            ...headerStyle.blue
         };
     };
 
@@ -27,11 +30,12 @@ export default class InvestmentScreen extends Component {
     }
 
     componentDidMount() {
-        if (!this.props.userStore.isLoggedIn) {
-            this.props.navigation.navigate('Login', {
-                from: 'Investment'
-            });
-        }
+        // if (!this.props.userStore.isLoggedIn) {
+        //     this.props.navigation.navigate('Login', {
+        //         from: 'Investment'
+        //     });
+        // }
+
         // this.props.pubnub.subscribe(this.pubnubChannel);
     }
 
@@ -48,21 +52,24 @@ export default class InvestmentScreen extends Component {
     render() {
         return (
             <Container style={styles.container}>
-                <Tabs onChangeTab={this._onChangeTab}>
-                    <Tab heading={<TabHeading><Text>보유자산</Text></TabHeading>}
-                        styles={styles.tab}>
+                <Tabs 
+                    onChangeTab={this._onChangeTab} 
+                    // tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+                    style={styles.tabStyle}
+                    >
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>보유자산</Text></TabHeading>}>
                         <AssetsAndEvaluationBox />
                     </Tab>
-                    <Tab heading={<TabHeading><Text>거래내역</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>거래내역</Text></TabHeading>}>
                         <TransactionHistoryBox type='ALL_TRANSACTIONS'/>
                     </Tab>
-                    <Tab heading={<TabHeading><Text>채굴내역</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>채굴내역</Text></TabHeading>}>
                         <TransactionHistoryBox type='MINING'/>
                     </Tab>
-                    <Tab heading={<TabHeading><Text>배당내역</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>배당내역</Text></TabHeading>}>
                         <TransactionHistoryBox type='DIVIDEND'/>
                     </Tab>
-                    <Tab heading={<TabHeading><Text>미체결</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>미체결</Text></TabHeading>}>
                        <TransactionHistoryBox type='TRADE'/>
                     </Tab>
                 </Tabs>
@@ -76,6 +83,14 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tab: {
-        flex: 1
+        flex: 1,
+    },
+    activeTextStyle: {
+        fontColor: commonStyle.color.coblicBlue
+    },
+    tabStyle: {
+        backgroundColor: 'white',
+        borderBottomWidth: 0,
+        height: 40
     }
 })

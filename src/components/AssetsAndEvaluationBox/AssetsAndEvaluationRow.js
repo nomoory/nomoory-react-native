@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
+import Decimal from '../../utils/decimal';
+import number from '../../utils/number';
+
 import { observe } from 'mobx';
 import constants from '../../global/constants';
 
@@ -13,47 +16,70 @@ export default class AssetsAndEvaluationRow extends Component {
     }
 
     render() {
-        const { account } = this.props;
         const {
-            uuid,
-            balance,
             asset_symbol,
-            asset_english_name,
             asset_korean_name,
-            pending_order,
-            pending_withdrawl,
-            avg_fiat_buy_price,
-            is_avg_fiat_buy_price_modified,
-            asset_close_price
-        } = this.props.account;
+            avg_fiat_buy_price, // 매수평균가
+            balance, // 보유수량
+            liquid, // 유동자산
+            value_bought, // 매수 금액
+            value_present, // 현재 가치
+            value_change, // 평가 손익
+            value_change_rate, // 수익률
+            asset_close_price // asset의 현재가
+        } = this.props.portfolio;
+        const valueChange_decimal = Decimal(value_change || '0');
+        const isRise = valueChange_decimal.greaterThan(0);
+        const isFall = valueChange_decimal.lessThan(0);
 
-        const fiatBuyPrice = avg_fiat_buy_price * balance;
-        const evaluatedPrice = asset_close_price * balance;
-        const evaluatedRevenue = evaluatedPrice - fiatBuyPrice;
-        const evaluatedRevenueRatio = evaluatedRevenue / fiatBuyPrice;
+        console.log(this.props.portfolio)
 
         return (
             <View style={ styles.container }>
-                <View style={ styles.left }>
-                    <Text style={ {} }>{ asset_korean_name }</Text>
-                    <Text style={ {} }>{ asset_symbol }</Text>
-                    <Text style={ {} }>보유수량</Text>
-                    <Text style={ {} }>{ balance }</Text>    
-                </View>
-                <View style={ styles.right }>
-                    <View style={ styles.titles }>
-                        <Text style={ {} }>매수 금액</Text>
-                        <Text style={ {} }>매수 평균가</Text>
-                        <Text style={ {} }>평가 금액</Text>
-                        <Text style={ {} }>평가 수익률</Text>
-                        <Text style={ {} }>평가 손익</Text>
+                <View style={[styles.upperContainer]}>
+                    <View style={[styles.upperLeftContainer]}>
+                        <Text style={[styles.assetName]}>{`${asset_korean_name} (${ asset_symbol })`}</Text>
                     </View>
-                    <View style={ styles.contents }>
-                        <Text style={ {} }>{ avg_fiat_buy_price * balance }</Text>
-                        <Text style={ {} }>{ avg_fiat_buy_price }</Text>
-                        <Text style={ {} }>{ evaluatedPrice}</Text>
-                        <Text style={ {} }>{ evaluatedRevenueRatio +'%' }</Text>
-                        <Text style={ {} }>{ evaluatedRevenue }</Text>
+                    <View style={[styles.upperRightContainer]}>
+                        <View style={[styles.upperRightItemContainer]}>
+                            <Text style={[styles.upperRightItemTitle]}>평가 손익</Text>
+                            <Text style={[
+                                styles.upperRightItemValue,
+                                isFall ? styles.fall : null,
+                                isRise ? styles.rise : null,
+                            ]}>{isRise ? '+' : ''}{ value_change ? number.putComma(Decimal(value_change).toFixed(0)) : '- ' }원</Text>
+                        </View>
+                        <View style={[styles.upperRightItemContainer]}>
+                            <Text style={[styles.upperRightItemTitle]}>평가 수익률</Text>
+                            <Text style={[
+                                styles.upperRightItemValue,
+                                // isFall ? styles.fall : null,
+                                // isRise ? styles.rise : null,
+                            ]}>{/*isRise ? '+' : ''*/}{ value_change_rate ? number.putComma(Decimal(value_change_rate).toFixed(0)) : '- ' }%</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={ styles.bottomContainer }>
+                    <View style={ styles.bottomSubContainer }>
+                        <View style={styles.bottomItemContainer}>
+                            <Text style={[styles.bottomItemTitle]}>보유수량</Text>
+                            <Text style={[styles.bottomItemValue]}>{ balance ? number.putComma(Decimal(balance).toFixed(0)) : '- ' } {asset_symbol}</Text>
+                        </View>
+                        <View style={styles.bottomItemContainer}>
+                            <Text style={[styles.bottomItemTitle]}>매수 평균가</Text>
+                            <Text style={[styles.bottomItemValue]}>{ avg_fiat_buy_price ? number.putComma(Decimal(avg_fiat_buy_price).toFixed(0)) : '- ' }원</Text>
+                        </View>
+                    </View>
+                    <View style={ styles.bottomSubContainer }>
+                        <View style={styles.bottomItemContainer}>
+                            <Text style={[styles.bottomItemTitle]}>매수 금액</Text>
+                            <Text style={[styles.bottomItemValue]}>{ value_bought ? number.putComma(Decimal(value_bought).toFixed(0)) : '- ' }원</Text>
+                        </View>
+                        <View style={styles.bottomItemContainer}>
+                            <Text style={[styles.bottomItemTitle]}>현재 가치</Text>
+                            <Text style={[styles.bottomItemValue]}>{ value_present ? number.putComma(Decimal(value_present).toFixed(0)) : '- ' }원</Text>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -63,25 +89,73 @@ export default class AssetsAndEvaluationRow extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        flexDirection: 'column',
+    },
+    upperContainer: {
+        padding: 15,
+        paddingTop: 8,
+        paddingBottom: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: constants.style.padding
+        backgroundColor: '#f7f8fa',
     },
-    left: {
-        flex: 1,
+    upperLeftContainer: {
+        flex: 4
+    },
+    assetName: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#0042b7'
+    },
+    upperRightContainer: {
         flexDirection: 'column',
-        alignItems: 'flex-start',
+        flex: 5,
+        width: 300,
+        alignItems: 'stretch'
     },
-    right: {
-        flex: 1,
+    upperRightItemContainer: {
+        marginBottom: 6,
+        justifyContent: 'space-between',
+        flexDirection: 'row'
+    },
+    upperRightItemTitle: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#747474'
+    },
+    upperRightItemValue: {
+        fontSize: 14,
+        fontWeight: '500',
+    },
+    rise: {
+        color: '#da5f6e',
+    },
+    fall: {
+        color: '#0042b7',
+    },
+
+    bottomContainer: {
+        padding: 15,
+        paddingTop: 10,
+        paddingBottom: 4,
         flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#dedfe0',
     },
-    titles: {
+    bottomSubContainer: {
+        flex: 1,
         flexDirection: 'column',
-        alignItems: 'flex-start'
+        widht: '100%'
     },
-    contents: {
-        flexDirection: 'column',
-        alignItems: 'flex-end'
+    bottomItemContainer: {
+        alignItems: 'flex-end',
+        marginBottom: 6,
+    },
+    bottomItemTitle: {
+        color: '#747474',
+        fontWeight: '500',
+        marginBottom: 2,
+    },
+    bottomItemValue: {
     }
 })

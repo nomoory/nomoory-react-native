@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
+import headerStyle from '../styles/headerStyle';
 import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { Container } from 'native-base';
 import { inject, observer } from 'mobx-react';
@@ -17,7 +18,8 @@ export default class AccountDepositWithdrawScreen extends Component {
 
         return {
             title: `${this.currency} 입금`,
-            tabBarVisible: false, 
+            // tabBarVisible: false, 
+            ...headerStyle.white
         };
     };
 
