@@ -36,7 +36,7 @@ export default class App extends React.Component {
             () => stores.userStore.currentUser,
             currentUser => {
                 if (currentUser) {
-                    this.order_pubnub_channel = `ORDER_${currentUser.personal_pubnub_uuid}`; 
+                    this.order_pubnub_channel = `ORDER_${currentUser.personal_pubnub_uuid}`;
                     pubnub.subscribe(this.order_pubnub_channel);
                     this.accuount_pubnub_channel = `ACCOUNT_${currentUser.personal_pubnub_uuid}`; 
                     pubnub.subscribe(this.accuount_pubnub_channel);

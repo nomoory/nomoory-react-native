@@ -87,16 +87,16 @@ export default class TradingPairScreen extends Component {
                     </View>
                 </View>
                 <Tabs initialPage={0}>
-                    <Tab heading={<TabHeading><Text>주문</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>주문</Text></TabHeading>}>
                         <OrderBox />
                     </Tab>
-                    {/* <Tab heading={<TabHeading><Text>차트</Text></TabHeading>}>
+                    {/* <Tab heading={<TabHeading style={styles.tabStyle}><Text>차트</Text></TabHeading>}>
                         <View><Text>차트</Text></View>
                     </Tab> */}                   
-                    {/* <Tab heading={<TabHeading><Text>시세</Text></TabHeading>}>
+                    {/* <Tab heading={<TabHeading style={styles.tabStyle}><Text>시세</Text></TabHeading>}>
                         <View><Text>시세</Text></View>
                     </Tab> */}
-                    <Tab heading={<TabHeading><Text>거래내역</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>거래내역</Text></TabHeading>}>
                         <PersonalOrderHistory />
                     </Tab>
                 </Tabs>
@@ -131,5 +131,10 @@ const styles = StyleSheet.create({
         marginTop: 4,
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    tabStyle: {
+        backgroundColor: 'white',
+        borderBottomWidth: 0,
+        height: 40
     }
 })
