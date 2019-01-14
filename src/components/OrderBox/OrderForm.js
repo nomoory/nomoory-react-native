@@ -88,6 +88,7 @@ const orderFormStyle = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderColor: '#a2abb6',
         backgroundWidth: 0.5,
+        fontSize: 11,
     },
     inputTitleContainer: {
         left: 10,
@@ -126,8 +127,8 @@ const orderFormStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: '#d8dbde',
-        width: 36,
-        height: 36,
+        width: 30,
+        height: 30,
     },
     minusButton: {
         borderLeftWidth: 1.5,
@@ -156,7 +157,59 @@ const orderFormStyle = StyleSheet.create({
     },
     setVolumeButtonText: {
     },
-    
+
+    // infos
+    maxFeePercentageContainer: {
+        marginTop: 4,
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+    },
+    maxFeePercentageContent: {
+        color: '#747474',
+        fontSize: 11,
+    },
+    infoContainer: {
+        marginTop: 7,
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    infoTitle: {
+        fontWeight: '500'
+    },
+    infoContent: {
+        fontSize: 12,
+    },
+    minimumOrderAmountContainer: {
+        marginTop: 4,
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+
+    },
+    minimumOrderAmountContent: {
+        color: '#747474',
+        fontSize: 11        
+    },
+
+    // button
+    button: {
+        marginTop: 8,
+        borderRadius: 5,
+        width: '100%',
+        height: 36,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    blueButton: {
+        backgroundColor: '#0042b7'
+
+    },
+    redButton: {
+        backgroundColor: '#c45664'
+    },
+    buttonText: {
+        color: 'white'
+    }
 
 })
 
