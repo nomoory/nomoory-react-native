@@ -29,7 +29,6 @@ class TradingPairTableBody extends Component {
                         <TradingPairRow
                             key={idx}
                             tradingPair={tradingPair}
-                            columStyles={this.props.columStyles}
                         />
                     )
                 }

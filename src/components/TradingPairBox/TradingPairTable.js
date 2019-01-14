@@ -21,10 +21,24 @@ class TradingPairTable extends Component {
     constructor(props) {
         super(props);
         this.dynamicColumnStyles = StyleSheet.create({
-            [0]: { flex: 2 },
-            [1]: { flex: 1 },
-            [2]: { flex: 1 },
-            [3]: { flex: 1 },
+            [0]: { 
+                flex: 1,
+                justifyContent: 'flex-start',
+                paddingLeft: 10,
+            },
+            [1]: { 
+                flex: 1,        
+                justifyContent: 'flex-end'
+            },
+            [2]: { 
+                flex: 1,        
+                justifyContent: 'flex-end'
+            },
+            [3]: { 
+                flex: 1,
+                justifyContent: 'flex-end',
+                paddingRight: 10,
+            },
         });
     }
 

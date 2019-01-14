@@ -6,6 +6,7 @@ import { action, observable } from 'mobx';
 import number from '../utils/number';
 import Decimal from '../utils/decimal';
 import commonStyle, { color, font } from '../styles/commonStyle';
+import headerStyle from '../styles/headerStyle';
 import AccountList from '../components/AccountList';
 
 @inject('accountStore')
@@ -18,6 +19,7 @@ export default class AccountListScreen extends Component {
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
             // ),
+            ...headerStyle.blue
         };
     };
 

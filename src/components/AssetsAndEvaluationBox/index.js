@@ -32,7 +32,6 @@ export default class AssetsAndEvaluationBox extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10
     },
 
 })

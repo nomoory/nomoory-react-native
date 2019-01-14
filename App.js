@@ -25,9 +25,6 @@ const pubnub = new Pubnub(this, stores);
 export default class App extends React.Component {
     @observable order_pubnub_channel = null;
     @observable accuount_pubnub_channel = null;
-    constructor(props) {
-        super(props);
-    }
 
     async componentDidMount() {
         // 유저가 등록되면 ORDER pubnub을 subscribe함
@@ -39,7 +36,7 @@ export default class App extends React.Component {
             () => stores.userStore.currentUser,
             currentUser => {
                 if (currentUser) {
-                    this.order_pubnub_channel = `ORDER_${currentUser.personal_pubnub_uuid}`; 
+                    this.order_pubnub_channel = `ORDER_${currentUser.personal_pubnub_uuid}`;
                     pubnub.subscribe(this.order_pubnub_channel);
                     this.accuount_pubnub_channel = `ACCOUNT_${currentUser.personal_pubnub_uuid}`; 
                     pubnub.subscribe(this.accuount_pubnub_channel);

@@ -23,7 +23,7 @@ const font = {
 }
 
 
-let commonStyles = {
+let commonStyle = {
     coblicBlueButton: { ...coblicButton,
         color: '#0052f3'
     },
@@ -53,9 +53,9 @@ let commonStyles = {
  */
 Object.keys(font.size).forEach((sizeName) => {
     let size = font.size[sizeName];
-    commonStyles[sizeName + 'Text'] = { fontSize: size };
+    commonStyle[sizeName + 'Text'] = { fontSize: size };
 });
 
 export { color, font };
 
-export default StyleSheet.create(commonStyles);
+export default StyleSheet.create(commonStyle);

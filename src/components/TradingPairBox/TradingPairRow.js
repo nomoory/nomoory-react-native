@@ -8,6 +8,10 @@ import {
 import { Container, } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
+import number from '../../utils/number';
+import Decimal from '../../utils/decimal';
+import TRANSLATIONS from '../../TRANSLATIONS';
+import { QUOTE_SYMBOL } from '../../stores/accountStore';
 
 @withNavigation
 @inject('tradingPairStore')
@@ -27,32 +31,32 @@ class TradingPairRow extends Component {
     }
 
     render() {
-        const tradingPairStore = this.props.tradingPairStore;
-        const tradingPair = this.props.tradingPair;
-        const tokenNameForSelectedLanguage = tradingPairStore.languageForTokenName === 'ko' ?
-            tradingPair['base_korean_name'] :
-            tradingPair['base_english_name'];
+        const { 
+            close_price, signed_change_rate, acc_trade_value_24h, 
+            base_korean_name, base_english_name, name } = this.props.tradingPair || {};
+        const tokenNameForSelectedLanguage = this.props.tradingPairStore.languageForTokenName === 'ko' ?
+            base_korean_name :
+            base_english_name;
+        const result = number.getNumberAndPowerOfTenFromNumber_kr(acc_trade_value_24h);
 
         return (
             <TouchableOpacity
-                style={styles.container}
+                style={[styles.container]}
                 onPress={this._onPressTradingPairRow}
             >
-                <View style={this.props.columStyles[0]}>
-                    <Text>
-                        {tokenNameForSelectedLanguage + ' ' + tradingPair.name}
-                    </Text>
+                <View style={[styles.name]}>
+                    <Text style={[styles.tokenNameText]}>{tokenNameForSelectedLanguage}</Text>
+                    <Text style={[styles.tradingPairNameText]}>{name}</Text>
+                </View>                
+                <View style={[styles.closePrice, styles.column]}>
+                    <Text>{close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원</Text>
                 </View>
-                {
-                    tradingPairStore.sorts.map((sort, index) => (
-                        this.props.columStyles[index + 1] ?
-                            <View key={sort.name} style={this.props.columStyles[index + 1]}>
-                                <Text>{tradingPair[sort.name]}</Text>
-                            </View>
-                            :
-                            null
-                    ))
-                }
+                <View style={[styles.signedChangeRate, styles.column]}>
+                    <Text>{signed_change_rate ? number.putComma(Decimal(signed_change_rate).toFixed()) : '-'} %</Text>
+                </View>
+                <View style={[styles.accTradeValue, styles.column]}>
+                    <Text>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]}원</Text>
+                </View>
             </TouchableOpacity>
         );
     }
@@ -61,8 +65,32 @@ class TradingPairRow extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        height: 30,
-        flexDirection: 'row'
+        height: 60,
+        flexDirection: 'row',
+
+        borderStyle: 'solid',
+        borderWidth: 0.5,
+        borderColor: '#e9eaea',
+    },
+    name: {
+        paddingLeft: 10,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    accTradeValue: {
+        paddingRight: 10,
+    },
+    closePrice: {
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
+    column: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     }
 })
 export default TradingPairRow;
