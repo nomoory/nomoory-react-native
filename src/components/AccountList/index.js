@@ -4,7 +4,9 @@ import { Container } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import AccountItem from './AccountItem';
 import Decimal from '../../utils/decimal';
+import { withNavigation } from 'react-navigation';
 
+@withNavigation
 @inject('accountStore')
 @observer
 export default class AccountList extends Component {
@@ -24,6 +26,14 @@ export default class AccountList extends Component {
         return accounts.map((account, index) => {
             if (this.props.showPossesionOnly && Decimal(account.balance || 0).equals(0)) {
                 return null;
+            } else if (
+                this.props.showDepositableOnly && 
+                (
+                    // !account.is_depositable || 
+                    ['KRW', 'CT', 'TOKA'].includes(account.asset_symbol)
+                )
+            ) {
+                return null;
             } else {
                 return ( <AccountItem key={index} account={account} /> );
             }
@@ -41,7 +51,7 @@ export default class AccountList extends Component {
                         <View style={[styles.test]}><Text style={[styles.test]}>보유비중</Text></View>
                     </View> */}
                     <ScrollView style={[styles.scrollViewContainer]}>
-                        <View>
+                        <View style={[styles.itemsContainer]}>
                             {this._renderAccountList()}
                         </View>
                     </ScrollView>

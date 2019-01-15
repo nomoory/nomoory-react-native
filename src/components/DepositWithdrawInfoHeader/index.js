@@ -30,12 +30,12 @@ export default class MiningHistoryBox extends Component {
         return (
             <View style={[styles.container]}>
                 <View style={[styles.balanceContainer]}>
-                    <Text style={[styles.assetBalanceText]}>보유수량</Text>
+                    <Text style={[styles.assetBalanceText]}>총 보유금액</Text>
                     <View style={[styles.assetBalanceValues]}>
                         <Text style={[styles.balanceText]}>{`${number.putComma(number.getFixedVolume(balance || '0', selectedAccountSymbol))}`} {selectedAccountSymbol}</Text>
                         { 
                             selectedAccountSymbol !== 'KRW' &&
-                            <Text style={[styles.title, styles.grey]}>{`${evaluated_in_base_currency ? number.putComma(Decimal(evaluated_in_base_currency).toFixed(0)) : ''}`} {QUOTE_SYMBOL}</Text>
+                            <Text style={[styles.evaluatedBalanceText]}>{`${evaluated_in_base_currency ? '≈' + number.putComma(Decimal(evaluated_in_base_currency).toFixed(0)) : '-'}`} {QUOTE_SYMBOL}</Text>
                         }
                     </View>
                 </View>
@@ -44,22 +44,22 @@ export default class MiningHistoryBox extends Component {
                     <View style={[styles.titleAndValueContainer]}>
                         <Text style={[styles.title, styles.grey]}>거래대기</Text>
                         <View style={[styles.amountContainer]}>
-                            <Text style={[styles.amountText, styles.numberText]}>{`${number.putComma(number.getFixedVolume(pending_order_amount || pending_order, selectedAccountSymbol))}`}</Text>
-                            <Text style={[styles.amountText, styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
+                            <Text style={[styles.numberText, styles.grey]}>{pending_order_amount || pending_order ? `${number.putComma(number.getFixedVolume(pending_order_amount || pending_order, selectedAccountSymbol))}` : '-'}</Text>
+                            <Text style={[styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
                         </View>
                     </View>
                     <View style={[styles.titleAndValueContainer]}>
                         <Text style={[styles.title, styles.grey]}>출금대기</Text>
                         <View style={[styles.amountContainer]}>
-                            <Text style={[styles.amountText, styles.numberText]}>{`${number.putComma(number.getFixedVolume(pending_withdrawal, selectedAccountSymbol))}`}</Text>
-                            <Text style={[styles.amountText, styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
+                            <Text style={[styles.numberText, styles.grey]}>{pending_withdrawal ? `${number.putComma(number.getFixedVolume(pending_withdrawal, selectedAccountSymbol))}` : '-'}</Text>
+                            <Text style={[styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
                         </View>
                     </View>
                     <View style={[styles.titleAndValueContainer]}>
                         <Text style={[styles.title, styles.grey]}>출금가능</Text>
                         <View style={[styles.amountContainer]}>
-                            <Text style={[styles.amountText, styles.numberText]}>{`${number.putComma(number.getFixedVolume(withdrawable, selectedAccountSymbol))}`}</Text>
-                            <Text style={[styles.amountText, styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
+                            <Text style={[styles.numberText, styles.grey]}>{withdrawable ? `${number.putComma(number.getFixedVolume(withdrawable, selectedAccountSymbol))}` : '-'}</Text>
+                            <Text style={[styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
                         </View>
                     </View>
                 </View>
@@ -68,30 +68,51 @@ export default class MiningHistoryBox extends Component {
     }
 }
 
+const padding = 15;
 const styles = StyleSheet.create({
     container: {
+        padding,
         flexDirection: 'column',
+        backgroundColor: '#f7f8fa'
     },
     balanceContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
     },
-    assetBalanceValues: {
-        alignItems: 'flex-end',
+    assetBalanceText: {
+        fontSize: 16,
+        color: '#333333',
+        fontWeight: '500'
+    },
+    balanceText: {
+        fontSize: 16,
+        fontWeight: '700'
+    },
+    evaluatedBalanceText: {
+        marginTop: 4,
+        fontSize: 14,
+        color: '#333333',
     },
     withdrawableContainer: {
+        marginTop: 4,
         flexDirection: 'column',
+    },
+    assetBalanceValues: {
+        alignItems: 'flex-end',
     },
     titleAndValueContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
-    title: {
-
-    }, 
     amountContainer: {
+        marginTop: 3,
         flexDirection: 'row',
+    },
+    numberText: {
+        marginRight: 6,
+    },
+    grey: {
+        color: '#a2abb6'
     }
-
 })

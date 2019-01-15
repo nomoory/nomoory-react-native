@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import commonStyles, { font }from '../../styles/commonStyle';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
 import { Container, Header, Text, Button, Item, Input } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
@@ -109,6 +109,11 @@ export default class TransactionHistoryBox extends Component {
                         isLoadable={this.props.personalOrderHistoryStore.isLoadable}
                     /> */}
                 </View>
+                { 
+                    this.props.transactionHistoryStore.loadMoreValues.isLoading ? 
+                    <ActivityIndicator size="large" color={commonStyles.color.coblicPaleBlue}/> :
+                    null
+                }
             </ScrollView>
         );
     }
