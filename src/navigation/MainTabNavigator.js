@@ -94,7 +94,7 @@ export default createBottomTabNavigator(
         Etc: EtcStack
     },
     {
-        initialRouteName: 'DepositWithdraw',
+        initialRouteName: 'Exchange',
         tabBarOptions: {
             activeTintColor: 'black',
             inactiveTintColor: 'grey',

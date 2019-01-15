@@ -9,14 +9,12 @@ import number from '../../utils/number';
 @observer
 export default class OrderRow extends Component {
     _onPressOrderPrice = () => {
-        const { side, order } = this.props;
-        this.props.orderStore.setSide(side);
+        const { order } = this.props;
         this.props.orderStore.setPrice(order.price);
     }
 
     _onPressOrderVolume = () => {
-        const { side, order } = this.props;
-        this.props.orderStore.setSide(side);
+        const { order } = this.props;
         this.props.orderStore.setVolume(order.volume);
     }
 

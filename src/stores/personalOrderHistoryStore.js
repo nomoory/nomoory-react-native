@@ -23,26 +23,28 @@ class PersonalOrderHistoryStore {
         let placedOrders = [];
         this.placedOrdersRegistry.forEach((placedOrder) => {
             if ( selectedTradingPairName === placedOrder.trading_pair_name) {
-                placedOrders.push(placedOrder);    
+                placedOrders.push({
+                    ...placedOrder,
+                    trades: []
+                });    
             }
         });
-        placedOrders.sort(function(a,b){
+        placedOrders.sort((a,b) => {
             return new Date(b.created) - new Date(a.created);
         });
+
         return placedOrders;
     }
 
     @action setPersonalOrder(personalOrder) {
         if (['PLACED', 'PENDING', 'PARTIALLY_FILLED'].includes(personalOrder.order_status)) {
             this.placedOrdersRegistry.set(personalOrder.uuid, personalOrder);
-        } else if (['COMPLETED'].includes(personalOrder.order_status)) {
+        }
+
+        if (['COMPLETED', 'CANCELLED'].includes(personalOrder.order_status)) {
             if (this.placedOrdersRegistry.get(personalOrder.uuid)){
                 this.placedOrdersRegistry.delete(personalOrder.uuid);
-            }
-            this.completedOrdersRegistry.set(personalOrder.uuid, personalOrder);
-        } else if (['CANCELLED'].includes(personalOrder.order_status)) {
-            if (this.placedOrdersRegistry.get(personalOrder.uuid)){
-                this.placedOrdersRegistry.delete(personalOrder.uuid);
+                console.log('deleted', this.placedOrdersRegistry.get(personalOrder.uuid));
             }
         }
     }
@@ -71,17 +73,13 @@ class PersonalOrderHistoryStore {
 
     @action load() {
         this.loadValues.isLoading = true;
-        console.log('requested')
         return agent.loadPersonalPlacedOrders(tradingPairStore.selectedTradingPairName)
         .then(action((response) => {
-            console.log('success')
             let { results, next, previous } = response.data;
             this.placedOrdersRegistry.clear();
-            console.log(results)
             results.map((placedOrder) => {
                 this.placedOrdersRegistry.set(placedOrder.uuid, placedOrder);
             });
-            console.log('placedOrdersRegistry', this.placedOrdersRegistry);
             this.loadValues = {
                 isFirstLoad: false,
                 isLoading: false,
@@ -89,8 +87,6 @@ class PersonalOrderHistoryStore {
             };
         }))
         .catch(action((err) => {
-            console.log(err)
-
             this.errors = err.response && err.response.body && err.response.body.errors;
             this.loadValues = {
                 isFirstLoad: false,

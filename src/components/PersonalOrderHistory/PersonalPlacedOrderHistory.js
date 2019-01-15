@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import commonStyles, {font }from '../../styles/commonStyle';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import { Container, Header, Text, Button, Item, Input } from 'native-base';
+import commonStyles, { font }from '../../styles/commonStyle';
+import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
@@ -50,7 +49,7 @@ export default class PersonalPlacedOrderHistory extends Component {
                         <Text style={[styles.headColumnText]}>체결량</Text>
                     </View>
                     <View style={[styles.columnItem]}>
-                        <Text style={[styles.headColumnText]}>마체결</Text>
+                        <Text style={[styles.headColumnText]}>미체결</Text>
                     </View>
                 </View>
                 <View style={[styles.column, styles.columnItem]}>
@@ -61,19 +60,29 @@ export default class PersonalPlacedOrderHistory extends Component {
     };
 
     _renderPersonalPlacedOrderHistoryBody() {
-        const tradingPair = this.props.tradingPairStore.selectedTradingPair;
-        const { base_symbol, quote_symbol } = tradingPair || {};
+        // const tradingPair = this.props.tradingPairStore.selectedTradingPair;
         return (
             <ScrollView style={[styles.body]}>
                 <View style={[styles.tuples]}>
                     {this.props.personalOrderHistoryStore.selectedTradingPairPlacedOrders.map((placedOrder, index) => {
-                        let { uuid, created, side, price, volume, volume_filled, volume_remaining} = placedOrder;
+                        console.log('find0', placedOrder)
+                        let { 
+                            uuid, created, side, 
+                            price, volume, volume_filled, volume_remaining, 
+                            trading_pair_name
+                        } = placedOrder || {};
+                        console.log('find1', trading_pair_name)
+                        let [ base_symbol, quote_symbol ] = trading_pair_name ? trading_pair_name.split('-') : [];
+                        console.log('find2', base_symbol, quote_symbol)
                         let dateAndTime_string = momentHelper.getLocaleDatetime(created);
+                        console.log('find3', dateAndTime_string)
                         let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
+                        console.log('find4',date, time)
                         return (
                             <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
                                 <View style={[styles.column]}>
                                     <View style={[styles.columnItem, commonStyles[side]]}>
+                                        <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
                                         <Text style={[styles.tupleColumnText, commonStyles[side]]}>
                                             { side === 'SELL' ? '매도' : '매수' }
                                         </Text>
@@ -108,7 +117,10 @@ export default class PersonalPlacedOrderHistory extends Component {
                                     </View>        
                                 </View>
                                 <View style={[styles.column, styles.columnItem]}>{
-                                    <Button onPress={this._onPressDeleteOrder(uuid)} title={'취소'}></Button>
+                                    <TouchableOpacity style={[styles.cancleButton]}
+                                        onPress={this._onPressDeleteOrder(uuid)}>
+                                        <Text style={[styles.cancleButtonText]}>취소</Text>
+                                    </TouchableOpacity>
                                 }</View>
                             </View>
                         );
@@ -124,11 +136,76 @@ export default class PersonalPlacedOrderHistory extends Component {
 
     render() {
         return (
-            <Container style={[styles.container]}>
+            <View style={[styles.container]}>
                 {/* <Loading isOpened={this.props.personalOrderHistoryStore.isLoading} /> */}
                 {this.personalPlacedOrderHistoryHead}
-                {this._renderPersonalPlacedOrderHistoryBody()}
-            </Container>
+                <ScrollView style={[styles.body]}>
+                    <View style={[styles.tuples]}>
+                        {this.props.personalOrderHistoryStore.selectedTradingPairPlacedOrders.map((placedOrder, index) => {
+                            let { 
+                                uuid, created, side, 
+                                price, volume, volume_filled, volume_remaining, 
+                                trading_pair_name
+                            } = placedOrder || {};
+                            let [ base_symbol, quote_symbol ] = trading_pair_name ? trading_pair_name.split('-') : [];
+                            let dateAndTime_string = momentHelper.getLocaleDatetime(created);
+                            let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
+                            return (
+                                <View style={[styles.tuple,
+                                    // index % 2 === 0 ? styles['even'] : styles['odd'] 
+                                ]}>
+                                    <View style={[styles.column]}>
+                                        <View style={[styles.columnItem, commonStyles[side]]}>
+                                            <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
+                                            <Text style={[styles.tupleColumnText, commonStyles[side]]}>
+                                                { side === 'SELL' ? '매도' : '매수' }
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.columnItem, styles.created]}> 
+                                            <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''} </Text>
+                                            <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
+                                        </View>
+                                    </View>
+                                    <View style={[styles.column]}>
+                                        <View style={[styles.columnItem, styles.price]}>
+                                            <Text style={[styles.tupleColumnText, styles.priceText]}>
+                                                {number.putComma(Decimal(Decimal(price).toFixed()).toFixed())} {quote_symbol}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.columnItem, styles.volume]}>
+                                            <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                                {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+                                            </Text>
+                                        </View>               
+                                    </View>
+                                    <View style={[styles.column]}>
+                                        <View style={[styles.columnItem, styles.filled ]}>
+                                            <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                                {number.putComma(Decimal(volume_filled).toFixed())} {base_symbol}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.columnItem, styles.remaining]}>
+                                            <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                                {number.putComma(Decimal(volume_remaining).toFixed())} {base_symbol}
+                                            </Text>
+                                        </View>        
+                                    </View>
+                                    <View style={[styles.column, styles.columnItem]}>{
+                                        <TouchableOpacity style={[styles.cancleButton]}
+                                            onPress={this._onPressDeleteOrder(uuid)}>
+                                            <Text style={[styles.cancleButtonText]}>취소</Text>
+                                        </TouchableOpacity>
+                                    }</View>
+                                </View>
+                            );
+                        })}
+                        {/* <ScrollLoading
+                            isLoading={this.props.personalOrderHistoryStore.loadValues.isLoading} 
+                            isLoadable={this.props.personalOrderHistoryStore.isLoadable}
+                        /> */}
+                    </View>
+                </ScrollView>
+            </View>
         )
     }
 }
@@ -152,6 +229,10 @@ const styles = StyleSheet.create({
         borderTopColor: '#dedfe0',
         
     },
+    headColumnText: {
+        color: '#333333',
+        fontSize: 14,
+    },
     column: {
         flex: 1,
         flexDirection: 'column',
@@ -164,7 +245,8 @@ const styles = StyleSheet.create({
 
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection: 'row'
     },
     tuple: {        
         width: '100%',
@@ -173,6 +255,8 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderRightWidth: 1,
         borderRightColor: '#dedfe0',
+        borderBottomWidth: 1,
+        borderBottomColor: '#dedfe0',
     },
     odd: {
         backgroundColor: '#f7f8fa',
@@ -188,5 +272,18 @@ const styles = StyleSheet.create({
     },
     timeText: {
         color: '#747474'
+    },
+    cancleButton: { 
+        width: 50,
+        height: 30,
+        borderRadius: 4,
+        backgroundColor: '#da5f6e',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    cancleButtonText: { 
+        borderRadius: 4,
+        fontWeight: '600',
+        color: 'white'
     }
 });

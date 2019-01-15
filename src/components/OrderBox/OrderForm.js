@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Container, Text } from 'native-base';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import BuyOrderForm from './BuyOrderForm';
@@ -26,7 +25,7 @@ export default class OrderForm extends Component {
 
     render() {
         return (
-            <Container style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.buttons}>
                     <TouchableOpacity style={[styles.button, this.selectedTabType === 'BUY' ? styles.selectedBuy : styles.unselected]} onPress={this._onPressBuy}>
                         <Text style={[styles.buttonText, this.selectedTabType === 'BUY' ? styles.selectedBuyText : null ]}>매수</Text>
@@ -41,7 +40,7 @@ export default class OrderForm extends Component {
                 { this.selectedTabType === 'BUY' && <BuyOrderForm orderFormStyle={orderFormStyle}/> }
                 { this.selectedTabType === 'SELL' && <SellOrderForm orderFormStyle={orderFormStyle}/> }
                 { this.selectedTabType === 'REALTIME_TRADE_HISTORY' && <RealtimeTradeHistory /> }
-            </Container>
+            </View>
         );
     }
 }
@@ -217,6 +216,7 @@ const orderFormStyle = StyleSheet.create({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height: '100%',
         paddingTop: 14,
         padding: 10
     },

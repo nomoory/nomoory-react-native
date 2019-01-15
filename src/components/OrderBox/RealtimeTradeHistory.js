@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import commonStyle from '../../styles/commonStyle';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import { Container, Header, Text, Button, Item, Input } from 'native-base';
+import { StyleSheet, View, ScrollView, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
@@ -33,17 +32,21 @@ export default class RealtimeTradeHistory extends Component {
         let { quote_symbol } = this.props.tradingPairStore.selectedTradingPair || {};
 
         return (
-            <Container style={[styles.container, styles.realtimeTradeTable]}>
+            <View style={[styles.container]}>
                 <View style={[styles.realtimeTradeHead]}>
-                    <View style={[styles.priceTitle, styles.priceColumn]}><Text >체결가</Text></View>
-                    <View style={[styles.volumeTitle, styles.volumeColumn]}><Text >체결량</Text></View>
+                    <View style={[styles.priceTitle, styles.headColumn]}>
+                        <Text style={[styles.realtimeTradeHeadText]}>체결가</Text>
+                    </View>
+                    <View style={[styles.volumeTitle, styles.headColumn]}>
+                        <Text style={[styles.realtimeTradeHeadText]}>체결량</Text>
+                    </View>
                 </View>
-                <View style={[styles.realtimeTradeBody]}>
-                    <ScrollView>
+                <ScrollView style={[styles.realtimeTradeBody]}>
+                    <View>
                         {realtimeTrades.map((realtimeTrade, index) => {
                             let { price, volume, side } = realtimeTrade;
                             return (
-                                <View style={[styles.realtimeTradeRow]} key={index}>
+                                <View style={[styles.realtimeTradeRow]}>
                                     <View style={[styles.realtimeTradePrice, styles.priceColumn]}>
                                         <Text style={[styles.realtimeTradePriceText]}>{
                                             number.putComma(number.getFixedPrice(price, quote_symbol))
@@ -57,9 +60,9 @@ export default class RealtimeTradeHistory extends Component {
                                 </View>
                             );
                         })}
-                    </ScrollView>
-                </View>
-            </Container>
+                    </View>
+                </ScrollView>
+            </View>
         );
     }
 }
@@ -67,21 +70,33 @@ export default class RealtimeTradeHistory extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: '100%',
-        flexDirection: 'column'
     },
     realtimeTradeHead: {
-        height: 30,
+        height: 26,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: 12,
+        paddingRight: 12,
     },
+    realtimeTradeHeadText: {
+        fontWeight: '600'
+    },
+    headColumn: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
     realtimeTradeBody: {
+        paddingTop: 6,
         flex: 1,
-        flexDirection: 'column'
     },
     realtimeTradeRow: {
         height: 30,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',        
+        paddingLeft: 12,
+        paddingRight: 12,
+
     },
 });

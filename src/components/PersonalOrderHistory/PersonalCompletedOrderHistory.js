@@ -65,12 +65,13 @@ export default class PersonalCompletedOrderHistory extends Component {
                             <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
                                 <View style={[styles.column]}>
                                     <View style={[styles.columnItem, commonStyles[transaction_type]]}>
+                                        <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
                                         <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>
                                             { transaction_type === 'SELL' ? '매도' : '매수' }
                                         </Text>
                                     </View>
                                     <View style={[styles.columnItem, styles.created]}> 
-                                        <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''} </Text>
+                                        <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date : ''} </Text>
                                         <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
                                     </View>
                                 </View>
@@ -131,6 +132,10 @@ const styles = StyleSheet.create({
         borderTopColor: '#dedfe0',
         
     },
+    headColumnText: {
+        color: '#333333',
+        fontSize: 14,
+    },
     column: {
         flex: 1,
         flexDirection: 'column',
@@ -143,7 +148,8 @@ const styles = StyleSheet.create({
 
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection: 'row'
     },
     tuple: {        
         width: '100%',
@@ -157,7 +163,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f7f8fa',
     },
     tupleColumnText: {
-        fontSize: 10
+        fontSize: 12
     },
     created: {
         flexDirection: 'row'

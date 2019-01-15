@@ -13,6 +13,7 @@ export default class SellOrderForm extends Component {
         let { close_price } = this.props.tradingPairStore.selectedTradingPair || {};
         this.props.orderStore.setPrice(close_price ? Decimal(close_price).toFixed() : '0');
         this.props.orderStore.setVolume('0');
+        this.props.orderStore.setSide('SELL'); // SELL side임을 보장하기 위함
     }
 
     @computed get maxFeePercentage() { return number.getRateAsFiexdPercentage(this.props.orderStore.maxFeeRate, 2); }
@@ -136,7 +137,7 @@ export default class SellOrderForm extends Component {
                         최소주문금액 {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
                     </Text>
                 </View>
-                <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.redButton]} onPress={this._onPressOrder}>
+                <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressOrder}>
                     <Text style={[orderFormStyle.buttonText]}>판매</Text>
                 </TouchableOpacity>
             </View>
