@@ -41,7 +41,7 @@ export default class AccountList extends Component {
                         <View style={[styles.test]}><Text style={[styles.test]}>보유비중</Text></View>
                     </View> */}
                     <ScrollView style={[styles.scrollViewContainer]}>
-                        <View>
+                        <View style={[styles.itemsContainer]}>
                             {this._renderAccountList()}
                         </View>
                     </ScrollView>

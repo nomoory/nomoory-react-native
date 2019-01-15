@@ -8,6 +8,7 @@ const images = {
         ETC: require('../../../assets/images/logos/ETC.png'),
         ADA: require('../../../assets/images/logos/ADA.png'),
         EOS: require('../../../assets/images/logos/EOS.png'),
+        TOKA: require('../../../assets/images/logos/TOKA.png'),
     },
     buttons: {
         account: require('../../../assets/images/depositWithdraw/btn_arrow_small.png'),

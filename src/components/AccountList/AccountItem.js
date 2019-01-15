@@ -39,7 +39,7 @@ export default class AccountItem extends Component {
             >
                 <View style={[styles.left]}>
                     <Image
-                        style={{ width: 24, height: 24 }}
+                        style={{ width: 28, height: 28 }}
                         source={images.logos[asset_symbol]}
                     />
                     <View style={[styles.coinNameAndSymbol]}>
@@ -51,26 +51,26 @@ export default class AccountItem extends Component {
                 <View style={[styles.right]}>
                     <View style={[styles.balanceAndPriceContainer]}>
                         <View style={[styles.balanceAmount]}>
-                            <Text style={[styles.amount]}>{number.putComma(number.getFixedPrice(balance, asset_symbol))}</Text>
-                            <Text style={[styles.unit]}>{asset_symbol}</Text>
+                            <Text style={[styles.assetAmount]}>{balance ? number.putComma(number.getFixedPrice(balance, asset_symbol)) : '-'}</Text>
+                            <Text style={[styles.assetUnit]}> {asset_symbol}</Text>
                         </View>
                         {
                             asset_symbol !== 'KRW' ?
                             <View style={[styles.evaluatedBalanceAmount]}>
                                 <Text style={[styles.amount]}>
-                                    {number.putComma(number.getFixedPrice(evaluated_in_base_currency, 'KRW'))}
+                                    {evaluated_in_base_currency ? number.putComma(number.getFixedPrice(evaluated_in_base_currency, 'KRW')) : '-'}
                                 </Text>
-                                <Text style={[styles.unit]}>{'KRW'}</Text>
+                                <Text style={[styles.unit]}> {'KRW'}</Text>
                             </View> :
                             null
                         }
                     </View>
-                    <View style={[styles.balanceWeight]}>
+                    {/* <View style={[styles.balanceWeight]}>
                         <Text style={[styles.balanceWeightText]}>{`${balanceWeight}%`}</Text>
-                    </View>
+                    </View> */}
                     <View style={[styles.emptyColumn]}>
                         <Image
-                            style={{ height: 24 }}
+                            style={{ width: 15, resizeMode: 'contain' }}
                             source={images.buttons.account}
                         />
                     </View>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 15,
-        height: 70,
+        height: 80,
 
         borderStyle: 'solid',
         borderTopWidth: 0.5,
@@ -98,18 +98,41 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
+    coinNameAndSymbol: {
+        marginLeft: 12,
+    },
+    coinName: {
+        fontWeight: '500',
+        fontSize: 16
+    },
+    coinSymbol: {
+        marginTop: 4,
+        fontSize: 14,
+        color: '#747474'
+    },
     balanceAndPriceContainer: {
         alignItems: 'flex-end',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        marginRight: 12 
     },
     balanceAmount: {
         flexDirection: 'row'
     },
     evaluatedBalanceAmount: {
+        marginTop: 4,
         flexDirection: 'row'
     },
     right: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    assetAmount: {
+        fontWeight: '500',
+        fontSize: 14
+
+    },
+    assetUnit: {
+        fontWeight: '500',
+        fontSize: 14
     },
 })

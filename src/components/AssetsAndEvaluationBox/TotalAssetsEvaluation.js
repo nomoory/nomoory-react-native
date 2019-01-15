@@ -51,7 +51,7 @@ export default class TotalAssetsEvaluation extends Component {
                         <Text style={[styles.investInfoValue]}>{ total_tokens_evaluated_price_in_quote ? number.putComma(Decimal(total_tokens_evaluated_price_in_quote).toFixed(0)) : '-'}원</Text>
                     </View>
                     <View style={[styles.investInfoSubContainer]}>
-                        <Text style={[styles.investInfoTitle]}>평가 수익률</Text>
+                        <Text style={[styles.investInfoTitle]}>총 평가 수익률</Text>
                         <Text style={[styles.investInfoValue, 
                             evaluatedRevenueRatio_decimal.greaterThan(0) ? styles.rise : 
                             (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)                        
@@ -60,7 +60,7 @@ export default class TotalAssetsEvaluation extends Component {
                                 evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : ''
                             }
                             { evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).toFixed(2)).toFixed()) : '-'}%</Text>
-                        <Text style={[styles.investInfoTitle]}>평가 손익</Text>
+                        <Text style={[styles.investInfoTitle]}>총 평가 손익</Text>
                         <Text style={[styles.investInfoValue, 
                             evaluatedRevenueRatio_decimal.greaterThan(0) ? styles.rise : 
                             (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)                        
@@ -80,10 +80,10 @@ export default class TotalAssetsEvaluation extends Component {
 const styles = StyleSheet.create({
     container: {
         padding: 15,
-        paddingTop: 22,
+        paddingTop: 16,
         paddingBottom: 20,
         borderBottomColor: '#dedfe0',
-        borderBottomWidth: '2',
+        borderBottomWidth: '1.5',
     },
     assetInfoTitleContainer: {
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     assetInfoContentContainer: {
-        marginTop: 15,
+        marginTop: 12,
         flexDirection: 'row',
     },
     assetItemContainer: {
@@ -105,14 +105,13 @@ const styles = StyleSheet.create({
         color: '#747474'
     },
     assetItemValue: {
-        marginTop: 4,
         fontWeight: '700',
         fontSize: 16,
     },
 
     // investment info
     investInfoContainer: {
-        marginTop: 15,
+        marginTop: 8,
         flexDirection: 'row',
     },
     investInfoSubContainer: {

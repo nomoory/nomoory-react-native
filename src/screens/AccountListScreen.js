@@ -30,16 +30,15 @@ export default class AccountListScreen extends Component {
     }
 
     render() {
-        let { totalAssetsEvaluation } = this.props.accountStore;
+        let { total_evaluated_price_in_quote } = this.props.accountStore.totalAssetsEvaluation || {};
         return (
             <Container style={[styles.container]}>
-                <View style={[styles['totalEvaluatedPriceContainer']]}>
-                    <Text style={[styles['title']]}>총 보유자산</Text>
+                <View style={[styles.totalEvaluatedPriceContainer]}>
+                    <Text style={[styles.title]}>총 보유자산</Text>
                     <View style={[styles['priceContainer']]}>
                         <Text style={[styles['price']]}>
-                            {number.putComma(Decimal(totalAssetsEvaluation.total_evaluated_price_in_quote).toFixed(0))}
+                            {total_evaluated_price_in_quote ? number.putComma(Decimal(total_evaluated_price_in_quote).toFixed(0)) : '-'} KRW
                         </Text>
-                        <Text style={[styles['unit']]}>KRW</Text>
                     </View>
                 </View>
                 <View style={[styles['searchContainer']]}>
@@ -56,11 +55,11 @@ export default class AccountListScreen extends Component {
                             this.showPossesionOnly && styles.checked
                         ]}>
                             <Image
-                                style={{ width: 10, height: 6.6 }}
+                                style={{ height: 8, resizeMode: 'contain' }}
                                 source={require('../../assets/images/depositWithdraw/ic_check_small.png')}
                             />
                         </View>
-                        <Text style={[styles.checkboxText]}>보유코인</Text>
+                        <Text style={[styles.checkboxText]}>보유코인만</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -73,7 +72,6 @@ export default class AccountListScreen extends Component {
 }
 
 const padding = 15;
-const height = 70;
 const styles = StyleSheet.create({
     container: {
         height: '100%',
@@ -83,24 +81,38 @@ const styles = StyleSheet.create({
     totalEvaluatedPriceContainer: {
         width: '100%',
         flexDirection: 'row',
-        height,
+        height: 70,
         padding,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        backgroundColor: '#f7f8fa',
     },
     priceContainer: {
         flexDirection: 'row'
     },
+    title: {
+        fontWeight: '500',
+        fontSize: 18,
+        color: '#333333',
+    },
+    price: {
+        fontWeight: '700',
+        fontSize: 18,
+    },
+
     searchContainer: {
-        height,
+        height: 46,
         padding,
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        borderBottomColor: '#dedfe0'
     },
     searchbarContainer: {
     },
+
     checkboxContainer: {
         height: 40,
         flexDirection: 'row',
@@ -109,15 +121,16 @@ const styles = StyleSheet.create({
     checkBox: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: 22,
-        height: 22,
+        width: 18,
+        height: 18,
         borderRadius: 11,
         borderWidth: 2,
         borderColor: color.coblicGrey,
         backgroundColor: color.white,
     },
     checkboxText: {
-        fontSize: 16,
+        fontSize: 14,
+        marginLeft: 6,
     },
     checked: {
         backgroundColor: color.coblicBlue,
