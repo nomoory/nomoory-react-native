@@ -1,10 +1,6 @@
-import {
-    observable,
-    action,
-    computed,
-    reaction
-} from 'mobx';
+import { observable, action, computed, reaction } from 'mobx';
 import orderbookStore from './orderbookStore';
+import orderStore from './orderStore';
 import Hangul from 'hangul-js';
 import agent from '../utils/agent';
 
@@ -18,6 +14,7 @@ class TradingPairStore {
             async (selectedTradingPairName) => {
                 orderbookStore.clearOrderbook();
                 await orderbookStore.loadOrderbook(selectedTradingPairName);
+                orderStore.setTradingPair(selectedTradingPairName);
             }
         );
     }

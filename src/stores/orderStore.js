@@ -20,6 +20,16 @@ class OrderStore {
         price: '0',
         order_type: 'LIMIT',
     };
+    @action clear() {
+        this.values = {...this.values,
+            ...{
+                side: 'BUY',
+                volume: '0',
+                price: '0',
+                order_type: 'LIMIT',
+            }
+        };
+    }
     @computed get unit_price() { return number.getUnitPrice(this.values.price, this.quoteSymbol) }
     @computed get isBuy() { return this.values.side === 'BUY'; }
     @computed get isSell() { return this.values.side === 'SELL'; }
@@ -54,7 +64,7 @@ class OrderStore {
 
     @computed get maxFee() {
         try {
-            if (this.isBuy) { return Decimal(this.maxFeeRate || 0).mul(this.values.volume || 0).toFixed(); }
+            if (this.isBuy) { return Decimal(Decimal(this.maxFeeRate || 0).mul(this.values.volume || 0).toFixed(8, Decimal.ROUND_UP )).toFixed(); }
             if (this.isSell) { return Decimal(this.maxFeeRate || 0).mul(this.amount || 0).toFixed(2, Decimal.ROUND_UP); }
         } catch (e) {
             return '';
@@ -151,6 +161,7 @@ class OrderStore {
             state: true
         };
     }
+    @action setTradingPair(tradingPair) { this.values.trading_pair = tradingPair; }
     @action setSide(side) { this.values.side = side; }
     @action setVolumeByRate(rate) {
         let { side, price } = this.values;

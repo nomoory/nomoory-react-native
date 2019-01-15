@@ -26,7 +26,7 @@ export default class ExchangeScreen extends Component {
         this.pubnubChannel = `TEMP|TICKE`;
         this.props.pubnub.subscribe(this.pubnubChannel);
 
-        this._openBTCKRWForDevelopTradingPairScreen();
+        // this._openBTCKRWForDevelopTradingPairScreen();
     }
 
     _openBTCKRWForDevelopTradingPairScreen = () => {

@@ -13,12 +13,6 @@ import { observable, action } from 'mobx';
 @observer
 export default class PersonalOrderHistory extends Component {
     @observable selectedTabType = 'PersonalPlacedOrderHistory'
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    }
 
     _onPressPlacedOrderHistoryTab = action(() => { this.selectedTabType = 'PersonalPlacedOrderHistory'; });
     _onPressCompletedOrderHistoryTab = action(() => { this.selectedTabType = 'PersonalCompletedOrderHistory'; });
