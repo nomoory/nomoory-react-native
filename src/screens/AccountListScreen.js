@@ -14,7 +14,7 @@ import AccountList from '../components/AccountList';
 export default class AccountListScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: '입출금',
+            title: '입금',
             // headerLeft: (
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
@@ -24,9 +24,14 @@ export default class AccountListScreen extends Component {
     };
 
     @observable showPossesionOnly = false;
-    @action _handleChnageFilterCheckBox = (e) => {  
+    @action _handleChangeFilterCheckBox = (e) => {  
         console.log(this.showPossesionOnly)
         this.showPossesionOnly = !this.showPossesionOnly;    
+    }
+
+    @observable showDepositableOnly = false;
+    @action _handleToggleDepositableFilterCheckBox = (e) => {  
+        this.showDepositableOnly = !this.showDepositableOnly;    
     }
 
     render() {
@@ -41,14 +46,28 @@ export default class AccountListScreen extends Component {
                         </Text>
                     </View>
                 </View>
-                <View style={[styles['searchContainer']]}>
+                <View style={[styles.searchContainer]}>
                     <View style={[styles['searchbarContainer']]}> 
                         {/* <CoinSearchBar
                             searchBarType={SEARCHBAR_TYPES.ACCOUNT}
                         /> */}
                     </View>
                     <TouchableOpacity style={[ styles['checkboxContainer'] ]}
-                        onPress={this._handleChnageFilterCheckBox}
+                        onPress={this._handleToggleDepositableFilterCheckBox}
+                    >
+                        <View style={[
+                            styles.checkBox,
+                            this.showDepositableOnly && styles.checked
+                        ]}>
+                            <Image
+                                style={{ height: 8, resizeMode: 'contain' }}
+                                source={require('../../assets/images/depositWithdraw/ic_check_small.png')}
+                            />
+                        </View>
+                        <Text style={[styles.checkboxText]}>입금가능만</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[ styles['checkboxContainer'] ]}
+                        onPress={this._handleChangeFilterCheckBox}
                     >
                         <View style={[
                             styles.checkBox,
@@ -64,7 +83,7 @@ export default class AccountListScreen extends Component {
                 </View>
 
                 <View style={[styles['accountListContainer']]}>
-                    <AccountList showPossesionOnly={this.showPossesionOnly}/>
+                    <AccountList showPossesionOnly={this.showPossesionOnly} showDepositableOnly={this.showDepositableOnly}/>
                 </View>
             </Container>
         );
@@ -106,7 +125,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         borderBottomWidth: 1,
         borderBottomColor: '#dedfe0'
     },
@@ -117,6 +136,7 @@ const styles = StyleSheet.create({
         height: 40,
         flexDirection: 'row',
         alignItems: 'center',
+        
     },
     checkBox: {
         justifyContent: 'center',
@@ -124,13 +144,14 @@ const styles = StyleSheet.create({
         width: 18,
         height: 18,
         borderRadius: 11,
-        borderWidth: 2,
+        borderWidth: 1.5,
         borderColor: color.coblicGrey,
         backgroundColor: color.white,
+        marginRight: 4,
+        marginLeft: 10,
     },
     checkboxText: {
         fontSize: 14,
-        marginLeft: 6,
     },
     checked: {
         backgroundColor: color.coblicBlue,
