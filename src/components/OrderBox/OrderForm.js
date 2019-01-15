@@ -80,7 +80,7 @@ const orderFormStyle = StyleSheet.create({
     },
     textInput: {
         width: '100%',
-        paddingRight: 46,
+        paddingRight: 42,
         borderWidth: 1,
         textAlign: 'right',
         height: 36,
@@ -88,11 +88,11 @@ const orderFormStyle = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderColor: '#a2abb6',
         backgroundWidth: 0.5,
-        fontSize: 11,
+        fontSize: 12,
     },
     inputTitleContainer: {
         left: 10,
-        top: 10,
+        top: 10.5,
         position: 'absolute',
     },
     inputTitle: {
@@ -101,12 +101,13 @@ const orderFormStyle = StyleSheet.create({
     },
     inputUnitContainer: {
         right: 10,
-        top: 9.5,
+        top: 11.5,
         position: 'absolute',
     },
     inputUnit: {
         color: '#747474',
         fontWeight: '500',
+        fontSize: 11
     },
     setPriceButtonsContainer: {
         marginTop: 6,

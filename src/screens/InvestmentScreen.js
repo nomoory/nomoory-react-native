@@ -60,7 +60,7 @@ export default class InvestmentScreen extends Component {
                     <Tab heading={<TabHeading style={styles.tabStyle}><Text>보유자산</Text></TabHeading>}>
                         <AssetsAndEvaluationBox />
                     </Tab>
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>거래내역</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>모든내역</Text></TabHeading>}>
                         <TransactionHistoryBox type='ALL_TRANSACTIONS'/>
                     </Tab>
                     <Tab heading={<TabHeading style={styles.tabStyle}><Text>채굴내역</Text></TabHeading>}>
@@ -68,9 +68,6 @@ export default class InvestmentScreen extends Component {
                     </Tab>
                     <Tab heading={<TabHeading style={styles.tabStyle}><Text>배당내역</Text></TabHeading>}>
                         <TransactionHistoryBox type='DIVIDEND'/>
-                    </Tab>
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>미체결</Text></TabHeading>}>
-                       <TransactionHistoryBox type='TRADE'/>
                     </Tab>
                 </Tabs>
             </Container>
