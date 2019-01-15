@@ -67,6 +67,7 @@ class AuthStore {
                 this.setUserUuid(user.uuid);
                 console.log('access_token: ', this.access_token)
                 delete user.access_token;
+                
                 userStore.saveUser(user);
             }
             this.clearLoginValues();

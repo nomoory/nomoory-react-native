@@ -33,7 +33,6 @@ export default class EtcScreen extends Component {
     render() {
         const { profile, email } = this.props.userStore.currentUser || {};
         const { real_name_masked } = profile || {};
-        console.log(this.props.userStore.currentUser);
         return (
             <View style={[styles.container]}>
                 <View style={styles.welcomeContainer}>

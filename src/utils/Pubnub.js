@@ -12,10 +12,10 @@ import personalOrderHistoryStore from '../stores/personalOrderHistoryStore';
 export default class Pubnub {
     constructor(container, stores) {
         this.pubnub = new PubNubReact({
-            subscribeKey: ''
-                // __DEV__ ? 
-                // Expo.Constants.manifest.extra.REACT_APP_DEV_PUBNUB_SUBSCRIBE_KEY :
-                // Expo.Constants.manifest.extra.REACT_APP_PUBNUB_SUBSCRIBE_KEY
+            subscribeKey:
+                __DEV__ ? 
+                Expo.Constants.manifest.extra.REACT_APP_DEV_PUBNUB_SUBSCRIBE_KEY :
+                Expo.Constants.manifest.extra.REACT_APP_PUBNUB_SUBSCRIBE_KEY
         });
         this.stores = stores;
         this._addListenerToUpdateStoreOnReceiveMessage();
@@ -32,7 +32,8 @@ export default class Pubnub {
         let message = msg.message;
         // store에 업데이트 시 method에 identification을 넘깁니다.
         // store에서 UUID와 authStore를 비교하여 업데이트 할지 여부를 결정합니다.
-
+        console.log('channelScope',channelScope)
+        console.log('msg',msg)
         switch (channelScope) {
             case 'ORDERBOOK':
                 orderbookStore.setOrderbook(message);
