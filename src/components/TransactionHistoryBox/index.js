@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import commonStyles, { font }from '../../styles/commonStyle';
-import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
-import { Container, Header, Text, Button, Item, Input } from 'native-base';
+import { StyleSheet, View, ListView, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
 import Decimal from '../../utils/decimal';
 import { reaction, computed } from 'mobx';
-import TRANSLATIONS from '../../TRANSLATIONS'
+import TRANSLATIONS from '../../TRANSLATIONS';
+import ScrollLoading from '../ScrollLoading';
 
 @inject('pubnub', 'transactionHistoryStore', 'tradingPairStore')
 @observer
@@ -60,82 +60,88 @@ export default class TransactionHistoryBox extends Component {
     };
 
     _renderPersonalCompoletedOrderHistoryBody() {
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.transactionHistory);
+        const isLoading = this.props.transactionHistoryStore.loadMoreValues.isLoading;
+        const isLoadable = this.props.transactionHistoryStore.isLoadable;
         return (
-            <ScrollView style={[styles.body]}>
-                <View style={[styles.tuples]}>
-                    {this.props.transactionHistoryStore.transactionHistory.map((transaction, index) => {
-                        let { 
-                            uuid, 
-                            amount, price, volume, fee,
-                            base_symbol, quote_symbol, 
-                            transaction_created, transaction_type 
-                        } = transaction;
-                        let dateAndTime_string = momentHelper.getLocaleDatetime(transaction_created);
-                        let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
-                        return (
-                            <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
-                                <View style={[styles.column]}>
-                                    <View style={[styles.columnItem, commonStyles[transaction_type], ]}>
-                                        <Text style={[styles.tupleColumnText, styles.dateText]}>{base_symbol} </Text>
-                                        <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>
-                                            { TRANSLATIONS[transaction_type] }
-                                        </Text>
-                                    </View>
-                                    <View style={[styles.columnItem, styles.created]}> 
-                                        <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + '' : ''} </Text>
-                                        <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
-                                    </View>
+            <ListView style={[styles.container]}
+                onEndReachedThreshold={30}
+                onEndReached={(e) => {
+                    if (this.props.transactionHistoryStore.isLoadable.message_code === 'has_next_load') {
+                        this.props.transactionHistoryStore.loadNext();
+                    }
+                }}
+                dataSource={dataSource}
+                renderRow={(transaction, mode, index) => {
+                    let { 
+                        uuid, 
+                        amount, price, volume, fee,
+                        base_symbol, quote_symbol, 
+                        transaction_created, transaction_type 
+                    } = transaction;
+                    let dateAndTime_string = momentHelper.getLocaleDatetime(transaction_created);
+                    let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
+                    return (
+                        <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
+                            <View style={[styles.column]}>
+                                <View style={[styles.columnItem, commonStyles[transaction_type], ]}>
+                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{base_symbol} </Text>
+                                    <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>
+                                        { TRANSLATIONS[transaction_type] }
+                                    </Text>
                                 </View>
-                                <View style={[styles.column]}>
-                                    <View style={[styles.columnItem, styles.price, styles.textRight]}>
-                                        <Text style={[styles.tupleColumnText, styles.priceText]}>
-                                            {number.putComma(Decimal(price).toFixed())} {quote_symbol}
-                                        </Text>     
-                                    </View>
-                                    <View style={[styles.columnItem, styles.volume, styles.textRight]}>
-                                        <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                            {number.putComma(Decimal(volume).toFixed())} {base_symbol}
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={[styles.column]}>
-                                    <View style={[styles.columnItem, styles.fee, styles.textRight]}>
-                                        <Text style={[styles.tupleColumnText, styles.feeText]}>
-                                            {number.putComma(Decimal(fee).toFixed())} { transaction_type === 'SELL' ? quote_symbol : base_symbol }
-                                        </Text>
-                                    </View>
-                                    <View style={[styles.columnItem, styles.amount, styles.textRight]}>
-                                        <Text style={[styles.tupleColumnText, styles.amountText]}>
-                                            {number.putComma(Decimal(amount).toFixed())} {quote_symbol}
-                                        </Text>
-                                    </View>
+                                <View style={[styles.columnItem, styles.created]}> 
+                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + '' : ''} </Text>
+                                    <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
                                 </View>
                             </View>
-                        );
-                    })}
-                    {/* 
+                            <View style={[styles.column]}>
+                                <View style={[styles.columnItem, styles.price, styles.textRight]}>
+                                    <Text style={[styles.tupleColumnText, styles.priceText]}>
+                                        {number.putComma(Decimal(price).toFixed())} {quote_symbol}
+                                    </Text>     
+                                </View>
+                                <View style={[styles.columnItem, styles.volume, styles.textRight]}>
+                                    <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                        {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={[styles.column]}>
+                                <View style={[styles.columnItem, styles.fee, styles.textRight]}>
+                                    <Text style={[styles.tupleColumnText, styles.feeText]}>
+                                        {number.putComma(Decimal(fee).toFixed())} { transaction_type === 'SELL' ? quote_symbol : base_symbol }
+                                    </Text>
+                                </View>
+                                <View style={[styles.columnItem, styles.amount, styles.textRight]}>
+                                    <Text style={[styles.tupleColumnText, styles.amountText]}>
+                                        {number.putComma(Decimal(amount).toFixed())} {quote_symbol}
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                    );
+                }}
+                renderFooter={() => {
+                    return (
                         <ScrollLoading
-                            isLoading={this.props.personalOrderHistoryStore.loadValues.isLoading} 
-                            isLoadable={this.props.personalOrderHistoryStore.isLoadable}
+                            isLoading={isLoading} 
+                            isLoadable={isLoadable}
                         />
-                    */}
-                </View>
-                { 
-                    this.props.transactionHistoryStore.loadMoreValues.isLoading ? 
-                    <ActivityIndicator size="large" color={commonStyles.color.coblicPaleBlue}/> :
-                    null
-                }
-            </ScrollView>
+                    );
+                }}
+            />
         );
     }
 
     render() {
         return (
-            <Container style={[styles.container]}>
+            <View style={[styles.container]}>
                 {/* <Loading isOpened={this.props.personalOrderHistoryStore.isLoading} /> */}
                 {this.personalCompletedOrderHistoryHead}
                 {this._renderPersonalCompoletedOrderHistoryBody()}
-            </Container>
+            </View>
         )
     }
 }

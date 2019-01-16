@@ -28,11 +28,15 @@ class TransactionHistoryStore {
         nextUrl: null,
         isFirstLoad: true
     }
+    @observable loadMoreValuesTradeHistory = {
+        isLoading: false,
+        nextUrl: null,
+        isFirstLoad: true
+    }
 
     @action changeSelectedOption(selectedOption) {
         this.loadMoreValues.selectedOption = selectedOption;
-        if (selectedOption === 'TRADE') { this.loadTradeHistory()}
-        this.load(selectedOption);
+        this.load();
     }
 
     @observable registry = observable.array();
@@ -88,16 +92,16 @@ class TransactionHistoryStore {
             };
         }
         if (!isFirstLoad && !nextUrl) { // 이후 로드할 내역이 더이상 없을 때: 로드 불가
-            if (this.registry.length == 0) {
+            if (this.registry.length) {
                 return {
                     status: false,
                     message_code: 'no_more_load'
-                };    
+                };
             } else {
                 return {
                     status: false,
                     message_code: 'no_data'
-                };
+                };   
             }
         }
         if (isFirstLoad) { // 로드하기 전 상태: 로드 가능
@@ -165,8 +169,46 @@ class TransactionHistoryStore {
         }
     }
 
+    @computed get isTradeHistoryLoadable() {
+        let {
+            isFirstLoad,
+            nextUrl,
+            isLoading,
+        } = this.loadMoreValuesTradeHistory;
+        if (isLoading) { // 로딩 중일 때: 로드 불가
+            return {
+                status: false,
+                message_code: 'on_loading'
+            };
+        }
+        if (!isFirstLoad && !nextUrl) { // 이후 로드할 내역이 더이상 없을 때: 로드 불가
+            if (this.tradeHistoryRegistry.length) {
+                return {
+                    status: false,
+                    message_code: 'no_more_load'
+                };
+            } else {
+                return {
+                    status: false,
+                    message_code: 'no_data'
+                };   
+            }
+        }
+        if (isFirstLoad) { // 로드하기 전 상태: 로드 가능
+            return {
+                status: true,
+                message_code: 'before_load'
+            };
+        } else {
+            return { // 이후 로드할 데이터가 있는 상태: 로드 가능
+                status: true,
+                message_code: 'has_next_load'
+            };
+        }
+    }
+
     @action loadTradeHistory() {
-        this.loadMoreValues.isLoading = true;
+        this.loadMoreValuesTradeHistory.isLoading = true;
         let selectedOption = 'TRADE';
         let tradingPairName = tradingPairStore.selectedTradingPairName;
         
@@ -174,7 +216,7 @@ class TransactionHistoryStore {
         .then(action((response) => {
             let { results, next, previous } = response.data;
             this.tradeHistoryRegistry.replace(results);
-            this.loadMoreValues = { ...this.loadMoreValues,
+            this.loadMoreValuesTradeHistory = { ...this.loadMoreValuesTradeHistory,
                 isFirstLoad: false,
                 nextUrl: next,
                 isLoading: false
@@ -182,19 +224,19 @@ class TransactionHistoryStore {
         }))
         .catch(action((err) => {
             this.errors = err.response && err.response.body && err.response.body.errors;
-            this.loadMoreValues.isLoading = false;
+            this.loadMoreValuesTradeHistory.isLoading = false;
             throw err;
         }));
     }
 
     @action loadNextTradeHistory() {
-        if(this.loadMoreValues.nextUrl) {
-            this.loadMoreValues.isLoading = true;
-            return agent.get(this.loadMoreValues.nextUrl)
+        if(this.loadMoreValuesTradeHistory.nextUrl) {
+            this.loadMoreValuesTradeHistory.isLoading = true;
+            return agent.get(this.loadMoreValuesTradeHistory.nextUrl)
             .then(action((response) => {
                 let { results, next, previous } = response.data;
                 this.tradeHistoryRegistry.replace([...this.registry, ...results]);
-                this.loadMoreValues = { ...this.loadMoreValues,
+                this.loadMoreValuesTradeHistory = { ...this.loadMoreValuesTradeHistory,
                     isFirstLoad: false,
                     nextUrl: next,
                     isLoading: false
@@ -202,7 +244,7 @@ class TransactionHistoryStore {
             }))
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
-                this.loadMoreValues.isLoading = false;
+                this.loadMoreValuesTradeHistory.isLoading = false;
                 throw err;
             }));
         } else {

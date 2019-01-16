@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import commonStyles, { font }from '../../styles/commonStyle';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, ListView } from 'react-native';
 import { Container, Header, Text, Button, Item, Input } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
 import Decimal from '../../utils/decimal';
 import { reaction, computed } from 'mobx';
+import ScrollLoading from '../ScrollLoading';
 
 @inject('pubnub', 'transactionHistoryStore', 'tradingPairStore')
 @observer
@@ -50,56 +51,71 @@ export default class PersonalCompletedOrderHistory extends Component {
     };
 
     _renderPersonalCompoletedOrderHistoryBody() {
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.tradeHistory);
+        const isLoading = this.props.transactionHistoryStore.loadMoreValuesTradeHistory.isLoading;
+        const message_code = this.props.transactionHistoryStore.isTradeHistoryLoadable.message_code;
+        const isLoadable = this.props.transactionHistoryStore.isTradeHistoryLoadable;
+        
         return (
-            <ScrollView style={[styles.body]}>
-                <View style={[styles.tuples]}>
-                    {this.props.transactionHistoryStore.tradeHistory.map((completedOrder, index) => {
-                        let { 
-                            uuid, 
-                            amount, price, volume, 
-                            base_symbol, quote_symbol, 
-                            transaction_created, transaction_type 
-                        } = completedOrder;
-                        let dateAndTime_string = momentHelper.getLocaleDatetime(transaction_created);
-                        let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
-                        return (
-                            <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
-                                <View style={[styles.column]}>
-                                    <View style={[styles.columnItem, commonStyles[transaction_type]]}>
-                                        <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
-                                        <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>
-                                            { transaction_type === 'SELL' ? '매도' : '매수' }
-                                        </Text>
-                                    </View>
-                                    <View style={[styles.columnItem, styles.created]}> 
-                                        <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date : ''} </Text>
-                                        <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
-                                    </View>
-                                </View>
-                                <View style={[styles.column, styles.columnItem, styles.price]}>
-                                    <Text style={[styles.tupleColumnText, styles.priceText]}>
-                                        {number.putComma(Decimal(price).toFixed())} {quote_symbol}
-                                    </Text>     
-                                </View>
-                                <View style={[styles.column, styles.columnItem, styles.volume ]}>
-                                    <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                        {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+            <ListView style={[styles.container]}
+                onEndReachedThreshold={30}
+                onEndReached={(e) => {
+                    if (message_code === 'has_next_load') {
+                        this.props.transactionHistoryStore.loadNextTradeHistory();
+                    }
+                }}
+                dataSource={dataSource}
+                renderRow={(completedOrder, mode, index) => {
+                    let { 
+                        uuid, 
+                        amount, price, volume, 
+                        base_symbol, quote_symbol, 
+                        transaction_created, transaction_type 
+                    } = completedOrder;
+                    let dateAndTime_string = momentHelper.getLocaleDatetime(transaction_created);
+                    let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
+                    return (
+                        <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
+                            <View style={[styles.column]}>
+                                <View style={[styles.columnItem, commonStyles[transaction_type]]}>
+                                    <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
+                                    <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>
+                                        { transaction_type === 'SELL' ? '매도' : '매수' }
                                     </Text>
                                 </View>
-                                <View style={[styles.column, styles.columnItem, styles.amount]}>
-                                    <Text style={[styles.tupleColumnText, styles.amountText]}>
-                                        {number.putComma(Decimal(amount).toFixed())} {quote_symbol}
-                                    </Text>
+                                <View style={[styles.columnItem, styles.created]}> 
+                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date : ''} </Text>
+                                    <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
                                 </View>
                             </View>
-                        );
-                    })}
-                    {/* <ScrollLoading
-                        isLoading={this.props.personalOrderHistoryStore.loadValues.isLoading} 
-                        isLoadable={this.props.personalOrderHistoryStore.isLoadable}
-                    /> */}
-                </View>
-            </ScrollView>
+                            <View style={[styles.column, styles.columnItem, styles.price]}>
+                                <Text style={[styles.tupleColumnText, styles.priceText]}>
+                                    {number.putComma(Decimal(price).toFixed())} {quote_symbol}
+                                </Text>     
+                            </View>
+                            <View style={[styles.column, styles.columnItem, styles.volume ]}>
+                                <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                    {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+                                </Text>
+                            </View>
+                            <View style={[styles.column, styles.columnItem, styles.amount]}>
+                                <Text style={[styles.tupleColumnText, styles.amountText]}>
+                                    {number.putComma(Decimal(amount).toFixed())} {quote_symbol}
+                                </Text>
+                            </View>
+                        </View>
+                    );
+                }}
+                renderFooter={() => {
+                    return (
+                        <ScrollLoading
+                            isLoading={isLoading} 
+                            isLoadable={isLoadable}
+                        />
+                    );
+                }}
+            />
         );
     }
 

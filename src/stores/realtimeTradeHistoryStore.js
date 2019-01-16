@@ -121,12 +121,12 @@ class RealtimeTradeHistoryStore {
                 return {
                     status: false,
                     message_code: 'no_more_load'
-                };    
+                };
             } else {
                 return {
                     status: false,
                     message_code: 'no_data'
-                };
+                };    
             }
         }
         if (isFirstLoad) { // 로드하기 전 상태: 로드 가능
