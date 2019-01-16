@@ -1,23 +1,30 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Clipboard } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import commonStyle from '../../styles/commonStyle';
+import Decimal from '../../utils/decimal';
+import number from '../../utils/number';
 
-@inject('accountStore')
+@inject('accountStore', 'modalStore')
 @observer
 export default class DepositBox extends Component {
     componentDidMount() {
         console.log('OrderBox is mounted |')
     }
-    _handleCopyAddress = (address) => (e) => {
-        let element = document.getElementById('token-address');
-        element.select()
-        document.execCommand("copy");
-        alert('주소를 복사하였습니다.')
-    }
+
     _handleIssueAddress = (e) => {
         this.props.accountStore.createAndGetWarmWalletAddress(this.props.accountStore.selectedAccountSymbol);
     }
+
+    _setClipboardContent = (msg) => {
+        Clipboard.setString(msg);
+        this.props.modalStore.openModal({
+            type: 'preset',
+            title: '주소복사',
+            content: '클립보드에 주소를 복사하였습니다.'
+        });
+    };
+
     _renderIssueAddress = () => {
         let account = this.props.accountStore.selectedAccount;
         let {
@@ -48,26 +55,28 @@ export default class DepositBox extends Component {
             asset_min_deposit_amount,
             asset_symbol
         } = account || {};
+
         return (
-            <View className='address-content-container'>
-                {/* <Input className='address' 
-              type='text' 
-              value={`${wallet_address}`} 
-              id="token-address" 
-              readOnly
-            /> */}
+            <View style={[styles.copyAddressContainer]}>
+                <View style={[styles.addressTextContainer]}>
+                    <Text style={[styles.addressText]}
+                        selectable={true}
+                        onPress={() => this._setClipboardContent(wallet_address)}
+                    >{wallet_address}
+                    </Text>
+                </View>
                 {
                     (asset_min_deposit_amount && Decimal(asset_min_deposit_amount).toFixed() !== '0') &&
-                    <View className="asset-min-deposit-amount">
-                        <Text>
-                            {`* 최소입금금액은 ${asset_min_deposit_amount ? Decimal(asset_min_deposit_amount).toFixed() : '-'} ${asset_symbol} 입니다.`}
+                    <View style={[styles.addressDescriptionContainer]}>
+                        <Text style={[styles.addressDescriptionText]}>
+                            {`* 최소입금금액은 ${number.putComma(Decimal(asset_min_deposit_amount).toFixed())} ${asset_symbol} 입니다.`}
                         </Text>
                     </View>
                 }
-                <TouchableOpacity className='copy-address-button coblic-blue-button'
-                    onPress={this._handleCopyAddress(wallet_address)}
+                <TouchableOpacity style={styles.copyAddressButton}
+                    onPress={() => this._setClipboardContent(wallet_address)}
                 >
-                    <Text>{`주소 복사하기`}</Text>
+                    <Text style={styles.copyAddressButtonText}>{`주소 복사하기`}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -106,8 +115,8 @@ export default class DepositBox extends Component {
 
                     { /* 입금 오픈시 */
                         wallet_address ?
-                            this._renderCopyAddress(wallet_address.address) :
-                            this._renderIssueAddress()
+                        this._renderCopyAddress(wallet_address.address) :
+                        this._renderIssueAddress()
                     }
                     { /* 입금방지 입금금지 입금정지 입금 방지 입금 금지 입금 정지 */
                         /*
@@ -207,5 +216,47 @@ const styles = StyleSheet.create({
     },
     grey: {
         color: commonStyle.color.grey
+    },
+
+    copyAddressContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    addressTextContainer: {
+        marginTop: 18,
+        padding: 16,
+        paddingTop: 10,
+        paddingBottom: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: commonStyle.color.coblicGrey,
+        borderWidth: 1,
+    },    
+    addressText: {
+        fontWeight: '400',
+        fontSize: 14,
+    },
+    addressDescriptionContainer: {
+        marginTop: 4,
+    },
+    addressDescriptionText: {
+        fontSize: 11,
+        color: '#333333',
+    },
+    copyAddressButton: {
+        marginTop: 14,
+        marginBottom: 4,
+        height: 46,
+        width: 146,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        backgroundColor: commonStyle.color.coblicBlue,
+    },
+    copyAddressButtonText: {
+        fontWeight: '600',
+        fontSize: 15,
+        color: 'white'
     }
 });
