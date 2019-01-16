@@ -21,6 +21,7 @@ class TransactionHistoryStore {
         { value: 'GIVEAWAY', label: TRANSLATIONS['GIVEAWAY'] },
         // { value: 'TRADE', label: TRANSLATIONS['TRADE'] },
     ];
+
     @observable loadMoreValues = {
         isLoading: false,
         selectedOption: this.options[0].value,
@@ -30,9 +31,12 @@ class TransactionHistoryStore {
 
     @action changeSelectedOption(selectedOption) {
         this.loadMoreValues.selectedOption = selectedOption;
+        if (selectedOption === 'TRADE') { this.loadTradeHistory()}
+        this.load(selectedOption);
     }
 
     @observable registry = observable.array();
+    @observable tradeHistoryRegistry = observable.array();
 
     @computed get transactionHistory() {
         let transactionHistory = [];
@@ -42,8 +46,20 @@ class TransactionHistoryStore {
         return transactionHistory;
     }
 
+    @computed get tradeHistory() {
+        let tradeHistories = [];
+        this.tradeHistoryRegistry.forEach((trade) => {
+            tradeHistories.push(trade);
+        });
+        return tradeHistories;
+    }
+
+
     @action clearRegistry() {
         this.registry.clear();
+    }
+    @action clearTradeHistoryRegistry() {
+        this.tradeHistoryRegistry.clear();
     }
 
     @action clearLoadMoreValues() {
@@ -106,19 +122,15 @@ class TransactionHistoryStore {
         }
     }
 
-    @action load(selectedOption) {
-        if (selectedOption) this.changeSelectedOption(selectedOption);
-        selectedOption  = selectedOption || this.loadMoreValues.selectedOption;
+    @action load() {
         this.loadMoreValues.isLoading = true;
-        this.errors = null;
-        let trading_pair_name = null;
-        if (selectedOption === 'TRADE') trading_pair_name = tradingPairStore.selectedTradingPairName;
+        let selectedOption = this.loadMoreValues.selectedOption;
         
-        return agent.loadTransactionHistory(selectedOption, trading_pair_name)
+        return agent.loadTransactionHistory(selectedOption)
         .then(action((response) => {
             let { results, next, previous } = response.data;
             this.registry.replace(results);
-            this.loadMoreValues = {
+            this.loadMoreValues = { ...this.loadMoreValues,
                 isFirstLoad: false,
                 nextUrl: next,
                 isLoading: false
@@ -130,6 +142,7 @@ class TransactionHistoryStore {
             throw err;
         }));
     }
+
     @action loadNext() {
         if(this.loadMoreValues.nextUrl) {
             this.loadMoreValues.isLoading = true;
@@ -137,7 +150,51 @@ class TransactionHistoryStore {
             .then(action((response) => {
                 let { results, next, previous } = response.data;
                 this.registry.replace([...this.registry, ...results]);
-                this.loadMoreValues = {
+                this.loadMoreValues = { ...this.loadMoreValues,
+                    isFirstLoad: false,
+                    nextUrl: next,
+                    isLoading: false
+                };
+            }))
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+                this.loadMoreValues.isLoading = false;
+                throw err;
+            }));
+        } else {
+        }
+    }
+
+    @action loadTradeHistory() {
+        this.loadMoreValues.isLoading = true;
+        let selectedOption = 'TRADE';
+        let tradingPairName = tradingPairStore.selectedTradingPairName;
+        
+        return agent.loadTransactionHistory(selectedOption, tradingPairName)
+        .then(action((response) => {
+            let { results, next, previous } = response.data;
+            this.tradeHistoryRegistry.replace(results);
+            this.loadMoreValues = { ...this.loadMoreValues,
+                isFirstLoad: false,
+                nextUrl: next,
+                isLoading: false
+            };
+        }))
+        .catch(action((err) => {
+            this.errors = err.response && err.response.body && err.response.body.errors;
+            this.loadMoreValues.isLoading = false;
+            throw err;
+        }));
+    }
+
+    @action loadNextTradeHistory() {
+        if(this.loadMoreValues.nextUrl) {
+            this.loadMoreValues.isLoading = true;
+            return agent.get(this.loadMoreValues.nextUrl)
+            .then(action((response) => {
+                let { results, next, previous } = response.data;
+                this.tradeHistoryRegistry.replace([...this.registry, ...results]);
+                this.loadMoreValues = { ...this.loadMoreValues,
                     isFirstLoad: false,
                     nextUrl: next,
                     isLoading: false

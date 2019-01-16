@@ -70,13 +70,17 @@ class PersonalOrderHistoryStore {
         isLoading: false,
         nextUrl: null,
     }
+    
+    clearRegistry() {
+        this.placedOrdersRegistry.clear();
+    }
 
     @action load() {
         this.loadValues.isLoading = true;
+        this.clearRegistry();
         return agent.loadPersonalPlacedOrders(tradingPairStore.selectedTradingPairName)
         .then(action((response) => {
             let { results, next, previous } = response.data;
-            this.placedOrdersRegistry.clear();
             results.map((placedOrder) => {
                 this.placedOrdersRegistry.set(placedOrder.uuid, placedOrder);
             });

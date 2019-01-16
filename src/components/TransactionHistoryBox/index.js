@@ -113,10 +113,12 @@ export default class TransactionHistoryBox extends Component {
                             </View>
                         );
                     })}
-                    {/* <ScrollLoading
-                        isLoading={this.props.personalOrderHistoryStore.loadValues.isLoading} 
-                        isLoadable={this.props.personalOrderHistoryStore.isLoadable}
-                    /> */}
+                    {/* 
+                        <ScrollLoading
+                            isLoading={this.props.personalOrderHistoryStore.loadValues.isLoading} 
+                            isLoadable={this.props.personalOrderHistoryStore.isLoadable}
+                        />
+                    */}
                 </View>
                 { 
                     this.props.transactionHistoryStore.loadMoreValues.isLoading ? 
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
         color: '#747474'
     },
     textRight: {
-        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
         paddingRight: 6,
     }
 });

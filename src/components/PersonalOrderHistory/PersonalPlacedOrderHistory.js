@@ -14,10 +14,11 @@ export default class PersonalPlacedOrderHistory extends Component {
         reaction(
             () => this.props.tradingPairStore.selectedTradingPairName,
             (selectedTradingPairName) => {
+                this.props.personalOrderHistoryStore.clearRegistry();
                 this.props.personalOrderHistoryStore.load();
             }
         );
-
+        this.props.personalOrderHistoryStore.clearRegistry();
         this.props.personalOrderHistoryStore.load();
     }
 
