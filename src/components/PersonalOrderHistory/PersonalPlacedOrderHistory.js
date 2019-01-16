@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import commonStyles, { font }from '../../styles/commonStyle';
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ListView } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
 import Decimal from '../../utils/decimal';
 import { reaction, computed } from 'mobx';
+import ScrollLoading from '../ScrollLoading';
 
 @inject('personalOrderHistoryStore', 'tradingPairStore')
 @observer
@@ -61,77 +62,88 @@ export default class PersonalPlacedOrderHistory extends Component {
     };
 
     _renderPersonalPlacedOrderHistoryBody() {
-        // const tradingPair = this.props.tradingPairStore.selectedTradingPair;
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const dataSource = ds.cloneWithRows(this.props.personalOrderHistoryStore.placedOrders);
+        const isLoading = this.props.personalOrderHistoryStore.loadMoreValues.isLoading;
+        const isLoadable = this.props.personalOrderHistoryStore.isLoadable;
+        const message_code = isLoadable.message_code;
+        console.log(message_code)
         return (
-            <ScrollView style={[styles.body]}>
-                <View style={[styles.tuples]}>
-                    {this.props.personalOrderHistoryStore.selectedTradingPairPlacedOrders.map((placedOrder, index) => {
-                        console.log('find0', placedOrder)
-                        let { 
-                            uuid, created, side, 
-                            price, volume, volume_filled, volume_remaining, 
-                            trading_pair_name
-                        } = placedOrder || {};
-                        console.log('find1', trading_pair_name)
-                        let [ base_symbol, quote_symbol ] = trading_pair_name ? trading_pair_name.split('-') : [];
-                        console.log('find2', base_symbol, quote_symbol)
-                        let dateAndTime_string = momentHelper.getLocaleDatetime(created);
-                        console.log('find3', dateAndTime_string)
-                        let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
-                        console.log('find4',date, time)
-                        return (
-                            <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
-                                <View style={[styles.column]}>
-                                    <View style={[styles.columnItem, commonStyles[side]]}>
-                                        <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
-                                        <Text style={[styles.tupleColumnText, commonStyles[side]]}>
-                                            { side === 'SELL' ? '매도' : '매수' }
-                                        </Text>
-                                    </View>
-                                    <View style={[styles.columnItem, styles.created]}> 
-                                        <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''} </Text>
-                                        <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
-                                    </View>
+            <ListView style={[styles.container, styles.tuples]}
+                onEndReachedThreshold={30}
+                onEndReached={(e) => {
+                    if (message_code === 'has_next_load') {
+                        this.props.transactionHistoryStore.loadNextTradeHistory();
+                    }
+                }}
+                dataSource={dataSource}
+                renderRow={(placedOrder, mode, index) => {
+                    let { 
+                        uuid, created, side, 
+                        price, volume, volume_filled, volume_remaining, 
+                        trading_pair_name
+                    } = placedOrder || {};
+                    let [ base_symbol, quote_symbol ] = trading_pair_name ? trading_pair_name.split('-') : [];
+                    let dateAndTime_string = momentHelper.getLocaleDatetime(created);
+                    let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
+                    return (
+                        <View style={[styles.tuple,
+                            // index % 2 === 0 ? styles['even'] : styles['odd'] 
+                        ]}>
+                            <View style={[styles.column]}>
+                                <View style={[styles.columnItem, commonStyles[side]]}>
+                                    <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
+                                    <Text style={[styles.tupleColumnText, commonStyles[side]]}>
+                                        { side === 'SELL' ? '매도' : '매수' }
+                                    </Text>
                                 </View>
-                                <View style={[styles.column]}>
-                                    <View style={[styles.columnItem, styles.price]}>
-                                        <Text style={[styles.tupleColumnText, styles.priceText]}>
-                                            {number.putComma(Decimal(Decimal(price).toFixed()).toFixed())} {quote_symbol}
-                                        </Text>
-                                    </View>
-                                    <View style={[styles.columnItem, styles.volume]}>
-                                        <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                            {number.putComma(Decimal(volume).toFixed())} {base_symbol}
-                                        </Text>
-                                    </View>               
+                                <View style={[styles.columnItem, styles.created]}> 
+                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''} </Text>
+                                    <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
                                 </View>
-                                <View style={[styles.column]}>
-                                    <View style={[styles.columnItem, styles.filled ]}>
-                                        <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                            {number.putComma(Decimal(volume_filled).toFixed())} {base_symbol}
-                                        </Text>
-                                    </View>
-                                    <View style={[styles.columnItem, styles.remaining]}>
-                                        <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                            {number.putComma(Decimal(volume_remaining).toFixed())} {base_symbol}
-                                        </Text>
-                                    </View>        
-                                </View>
-                                <View style={[styles.column, styles.columnItem]}>{
-                                    <TouchableOpacity style={[styles.cancleButton]}
-                                        onPress={this._onPressDeleteOrder(uuid)}>
-                                        <Text style={[styles.cancleButtonText]}>취소</Text>
-                                    </TouchableOpacity>
-                                }</View>
                             </View>
-                        );
-                    })}
-                    {/* <ScrollLoading
-                        isLoading={this.props.personalOrderHistoryStore.loadValues.isLoading} 
-                        isLoadable={this.props.personalOrderHistoryStore.isLoadable}
-                    /> */}
-                </View>
-            </ScrollView>
+                            <View style={[styles.column]}>
+                                <View style={[styles.columnItem, styles.price]}>
+                                    <Text style={[styles.tupleColumnText, styles.priceText]}>
+                                        {number.putComma(Decimal(Decimal(price).toFixed()).toFixed())} {quote_symbol}
+                                    </Text>
+                                </View>
+                                <View style={[styles.columnItem, styles.volume]}>
+                                    <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                        {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+                                    </Text>
+                                </View>               
+                            </View>
+                            <View style={[styles.column]}>
+                                <View style={[styles.columnItem, styles.filled ]}>
+                                    <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                        {number.putComma(Decimal(volume_filled).toFixed())} {base_symbol}
+                                    </Text>
+                                </View>
+                                <View style={[styles.columnItem, styles.remaining]}>
+                                    <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                        {number.putComma(Decimal(volume_remaining).toFixed())} {base_symbol}
+                                    </Text>
+                                </View>        
+                            </View>
+                            <View style={[styles.column, styles.columnItem]}>{
+                                <TouchableOpacity style={[styles.cancleButton]}
+                                    onPress={this._onPressDeleteOrder(uuid)}>
+                                    <Text style={[styles.cancleButtonText]}>취소</Text>
+                                </TouchableOpacity>
+                            }</View>
+                        </View>
+                    );
+                }}
+                renderFooter={() => {
+                    return (
+                        <ScrollLoading
+                            isLoading={isLoading} 
+                            isLoadable={isLoadable}
+                        />
+                    );
+                }}
+            />
         );
     }
 
@@ -140,72 +152,7 @@ export default class PersonalPlacedOrderHistory extends Component {
             <View style={[styles.container]}>
                 {/* <Loading isOpened={this.props.personalOrderHistoryStore.isLoading} /> */}
                 {this.personalPlacedOrderHistoryHead}
-                <ScrollView style={[styles.body]}>
-                    <View style={[styles.tuples]}>
-                        {this.props.personalOrderHistoryStore.selectedTradingPairPlacedOrders.map((placedOrder, index) => {
-                            let { 
-                                uuid, created, side, 
-                                price, volume, volume_filled, volume_remaining, 
-                                trading_pair_name
-                            } = placedOrder || {};
-                            let [ base_symbol, quote_symbol ] = trading_pair_name ? trading_pair_name.split('-') : [];
-                            let dateAndTime_string = momentHelper.getLocaleDatetime(created);
-                            let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
-                            return (
-                                <View style={[styles.tuple,
-                                    // index % 2 === 0 ? styles['even'] : styles['odd'] 
-                                ]}>
-                                    <View style={[styles.column]}>
-                                        <View style={[styles.columnItem, commonStyles[side]]}>
-                                            <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
-                                            <Text style={[styles.tupleColumnText, commonStyles[side]]}>
-                                                { side === 'SELL' ? '매도' : '매수' }
-                                            </Text>
-                                        </View>
-                                        <View style={[styles.columnItem, styles.created]}> 
-                                            <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''} </Text>
-                                            <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
-                                        </View>
-                                    </View>
-                                    <View style={[styles.column]}>
-                                        <View style={[styles.columnItem, styles.price]}>
-                                            <Text style={[styles.tupleColumnText, styles.priceText]}>
-                                                {number.putComma(Decimal(Decimal(price).toFixed()).toFixed())} {quote_symbol}
-                                            </Text>
-                                        </View>
-                                        <View style={[styles.columnItem, styles.volume]}>
-                                            <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                                {number.putComma(Decimal(volume).toFixed())} {base_symbol}
-                                            </Text>
-                                        </View>               
-                                    </View>
-                                    <View style={[styles.column]}>
-                                        <View style={[styles.columnItem, styles.filled ]}>
-                                            <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                                {number.putComma(Decimal(volume_filled).toFixed())} {base_symbol}
-                                            </Text>
-                                        </View>
-                                        <View style={[styles.columnItem, styles.remaining]}>
-                                            <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                                {number.putComma(Decimal(volume_remaining).toFixed())} {base_symbol}
-                                            </Text>
-                                        </View>        
-                                    </View>
-                                    <View style={[styles.column, styles.columnItem]}>{
-                                        <TouchableOpacity style={[styles.cancleButton]}
-                                            onPress={this._onPressDeleteOrder(uuid)}>
-                                            <Text style={[styles.cancleButtonText]}>취소</Text>
-                                        </TouchableOpacity>
-                                    }</View>
-                                </View>
-                            );
-                        })}
-                        {/* <ScrollLoading
-                            isLoading={this.props.personalOrderHistoryStore.loadValues.isLoading} 
-                            isLoadable={this.props.personalOrderHistoryStore.isLoadable}
-                        /> */}
-                    </View>
-                </ScrollView>
+                {this._renderPersonalPlacedOrderHistoryBody()}
             </View>
         )
     }

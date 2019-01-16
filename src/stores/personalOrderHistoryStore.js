@@ -3,7 +3,6 @@ import agent from '../utils/agent';
 import tradingPairStore from './tradingPairStore';
 
 class PersonalOrderHistoryStore {
-    @observable isLoading = false;
     @observable errors = undefined;
 
     @observable placedOrdersRegistry = observable.map();
@@ -50,22 +49,22 @@ class PersonalOrderHistoryStore {
     }
 
     @action deletePlacedOrder(uuid) {
-        this.isLoading = true;
+        this.loadMoreValues.isLoading = true;
         return agent.deletePlacedOrderById(uuid)
         .then(action((response) => {
             // front 상에서 삭제는 pubnub을 통해 this.setPersonalOrder가 진행합니다.
-            this.isLoading = false;
+            this.loadMoreValues.isLoading = false;
         }))
         .catch(action((err) => {
             this.errors = err.response && err.response.body && err.response.body.errors;
-            this.isLoading = false;
+            this.loadMoreValues.isLoading = false;
             // 요청에서 실패하면 서버와 sync를 맞추기위해 다시 데이터를 로드합니다.
             this.load();
             throw err;
         }));
     }
 
-    @observable loadValues = {
+    @observable loadMoreValues = {
         isFirstLoad: true,
         isLoading: false,
         nextUrl: null,
@@ -76,7 +75,7 @@ class PersonalOrderHistoryStore {
     }
 
     @action load() {
-        this.loadValues.isLoading = true;
+        this.loadMoreValues.isLoading = true;
         this.clearRegistry();
         return agent.loadPersonalPlacedOrders(tradingPairStore.selectedTradingPairName)
         .then(action((response) => {
@@ -84,7 +83,7 @@ class PersonalOrderHistoryStore {
             results.map((placedOrder) => {
                 this.placedOrdersRegistry.set(placedOrder.uuid, placedOrder);
             });
-            this.loadValues = {
+            this.loadMoreValues = {
                 isFirstLoad: false,
                 isLoading: false,
                 nextUrl: next,
@@ -92,7 +91,7 @@ class PersonalOrderHistoryStore {
         }))
         .catch(action((err) => {
             this.errors = err.response && err.response.body && err.response.body.errors;
-            this.loadValues = {
+            this.loadMoreValues = {
                 isFirstLoad: false,
                 isLoading: false,
                 nextUrl: null,
@@ -102,15 +101,15 @@ class PersonalOrderHistoryStore {
     }
 
     @action loadNext() {
-        if (this.loadValues.nextUrl) {
-            this.loadValues.isLoading = true;
-            return agent.get(this.loadValues.nextUrl)
+        if (this.loadMoreValues.nextUrl) {
+            this.loadMoreValues.isLoading = true;
+            return agent.get(this.loadMoreValues.nextUrl)
                 .then(action((response) => {
                     let { results, next, previous } = response.data;
                     results.forEach((placedOrder) => {
                         this.placedOrdersRegistry.set(placedOrder.uuid, placedOrder);
                     });
-                    this.loadValues = {
+                    this.loadMoreValues = {
                         isFirstLoad: false,
                         isLoading: false,
                         nextUrl: next,
@@ -118,7 +117,7 @@ class PersonalOrderHistoryStore {
                 }))
                 .catch(action((err) => {
                     this.errors = err.response && err.response.body && err.response.body.errors;
-                    this.loadValues = {
+                    this.loadMoreValues = {
                         isFirstLoad: false,
                         isLoading: false,
                         nextUrl: null,
@@ -128,24 +127,13 @@ class PersonalOrderHistoryStore {
         } else {
         }
     }
-    
-    @action listenScrollEvent = (event) => {
-        let { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
-        if (
-            scrollHeight - (clientHeight + scrollTop) < 100 && 
-            this.isLoading === false &&
-            this.isLoadable.status
-        ) {
-            this.loadNextPersonalPlacedOrders();
-        };
-    }
 
     @computed get isLoadable() {
         let {
             isFirstLoad,
             nextUrl,
             isLoading,
-        } = this.loadValues;
+        } = this.loadMoreValues;
         if (isLoading) { // 로딩 중일 때: 로드 불가
             return {
                 status: false,
@@ -153,16 +141,16 @@ class PersonalOrderHistoryStore {
             };
         }
         if (!isFirstLoad && !nextUrl) { // 이후 로드할 내역이 더이상 없을 때: 로드 불가
-            if (this.placedOrdersRegistry.length == 0) {
+            if (this.placedOrdersRegistry.length) {
                 return {
                     status: false,
                     message_code: 'no_more_load'
-                };    
+                };
             } else {
                 return {
                     status: false,
                     message_code: 'no_data'
-                };
+                };    
             }
         }
         if (isFirstLoad) { // 로드하기 전 상태: 로드 가능
