@@ -45,7 +45,7 @@ export default class InvestmentScreen extends Component {
     _onChangeTab = (e) => {
         this.props.transactionHistoryStore.clear();
         try {
-            this.props.transactionHistoryStore.load(e.ref.props.children.props.type);
+            this.props.transactionHistoryStore.changeSelectedOption(e.ref.props.children.props.type);
         } catch (err) { }
     }
 

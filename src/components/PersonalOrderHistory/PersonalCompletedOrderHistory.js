@@ -11,17 +11,18 @@ import { reaction, computed } from 'mobx';
 @inject('pubnub', 'transactionHistoryStore', 'tradingPairStore')
 @observer
 export default class PersonalCompletedOrderHistory extends Component {
-    componentDidMount() {
+    constructor(props) {
+        super(props);
         reaction(
             () => this.props.tradingPairStore.selectedTradingPairName,
             (selectedTradingPairName) => {
-                this.props.transactionHistoryStore.load('TRADE');
+                this.props.transactionHistoryStore.clearTradeHistoryRegistry();
+                this.props.transactionHistoryStore.loadTradeHistory();
             }
         );
-        this.props.transactionHistoryStore.load('TRADE');
-    }
-    componentWillUnmount() {
-        this.props.transactionHistoryStore.clear()
+        this.props.transactionHistoryStore.clearTradeHistoryRegistry();
+        this.props.transactionHistoryStore.loadTradeHistory();
+
     }
     
     @computed get personalCompletedOrderHistoryHead() {
@@ -52,7 +53,7 @@ export default class PersonalCompletedOrderHistory extends Component {
         return (
             <ScrollView style={[styles.body]}>
                 <View style={[styles.tuples]}>
-                    {this.props.transactionHistoryStore.transactionHistory.map((completedOrder, index) => {
+                    {this.props.transactionHistoryStore.tradeHistory.map((completedOrder, index) => {
                         let { 
                             uuid, 
                             amount, price, volume, 

@@ -9,13 +9,18 @@ import PersonalPlacedOrderHistory from './PersonalPlacedOrderHistory';
 import PersonalCompletedOrderHistory from './PersonalCompletedOrderHistory';
 import { observable, action } from 'mobx';
 
-@inject('pubnub', 'tradingPairStore')
+@inject('pubnub', 'tradingPairStore', 'personalOrderHistoryStore', 'transactionHistoryStore')
 @observer
 export default class PersonalOrderHistory extends Component {
     @observable selectedTabType = 'PersonalPlacedOrderHistory'
 
-    _onPressPlacedOrderHistoryTab = action(() => { this.selectedTabType = 'PersonalPlacedOrderHistory'; });
-    _onPressCompletedOrderHistoryTab = action(() => { this.selectedTabType = 'PersonalCompletedOrderHistory'; });
+    _onPressPlacedOrderHistoryTab = action(() => {
+        this.selectedTabType = 'PersonalPlacedOrderHistory';
+    });
+
+    _onPressCompletedOrderHistoryTab = action(() => {
+        this.selectedTabType = 'PersonalCompletedOrderHistory';         
+    });
 
     render() {
         return (
