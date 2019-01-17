@@ -30,11 +30,11 @@ export default class InvestmentScreen extends Component {
     }
 
     componentDidMount() {
-        // if (!this.props.userStore.isLoggedIn) {
-        //     this.props.navigation.navigate('Login', {
-        //         from: 'Investment'
-        //     });
-        // }
+        if (!this.props.userStore.isLoggedIn) {
+            this.props.navigation.navigate('Login', {
+                from: 'Investment'
+            });
+        }
 
         // this.props.pubnub.subscribe(this.pubnubChannel);
     }

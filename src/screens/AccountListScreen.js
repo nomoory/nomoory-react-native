@@ -8,8 +8,10 @@ import Decimal from '../utils/decimal';
 import commonStyle, { color, font } from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import AccountList from '../components/AccountList';
+import { withNavigation } from 'react-navigation';
 
-@inject('accountStore')
+@withNavigation
+@inject('accountStore', 'userStore')
 @observer
 export default class AccountListScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -22,6 +24,14 @@ export default class AccountListScreen extends Component {
             ...headerStyle.blue
         };
     };
+    componentDidMount() {
+        if (!this.props.userStore.isLoggedIn) {
+            this.props.navigation.navigate('Login', {
+                from: 'Accounts'
+            });
+        }
+    }
+    
 
     @observable showPossesionOnly = false;
     @action _handleChangeFilterCheckBox = (e) => {  
