@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import logoSrc from '../../assets/images/more/logo.png'
 
 @withNavigation
-@inject('userStore', 'authStore')
+@inject('userStore', 'authStore', 'modalStore')
 @observer
 export default class EtcScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -25,7 +25,21 @@ export default class EtcScreen extends Component {
         this.props.navigation.navigate('Login');
     }
     _onPressLogout = () => {
-        this.props.authStore.logout();
+        this.props.modalStore.openModal({
+            type: 'preset',
+            title: '로그아웃',
+            content: '로그아웃 하시겠습니까?',
+            buttons: [{
+                title: '확인',
+                onPress: () => {
+                    this.props.authStore.logout(); 
+                    this.props.modalStore.closeModal();
+                }
+            }, {
+                title: '취소',
+                onPress: () => {this.props.modalStore.closeModal()}
+            }]
+        });
     }
     _onPressAnnouncement = (e) => { Linking.openURL('https://coblic.com/announcements'); }
     _onPressZendesk = (e) => { Linking.openURL('https://coblic.zendesk.com/hc/ko'); }
