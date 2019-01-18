@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     searchImageContainer: {
         width: 50,
-        flexDirection: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     searchImage: {

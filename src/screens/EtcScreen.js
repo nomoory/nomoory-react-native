@@ -29,16 +29,18 @@ export default class EtcScreen extends Component {
             type: 'preset',
             title: '로그아웃',
             content: '로그아웃 하시겠습니까?',
-            buttons: [{
-                title: '확인',
-                onPress: () => {
-                    this.props.authStore.logout(); 
-                    this.props.modalStore.closeModal();
-                }
-            }, {
-                title: '취소',
-                onPress: () => {this.props.modalStore.closeModal()}
-            }]
+            buttons: [
+                {
+                    title: '취소',
+                    onPress: () => {this.props.modalStore.closeModal()}
+                },{
+                    title: '확인',
+                    onPress: () => {
+                        this.props.authStore.logout(); 
+                        this.props.modalStore.closeModal();
+                    }
+                }, 
+            ]
         });
     }
     _onPressAnnouncement = (e) => { Linking.openURL('https://coblic.com/announcements'); }
@@ -56,7 +58,7 @@ export default class EtcScreen extends Component {
                     />
                 </View>
                 <ScrollView style={[styles.scrollContainer]}>
-                    <TouchableOpacity style={[styles.scrollItem]}
+                    <TouchableOpacity style={[styles.scrollItem, styles.scrollItemFirst]}
                         onPress={this._onPressAnnouncement}
                         >
                         <Ionicons name="md-checkmark-circle" size={iconSize} color={iconColor} />
@@ -106,10 +108,14 @@ const styles = StyleSheet.create({
     },
     welcomeContainer: {
         width: '100%',
-        height: 300,
+        height: 292,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white'
+    },
+    scrollItemFirst: {
+        borderTopWidth: 1,
+        borderTopColor: '#e9eaea',
     },
     scrollItem: {
         paddingLeft: 15,

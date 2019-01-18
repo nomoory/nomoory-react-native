@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Text } from 'native-base';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import Decimal from '../../utils/decimal';
 import number from '../../utils/number';

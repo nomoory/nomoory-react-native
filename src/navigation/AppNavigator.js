@@ -4,7 +4,7 @@ import {
     createSwitchNavigator
 } from 'react-navigation';
 
-import AuthLoadingScreen from '../screens/AuthLoadingScreen';
+import InitialLoadScreen from '../screens/InitialLoadScreen';
 import LoginScreen from '../screens/LoginScreen';
 import OtpVerificationScreen from '../screens/OtpVerificationScreen';
 import MainTabNavigator from './MainTabNavigator';
@@ -18,11 +18,11 @@ const AuthStack = createStackNavigator(
 
 export default createSwitchNavigator(
     { 
-        AuthLoading: AuthLoadingScreen,
+        InitialLoad: InitialLoadScreen,
         Auth: AuthStack,
         Main: MainTabNavigator,
     },
     { 
-        initialRouteName: 'Main'
+        initialRouteName: 'InitialLoad'
     } 
 );

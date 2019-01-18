@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet } from 'react-native';
-import { View } from 'native-base';
+import { Text, StyleSheet, View } from 'react-native';
 import TotalAssetsEvaluation from './TotalAssetsEvaluation';
 import AssetsAndEvaluationList from './AssetsAndEvaluationList';
 import { inject, observer } from 'mobx-react';

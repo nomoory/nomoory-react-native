@@ -7,7 +7,8 @@ const color = {
     coblicBlue: '#0052f3',
     coblicPaleBlue: '#81a6ef',
     coblicRed: '#da5f6e',
-    coblicGrey: '#dedfe0',
+    coblicGrey: '#999',
+    coblicPaleGrey: '#dedfe0',
     white: '#ffffff'
 };
 

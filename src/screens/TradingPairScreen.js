@@ -2,28 +2,32 @@ import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 
-import { Container, Tab, Tabs, TabHeading} from 'native-base';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { Tab, Tabs, TabHeading } from 'native-base';
+
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+
+import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Animated } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { reaction, computed } from 'mobx';
+import { reaction, computed, observable, action } from 'mobx';
 import OrderBox from '../components/OrderBox';
 import PersonalOrderHistory from '../components/PersonalOrderHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
 import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
+// import { Constants } from 'expo';
 
 
 @inject('pubnub', 'tradingPairStore')
 @observer
 export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
-        this.baseKoreanName= navigation.getParam('baseKoreanName', '토큰');
+        this.baseKoreanName = navigation.getParam('baseKoreanName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
 
         return {
             title: `${this.baseKoreanName} ${this.tradingPairName}`,
-            tabBarVisible: false, 
+            tabBarVisible: false,
             ...headerStyle.white
         };
     };
@@ -32,12 +36,20 @@ export default class TradingPairScreen extends Component {
         super(props);
         this.pubnubChannel = `ORDERBOOK_${this.tradingPairName}`;
         this.props.pubnub.subscribe(this.pubnubChannel);
+
+        this.state = {
+            index: 0,
+            routes: [
+                { key: 'OrderBox', title: '주문' },
+                { key: 'PersonalOrderHistory', title: '거래내역' },
+            ],
+        };
     }
 
     componentWillMount() { console.log('TradingPairScreen will mount |'); }
-    componentWillUnmount() { 
+    componentWillUnmount() {
         console.log('TradingPairScreen | will unmount |');
-        this.props.pubnub.unsubscribe(this.pubnubChannel); 
+        this.props.pubnub.unsubscribe(this.pubnubChannel);
     }
 
     @computed get changeRate() {
@@ -51,6 +63,30 @@ export default class TradingPairScreen extends Component {
         return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_price ? number.putComma(Decimal(change_price).toFixed()) : '- '}`
     }
 
+    _renderTabBar = props => {
+        const inputRange = props.navigationState.routes.map((x, i) => i);
+
+        return (
+            <View style={styles.tabBar}>
+                {props.navigationState.routes.map((route, i) => {
+                    const color = props.position.interpolate({
+                        inputRange,
+                        outputRange: inputRange.map(
+                            inputIndex => (inputIndex === i ? commonStyle.color.coblicBlue : '#222')
+                        ),
+                    });
+                    return (
+                        <TouchableOpacity
+                            style={[styles.tabItem, this.state.index === i ? styles.selectedTabItem : null]}
+                            onPress={() => this.setState({ index: i })}>
+                            <Animated.Text style={[ { color, fontWeight: '600', fontSize: 16 }, ]}>{route.title}</Animated.Text>
+                        </TouchableOpacity>
+                    );
+                })}
+            </View>
+        );
+    };
+
     render() {
         console.log('TradingPairScreen | render |')
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
@@ -59,23 +95,23 @@ export default class TradingPairScreen extends Component {
             change, // 'RISE' | 'FALL'
         } = tradingPair || {};
         return (
-            <Container style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.tradingPairSummaryContainer}>
                     <View style={styles.leftContainer}>
                         <View style={styles.closePrice}>
                             <Text style={styles.closePriceText}>
-                                {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
+                                현재가 {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
                             </Text>
                         </View>
                         <View style={styles.tradingPairSubInfo}>
-                            <Text style={[styles.subText]}>24시간대비</Text>                            
+                            <Text style={[styles.subText]}>24시간대비</Text>
                             <Text style={[styles.subText, commonStyle[change]]}>
                                 {this.changeRate}%
                             </Text>
-                            {   (change === 'FALL' || change === 'RISE') ? 
+                            {(change === 'FALL' || change === 'RISE') ?
                                 <Image
-                                    style={{ width: 16, height: 8 }}                                
-                                    source={ change === 'FALL' ? fallIcon : riseIcon }
+                                    style={{ width: 16, height: 8 }}
+                                    source={change === 'FALL' ? fallIcon : riseIcon}
                                 /> : null
                             }
                             <Text style={[styles.subText, commonStyle[change]]}>
@@ -86,21 +122,32 @@ export default class TradingPairScreen extends Component {
                     <View style={styles.rightContainer}>
                     </View>
                 </View>
-                <Tabs initialPage={0}>
+                {/* <Tabs initialPage={0}>
                     <Tab heading={<TabHeading style={styles.tabStyle}><Text>주문</Text></TabHeading>}>
                         <OrderBox />
                     </Tab>
-                    {/* <Tab heading={<TabHeading style={styles.tabStyle}><Text>차트</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>차트</Text></TabHeading>}>
                         <View><Text>차트</Text></View>
-                    </Tab> */}                   
-                    {/* <Tab heading={<TabHeading style={styles.tabStyle}><Text>시세</Text></TabHeading>}>
+                    </Tab>                    
+                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>시세</Text></TabHeading>}>
                         <View><Text>시세</Text></View>
-                    </Tab> */}
+                    </Tab>
                     <Tab heading={<TabHeading style={styles.tabStyle}><Text>거래내역</Text></TabHeading>}>
                         <PersonalOrderHistory />
                     </Tab>
-                </Tabs>
-            </Container>
+                </Tabs> */}
+
+                <TabView
+                    navigationState={this.state}
+                    renderScene={SceneMap({
+                        OrderBox: () => <OrderBox />,
+                        PersonalOrderHistory: PersonalOrderHistory,
+                    })}
+                    onIndexChange={index => this.setState({ index })}
+                    renderTabBar={this._renderTabBar}
+                    initialLayout={{ width: Dimensions.get('window').width }}
+                />
+            </View>
         )
     }
 }
@@ -114,7 +161,8 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         padding: 6,
-        paddingLeft: 12
+        paddingLeft: 12,
+        backgroundColor: 'white'
     },
     closePriceText: {
         fontSize: 22,
@@ -136,5 +184,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderBottomWidth: 0,
         height: 40
-    }
+    },
+
+    // tab
+    tabBar: {
+        flexDirection: 'row',
+        // paddingTop: Constants.statusBarHeight,
+    },
+    selectedTabItem: {
+        borderBottomWidth: 6,
+        borderBottomColor: commonStyle.color.coblicBlue 
+    },
+    tabItem: {
+        flex: 1,
+        alignItems: 'center',
+        padding: 16,
+        backgroundColor: 'white'
+    },
 })

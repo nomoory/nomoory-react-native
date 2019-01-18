@@ -43,7 +43,7 @@ export default class TotalAssetsEvaluation extends Component {
                         </View>
                     </View>
                 </View>
-                <View style={ styles.investInfoContainer }>
+                {/* <View style={ styles.investInfoContainer }>
                     <View style={[styles.investInfoSubContainer]}>
                         <Text style={[styles.investInfoTitle]}>총 매수금액</Text>
                         <Text style={[styles.investInfoValue]}>{ total_token_buying_price ? number.putComma(Decimal(total_token_buying_price).toFixed(0)) : '-'}원</Text>
@@ -71,7 +71,7 @@ export default class TotalAssetsEvaluation extends Component {
                             { evaluated_revenue ? number.putComma(Decimal(evaluated_revenue).toFixed(0)) : '-'}원
                         </Text>
                     </View>
-                </View>
+                </View> */}
             </View>
         )
   }
@@ -81,19 +81,23 @@ const styles = StyleSheet.create({
     container: {
         padding: 15,
         paddingTop: 16,
-        paddingBottom: 20,
+        paddingBottom: 16,
         borderBottomColor: '#dedfe0',
-        borderBottomWidth: '1.5',
+        borderBottomWidth: 1,
+        backgroundColor: 'white'
+    },
+    assetInfoContainer: {
+        marginBottom: 6,
     },
     assetInfoTitleContainer: {
-
+        marginTop: 6,
     },
     assetInfoTitle: {
         fontWeight: '700',
         fontSize: 20
     },
     assetInfoContentContainer: {
-        marginTop: 12,
+        marginTop: 10,
         flexDirection: 'row',
     },
     assetItemContainer: {
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
 
     // investment info
     investInfoContainer: {
-        marginTop: 8,
+        marginTop: 10,
         flexDirection: 'row',
     },
     investInfoSubContainer: {
@@ -119,7 +123,6 @@ const styles = StyleSheet.create({
         alignItems: 'stretch'
     },
     investInfoTitle: {
-        marginTop: 10,
         textAlign: 'left',
         fontWeight: '500',
         color: '#747474'

@@ -51,8 +51,8 @@ export default class AccountDepositWithdrawScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        hegith: '100%',
-        flexDirection: 'column'
+        // width: '100%',
+        // hegith: '100%',
+        // flexDirection: 'column'
     }
 })

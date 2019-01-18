@@ -14,6 +14,7 @@ class OrderFeeStore {
         this.isLoading = true;
         return agent.loadOrderFee()
             .then(action((response) => {
+                console.log('res orderfee', response)
                 this.orderFee = response.data;
                 this.isLoading = false;
             }))

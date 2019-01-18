@@ -97,9 +97,10 @@ export default class LoginScreen extends Component {
     }
 }
 
-const width = 278;
-const height = 47;
-const marginTop = 20;
+const width = 270;
+const height = 45;
+const marginTop = 16;
+const borderRadius = 6;
 
 const styles = StyleSheet.create({
     container: {
@@ -111,14 +112,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     logoContainer: { 
-        paddingTop: 150,
-        paddingBottom: 20
+        paddingTop: 138,
+        paddingBottom: 30
     },
     inputContainer: {
         width: '100%',
         flexDirection: 'column',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 30,
     },
     input: {
         width,
@@ -128,7 +129,9 @@ const styles = StyleSheet.create({
         paddingLeft: 18,
         marginTop,
         fontSize: 16,
-        color: '#333333'
+        color: '#333333',
+        borderRadius
+
     },
     loginButton: {
         width,
@@ -137,6 +140,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffc107',
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius
     },
     loginButtonText: {
         color: color.coblicBlue,

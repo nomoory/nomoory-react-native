@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { Container } from 'native-base';
 import { action, observable } from 'mobx';
 import number from '../utils/number';
 import Decimal from '../utils/decimal';
@@ -47,7 +46,7 @@ export default class AccountListScreen extends Component {
     render() {
         let { total_evaluated_price_in_quote } = this.props.accountStore.totalAssetsEvaluation || {};
         return (
-            <Container style={[styles.container]}>
+            <View style={[styles.container]}>
                 <View style={[styles.totalEvaluatedPriceContainer]}>
                     <Text style={[styles.title]}>총 보유자산</Text>
                     <View style={[styles['priceContainer']]}>
@@ -95,7 +94,7 @@ export default class AccountListScreen extends Component {
                 <View style={[styles['accountListContainer']]}>
                     <AccountList showPossesionOnly={this.showPossesionOnly} showDepositableOnly={this.showDepositableOnly}/>
                 </View>
-            </Container>
+            </View>
         );
     };
 }
@@ -106,6 +105,7 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         flexDirection: 'column',
+        backgroundColor: 'white'
     },
     totalEvaluatedPriceContainer: {
         width: '100%',
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         height: 18,
         borderRadius: 11,
         borderWidth: 1.5,
-        borderColor: color.coblicGrey,
+        borderColor: color.coblicPaleGrey,
         backgroundColor: color.white,
         marginRight: 4,
         marginLeft: 10,

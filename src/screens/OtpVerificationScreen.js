@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, TextInput } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { Container, Content, Form, Item, Label, Button } from 'native-base';
 import { Linking } from 'react-native';
 import { color } from '../styles/commonStyle';
 import { action, observable } from 'mobx';
@@ -35,7 +34,7 @@ export default class OtpVerificationScreen extends Component {
 
     render() {
         return (
-            <Container style={[styles.container]}>
+            <View style={[styles.container]}>
                 <View style={[styles.otpCodeInputContainer]}>
                     <Text style={[styles.otpCodeInputTitle]}>OTP 코드</Text>
                     <TextInput style={[styles.otpCodeInput]}
@@ -50,7 +49,7 @@ export default class OtpVerificationScreen extends Component {
                         <Text onPress={this.onPressZendesk}>{' 고객센터'}</Text>로 문의해주세요.
                     </Text>
                 </View>
-            </Container>
+            </View>
         );
     }
 }

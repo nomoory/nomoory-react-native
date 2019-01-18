@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Container, Content, Button, Text } from 'native-base';
+import { StyleSheet, View, Button, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 
 const buttons = [

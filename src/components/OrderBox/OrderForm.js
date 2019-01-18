@@ -143,7 +143,7 @@ const orderFormStyle = StyleSheet.create({
         borderColor: '#d8dbde',
         width: '100%',
         height: 36,
-        alignItems: 'cneter'
+        alignItems: 'center'
     },
     setVolumeButton: {
         flex: 1,

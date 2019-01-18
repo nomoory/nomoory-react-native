@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import commonStyle, { color } from '../../styles/commonStyle';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Container, Header, Text, Button, Item, Input } from 'native-base';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
@@ -24,7 +23,7 @@ export default class PersonalOrderHistory extends Component {
 
     render() {
         return (
-            <Container style={[styles.container]}>
+            <View style={[styles.container]}>
                 <View style={[styles.tabs]}>
                     <TouchableOpacity 
                         style={[
@@ -53,7 +52,7 @@ export default class PersonalOrderHistory extends Component {
                 </View>
                 { this.selectedTabType === 'PersonalPlacedOrderHistory' && <PersonalPlacedOrderHistory />}
                 { this.selectedTabType === 'PersonalCompletedOrderHistory' && <PersonalCompletedOrderHistory />}
-            </Container>
+            </View>
         );
     }
 }
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
 
         borderStyle: 'solid',
         borderWidth: 0.5,
-        borderColor: color.coblicGrey,
+        borderColor: color.coblicPaleGrey,
         color: '#747474'
     },
     selected: {

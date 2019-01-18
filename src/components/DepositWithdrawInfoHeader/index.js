@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import commonStyle from '../../styles/commonStyle';
 import { Text, StyleSheet, View } from 'react-native';
-import { Container } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import { QUOTE_SYMBOL } from '../../stores/accountStore';
 import number from '../../utils/number';

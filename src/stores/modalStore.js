@@ -20,8 +20,7 @@ class ModalStore {
     openModal = action(({type, title, content, buttons, onClose}) => {
         this.closeModal();
         this.clear();
-
-        this.type = type || 'error';       
+        this.type = type || 'error';
         this.title = title || '';
         this.content = content || '';
         this.buttons = buttons || this.initial.buttons;

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import commonStyles, { font }from '../../styles/commonStyle';
-import { StyleSheet, View, ScrollView, ListView } from 'react-native';
-import { Container, Header, Text, Button, Item, Input } from 'native-base';
+import { StyleSheet, View, Text, ListView } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
@@ -121,11 +120,11 @@ export default class PersonalCompletedOrderHistory extends Component {
 
     render() {
         return (
-            <Container style={[styles.container]}>
+            <View style={[styles.container]}>
                 {/* <Loading isOpened={this.props.personalOrderHistoryStore.isLoading} /> */}
                 {this.personalCompletedOrderHistoryHead}
                 {this._renderPersonalCompoletedOrderHistoryBody()}
-            </Container>
+            </View>
         )
     }
 }

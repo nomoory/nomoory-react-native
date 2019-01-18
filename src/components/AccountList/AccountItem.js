@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Container } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import Decimal from '../../utils/decimal.js';
 import number from '../../utils/number';
@@ -14,7 +13,7 @@ export default class AccountItem extends Component {
     _onPressBalanceItemrRow = (currency) => (e) => {
         if (                    
             // !account.is_depositable || 
-            ['KRW', 'CT', 'TOKA'].includes(currency)
+            !['BTC', 'BCH', 'ETH'].includes(currency)
         ) { /* show 입금 불가 modal */ 
 
             this.props.modalStore.openModal({
@@ -80,7 +79,7 @@ export default class AccountItem extends Component {
                     </View> */}
                     <View style={[styles.emptyColumn]}>
                         { 
-                            !['KRW', 'CT', 'TOKA'].includes(asset_symbol) ?
+                            ['BTC', 'BCH', 'ETH'].includes(asset_symbol) ?
                             <Image
                                 style={{ width: 15, resizeMode: 'contain' }}
                                 source={images.buttons.account}

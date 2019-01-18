@@ -47,17 +47,17 @@ class CommonModal extends Component {
                         <View style={styles.buttons}>
                             { 
                                 buttons && buttons.map((button, index) => {
-                                    let { style, title, onPress } = button;
+                                    let { containerStyle, textStyle, title, onPress } = button;
                                     return (
                                         <TouchableOpacity
                                             style={[
                                                 styles.button, 
-                                                style, 
+                                                containerStyle, 
                                                 index !== buttons.length - 1 && styles.borderOnRight
                                             ]}
                                             onPress={onPress}
                                             >
-                                            <Text>{title}</Text>
+                                            <Text style={[styles.buttonText, textStyle]}>{title}</Text>
                                         </TouchableOpacity>
                                     )
                                 })
@@ -124,16 +124,17 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        borderTopColor: color.coblicGrey,
+        borderTopColor: color.coblicPaleGrey,
         borderTopWidth: 1,
     },
     buttonText: {
         fontSize: font.size.default,
+        fontWeight: '600',
         color: color.coblicBlue
 
     },
     borderOnRight: {
-        borderRightColor: color.coblicGrey,
+        borderRightColor: color.coblicPaleGrey,
         borderRightWidth: 1,
     }
 });

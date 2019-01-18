@@ -26,23 +26,25 @@ export default class ScrollLoading extends Component {
                 // ref={this.loadingRef}
                 // onClick={(e) => { e.stopPropagation() }}
             >
-                {this.props.isLoadable.message_code === 'no_data' &&
-                    <View>
-                        <Text className='coblic-centered-text-container' style={[ styles.textContainer ]}>
+                <View style={[ styles.contentContainer ]}>
+                    {
+                        this.props.isLoadable.message_code === 'no_data' &&
+                        <Text style={[ styles.notificationText ]}>
                             불러올 데이터가 없습니다.
                         </Text>
-                    </View>
-                }
-                {this.props.isLoadable.message_code === 'no_more_load' &&
-                     <View>
-                        <Text className='coblic-centered-text-container' style={[styles.textContainer]}>
+                    }
+                    {
+                        this.props.isLoadable.message_code === 'no_more_load' &&
+                        <Text style={[styles.notificationText]}>
                             더 이상 불러올 데이터가 없습니다.
                         </Text>
-                    </View>
-                }
-                {this.props.isLoading &&
-                    <ActivityIndicator size="large" color={commonStyles.color.coblicPaleBlue}/>
-                }
+                    }
+                    {
+                        this.props.isLoading &&
+                        <ActivityIndicator size="large" color={commonStyles.color.coblicPaleBlue}/>
+                    }
+                </View>
+
             </View>
         )
     }
@@ -52,9 +54,17 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         flex: 1,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        alignItems: 'center'
     },
-    textContainer: {
-        height: 80
+    contentContainer: {
+        height: 70,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    notificationText: {
+        color: commonStyles.color.coblicGrey,
+        fontSize: 15
+
     }
 });

@@ -1,7 +1,7 @@
 import { observable, action, computed, reaction } from 'mobx';
-import commonStore from './commonStore';
 import agent from '../utils/agent';
 import accountStore from './accountStore';
+import authStore from './authStore';
 // import Sentry from '../utils/Sentry';
 
 class UserStore {
@@ -61,7 +61,7 @@ class UserStore {
             }))
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
-                commonStore.destroyTokenAndUuid();
+                authStore.destroyAccessToken();
                 this.isLoading = false;
                 throw err;
             }));

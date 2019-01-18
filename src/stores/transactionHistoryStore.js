@@ -34,9 +34,9 @@ class TransactionHistoryStore {
         isFirstLoad: true
     }
 
-    @action changeSelectedOption(selectedOption) {
+    @action async changeSelectedOption(selectedOption) {
         this.loadMoreValues.selectedOption = selectedOption;
-        this.load();
+        await this.load();
     }
 
     @observable registry = observable.array();

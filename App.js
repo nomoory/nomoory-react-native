@@ -26,9 +26,8 @@ export default class App extends React.Component {
     @observable order_pubnub_channel = null;
     @observable accuount_pubnub_channel = null;
 
-    async componentDidMount() {
+    componentDidMount() {
         // 유저가 등록되면 ORDER pubnub을 subscribe함
-
         // ORDER: 주문의 발생으로 인한 알림이 언제나 떠야하기에 아래의 reaction을 넣음
         // ACCOUNT: 내 계좌의 입출금 정보는 항상 최신 사항을 반영해야하며, 투자와 입출금 페이지 및 거래소에서도 사용되므로 항상 subscribe 하게함
         // pubnub을 호출하려면 component에서 가능하기에 store에서 실행하지 않음
@@ -50,22 +49,6 @@ export default class App extends React.Component {
                 }
             }
         );
-        
-        // 거의 모든 페이지에서 trading pair의 close pirce를 참조하기에 실시간 변동을 위해 subscribe 함
-        this.ticker_pubnub_channel = 'TEMP|TICKER';
-        pubnub.subscribe(this.ticker_pubnub_channel);
-        
-        if (stores.commonStore.token) {
-            await stores.userStore.loadUser();
-        }
-
-        stores.orderFeeStore.loadOrderFee();
-        stores.commonStore.setAppLoaded(true);
-        await stores.tradingPairStore.loadTradingPairs();
-        // await stores.accountStore.loadAccounts();
-
-        // TODO test 후 지우기
-        stores.authStore.login();
     }
     render() {
         return (

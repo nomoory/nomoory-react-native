@@ -66,12 +66,13 @@ export default class DepositBox extends Component {
                     </Text>
                 </View>
                 {
-                    (asset_min_deposit_amount && Decimal(asset_min_deposit_amount).toFixed() !== '0') &&
+                    (asset_min_deposit_amount && Decimal(asset_min_deposit_amount).toFixed() !== '0') ?
                     <View style={[styles.addressDescriptionContainer]}>
                         <Text style={[styles.addressDescriptionText]}>
                             {`* 최소입금금액은 ${number.putComma(Decimal(asset_min_deposit_amount).toFixed())} ${asset_symbol} 입니다.`}
                         </Text>
-                    </View>
+                    </View> :
+                    null
                 }
                 <TouchableOpacity style={styles.copyAddressButton}
                     onPress={() => this._setClipboardContent(wallet_address)}
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 4,
-        borderColor: commonStyle.color.coblicGrey,
+        borderColor: commonStyle.color.coblicPaleGrey,
         borderWidth: 1,
     },    
     addressText: {

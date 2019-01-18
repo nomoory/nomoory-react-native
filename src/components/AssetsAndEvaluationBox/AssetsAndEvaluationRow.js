@@ -4,9 +4,6 @@ import { inject, observer } from 'mobx-react';
 import Decimal from '../../utils/decimal';
 import number from '../../utils/number';
 
-import { observe } from 'mobx';
-import constants from '../../global/constants';
-
 @inject('accountStore')
 @observer
 export default class AssetsAndEvaluationRow extends Component {
@@ -45,9 +42,11 @@ export default class AssetsAndEvaluationRow extends Component {
                             <Text style={[styles.upperRightItemTitle]}>평가 손익</Text>
                             <Text style={[
                                 styles.upperRightItemValue,
-                                isFall ? styles.fall : null,
-                                isRise ? styles.rise : null,
-                            ]}>{isRise ? '+' : ''}{ value_change ? number.putComma(Decimal(value_change).toFixed(0)) : '- ' }원</Text>
+                                // isFall ? styles.fall : null,
+                                // isRise ? styles.rise : null,
+                            ]}>
+                                {/* {isRise ? '+' : ''}{ value_change ? number.putComma(Decimal(value_change).toFixed(0)) : '- ' } */}
+                                - 원</Text>
                         </View>
                         <View style={[styles.upperRightItemContainer]}>
                             <Text style={[styles.upperRightItemTitle]}>평가 수익률</Text>
@@ -55,7 +54,9 @@ export default class AssetsAndEvaluationRow extends Component {
                                 styles.upperRightItemValue,
                                 // isFall ? styles.fall : null,
                                 // isRise ? styles.rise : null,
-                            ]}>{/*isRise ? '+' : ''*/}{ value_change_rate ? number.putComma(Decimal(value_change_rate).toFixed(0)) : '- ' }%</Text>
+                            ]}>
+                                {/* {isRise ? '+' : ''}{ value_change_rate ? number.putComma(Decimal(value_change_rate).toFixed(0)) : '- ' } */}
+                                - %</Text>
                         </View>
                     </View>
                 </View>
@@ -66,20 +67,20 @@ export default class AssetsAndEvaluationRow extends Component {
                             <Text style={[styles.bottomItemTitle]}>보유수량</Text>
                             <Text style={[styles.bottomItemValue]}>{ balance ? number.putComma(Decimal(balance).toFixed(0)) : '- ' } {asset_symbol}</Text>
                         </View>
-                        <View style={styles.bottomItemContainer}>
+                        {/* <View style={styles.bottomItemContainer}>
                             <Text style={[styles.bottomItemTitle]}>매수 평균가</Text>
                             <Text style={[styles.bottomItemValue]}>{ avg_fiat_buy_price ? number.putComma(Decimal(avg_fiat_buy_price).toFixed(0)) : '- ' }원</Text>
-                        </View>
+                        </View> */}
                     </View>
                     <View style={ styles.bottomSubContainer }>
-                        <View style={styles.bottomItemContainer}>
-                            <Text style={[styles.bottomItemTitle]}>매수 금액</Text>
-                            <Text style={[styles.bottomItemValue]}>{ value_bought ? number.putComma(Decimal(value_bought).toFixed(0)) : '- ' }원</Text>
-                        </View>
                         <View style={styles.bottomItemContainer}>
                             <Text style={[styles.bottomItemTitle]}>현재 가치</Text>
                             <Text style={[styles.bottomItemValue]}>{ value_present ? number.putComma(Decimal(value_present).toFixed(0)) : '- ' }원</Text>
                         </View>
+                        {/* <View style={styles.bottomItemContainer}>
+                            <Text style={[styles.bottomItemTitle]}>매수 금액</Text>
+                            <Text style={[styles.bottomItemValue]}>{ value_bought ? number.putComma(Decimal(value_bought).toFixed(0)) : '- ' }원</Text>
+                        </View> */}
                     </View>
                 </View>
             </View>
@@ -90,6 +91,7 @@ export default class AssetsAndEvaluationRow extends Component {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
+        backgroundColor: 'white'
     },
     upperContainer: {
         padding: 15,
@@ -98,6 +100,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: '#f7f8fa',
+
+        borderTopWidth: 0.5,
+        borderTopColor: '#dedfe0',
     },
     upperLeftContainer: {
         flex: 4
@@ -136,10 +141,11 @@ const styles = StyleSheet.create({
 
     bottomContainer: {
         padding: 15,
-        paddingTop: 10,
-        paddingBottom: 4,
+        paddingTop: 12,
+        paddingBottom: 7,
         flexDirection: 'row',
-        borderBottomWidth: 1,
+
+        borderBottomWidth: 0.5,
         borderBottomColor: '#dedfe0',
     },
     bottomSubContainer: {

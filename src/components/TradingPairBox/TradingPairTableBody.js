@@ -1,17 +1,6 @@
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    Button,
-    Text,
-    ScrollView,
-    TouchableOpacity
-} from 'react-native';
-import { } from 'native-base';
-import {
-    inject,
-    observer
-} from 'mobx-react';
-import { computed, observable } from 'mobx';
+import { StyleSheet, ScrollView } from 'react-native';
+import { inject, observer } from 'mobx-react';
 import TradingPairRow from './TradingPairRow';
 
 // TODO 정렬, 필터 정보 받아서 이에 맞게 rows 걸러주기

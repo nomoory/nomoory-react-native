@@ -1,6 +1,5 @@
 import accountStore from './accountStore';
 import authStore from './authStore';
-import commonStore from './commonStore';
 import modalStore from './modalStore';
 import orderStore from './orderStore';
 import orderbookStore from './orderbookStore';
@@ -16,7 +15,6 @@ import transactionHistoryStore from './transactionHistoryStore';
 const stores = {
     accountStore,
     authStore,
-    commonStore,
     modalStore,
     orderStore,
     orderbookStore,

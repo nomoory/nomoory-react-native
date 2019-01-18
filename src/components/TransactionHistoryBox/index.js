@@ -31,7 +31,7 @@ export default class TransactionHistoryBox extends Component {
     @computed get personalCompletedOrderHistoryHead() {
         return (
             <View style={[styles.head]}>
-                <View style={[styles.column]}>
+                <View style={[styles.column, styles.firstColumn]}>
                     <View style={[styles.columnItem]}>
                         <Text style={[styles.headColumnText]}>주문유형</Text>
                     </View>
@@ -84,7 +84,7 @@ export default class TransactionHistoryBox extends Component {
                     let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
                     return (
                         <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
-                            <View style={[styles.column]}>
+                            <View style={[styles.column, styles.firstColumn]}>
                                 <View style={[styles.columnItem, commonStyles[transaction_type], ]}>
                                     <Text style={[styles.tupleColumnText, styles.dateText]}>{base_symbol} </Text>
                                     <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>
@@ -138,7 +138,6 @@ export default class TransactionHistoryBox extends Component {
     render() {
         return (
             <View style={[styles.container]}>
-                {/* <Loading isOpened={this.props.personalOrderHistoryStore.isLoading} /> */}
                 {this.personalCompletedOrderHistoryHead}
                 {this._renderPersonalCompoletedOrderHistoryBody()}
             </View>
@@ -150,7 +149,8 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         flex: 1,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        backgroundColor: 'white'
     },
     head: {
         width: '100%',
@@ -165,6 +165,9 @@ const styles = StyleSheet.create({
     headColumnText: {
         color: '#333333',
         fontSize: 14,
+    },
+    firstColumn: {
+        flex: 0.6,
     },
     column: {
         flex: 1,

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, ScrollView, View } from 'react-native';
-import { Container } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import AccountItem from './AccountItem';
 import Decimal from '../../utils/decimal';
@@ -30,7 +29,7 @@ export default class AccountList extends Component {
                 this.props.showDepositableOnly && 
                 (
                     // !account.is_depositable || 
-                    ['KRW', 'CT', 'TOKA'].includes(account.asset_symbol)
+                    !['BTC', 'BCH', 'ETH'].includes(account.asset_symbol)
                 )
             ) {
                 return null;
@@ -43,7 +42,7 @@ export default class AccountList extends Component {
     render() {
         console.log('accounts', this.props.accountStore.accounts)
         return (
-            <Container style={[styles.container]}>
+            <View style={[styles.container]}>
                 <View>
                     {/* <View style={styles.header}>
                         <View style={[styles.test]}><Text style={[styles.test]}>코인명</Text></View>
@@ -56,7 +55,7 @@ export default class AccountList extends Component {
                         </View>
                     </ScrollView>
                 </View>
-            </Container>
+            </View>
         );
     }
 }
