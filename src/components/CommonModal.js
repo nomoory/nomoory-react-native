@@ -99,9 +99,10 @@ const styles = StyleSheet.create({
         color: color.coblicBlue
     },
     contentScrollableContainer: {
-        flexDirection: 'column',
         marginBottom: 5,
         paddingTop: 5,
+        paddingLeft: 30,
+        paddingRight: 30,
         paddingBottom: 5,
         marginBottom: 15,
         minHeight: 40,

@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
 import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
+import TRANSLATIONS from '../../TRANSLATIONS';
 import { withNavigation } from 'react-navigation';
 
 @withNavigation
@@ -36,36 +37,42 @@ export default class BuyOrderForm extends Component {
             totalGain,
         } = this.props.orderStore || {};
         const { price, volume } = values || {};
-        
-        try {
-            this.props.modalStore.openModal({
-                title: '주문 확인',
-                content: <Text style={{ textAlign: 'left', fontSize: 16, marginLeft: 20}}>{`
-                    거래자산:  ${baseSymbol}/${quoteSymbol}
-                    구매가격:  ${number.putComma(price)} ${quoteSymbol}
-                    구매수량:  ${number.putComma(volume)} ${baseSymbol}
-                    수수료:  ${number.putComma(number.getFixedPrice(maxFee, baseSymbol)) } ${baseSymbol}
-                    수령량:  ${number.putComma(totalGain)} ${baseSymbol}\n
-                    총금액:  ${number.putComma(number.getFixedPrice(amount, quoteSymbol))} ${quoteSymbol}
-                `}</Text>,
-                buttons: [
-                    {
-                        title: '취소',
-                        onPress: () => {this.props.modalStore.closeModal()}
-                    },{
-                        title: '확인',
-                        onPress: () => {
-                            this.props.orderStore.registerOrder();
-                            this.props.modalStore.closeModal();
-                        }
-                    }, 
-                ]
-            })
-        } catch (err) {
+        if (this.props.orderStore.isValidOrder.state === false) {
             this.props.modalStore.openModal({
                 title: '주문 실패',
-                content: '입력 값들을 확인해주세요.',
+                content: TRANSLATIONS[this.props.orderStore.isValidOrder.message_code],
             })
+        } else { 
+            try {
+                this.props.modalStore.openModal({
+                    title: '주문 확인',
+                    content: <Text style={{ textAlign: 'center', fontSize: 16}}>{`
+거래자산 : ${baseSymbol}/${quoteSymbol}
+구매가격 : ${number.putComma(price)} ${quoteSymbol}
+구매수량 : ${number.putComma(volume)} ${baseSymbol}
+수수료 : ${number.putComma(number.getFixedPrice(maxFee, baseSymbol)) } ${baseSymbol}
+수령량 : ${number.putComma(totalGain)} ${baseSymbol}\n
+총금액 : ${number.putComma(number.getFixedPrice(amount, quoteSymbol))} ${quoteSymbol}
+                    `}</Text>,
+                    buttons: [
+                        {
+                            title: '취소',
+                            onPress: () => {this.props.modalStore.closeModal()}
+                        },{
+                            title: '확인',
+                            onPress: () => {
+                                this.props.orderStore.registerOrder();
+                                this.props.modalStore.closeModal();
+                            }
+                        }, 
+                    ]
+                })
+            } catch (err) {
+                this.props.modalStore.openModal({
+                    title: '주문 실패',
+                    content: '입력 값들을 확인해주세요.',
+                })
+            }
         }
     }
     _onPressIncreasePrice = (e) => { this.props.orderStore.increasePriceByButton(); }

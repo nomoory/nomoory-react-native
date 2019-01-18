@@ -98,11 +98,7 @@ class NumberHelper {
                 result_string = price_decimal.toFixed(0);
             }
         } else if (baseSymbol === "CT") {
-            if (price_decimal.lessThan(100)) {
-                result_string = Decimal(price_decimal.toFixed(2)).toFixed();
-            } else {
-                result_string = price_decimal.toFixed(0);
-            }
+            result_string = Decimal(price_decimal.toFixed(2)).toFixed();
         } else {
             result_string = Decimal(price_decimal.toFixed(8)).toFixed();
         }
