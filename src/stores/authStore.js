@@ -33,7 +33,7 @@ class AuthStore {
     @observable errors = null;
 
     @observable loginValues = {
-        email: 'junhyek+app@coblic.com',
+        email: 'junhyek+otp@coblic.com',
         password: 'sdfsdf!!'
     }
 
@@ -67,6 +67,8 @@ class AuthStore {
                     otp_code: ''            
                 };
             } else {
+                console.log('token received: ', user.access_token)
+                console.log('user received: ', user)
                 this.setAccessToken(user.access_token);
                 this.setUserUuid(user.uuid);
                 delete user.access_token;                
@@ -84,13 +86,17 @@ class AuthStore {
     }
 
     /* OTP Verification For Login */
-    @observable access_token = null;
-    @observable user_uuid = null; // login, otp인증시 token과 함게 저장하고 사용/ 새로운 유저 로그인시 변경
-
-    @action hasAccessToken() { return this.access_token ? true : false; }
-    @action async setAccessToken(accessToken) { await SecureStore.setItemAsync('access_token', accessToken) }
-    @action setUserUuid(userUuid) { this.user_uuid = userUuid; }
-    @action destroyAccessToken() { this.setAccessToken(null); }
+    @action async hasAccessToken() {
+        let hasAccessToken = await SecureStore.getItemAsync('access_token') ? true : false;
+        return hasAccessToken;
+    }
+    @action async setAccessToken(accessToken) { await SecureStore.setItemAsync('access_token', accessToken); }
+    @action async setUserUuid(userUuid) { await SecureStore.setItemAsync('user_uuid', userUuid); }
+    @action async destroyAccessToken() { 
+        
+        SecureStore.deleteItemAsync('access_token'); 
+        SecureStore.deleteItemAsync('user_uuid');
+    }
 
     @observable otpVerificationValues = {
         needOtpVerificationToLogin: false,
@@ -109,7 +115,7 @@ class AuthStore {
             temporaryEmail: '',
             otp_code: ''
         };
-    }    
+    }
 
     @action verifyOTPLogin() {
         this.isLoading = true;
@@ -176,6 +182,7 @@ class AuthStore {
         .then(action((response) => {
             let user = response.data;
             this.setAccessToken(user.access_token);
+            this.setUserUuid(user.uuid);
             delete user.access_token;
             userStore.saveUser(user);
             this.clearSignupValues();

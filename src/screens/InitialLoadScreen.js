@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, Button, ActivityIndicator, Image } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import commonStyle from '../styles/commonStyle'
+import { SecureStore } from 'expo';
 import { withNavigation } from 'react-navigation';
 
 @withNavigation
@@ -18,9 +19,11 @@ export default class InitialLoadScreen extends Component {
         this.props.pubnub.subscribe(this.ticker_pubnub_channel);
         await this.props.orderFeeStore.loadOrderFee();
         await this.props.tradingPairStore.loadTradingPairs();
+        let accessToken = await SecureStore.getItemAsync('access_token');
+        let userUuid = await SecureStore.getItemAsync('user_uuid');
+        if (accessToken) { await this.props.userStore.loadUser(userUuid); }
 
-        if (this.props.authStore.access_token) { await this.props.userStore.loadUser(); }
-        if (!this.props.userStore.isLoggedIn) { await this.props.authStore.login(); } 
+        // if (!this.props.userStore.isLoggedIn) { await this.props.authStore.login(); } 
 
         this._moveToMainStack();
     }
@@ -30,8 +33,8 @@ export default class InitialLoadScreen extends Component {
             <View style={styles.container}>
                 <View style={[styles.logoContainer]}>
                     <Image
-                        style={{width: 220, resizeMode: 'contain'}}
-                        source={require('../../assets/images/login/ic_navi_logo.png')}
+                        style={{width: '100%', resizeMode: 'contain'}}
+                        source={require('../../assets/splash_icon.png')}
                     />
                 </View>
                 <ActivityIndicator style={[styles.loadingIndicator]}size="large" color={commonStyle.color.coblicPaleBlue}/>
@@ -40,7 +43,7 @@ export default class InitialLoadScreen extends Component {
     }
 
     _moveToMainStack = () => {
-        this.props.navigation.navigate('Main');
+        this.props.navigation.navigate('Exchange');
     }
 }
 
@@ -53,6 +56,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     logoContainer: {
+        width: '100%',
     },
     loadingIndicator: {
         position: 'absolute',

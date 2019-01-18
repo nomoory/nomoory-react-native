@@ -5,6 +5,7 @@ import { observable, action } from 'mobx';
 import BuyOrderForm from './BuyOrderForm';
 import SellOrderForm from './SellOrderForm';
 import RealtimeTradeHistory from './RealtimeTradeHistory';
+import commonStyle from '../../styles/commonStyle';
 
 @inject('orderStore')
 @observer
@@ -201,11 +202,13 @@ const orderFormStyle = StyleSheet.create({
         alignItems: 'center'
     },
     blueButton: {
-        backgroundColor: '#0042b7'
-
+        backgroundColor: commonStyle.color.coblicBlue,
     },
     redButton: {
-        backgroundColor: '#c45664'
+        backgroundColor: commonStyle.color.coblicRed,
+    },
+    yellowButton: {
+        backgroundColor: commonStyle.color.coblicYellow,
     },
     buttonText: {
         color: 'white'

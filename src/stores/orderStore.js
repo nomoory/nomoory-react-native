@@ -164,21 +164,25 @@ class OrderStore {
     @action setTradingPair(tradingPair) { this.values.trading_pair = tradingPair; }
     @action setSide(side) { this.values.side = side; }
     @action setVolumeByRate(rate) {
-        let { side, price } = this.values;
-        let maximumOrderableVolume = '0';
-        if (side === 'BUY') {
-            let symbol = this.quoteSymbol;
-            let account  = accountStore.getAccountByAssetSymbol(symbol) || {};
-            let liquid = account.liquid || '0';
-
-            maximumOrderableVolume = Decimal(liquid).mul(rate).div(price).toFixed(8, Decimal.ROUND_DOWN);
-        } else {
-            let symbol = this.baseSymbol;
-            let account  = accountStore.getAccountByAssetSymbol(symbol) || {};
-            let liquid = account.liquid;
-            maximumOrderableVolume = Decimal(liquid).mul(rate).toFixed(8, Decimal.ROUND_DOWN);
+        try {
+            let { side, price } = this.values;
+            let maximumOrderableVolume = '0';
+            if (side === 'BUY') {
+                let symbol = this.quoteSymbol;
+                let account  = accountStore.getAccountByAssetSymbol(symbol) || {};
+                let liquid = account.liquid || '0';
+    
+                maximumOrderableVolume = price && Decimal(price).equals(0) ?  this.values.volume : Decimal(liquid).mul(rate).div(price).toFixed(8, Decimal.ROUND_DOWN);
+            } else {
+                let symbol = this.baseSymbol;
+                let account  = accountStore.getAccountByAssetSymbol(symbol) || {};
+                let liquid = account.liquid;
+                maximumOrderableVolume = Decimal(liquid).mul(rate).toFixed(8, Decimal.ROUND_DOWN);
+            }
+            this.values.volume = Decimal(maximumOrderableVolume).toFixed();       
+        } catch (err) {
+            this.values.volume = this.values.volume
         }
-        this.values.volume = Decimal(maximumOrderableVolume).toFixed();   
     }
 
     increasePriceByButton = action(() => {

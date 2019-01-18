@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, ScrollView } from 'react-native';
 import { inject, observer } from 'mobx-react';
+import commonStyle from '../../styles/commonStyle';
 
 import AssetsAndEvaluationRow from './AssetsAndEvaluationRow';
 import constants from '../../global/constants';
@@ -26,7 +27,13 @@ class AssetsAndEvaluationList extends Component {
                     <Text style={ styles.title }>보유 자산별 손익</Text>
                 </View> */}
                 <ScrollView>
-                    { accountList }
+                    {   
+                        accountList.length > 0 ?
+                        accountList :
+                        <Text style={[styles.noAssetText]}>
+                            현재 보유한 자산이 없습니다.
+                        </Text>
+                    }
                 </ScrollView>
             </View>
         )
@@ -36,6 +43,7 @@ class AssetsAndEvaluationList extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#f8f8f8',  
     },
     header: {
         flexDirection: 'row',
@@ -47,9 +55,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
-    bodyLeft: {
-    },
-    bodyRight: {
+    noAssetText: {
+        marginTop: 40,
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: '500',
+        color: commonStyle.color.coblicGrey,
     }
 })
 

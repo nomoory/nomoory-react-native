@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyles, { font }from '../../styles/commonStyle';
+import commonStyle, { font }from '../../styles/commonStyle';
 import { StyleSheet, View, ScrollView, ActivityIndicator, Text } from 'react-native';
 
 export default class ScrollLoading extends Component {
@@ -41,7 +41,7 @@ export default class ScrollLoading extends Component {
                     }
                     {
                         this.props.isLoading &&
-                        <ActivityIndicator size="large" color={commonStyles.color.coblicPaleBlue}/>
+                        <ActivityIndicator size="large" color={commonStyle.color.coblicPaleBlue}/>
                     }
                 </View>
 
@@ -63,8 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     notificationText: {
-        color: commonStyles.color.coblicGrey,
+        color: commonStyle.color.coblicGrey,
         fontSize: 15
-
     }
 });

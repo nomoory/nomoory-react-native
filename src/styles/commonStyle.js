@@ -9,6 +9,7 @@ const color = {
     coblicRed: '#da5f6e',
     coblicGrey: '#999',
     coblicPaleGrey: '#dedfe0',
+    coblicYellow: '#ffc107',
     white: '#ffffff'
 };
 

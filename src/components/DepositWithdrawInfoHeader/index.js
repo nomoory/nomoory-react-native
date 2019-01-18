@@ -55,10 +55,10 @@ export default class MiningHistoryBox extends Component {
                         </View>
                     </View>
                     <View style={[styles.titleAndValueContainer]}>
-                        <Text style={[styles.title, styles.grey]}>출금가능</Text>
+                        <Text style={[styles.title]}>출금가능</Text>
                         <View style={[styles.amountContainer]}>
-                            <Text style={[styles.numberText, styles.grey]}>{withdrawable ? `${number.putComma(number.getFixedVolume(withdrawable, selectedAccountSymbol))}` : '-'}</Text>
-                            <Text style={[styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
+                            <Text style={[styles.numberText ]}>{withdrawable ? `${number.putComma(number.getFixedVolume(withdrawable, selectedAccountSymbol))}` : '-'}</Text>
+                            <Text style={[styles.unitText ]}>{selectedAccountSymbol}</Text>
                         </View>
                     </View>
                 </View>
@@ -103,6 +103,9 @@ const styles = StyleSheet.create({
     titleAndValueContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+    title:{
+        marginTop: 3,
     },
     amountContainer: {
         marginTop: 3,

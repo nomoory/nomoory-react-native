@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { AsyncStorage } from 'react-native';
-// import stubApi from '../stubs/stubApi';
 import authStore from '../stores/authStore';
+import userStore from '../stores/userStore';
 import tradingPairStore from '../stores/tradingPairStore';
 import errorHelper from '../utils/errorHelper';
+import { SecureStore } from 'expo';
 
 
 const REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
@@ -29,6 +29,12 @@ class Agent {
                     '' 
                 );
         }
+
+    }
+
+    async getUserUuid() {
+        let userUuid = await SecureStore.getItemAsync('user_uuid');
+        return userUuid;
     }
 
     /** 
@@ -59,20 +65,23 @@ class Agent {
         return axios.post(`${API_ROOT}/users/send_password_reset_email/`, emailInfo).catch(this._handleError);
     }
 
-    resetPassword(resetInfo, user_uuid) {
-        return axios.post(`${API_ROOT}/users/reset_password/?user_uuid=${user_uuid}`, resetInfo).catch(this._handleError);
+    resetPassword(resetInfo, userUuid) {
+        return axios.post(`${API_ROOT}/users/reset_password/?user_uuid=${userUuid}`, resetInfo).catch(this._handleError);
     }
 
-    loadUser() {
-        return this.get(`users/${authStore.user_uuid}/`);
+    loadUser(userUuid) {
+        return this.get(`users/${userUuid}/`);
     }
 
-    getOtpQrcodeUrl() {
-        return this.get(`/users/${authStore.user_uuid}/otp_qrcode/`);
+    async getOtpQrcodeUrl() {
+        let userUuid = await this.getUserUuid();
+        return this.get(`/users/${userUuid}/otp_qrcode/`);
     }
 
-    verifyOTP(otpInfo) {
-        return axios.post(`${API_ROOT}/verify/otp/?user_uuid=${authStore.user_uuid}`, otpInfo).catch(this._handleError);
+    async verifyOTP(otpInfo) {        
+        let userUuid = await this.getUserUuid();
+
+        return axios.post(`${API_ROOT}/verify/otp/?user_uuid=${userUuid}`, otpInfo).catch(this._handleError);
     }
 
     verifyOTPLogin(otpLoginInfo) {
@@ -104,24 +113,29 @@ class Agent {
     }
 
     //TransactionHistory
-    loadTransactionHistory(transaction_type, trading_pair_name) {
-        let url = `users/${authStore.user_uuid}/transaction_histories/?transaction_type=${transaction_type}`;
+    async loadTransactionHistory(transaction_type, trading_pair_name) {
+        let userUuid = await this.getUserUuid();
+        let url = `users/${userUuid}/transaction_histories/?transaction_type=${transaction_type}`;
         if (trading_pair_name) url += `&trading_pair_name=${trading_pair_name}`;
         return this.get(url);
     }
 
     // Accounts
-    loadAccounts() {
-        return this.get(`users/${authStore.user_uuid}/accounts/`);
+    async loadAccounts() {
+        let userUuid = await this.getUserUuid();
+        console.log('userId on load accounts', userUuid);
+        return this.get(`users/${userUuid}/accounts/`);
     }
 
     // Personal Trades
-    loadPersonalTrades() {
-        return this.get(`users/${authStore.user_uuid}/trades/?trading_pair_name=${tradingPairStore.selectedTradingPairName}`);
+    async loadPersonalTrades() {
+        let userUuid = await this.getUserUuid();
+        return this.get(`users/${userUuid}/trades/?trading_pair_name=${tradingPairStore.selectedTradingPairName}`);
     }
 
-    loadPersonalPlacedOrders() {
-        return this.get(`users/${authStore.user_uuid}/orders/?trading_pair_name=${tradingPairStore.selectedTradingPairName}&order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
+    async loadPersonalPlacedOrders() {
+        let userUuid = await this.getUserUuid();
+        return this.get(`users/${userUuid}/orders/?trading_pair_name=${tradingPairStore.selectedTradingPairName}&order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
     }
 
     createAndGetWarmWalletAddress(account_uuid) {
@@ -133,8 +147,9 @@ class Agent {
     }
 
     // Email Verification
-    requestActivateEmailAgain() {
-        return this.post(`/users/${authStore.user_uuid}/resend_activate_email/`, null);
+    async requestActivateEmailAgain() {
+        let userUuid = await this.getUserUuid();
+        return this.post(`/users/${userUuid}/resend_activate_email/`, null);
     }
 
     verifyEmail(activation_info, user_uuid) {
@@ -155,14 +170,17 @@ class Agent {
     }
 
     // Bank account 
-    loadBankAccount() {
-        return this.get(`/users/${authStore.user_uuid}/bank_accounts/latest/`);
+    async loadBankAccount() {
+        let userUuid = await this.getUserUuid();
+        return this.get(`/users/${userUuid}/bank_accounts/latest/`);
     }
-    registerBankAccount(accountInfo) {
-        return this.post(`/users/${authStore.user_uuid}/bank_accounts/`, accountInfo);
+    async registerBankAccount(accountInfo) {
+        let userUuid = await this.getUserUuid();
+        return this.post(`/users/${userUuid}/bank_accounts/`, accountInfo);
     }
-    deleteBankAccount(bankAccountUuid) {
-        return this.delete(`/users/${authStore.user_uuid}/bank_accounts/${bankAccountUuid}/`);
+    async deleteBankAccount(bankAccountUuid) {
+        let userUuid = await this.getUserUuid();
+        return this.delete(`/users/${userUuid}/bank_accounts/${bankAccountUuid}/`);
     }
 
     loadBankDepositHistory(account_uuid) {
@@ -194,28 +212,34 @@ class Agent {
         return axios.get(`${API_ROOT}/coblic_token_status/latest/`).catch(this._handleError);
     }
     // verification kyc
-    uploadIdPhotoImage(data) {
-        return this.postFile(`/users/${authStore.user_uuid}/upload_id_photo/`, data);
+    async uploadIdPhotoImage(data) {
+        let userUuid = await this.getUserUuid();
+        return this.postFile(`/users/${userUuid}/upload_id_photo/`, data);
     }
 
-    uploadKycPhotoImage(data) {
-        return this.postFile(`/users/${authStore.user_uuid}/upload_kyc_photo/`, data);
+    async uploadKycPhotoImage(data) {
+        let userUuid = await this.getUserUuid();
+        return this.postFile(`/users/${userUuid}/upload_kyc_photo/`, data);
     }
 
-    updatePersonalIdentificationAgreement(agreements) {
-        return this.post(`/users/${authStore.user_uuid}/identification_agreement/`, agreements);
+    async updatePersonalIdentificationAgreement(agreements) {
+        let userUuid = await this.getUserUuid();
+        return this.post(`/users/${userUuid}/identification_agreement/`, agreements);
     }
 
     // Register referral code
-    registerReferralCode(referralCodeInfo) {
-        return this.post(`/users/${authStore.user_uuid}/referrals/`, referralCodeInfo);
+    async registerReferralCode(referralCodeInfo) {
+        let userUuid = await this.getUserUuid();
+        return this.post(`/users/${userUuid}/referrals/`, referralCodeInfo);
     }
-    updatePersonalAgreement(agreements) {
-        return this.post(`/users/${authStore.user_uuid}/phone_agreement/`, agreements);
+    async updatePersonalAgreement(agreements) {
+        let userUuid = await this.getUserUuid();
+        return this.post(`/users/${userUuid}/phone_agreement/`, agreements);
     }
     // load my rank
-    loadMyRank() {
-        return this.get(`/users/${authStore.user_uuid}/rank/me/`);
+    async loadMyRank() {
+        let userUuid = await this.getUserUuid();
+        return this.get(`/users/${userUuid}/rank/me/`);
     }
 
     // order fees
@@ -270,49 +294,49 @@ class Agent {
     }
 
     /* Base REST API method */
-    get(url) {
+    async get(url) {
         console.log('request get | ', url);
         return this.axios
-            .get(url, this._getRequestConfig())
+            .get(url, await this._getRequestConfig())
             .catch(this._handleError);
     }
-    put(url, body) {
+    async put(url, body) {
         console.log('request put | ', url);
         return this.axios
-            .put(url, body, this._getRequestConfig())
+            .put(url, body, await this._getRequestConfig())
             .catch(this._handleError);
     }
-    patch(url, body) {
+    async patch(url, body) {
         console.log('request patch | ', url);
 
         return this.axios
-            .patch(url, body, this._getRequestConfig())
+            .patch(url, body, await this._getRequestConfig())
             .catch(this._handleError);
     }
-    post(url, body) {
+    async post(url, body) {
         console.log('request post | ', url);
 
         return this.axios
-            .post(url, body, this._getRequestConfig())
+            .post(url, body, await this._getRequestConfig())
             .catch(this._handleError);
     }
-    delete(url) {
+    async delete(url) {
         console.log('request delete | ', url);
 
         return this.axios
-            .delete(url, this._getRequestConfig())
+            .delete(url, await this._getRequestConfig())
             .catch(this._handleError);
     }
 
-    postFile(url, file) {
+    async postFile(url, file) {
         return this.axios
-            .post(url, file, this._getRequestConfigForFilePost())
+            .post(url, file, await this._getRequestConfigForFilePost())
             .catch(this._handleError);
 
     }
-    _getRequestConfig() {
+    async _getRequestConfig() {
         let requestConfig = null;
-        let accessToken = authStore.access_token;
+        let accessToken = await SecureStore.getItemAsync('access_token');
         if (accessToken) {
             requestConfig = { 
                 headers: { 
@@ -320,12 +344,13 @@ class Agent {
                 }
             };
         }
+        console.log('accessToken on request (config): ', requestConfig);
 
         return requestConfig;
     }
-    _getRequestConfigForFilePost() {
+    async _getRequestConfigForFilePost() {
         let requestConfig = null;
-        let accessToken = authStore.access_token;
+        let accessToken = await SecureStore.getItemAsync('access_token');
         if (accessToken) {
             requestConfig = {
                 headers: {
@@ -354,7 +379,7 @@ class Agent {
             throw error;
         }
         errorHelper.handleErrorCode(error.response);
-        console.log('handle error : ', error.request);
+        console.log('handle error : ', error.response);
         // errorStore.setErrorInfo(error.response.data);
         // 로그아웃을 해야할 에러일때 처리.
         // if (error && error.response && error.response.status === 401) {
@@ -363,8 +388,9 @@ class Agent {
         throw error;
     }
 
-    getPayFormValue = () => {
-        return `${API_ROOT}/verify/mcash/?user_uuid=${authStore.user_uuid}`;
+    getPayFormValue = async () => {
+        let userUuid = await this.getUserUuid();
+        return `${API_ROOT}/verify/mcash/?user_uuid=${userUuid}`;
     }
     getAPIRoot = () => {
         return API_ROOT;

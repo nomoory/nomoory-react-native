@@ -3,6 +3,7 @@ import modalStore from '../stores/modalStore';
 // import ctLockupStore from '../stores/ctLockupStore';
 import TRANSLATIONS from '..//TRANSLATIONS';
 import authStore from '../stores/authStore';
+import userStore from '../stores/userStore';
 
 class ErrorHelper{
     handleErrorCode(error) {
@@ -22,8 +23,15 @@ class ErrorHelper{
         /* latest 락업을 요청했는데(배당 페이지에서 매번 요청) 이전 락업 내역이 없을 때*/
         if (error_code == 3044) { return; }
 
+        /* temporary_otp_token expired */
+        if (error_code === 2102) {
+            
+            return; 
+        }
+        
         /* token 만료 */
         if (status_code == 401) { 
+            userStore.forgetUser();
             authStore.destroyAccessToken();
             return;
         } 

@@ -99,7 +99,7 @@ class AccountStore {
                 let value_bought = Decimal(account.avg_fiat_buy_price || 0).times(account.balance);
                 let value_present = trading_pair.close_price ?  Decimal(trading_pair.close_price).times(account.balance) : '';
                 let value_change = value_present ? value_present.minus(value_bought) : '';
-                let value_change_rate = value_change ? value_bought.equals(0) ? null : value_change.dividedBy(value_bought) : '';
+                let value_change_rate = value_change ? (value_bought.equals(0) ? null : value_change.dividedBy(value_bought)) : '';
 
                 totalBought = totalBought.plus(value_bought);
                 if (value_present)

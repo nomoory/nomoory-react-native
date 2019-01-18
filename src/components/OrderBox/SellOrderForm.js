@@ -5,7 +5,9 @@ import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
 import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
+import { withNavigation } from 'react-navigation';
 
+@withNavigation
 @inject('tradingPairStore', 'orderStore', 'accountStore', 'userStore')
 @observer
 export default class SellOrderForm extends Component {
@@ -30,6 +32,9 @@ export default class SellOrderForm extends Component {
     _onPressIncreasePrice = (e) => { this.props.orderStore.increasePriceByButton(); }
     _onPressDecreasePrice = (e) => { this.props.orderStore.decreasePriceByButton(); }
     _onPressSetVolumeByRate = (rate) => () => { if (this.props.userStore.isLoggedIn) this.props.orderStore.setVolumeByRate(rate); }
+    _onPressLogin = (e) => {
+        this.props.navigation.navigate('Login');
+    }
 
     render() {
         let {
@@ -137,9 +142,15 @@ export default class SellOrderForm extends Component {
                         최소주문금액 {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
                     </Text>
                 </View>
-                <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressOrder}>
-                    <Text style={[orderFormStyle.buttonText]}>판매</Text>
-                </TouchableOpacity>
+                {
+                    this.props.userStore.isLoggedIn ? 
+                    <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressOrder}>
+                        <Text style={[orderFormStyle.buttonText]}>판매</Text>
+                    </TouchableOpacity> :
+                    <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressLogin}>
+                        <Text style={[orderFormStyle.buttonText]}>로그인</Text>
+                    </TouchableOpacity>
+                }
             </View>
         );
     }

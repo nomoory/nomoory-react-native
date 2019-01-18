@@ -14,7 +14,7 @@ class UserStore {
                 is_email_verified,
                 is_otp_registered,
             } = this.currentUser.verification;
-            return is_email_verified && is_otp_registered;    
+            return is_email_verified && is_otp_registered;
         } catch (e) {
             return false;
         }
@@ -51,20 +51,23 @@ class UserStore {
         }
     }
 
-    @action loadUser() {
+    @action async loadUser(userUuid) {
         this.isLoading = true;
-        return agent.loadUser()
-            .then(action((response) => {
-                let user = response.data;
-                this.saveUser(user);
-                this.isLoading = false;
-            }))
-            .catch(action((err) => {
-                this.errors = err.response && err.response.body && err.response.body.errors;
-                authStore.destroyAccessToken();
-                this.isLoading = false;
-                throw err;
-            }));
+        if (userUuid) {
+            return agent.loadUser(userUuid)
+                .then(action((response) => {
+                    let user = response.data;
+                    this.saveUser(user);
+                    this.isLoading = false;
+                }))
+                .catch(action((err) => {
+                    this.errors = err.response && err.response.body && err.response.body.errors;
+                    authStore.destroyAccessToken();
+                    this.isLoading = false;
+                    throw err;
+                }));
+        }
+    
     }
 
     // currentUser
