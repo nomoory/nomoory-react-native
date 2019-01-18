@@ -9,16 +9,7 @@ import { withNavigation } from 'react-navigation';
 @inject('accountStore')
 @observer
 export default class AccountList extends Component {
-    constructor(props) {
-        super(props);
-        // this.pubnubChannel = "";
-    }
-    componentDidMount() {
-        // this.props.pubnub.subscribe(this.pubnubChannel);
-    }
-    componentWillUnmount() {
-        // this.props.pubnub.unsubscribe(this.pubnubChannel);
-    }
+
     _renderAccountList() {
         const { accounts } = this.props.accountStore;
 
@@ -40,7 +31,6 @@ export default class AccountList extends Component {
     }
 
     render() {
-        console.log('accounts', this.props.accountStore.accounts)
         return (
             <View style={[styles.container]}>
                 <View>
