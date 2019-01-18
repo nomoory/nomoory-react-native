@@ -6,6 +6,7 @@ import tradingPairStore from '../stores/tradingPairStore';
 import orderbookStore from '../stores/orderbookStore';
 import realtimeTradeHistoryStore from '../stores/realtimeTradeHistoryStore';
 import personalOrderHistoryStore from '../stores/personalOrderHistoryStore';
+import modalStore from '../stores/modalStore';
 // import coblicTokenStatusStore from '../stores/coblicTokenStatusStore';
 // import dividendStore from '../stores/dividendStore';
 
@@ -69,13 +70,18 @@ export default class Pubnub {
 
     _handleOrderByStatus = (personalOrder) => {
         let { order_status, price, volume_filled, trading_pair_name } = personalOrder;
-        let quoteSymbol = trading_pair_name.split('-')[1];
         switch (order_status) {
             case 'PENDING':
-                // snackbarHelper.info(`성공적으로 주문을 등록하였습니다.`);
+                modalStore.openModal({
+                    title: '주문성공',
+                    content: `성공적으로 주문을 등록하였습니다.`
+                });
                 break;
             case 'PLACED':
-                // snackbarHelper.info(`성공적으로 주문을 등록하였습니다.`);
+                modalStore.openModal({
+                    title: '주문성공',
+                    content: `성공적으로 주문을 등록하였습니다.`
+                });
                 break;
             case 'PARTIALLY_FILLED':
                 // snackbarHelper.success(`일부 주문이 체결되었습니다.`);
@@ -85,9 +91,16 @@ export default class Pubnub {
                 break;
             case 'COMPLETED':
                 // snackbarHelper.success(`주문이 체결되었습니다.`);
+                modalStore.openModal({
+                    title: '주문체결',
+                    content: `주문이 체결되었습니다.`
+                });
                 break;
             case 'CANCELLED':
-                // snackbarHelper.success(`주문이 취소되었습니다.`);
+                modalStore.openModal({
+                    title: '주문취소',
+                    content: `주문이 취소되었습니다.`
+                });
                 break;
             default:
                 break;

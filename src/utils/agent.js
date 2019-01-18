@@ -8,9 +8,10 @@ import { SecureStore } from 'expo';
 
 const REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
 const REACT_APP_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_API_VERSION;
+const API_ROOT = `${REACT_APP_API_ENDPOINT}/api/${REACT_APP_API_VERSION}`;
+
 const REACT_APP_DEV_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_DEV_API_ENDPOINT;
 const REACT_APP_DEV_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_DEV_API_VERSION;
-const API_ROOT = `${REACT_APP_API_ENDPOINT}/api/${REACT_APP_API_VERSION}`;
 const DEV_API_ROOT = `${REACT_APP_DEV_API_ENDPOINT}/api/${REACT_APP_DEV_API_VERSION}`;
 
 class Agent {

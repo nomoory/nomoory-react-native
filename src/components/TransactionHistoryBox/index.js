@@ -97,12 +97,12 @@ export default class TransactionHistoryBox extends Component {
                             <View style={[styles.column]}>
                                 <View style={[styles.columnItem, styles.price, styles.textRight]}>
                                     <Text style={[styles.tupleColumnText, styles.priceText]}>
-                                        {number.putComma(Decimal(price).toFixed())} {quote_symbol}
+                                        {price ? number.putComma(number.getFixedPrice(price, quote_symbol)) : '-' } {quote_symbol}
                                     </Text>     
                                 </View>
                                 <View style={[styles.columnItem, styles.volume, styles.textRight]}>
                                     <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                        {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+                                        {volume ? number.putComma(number.getFixedPrice(volume, base_symbol)) : '-' } {base_symbol}
                                     </Text>
                                 </View>
                             </View>

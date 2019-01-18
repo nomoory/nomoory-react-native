@@ -52,7 +52,7 @@ class TradingPairRow extends Component {
                     <Text>{close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원</Text>
                 </View>
                 <View style={[styles.signedChangeRate, styles.column]}>
-                    <Text>{signed_change_rate ? number.putComma(Decimal(signed_change_rate).toFixed()) : '-'} %</Text>
+                    <Text>{signed_change_rate ? number.putComma(Decimal(signed_change_rate).toFixed(2, Decimal.ROUND_UP)) : '-'} %</Text>
                 </View>
                 <View style={[styles.accTradeValue, styles.column]}>
                     <Text>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]}원</Text>

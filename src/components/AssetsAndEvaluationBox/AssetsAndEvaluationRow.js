@@ -55,7 +55,7 @@ export default class AssetsAndEvaluationRow extends Component {
                                 // isFall ? styles.fall : null,
                                 // isRise ? styles.rise : null,
                             ]}>
-                                {/* {isRise ? '+' : ''}{ value_change_rate ? number.putComma(Decimal(value_change_rate).toFixed(0)) : '- ' } */}
+                                {/* {isRise ? '+' : ''}{ value_change_rate ? number.putComma(Decimal(value_change_rate).toFixed(2)) : '- ' } */}
                                 - %</Text>
                         </View>
                     </View>
@@ -65,7 +65,7 @@ export default class AssetsAndEvaluationRow extends Component {
                     <View style={ styles.bottomSubContainer }>
                         <View style={styles.bottomItemContainer}>
                             <Text style={[styles.bottomItemTitle]}>보유수량</Text>
-                            <Text style={[styles.bottomItemValue]}>{ balance ? number.putComma(Decimal(balance).toFixed(0)) : '- ' } {asset_symbol}</Text>
+                            <Text style={[styles.bottomItemValue]}>{ balance ? number.putComma(number.getFixedPrice(balance, asset_symbol)) : '- ' } {asset_symbol}</Text>
                         </View>
                         {/* <View style={styles.bottomItemContainer}>
                             <Text style={[styles.bottomItemTitle]}>매수 평균가</Text>
@@ -75,7 +75,7 @@ export default class AssetsAndEvaluationRow extends Component {
                     <View style={ styles.bottomSubContainer }>
                         <View style={styles.bottomItemContainer}>
                             <Text style={[styles.bottomItemTitle]}>현재 가치</Text>
-                            <Text style={[styles.bottomItemValue]}>{ value_present ? number.putComma(Decimal(value_present).toFixed(0)) : '- ' }원</Text>
+                            <Text style={[styles.bottomItemValue]}>{ value_present ? number.putComma(number.getFixedPrice(value_present, 'KRW')) : '-' } 원</Text>
                         </View>
                         {/* <View style={styles.bottomItemContainer}>
                             <Text style={[styles.bottomItemTitle]}>매수 금액</Text>

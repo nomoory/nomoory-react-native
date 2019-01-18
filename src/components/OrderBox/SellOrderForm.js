@@ -8,7 +8,7 @@ import Decimal from '../../utils/decimal';
 import { withNavigation } from 'react-navigation';
 
 @withNavigation
-@inject('tradingPairStore', 'orderStore', 'accountStore', 'userStore')
+@inject('tradingPairStore', 'orderStore', 'accountStore', 'userStore', 'modalStore')
 @observer
 export default class SellOrderForm extends Component {
     componentDidMount() {
@@ -27,7 +27,44 @@ export default class SellOrderForm extends Component {
         this.props.orderStore.setVolumeFromInput(text);
     }
     _onPressOrder = (e) => {
-        this.props.orderStore.registerOrder();
+        let {
+            values,
+            baseSymbol,
+            quoteSymbol,
+            maxFee,
+            totalGain,
+        } = this.props.orderStore || {};
+        const { price, volume } = values || {};
+        try {
+            this.props.modalStore.openModal({
+                title: '주문 확인',
+                content: <Text style={{ textAlign: 'left', fontSize: 16, marginLeft: 20}}>{`
+                    거래자산:  ${baseSymbol}/${quoteSymbol}
+                    판매가격:  ${number.putComma(price)} ${quoteSymbol}
+                    판매수량:  ${number.putComma(volume)} ${baseSymbol}
+                    수수료:  ${number.putComma(number.getFixedPrice(maxFee, quoteSymbol)) } ${quoteSymbol}
+                    총수령액:  ${number.putComma(number.getFixedPrice(totalGain, quoteSymbol))} ${quoteSymbol}
+                `}</Text>,
+                buttons: [
+                    {
+                        title: '취소',
+                        onPress: () => {this.props.modalStore.closeModal()}
+                    },{
+                        title: '확인',
+                        onPress: () => {
+                            this.props.orderStore.registerOrder();
+                            this.props.modalStore.closeModal();
+                        }
+                    }, 
+                ]
+            })
+        } catch (err) {
+            this.props.modalStore.openModal({
+                title: '주문 실패',
+                content: '입력 값들을 확인해주세요.',
+            })
+        }
+
     }
     _onPressIncreasePrice = (e) => { this.props.orderStore.increasePriceByButton(); }
     _onPressDecreasePrice = (e) => { this.props.orderStore.decreasePriceByButton(); }
@@ -58,7 +95,7 @@ export default class SellOrderForm extends Component {
                         <Text style={orderFormStyle.liquidContentText}>
                             {
                                 targetAccount.liquid ? 
-                                number.putComma(Decimal(targetAccount.liquid).toFixed()) 
+                                number.putComma(number.getFixedPrice(targetAccount.liquid, baseSymbol)) 
                                 : '-' 
                             }
                         </Text>
@@ -126,7 +163,7 @@ export default class SellOrderForm extends Component {
                 </View>
                 <View style={[styles.feeContainer, orderFormStyle.infoContainer]}>
                     <Text style={[orderFormStyle.infoTitle]}>수수료</Text>
-                    <Text style={[orderFormStyle.infoContent]}>{maxFee ? number.putComma(Decimal(maxFee).toFixed()) : '-' } {baseSymbol}</Text>
+                    <Text style={[orderFormStyle.infoContent]}>{maxFee ? number.putComma(Decimal(maxFee).toFixed()) : '-' } {quoteSymbol}</Text>
                 </View>
                 <View style={orderFormStyle.maxFeePercentageContainer}> 
                     <Text style={orderFormStyle.maxFeePercentageContent}>

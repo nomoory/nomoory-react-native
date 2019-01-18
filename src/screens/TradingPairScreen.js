@@ -26,8 +26,7 @@ export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseKoreanName = navigation.getParam('baseKoreanName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
-        console.log('teset', tradingPairStore.selectedTradingPair)
-
+        
         return {
             title: `${this.tradingPairName.split('-').join('/')}`,
             tabBarVisible: false,
