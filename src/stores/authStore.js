@@ -2,6 +2,7 @@ import { observable, action, reaction } from 'mobx';
 import userStore from './userStore';
 import agent from '../utils/agent';
 import { AsyncStorage } from "react-native"
+import { SecureStore } from 'expo';
 
 /* 정책
  * 로그인시 > temporary_otp_token 및 email 발급 > otpVerificationValues에 저장
@@ -68,7 +69,6 @@ class AuthStore {
             } else {
                 this.setAccessToken(user.access_token);
                 this.setUserUuid(user.uuid);
-                // console.log('access_token: ', this.access_token)
                 delete user.access_token;                
                 userStore.saveUser(user);
             }
@@ -88,7 +88,7 @@ class AuthStore {
     @observable user_uuid = null; // login, otp인증시 token과 함게 저장하고 사용/ 새로운 유저 로그인시 변경
 
     @action hasAccessToken() { return this.access_token ? true : false; }
-    @action setAccessToken(accessToken) { this.access_token = accessToken; }
+    @action async setAccessToken(accessToken) { await SecureStore.setItemAsync('access_token', accessToken) }
     @action setUserUuid(userUuid) { this.user_uuid = userUuid; }
     @action destroyAccessToken() { this.setAccessToken(null); }
 

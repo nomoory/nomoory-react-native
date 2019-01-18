@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Clipboard } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Clipboard, ActivityIndicator } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import commonStyle from '../../styles/commonStyle';
 import Decimal from '../../utils/decimal';
@@ -34,11 +34,15 @@ export default class DepositBox extends Component {
         return (
             <View style={[styles.issueAddressContainer]}>
                 <TouchableOpacity style={[styles.addAddressButton]}
-                    onPress={this._handleIssueAddress}>
-                    <Image
-                        style={{ width: 46, height: 46 }}                                
-                        source={require('../../../assets/images/depositWithdraw/ic_plus_big.png')}
-                    />
+                    onPress={ this.props.accountStore.isLoading ? () => {} : this._handleIssueAddress}>
+                    {
+                        this.props.accountStore.isLoading ?
+                        <ActivityIndicator size="small" color={commonStyle.color.coblicPaleBlue}/> :
+                        <Image
+                            style={{ width: 46, height: 46 }}                                
+                            source={require('../../../assets/images/depositWithdraw/ic_plus_big.png')}
+                        />
+                    }
                 </TouchableOpacity>
                 <View style={[styles.issueAddressDescription]}>
                     <Text style={[styles.issueAddressDescriptionText]}>

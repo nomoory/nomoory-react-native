@@ -235,7 +235,7 @@ class TransactionHistoryStore {
             return agent.get(this.loadMoreValuesTradeHistory.nextUrl)
             .then(action((response) => {
                 let { results, next, previous } = response.data;
-                this.tradeHistoryRegistry.replace([...this.registry, ...results]);
+                this.tradeHistoryRegistry.replace([...this.tradeHistoryRegistry, ...results]);
                 this.loadMoreValuesTradeHistory = { ...this.loadMoreValuesTradeHistory,
                     isFirstLoad: false,
                     nextUrl: next,

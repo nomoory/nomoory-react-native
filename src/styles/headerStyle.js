@@ -14,6 +14,7 @@ export default {
         headerStyle: {
             backgroundColor: commonStyle.color.white,
             height: 50,
+            borderBottomWidth: 0
         },
         headerTintColor: 'black',
         headerTitleStyle: {

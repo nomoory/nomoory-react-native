@@ -86,13 +86,11 @@ export default class TransactionHistoryBox extends Component {
                         <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
                             <View style={[styles.column, styles.firstColumn]}>
                                 <View style={[styles.columnItem, commonStyles[transaction_type], ]}>
-                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{base_symbol} </Text>
-                                    <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>
-                                        { TRANSLATIONS[transaction_type] }
-                                    </Text>
+                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{base_symbol + ' '}</Text>
+                                    <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>{ TRANSLATIONS[transaction_type] }</Text>
                                 </View>
                                 <View style={[styles.columnItem, styles.created]}> 
-                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + '' : ''} </Text>
+                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''}</Text>
                                     <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
                                 </View>
                             </View>
@@ -111,12 +109,12 @@ export default class TransactionHistoryBox extends Component {
                             <View style={[styles.column]}>
                                 <View style={[styles.columnItem, styles.fee, styles.textRight]}>
                                     <Text style={[styles.tupleColumnText, styles.feeText]}>
-                                        {number.putComma(Decimal(fee).toFixed())} { transaction_type === 'SELL' ? quote_symbol : base_symbol }
+                                        { fee ? number.putComma(number.getFixedPrice(fee, transaction_type === 'SELL' ? quote_symbol : base_symbol)) : '-' } { transaction_type === 'SELL' ? quote_symbol : base_symbol }
                                     </Text>
                                 </View>
                                 <View style={[styles.columnItem, styles.amount, styles.textRight]}>
                                     <Text style={[styles.tupleColumnText, styles.amountText]}>
-                                        {number.putComma(Decimal(amount).toFixed())} {quote_symbol}
+                                        { amount ? number.putComma(number.getFixedPrice(amount, quote_symbol)) : '-' } {quote_symbol}
                                     </Text>
                                 </View>
                             </View>
@@ -196,13 +194,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#f7f8fa',
     },
     tupleColumnText: {
-        fontSize: 12
+        fontSize: 12,
+        textAlign: 'right'
     },
     created: {
         flexDirection: 'row'
     },
     dateText: {
-        color: '#333'
+        color: '#333',
+        marginRight: 4
     },
     timeText: {
         color: '#747474'

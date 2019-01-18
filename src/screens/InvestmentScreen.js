@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import headerStyle from '../styles/headerStyle';
 import commonStyle from '../styles/commonStyle';
+import tabStyle from '../styles/tabStyle';
 import { Tab, Tabs, TabHeading } from 'native-base';
 import { StyleSheet, View, Text, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import { inject, observer } from 'mobx-react';
@@ -59,7 +60,7 @@ export default class InvestmentScreen extends Component {
         const inputRange = props.navigationState.routes.map((x, i) => i);
 
         return (
-            <View style={styles.tabBar}>
+            <View style={tabStyle.tabBar}>
                 {props.navigationState.routes.map((route, i) => {
                     const color = props.position.interpolate({
                         inputRange,
@@ -69,7 +70,7 @@ export default class InvestmentScreen extends Component {
                     });
                     return (
                         <TouchableOpacity
-                            style={[styles.tabItem, this.state.index === i ? styles.selectedTabItem : null]}
+                            style={[tabStyle.tabItem, this.state.index === i ? tabStyle.selectedTabItem : null]}
                             onPress={() => {
                                 this.props.transactionHistoryStore.clear();        
                                 this.setState({ index: i });
@@ -152,21 +153,5 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderBottomWidth: 0,
         height: 40
-    },
-
-    // tab
-    tabBar: {
-        flexDirection: 'row',
-        // paddingTop: Constants.statusBarHeight,
-    },
-    selectedTabItem: {
-        borderBottomWidth: 6,
-        borderBottomColor: commonStyle.color.coblicBlue
-    },
-    tabItem: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 16,
-        backgroundColor: 'white'
     },
 })

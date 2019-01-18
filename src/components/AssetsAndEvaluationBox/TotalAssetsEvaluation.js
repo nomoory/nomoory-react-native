@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
         marginBottom: 6,
     },
     assetInfoTitleContainer: {
-        marginTop: 6,
     },
     assetInfoTitle: {
         fontWeight: '700',

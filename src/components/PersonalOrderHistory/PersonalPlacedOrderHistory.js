@@ -67,13 +67,12 @@ export default class PersonalPlacedOrderHistory extends Component {
         const isLoading = this.props.personalOrderHistoryStore.loadMoreValues.isLoading;
         const isLoadable = this.props.personalOrderHistoryStore.isLoadable;
         const message_code = isLoadable.message_code;
-        console.log(message_code)
         return (
             <ListView style={[styles.container, styles.tuples]}
                 onEndReachedThreshold={30}
                 onEndReached={(e) => {
                     if (message_code === 'has_next_load') {
-                        this.props.transactionHistoryStore.loadNextTradeHistory();
+                        this.props.personalOrderHistoryStore.loadNext();
                     }
                 }}
                 dataSource={dataSource}

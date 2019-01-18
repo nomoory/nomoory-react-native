@@ -152,14 +152,7 @@ export default class BuyOrderForm extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-
-    // price input
-
-    // volume input
-
-    price : {
-        
+        backgroundColor: 'white'
     },
     info: {
         flexDirection: 'row',

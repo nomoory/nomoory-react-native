@@ -72,7 +72,6 @@ export default class LoginScreen extends Component {
                             this.props.authStore.isLoading ?
                             <ActivityIndicator size="small" color={commonStyles.color.coblicPaleBlue}/> :
                             <Text style={[styles.loginButtonText]}>로그인</Text>
-
                         }
                     </TouchableOpacity>
                     <Text style={[styles.forgotPasswordText]}

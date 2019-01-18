@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderTopWidth: 1,
         borderTopColor: '#dedfe0',
+        width: '100%'
     },
     sellOrderRow: {
         backgroundColor: '#f3fbff',
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     price: {
         flex: 4,
         alignItems: 'flex-end',
-        paddingRight: 4,     
+        // paddingRight: 4,     
         height: '100%',
         justifyContent: 'center',
 
@@ -78,13 +79,13 @@ const styles = StyleSheet.create({
     priceText: {
         fontSize: 13,
         fontWeight: '600',
+        marginRight: 4,     
     },
     volume: {
         flex: 5,
         alignItems: 'flex-start',
         height: '100%',
         justifyContent: 'center',
-        paddingLeft: 4,
     },
     volumeBar: {
         position: 'absolute',
@@ -99,6 +100,7 @@ const styles = StyleSheet.create({
     volumeText: {
         fontSize: 11,
         fontWeight: '500',
+        marginLeft: 4
     },
 
 });

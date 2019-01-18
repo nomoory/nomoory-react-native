@@ -91,7 +91,7 @@ const orderFormStyle = StyleSheet.create({
     },
     inputTitleContainer: {
         left: 10,
-        top: 10.5,
+        top: 9,
         position: 'absolute',
     },
     inputTitle: {
@@ -100,7 +100,7 @@ const orderFormStyle = StyleSheet.create({
     },
     inputUnitContainer: {
         right: 10,
-        top: 11.5,
+        top: 10.5,
         position: 'absolute',
     },
     inputUnit: {
@@ -217,11 +217,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         height: '100%',
-        paddingTop: 14,
-        padding: 10
+        padding: 10,
+        backgroundColor: 'white'
     },
     buttons: {
-        height: 40,
+        height: 36,
         width: '100%',
         flexDirection: 'row',
     },

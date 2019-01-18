@@ -4,7 +4,7 @@ import { Linking, Text, StyleSheet, View, TouchableOpacity, ScrollView, Image } 
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import logoSrc from '../../assets/images/more/logo.png'
+import logoSrc from '../../assets/images/logos/logo_blue.png'
 
 @withNavigation
 @inject('userStore', 'authStore', 'modalStore')

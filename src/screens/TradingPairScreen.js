@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
+import tabStyle from '../styles/tabStyle';
 
 import { Tab, Tabs, TabHeading } from 'native-base';
 
@@ -17,6 +18,7 @@ import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 // import { Constants } from 'expo';
 
+import tradingPairStore from '../stores/tradingPairStore';
 
 @inject('pubnub', 'tradingPairStore')
 @observer
@@ -24,9 +26,10 @@ export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseKoreanName = navigation.getParam('baseKoreanName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
+        console.log('teset', tradingPairStore.selectedTradingPair)
 
         return {
-            title: `${this.baseKoreanName} ${this.tradingPairName}`,
+            title: `${this.tradingPairName.split('-').join('/')}`,
             tabBarVisible: false,
             ...headerStyle.white
         };
@@ -67,7 +70,7 @@ export default class TradingPairScreen extends Component {
         const inputRange = props.navigationState.routes.map((x, i) => i);
 
         return (
-            <View style={styles.tabBar}>
+            <View style={tabStyle.tabBar}>
                 {props.navigationState.routes.map((route, i) => {
                     const color = props.position.interpolate({
                         inputRange,
@@ -77,9 +80,13 @@ export default class TradingPairScreen extends Component {
                     });
                     return (
                         <TouchableOpacity
-                            style={[styles.tabItem, this.state.index === i ? styles.selectedTabItem : null]}
+                            style={[tabStyle.tabItem, this.state.index === i ? tabStyle.selectedTabItem : null]}
                             onPress={() => this.setState({ index: i })}>
-                            <Animated.Text style={[ { color, fontWeight: '600', fontSize: 16 }, ]}>{route.title}</Animated.Text>
+                            <Animated.Text style={[ 
+                                { color },
+                                tabStyle.tabText,
+                                this.state.index === i  ? tabStyle.selectedTabText : null
+                            ]}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
                 })}
@@ -97,29 +104,25 @@ export default class TradingPairScreen extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.tradingPairSummaryContainer}>
-                    <View style={styles.leftContainer}>
-                        <View style={styles.closePrice}>
-                            <Text style={styles.closePriceText}>
-                                현재가 {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
-                            </Text>
-                        </View>
-                        <View style={styles.tradingPairSubInfo}>
-                            <Text style={[styles.subText]}>24시간대비</Text>
-                            <Text style={[styles.subText, commonStyle[change]]}>
-                                {this.changeRate}%
-                            </Text>
-                            {(change === 'FALL' || change === 'RISE') ?
-                                <Image
-                                    style={{ width: 16, height: 8 }}
-                                    source={change === 'FALL' ? fallIcon : riseIcon}
-                                /> : null
-                            }
-                            <Text style={[styles.subText, commonStyle[change]]}>
-                                {this.changePrice}원
-                            </Text>
-                        </View>
+                    <View style={styles.closePrice}>
+                        <Text style={styles.closePriceText}>
+                            현재가 {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
+                        </Text>
                     </View>
-                    <View style={styles.rightContainer}>
+                    <View style={styles.tradingPairSubInfo}>
+                        {/* <Text style={[styles.subText]}>24h</Text> */}
+                        <Text style={[styles.subText, commonStyle[change]]}>
+                            {this.changeRate}%
+                        </Text>
+                        {/* {(change === 'FALL' || change === 'RISE') ?
+                            <Image
+                                style={{ width: 16, height: 8 }}
+                                source={change === 'FALL' ? fallIcon : riseIcon}
+                            /> : null
+                        }
+                        <Text style={[styles.subText, commonStyle[change]]}>
+                            {this.changePrice}원
+                        </Text> */}
                     </View>
                 </View>
                 {/* <Tabs initialPage={0}>
@@ -159,46 +162,33 @@ const styles = StyleSheet.create({
     tradingPairSummaryContainer: {
         height: 60,
         width: '100%',
-        flexDirection: 'row',
+        flexDirection: 'column',
         padding: 6,
-        paddingLeft: 12,
-        backgroundColor: 'white'
+        paddingTop: 12,
+        paddingRight: 18,
+        backgroundColor: 'white',
+        justifyContent: 'flex-end',
     },
     closePriceText: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold',
-        color: '#000000'
+        color: '#000000',
+        textAlign: 'right'
     },
     subText: {
         fontSize: 16,
         fontWeight: '500',
-        marginRight: 10
     },
 
     tradingPairSubInfo: {
         marginTop: 4,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'flex-end'
     },
     tabStyle: {
         backgroundColor: 'white',
         borderBottomWidth: 0,
         height: 40
-    },
-
-    // tab
-    tabBar: {
-        flexDirection: 'row',
-        // paddingTop: Constants.statusBarHeight,
-    },
-    selectedTabItem: {
-        borderBottomWidth: 6,
-        borderBottomColor: commonStyle.color.coblicBlue 
-    },
-    tabItem: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 16,
-        backgroundColor: 'white'
     },
 })
