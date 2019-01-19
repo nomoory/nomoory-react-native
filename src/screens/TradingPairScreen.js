@@ -14,11 +14,10 @@ import OrderBox from '../components/OrderBox';
 import PersonalOrderHistory from '../components/PersonalOrderHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
+import TRANSLATIONS from '../TRANSLATIONS';
 import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 // import { Constants } from 'expo';
-
-import tradingPairStore from '../stores/tradingPairStore';
 
 @inject('pubnub', 'tradingPairStore')
 @observer
@@ -100,20 +99,36 @@ export default class TradingPairScreen extends Component {
         let {
             close_price,
             change, // 'RISE' | 'FALL'
+            high_price,
+            low_price,
+            open_price,
+            acc_trade_value_24h
         } = tradingPair || {};
+        const result = number.getNumberAndPowerOfTenFromNumber_kr(acc_trade_value_24h);
+
         return (
             <View style={styles.container}>
                 <View style={styles.tradingPairSummaryContainer}>
-                    <View style={styles.closePrice}>
-                        <Text style={styles.closePriceText}>
-                            현재가 {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
-                        </Text>
+                    <View style={styles.leftContainer}>
+                        <View style={styles.leftUpperContainer}>
+                            <Text style={[styles.closePriceText, commonStyle[change]]}>
+                                {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
+                            </Text>
+                            <Text style={[styles.changeRateText, commonStyle[change]]}>
+                                {this.changeRate}%
+                            </Text>
+                        </View>
+                        <View style={styles.leftBotttomContainer}>
+                            <Text style={styles.highAndLowPriceText}>
+                                고가: {high_price ? number.putComma(Decimal(high_price).toFixed()) : '-'} 원 / 저가: {low_price ? number.putComma(Decimal(low_price).toFixed()) : '-'} 원
+                            </Text>
+                        </View>
                     </View>
-                    <View style={styles.tradingPairSubInfo}>
+                    <View style={styles.rightContainer}>
+                        <Text>거래대금</Text> 
+                        <Text style={styles.accTradeValueText}>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]}원</Text>
+
                         {/* <Text style={[styles.subText]}>24h</Text> */}
-                        <Text style={[styles.subText, commonStyle[change]]}>
-                            {this.changeRate}%
-                        </Text>
                         {/* {(change === 'FALL' || change === 'RISE') ?
                             <Image
                                 style={{ width: 16, height: 8 }}
@@ -162,24 +177,43 @@ const styles = StyleSheet.create({
     tradingPairSummaryContainer: {
         height: 60,
         width: '100%',
-        flexDirection: 'column',
+        flexDirection: 'row',
         padding: 6,
         paddingTop: 12,
         paddingRight: 18,
         backgroundColor: 'white',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
     },
     closePriceText: {
         fontSize: 20,
         fontWeight: 'bold',
         color: '#000000',
-        textAlign: 'right'
     },
-    subText: {
+    changeRateText: {
         fontSize: 16,
         fontWeight: '500',
     },
-
+    leftContainer: {
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    leftUpperContainer: {
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    leftBottomContainer: {
+        marginTop: 4,
+        flexDirection: 'row',
+    },
+    rightContainer: {
+        height: '100%',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+    },
+    accTradeValueText: {
+        marginTop: 4,
+    },
     tradingPairSubInfo: {
         marginTop: 4,
         flexDirection: 'row',

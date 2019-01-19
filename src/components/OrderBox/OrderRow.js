@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import Decimal from '../../utils/decimal';
 import number from '../../utils/number';
+import commonStyle from '../../styles/commonStyle';
 
 @inject('orderStore', 'orderbookStore')
 @observer
@@ -31,14 +32,26 @@ export default class OrderRow extends Component {
                         0
                 }
             });
+        const openPrice = this.props.openPrice;
+        const isLessThanOpenPrice = openPrice && order.price && Decimal(order.price).lessThan(openPrice);
+        const isBiggerThanOpenPrice = openPrice && order.price && Decimal(order.price).greaterThan(openPrice);
+    
         return (
             <View
-                style={[styles.container, orderRowStyle, styles[this.props.side], 
+                style={[
+                    styles.container, orderRowStyle, styles[this.props.side], 
                     order.price && this.props.closePrice && Decimal(order.price).equals(this.props.closePrice) ? 
                     styles.recentlyTraded : null]}
             >
                 <TouchableOpacity style={[styles.price]} onPress={this._onPressOrderPrice}>
-                    <Text style={styles.priceText}>{number.putComma(Decimal(order.price).toFixed())}</Text>
+                    <Text 
+                        style={[
+                            styles.priceText,
+                            isLessThanOpenPrice ? styles.blueText : null,
+                            isBiggerThanOpenPrice ? styles.redText : null,
+                        ]}>
+                            {number.putComma(Decimal(order.price).toFixed())}
+                    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.volume} onPress={this._onPressOrderVolume}>
                     <View style={[dynamicStyle.volumnBar, styles['volumeBar'], styles['volumeBar_' + side]]} />
@@ -55,8 +68,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderTopWidth: 1,
-        borderTopColor: '#dedfe0',
         width: '100%'
     },
     sellOrderRow: {
@@ -98,9 +109,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffdeea'
     },
     volumeText: {
-        fontSize: 11,
-        fontWeight: '500',
+        fontSize: 10,
+        fontWeight: '400',
         marginLeft: 4
+    },
+    recentlyTraded: {
+        borderColor: 'black',
+        borderWidth: 2
+    },
+    blueText: {
+        color: commonStyle.color.coblicBlue
+    },
+    redText: {
+        color: commonStyle.color.coblicRed
     },
 
 });

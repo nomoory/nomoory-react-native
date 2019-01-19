@@ -225,6 +225,7 @@ class TransactionHistoryStore {
         .catch(action((err) => {
             this.errors = err.response && err.response.body && err.response.body.errors;
             this.loadMoreValuesTradeHistory.isLoading = false;
+            this.loadMoreValuesTradeHistory.isFirstLoad = false;
             throw err;
         }));
     }
@@ -245,6 +246,7 @@ class TransactionHistoryStore {
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
                 this.loadMoreValuesTradeHistory.isLoading = false;
+                this.loadMoreValuesTradeHistory.isFirstLoad = false;
                 throw err;
             }));
         } else {

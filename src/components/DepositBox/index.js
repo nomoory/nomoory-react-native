@@ -167,7 +167,8 @@ const styles = StyleSheet.create({
     },
     descriptionText: {
         fontSize: 16,
-        textAlign: 'center'
+        textAlign: 'center',
+        lineHeight: 22,
     },
     addressContainer: {
         padding: 15,
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
 
     },
     addAddressButton: {
-        marginTop: 22,
+        marginTop: 20,
         width: 60,
         height: 60,
         borderRadius: 8,
@@ -210,17 +211,19 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     noticeContainer: {
-        marginTop: 14,
+        marginTop: 6,
         paddingLeft: 15,
         paddingRight: 15,
     },
     noticeTitleText: {
         fontWeight: '600',
         fontSize: 15,
-        marginBottom: 8,
+        marginBottom: 4,
     },
     grey: {
-        color: commonStyle.color.grey
+        color: commonStyle.color.grey,
+        textAlign: 'justify',
+        lineHeight: 20,
     },
 
     copyAddressContainer: {
@@ -250,8 +253,8 @@ const styles = StyleSheet.create({
         color: '#333333',
     },
     copyAddressButton: {
-        marginTop: 14,
-        marginBottom: 4,
+        marginTop: 8,
+        marginBottom: 0,
         height: 46,
         width: 146,
         justifyContent: 'center',

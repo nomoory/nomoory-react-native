@@ -5,13 +5,12 @@ import {
     View,
     TouchableOpacity
 } from 'react-native';
-import { Container, } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
 import TRANSLATIONS from '../../TRANSLATIONS';
-import { QUOTE_SYMBOL } from '../../stores/accountStore';
+import commonStyle from '../../styles/commonStyle';
 
 @withNavigation
 @inject('tradingPairStore')
@@ -33,11 +32,16 @@ class TradingPairRow extends Component {
     render() {
         const { 
             close_price, signed_change_rate, acc_trade_value_24h, 
-            base_korean_name, base_english_name, name } = this.props.tradingPair || {};
+            base_korean_name, base_english_name, name, 
+            open_price
+        } = this.props.tradingPair || {};
         const tokenNameForSelectedLanguage = this.props.tradingPairStore.languageForTokenName === 'ko' ?
             base_korean_name :
             base_english_name;
         const result = number.getNumberAndPowerOfTenFromNumber_kr(acc_trade_value_24h);
+        const isIncreased = close_price && open_price && Decimal(close_price).lessThan(open_price);
+        const isDecreased = close_price && open_price && Decimal(close_price).greaterThan(open_price);
+
 
         return (
             <TouchableOpacity
@@ -49,11 +53,21 @@ class TradingPairRow extends Component {
                     <Text style={[styles.tokenNameText]}>{tokenNameForSelectedLanguage}</Text>
                     <Text style={[styles.tradingPairNameText]}>{name}</Text>
                 </View>                
-                <View style={[styles.closePrice, styles.column]}>
-                    <Text>{close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원</Text>
+                <View style={[ styles.closePrice, styles.column ]}>
+                    <Text
+                        style={[
+                            isIncreased ? styles.blueText : null,
+                            isDecreased ? styles.redText : null,
+                        ]}
+                    >{close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원</Text>
                 </View>
                 <View style={[styles.signedChangeRate, styles.column]}>
-                    <Text>{signed_change_rate ? number.putComma(Decimal(signed_change_rate).toFixed(2, Decimal.ROUND_UP)) : '-'} %</Text>
+                    <Text
+                        style={[
+                            isIncreased ? styles.blueText : null,
+                            isDecreased ? styles.redText : null,
+                        ]}
+                    >{signed_change_rate ? number.putComma(Decimal(signed_change_rate).toFixed(2, Decimal.ROUND_UP)) : '-'} %</Text>
                 </View>
                 <View style={[styles.accTradeValue, styles.column]}>
                     <Text>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]}원</Text>
@@ -92,6 +106,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-    }
+    },
+    blueText: {
+        color: commonStyle.color.coblicBlue
+    },
+    redText: {
+        color: commonStyle.color.coblicRed
+    },
 })
 export default TradingPairRow;

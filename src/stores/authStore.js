@@ -33,8 +33,8 @@ class AuthStore {
     @observable errors = null;
 
     @observable loginValues = {
-        email: 'junhyek+otp@coblic.com',
-        password: 'sdfsdf!!'
+        email: '',
+        password: ''
     }
 
     @action setEmailForLogin(email) { this.loginValues.email = email; }
