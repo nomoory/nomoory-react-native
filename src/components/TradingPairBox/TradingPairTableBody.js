@@ -14,9 +14,10 @@ class TradingPairTableBody extends Component {
             <ScrollView style={styles.container}>
                 {
                     tradingPairs && 
-                    tradingPairs.map((tradingPair, idx) =>
+                    tradingPairs.map((tradingPair, index) =>
                         <TradingPairRow
-                            key={idx}
+                            key={index}
+                            index={index}
                             tradingPair={tradingPair}
                         />
                     )

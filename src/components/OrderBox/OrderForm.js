@@ -87,7 +87,7 @@ const orderFormStyle = StyleSheet.create({
         borderRadius: 4,
         backgroundColor: '#ffffff',
         borderColor: '#a2abb6',
-        backgroundWidth: 0.5,
+        borderWidth: 0.5,
         fontSize: 12,
     },
     inputTitleContainer: {

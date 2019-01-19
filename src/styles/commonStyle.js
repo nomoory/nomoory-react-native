@@ -60,4 +60,4 @@ Object.keys(font.size).forEach((sizeName) => {
 
 export { color, font };
 
-export default StyleSheet.create(commonStyle);
+export default commonStyle;

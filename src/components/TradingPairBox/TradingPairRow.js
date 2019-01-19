@@ -41,6 +41,7 @@ class TradingPairRow extends Component {
 
         return (
             <TouchableOpacity
+                key={this.props.index}
                 style={[styles.container]}
                 onPress={this._onPressTradingPairRow}
             >

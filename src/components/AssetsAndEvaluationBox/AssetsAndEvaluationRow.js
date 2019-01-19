@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     bottomSubContainer: {
         flex: 1,
         flexDirection: 'column',
-        widht: '100%'
+        width: '100%'
     },
     bottomItemContainer: {
         alignItems: 'flex-end',

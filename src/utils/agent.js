@@ -4,6 +4,7 @@ import userStore from '../stores/userStore';
 import tradingPairStore from '../stores/tradingPairStore';
 import errorHelper from '../utils/errorHelper';
 import { SecureStore } from 'expo';
+import { Platform } from 'react-native';
 
 
 const REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;

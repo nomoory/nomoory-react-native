@@ -50,6 +50,7 @@ class CommonModal extends Component {
                                     let { containerStyle, textStyle, title, onPress } = button;
                                     return (
                                         <TouchableOpacity
+                                            key={index}
                                             style={[
                                                 styles.button, 
                                                 containerStyle, 

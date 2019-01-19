@@ -58,7 +58,7 @@ export default class App extends React.Component {
                     pubnub={pubnub}
                 >
                     <View style={styles.container}>
-                        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+                        {typeof Platform && Platform.OS === 'ios' && <StatusBar barStyle="default" />}
                         <AppNavigator />
                         <CommonModal />
                     </View>

@@ -79,6 +79,7 @@ export default class TradingPairScreen extends Component {
                     });
                     return (
                         <TouchableOpacity
+                            key={route.key}
                             style={[tabStyle.tabItem, this.state.index === i ? tabStyle.selectedTabItem : null]}
                             onPress={() => this.setState({ index: i })}>
                             <Animated.Text style={[ 
@@ -145,7 +146,7 @@ export default class TradingPairScreen extends Component {
                         OrderBox: () => <OrderBox />,
                         PersonalOrderHistory: PersonalOrderHistory,
                     })}
-                    onIndexChange={index => this.setState({ index })}
+                    onIndexChange={(index) => {this.setState({ index })}}
                     renderTabBar={this._renderTabBar}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />

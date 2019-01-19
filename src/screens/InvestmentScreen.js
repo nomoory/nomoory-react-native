@@ -70,6 +70,7 @@ export default class InvestmentScreen extends Component {
                     });
                     return (
                         <TouchableOpacity
+                            key={route.key}
                             style={[tabStyle.tabItem, this.state.index === i ? tabStyle.selectedTabItem : null]}
                             onPress={() => {
                                 this.props.transactionHistoryStore.clear();        
@@ -123,6 +124,7 @@ export default class InvestmentScreen extends Component {
                     </Tab>
                 </Tabs> */}
                 <TabView
+                    initialH
                     navigationState={this.state}
                     renderScene={SceneMap({
                         AssetsAndEvaluationBox: AssetsAndEvaluationBox,
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     activeTextStyle: {
-        fontColor: commonStyle.color.coblicBlue
+        color: commonStyle.color.coblicBlue
     },
     tabStyle: {
         backgroundColor: 'white',
