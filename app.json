@@ -25,6 +25,9 @@
         "ios": {
             "supportsTablet": true
         },
+        "android": {
+            "package": "com.coblic.android.exchange"
+        },
         "extra": {
             "REACT_APP_API_ENDPOINT": "https://production-api-ln8l36h6vjpy4gfejda2sqttvu522gpl.coblic.com",
             "REACT_APP_API_VERSION": "v1.0",
