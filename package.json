@@ -11,7 +11,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'"
+    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'",
+    "upload:android" : "expo upload:android --key ./api-7427826906815320302-18903-ec35548540f8.json --track production"
   },
   "dependencies": {
     "axios": "^0.18.0",
