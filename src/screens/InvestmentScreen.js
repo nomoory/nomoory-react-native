@@ -124,7 +124,6 @@ export default class InvestmentScreen extends Component {
                     </Tab>
                 </Tabs> */}
                 <TabView
-                    initialH
                     navigationState={this.state}
                     renderScene={SceneMap({
                         AssetsAndEvaluationBox: AssetsAndEvaluationBox,
