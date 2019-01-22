@@ -315,97 +315,12 @@ class OrderStore {
         return true;
     }
 
-    _getOrderModalContent = () => {
-        let { trading_pair, side, volume, price, order_type } = this.values;
-        trading_pair = trading_pair || tradingPairStore.selectedTradingPairName;
-        let orderTypeString = order_type == 'LIMIT' ? '지정가' : '';
-        let orderSideString = side == 'SELL' ? '판매' : '구매';
 
-        if (side === 'BUY') {
-            return (
-                <div className='order-modal-content'>
-                    <div className='ask'>{`아래의 ${orderSideString} 주문을 등록하시겠습니까?`}</div>
-                    <div className='info'>
-                        <div className='row'>
-                            <div className='title'>{`거래 자산`}</div>
-                            <div className='value'>{`${trading_pair ? trading_pair.split('-').join(' / ') : '-'}`}</div> 
-                        </div>
-                        <div className='row'> 
-                            <div className='title'>{`주문 유형`}</div>
-                            <div className='value'>{`${orderTypeString} ${orderSideString}`}</div> 
-                        </div>
-                        <div className='row'>
-                            <div className='title'>{`구매 가격`}</div>
-                            <div className='value'>{`${number.putComma(price)} ${this.quoteSymbol}`}</div> 
-                        </div>
-                        <div className='row'> 
-                            <div className='title'>{`구매 수량`}</div>
-                            <div className='value'>{`${number.putComma(volume)} ${this.baseSymbol}`}</div> 
-                        </div>
-                        <div className='row'> 
-                            <div className='title'>{`수수료`}</div>
-                            <div className='value'>{`${number.putComma(number.getFixedPrice(this.maxFee, this.baseSymbol)) } ${this.baseSymbol}`}</div> 
-                        </div>
-                        <div className='row'> 
-                            <div className='title'>{`수령 수량`}</div>
-                            <div className='value'>{`${number.putComma(this.totalGain)} ${this.baseSymbol}`}</div> 
-                        </div>
-                        <div className='row'> 
-                            <div className='title coblic-bold'>{`총 구매금액`}</div>
-                            <div className='value coblic-bold'>{`${number.putComma(number.getFixedPrice(this.amount, this.quoteSymbol))} ${this.quoteSymbol}`}</div> 
-                        </div>
-                    </div>
-                </div>
-            );            
-        } else { // side === 'SELL'
-            return (
-                <div className='order-modal-content'>
-                    <div className='ask'>{`아래의 ${orderSideString} 주문을 등록하시겠습니까?`}</div>
-                    <div className='info'>
-                        <div className='row'>
-                            <div className='title'>{`거래 자산`}</div>
-                            <div className='value'>{`${trading_pair ? trading_pair.split('-').join(' / ') : '-'}`}</div> 
-                        </div>
-                        <div className='row'> 
-                            <div className='title'>{`주문 유형`}</div>
-                            <div className='value'>{`${orderTypeString} ${orderSideString}`}</div>
-                        </div>
-                        <div className='row'>
-                            <div className='title'>{`판매 가격`}</div>
-                            <div className='value'>{`${number.putComma(price)} ${this.quoteSymbol}`}</div> 
-                        </div>
-                        <div className='row'> 
-                            <div className='title'>{`판매 수량`}</div>
-                            <div className='value'>{`${number.putComma(volume)} ${this.baseSymbol}`}</div> 
-                        </div>
-                        <div className='row'> 
-                            <div className='title'>{`수수료`}</div>
-                            <div className='value'>{`${number.putComma(number.getFixedPrice(this.maxFee, this.quoteSymbol))} ${this.quoteSymbol}`}</div>
-                        </div>
-                        <div className='row'> 
-                            <div className='title coblic-bold'>{`총 수령액`}</div>
-                            <div className='value coblic-bold'>{`${number.putComma(number.getFixedPrice(this.totalGain, this.quoteSymbol))} ${this.quoteSymbol}`}</div> 
-                        </div>
-                    </div>
-                </div>
-            );       
-        }
+    @observable orderFormSelectedTabType = 'BUY';
+    @action setOrderFormSelectedTabType(type) {
+        this.orderFormSelectedTabType = type;
     }
-    _getOrderModalButtons() {
-        return (
-            <div className='order-modal-footer'>
-                <button className='button coblic-button coblic-white-button'
-                    onClick={(e) => {modalStore.closeModal()}}
-                >아니오</button>
-                <button className='button coblic-button coblic-blue-button'
-                    onClick={(e) => {
-                        modalStore.closeModal();
-                        this.registerOrder();
-                    }}
-                >예</button>
-            </div>
-        );
-    }
+
 }
 
 export default new OrderStore();
