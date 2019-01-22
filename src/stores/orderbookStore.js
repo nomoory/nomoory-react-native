@@ -33,7 +33,7 @@ class OrderbookStore {
             price: tradingPairStore.selectedTradingPair ? 
                 number.getFixedPrice(order.price, tradingPairStore.selectedTradingPair.base_symbol) :
                 Decimal(order.price).toFixed(),
-            volume: number.getFixed(order.volume, 3)
+            volume: number.getFixed(order.volume)
         };
     };
 
