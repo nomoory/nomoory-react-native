@@ -23,8 +23,6 @@ export default class ExchangeScreen extends Component {
     constructor(props) {
         super(props);
         console.log('ExchangeScreen | construct |');
-        this.pubnubChannel = `TEMP|TICKE`;
-        this.props.pubnub.subscribe(this.pubnubChannel);
 
         // this._openBTCKRWForDevelopTradingPairScreen();
     }
@@ -36,10 +34,14 @@ export default class ExchangeScreen extends Component {
             tradingPairName: 'TOKA-KRW'
         });
     }
+    componentDidMount() {
+        // this.pubnubChannel = `TEMP|TICKER`;
+        // this.props.pubnub.subscribe(this.pubnubChannel);
+    }
 
     componentWillUnmount() { 
         console.log('ExchangeScreen | will unmount |');
-        this.props.pubnub.unsubscribe(this.pubnubChannel); 
+        // this.props.pubnub.unsubscribe(this.pubnubChannel);
     }
 
     render() {

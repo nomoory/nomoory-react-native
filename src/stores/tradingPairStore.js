@@ -102,7 +102,7 @@ class TradingPairStore {
 
     @action updateTickerInTradingPair(ticker) {
         console.log('ticker', ticker)
-        const tickerData = ticker.message || {};
+        const tickerData = ticker || {};
         if (this.tradingPairsRegistry.has(tickerData.trading_pair_name)) {
             const tradingPair = 
                 this.tradingPairsRegistry.get(tickerData.trading_pair_name);

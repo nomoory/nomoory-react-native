@@ -9,16 +9,16 @@ import { withNavigation } from 'react-navigation';
 @inject('pubnub', 'userStore', 'authStore', 'orderFeeStore', 'tradingPairStore')
 @observer
 export default class InitialLoadScreen extends Component {
+    ticker_pubnub_channel = 'TEMP|TICKER';
     constructor(props) {
         super(props);
     }
 
     async componentDidMount() {
         // 거의 모든 페이지에서 trading pair의 close pirce를 참조하기에 실시간 변동을 위해 subscribe 함
-        this.ticker_pubnub_channel = 'TEMP|TICKER';
         this.props.pubnub.subscribe(this.ticker_pubnub_channel);
         await this.props.orderFeeStore.loadOrderFee();
-        await this.props.tradingPairStore.loadTradingPairs();
+        // await this.props.tradingPairStore.loadTradingPairs();
         let accessToken = await SecureStore.getItemAsync('access_token');
         let userUuid = await SecureStore.getItemAsync('user_uuid');
         if (accessToken) { await this.props.userStore.loadUser(userUuid); }
