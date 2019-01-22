@@ -72,13 +72,7 @@ export default class InvestmentScreen extends Component {
                         <TouchableOpacity
                             key={route.key}
                             style={[tabStyle.tabItem, this.state.index === i ? tabStyle.selectedTabItem : null]}
-                            onPress={() => {
-                                this.props.transactionHistoryStore.clear();        
-                                this.setState({ index: i });
-                                try {
-                                    this.props.transactionHistoryStore.changeSelectedOption(this.state.routes[i].key);
-                                } catch (err) { }
-                            }}>
+                            onPress={(e) => {this._onIndexChange(i)}}>
                             <Animated.Text style={[{ color, fontWeight: '600', fontSize: 16 },]}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
@@ -86,6 +80,14 @@ export default class InvestmentScreen extends Component {
             </View>
         );
     };
+    _onIndexChange = (index) => {
+        console.log('_onIndexChange index: ', index);
+        this.props.transactionHistoryStore.clear();        
+        this.setState({ index });
+        try {
+            this.props.transactionHistoryStore.changeSelectedOption(this.state.routes[index].key);
+        } catch (err) { }
+    }
     _renderScene = ({ route }) => {
         switch (route.key) {
             case 'AssetsAndEvaluationBox':
@@ -131,6 +133,7 @@ export default class InvestmentScreen extends Component {
                         MINING: () => <TransactionHistoryBox type='MINING' />,
                         DIVIDEND: () => <TransactionHistoryBox type='DIVIDEND' />,
                     })}
+                    onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
