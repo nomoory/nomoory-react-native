@@ -1,7 +1,6 @@
 import { observable, action, computed, reaction } from 'mobx';
 import agent from '../utils/agent';
 import accountStore from './accountStore';
-import authStore from './authStore';
 // import Sentry from '../utils/Sentry';
 
 class UserStore {
@@ -62,7 +61,6 @@ class UserStore {
                 }))
                 .catch(action((err) => {
                     this.errors = err.response && err.response.body && err.response.body.errors;
-                    authStore.destroyAccessToken();
                     this.isLoading = false;
                     throw err;
                 }));

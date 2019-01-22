@@ -21,7 +21,9 @@ export default class InitialLoadScreen extends Component {
         // await this.props.tradingPairStore.loadTradingPairs();
         let accessToken = await SecureStore.getItemAsync('access_token');
         let userUuid = await SecureStore.getItemAsync('user_uuid');
-        if (accessToken) { await this.props.userStore.loadUser(userUuid); }
+        if (accessToken) { 
+            await this.props.userStore.loadUser(userUuid);
+        }
 
         // if (!this.props.userStore.isLoggedIn) { await this.props.authStore.login(); } 
 

@@ -1,7 +1,4 @@
 import axios from 'axios';
-import authStore from '../stores/authStore';
-import userStore from '../stores/userStore';
-import tradingPairStore from '../stores/tradingPairStore';
 import errorHelper from '../utils/errorHelper';
 import { SecureStore } from 'expo';
 import { Platform } from 'react-native';
@@ -130,14 +127,14 @@ class Agent {
     }
 
     // Personal Trades
-    async loadPersonalTrades() {
+    async loadPersonalTrades(selectedTradingPairName) {
         let userUuid = await this.getUserUuid();
-        return this.get(`users/${userUuid}/trades/?trading_pair_name=${tradingPairStore.selectedTradingPairName}`);
+        return this.get(`users/${userUuid}/trades/?trading_pair_name=${selectedTradingPairName}`);
     }
 
-    async loadPersonalPlacedOrders() {
+    async loadPersonalPlacedOrders(selectedTradingPairName) {
         let userUuid = await this.getUserUuid();
-        return this.get(`users/${userUuid}/orders/?trading_pair_name=${tradingPairStore.selectedTradingPairName}&order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
+        return this.get(`users/${userUuid}/orders/?trading_pair_name=${selectedTradingPairName}&order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
     }
 
     createAndGetWarmWalletAddress(account_uuid) {
@@ -382,11 +379,6 @@ class Agent {
         }
         errorHelper.handleErrorCode(error.response);
         console.log('handle error : ', error.response);
-        // errorStore.setErrorInfo(error.response.data);
-        // 로그아웃을 해야할 에러일때 처리.
-        // if (error && error.response && error.response.status === 401) {
-        //   authStore.logout();
-        // }
         throw error;
     }
 
