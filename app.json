@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "coblic-app",
-        "description": "This project is really great.",
+        "name": "코블릭",
+        "description": "지속가능한 채굴형 거래소 코블릭",
         "slug": "coblic-app",
         "privacy": "public",
         "sdkVersion": "31.0.0",
@@ -9,10 +9,11 @@
             "ios",
             "android"
         ],
-        "version": "1.0.0",
+        "version": "1.0.1",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "splash": {
+            "resizeMode": "contain",
             "image": "./assets/splash_icon.png",
             "backgroundColor": "#0052f3"
         },
@@ -26,7 +27,8 @@
             "supportsTablet": true
         },
         "android": {
-            "package": "com.coblic.android.exchange"
+            "package": "com.coblic.android.exchange",
+            "versionCode": 4
         },
         "extra": {
             "REACT_APP_API_ENDPOINT": "https://production-api-ln8l36h6vjpy4gfejda2sqttvu522gpl.coblic.com",
@@ -34,10 +36,10 @@
             "REACT_APP_PUBNUB_SUBSCRIBE_KEY": "sub-c-1c6e4688-c2db-11e8-a415-1a3a09e2960b",
             "REACT_APP_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",
 
-            "REACT_APP_DEV_API_ENDPOINT": "https://staging-api-vgeynb6vsktxpsc88j3qmmhjpwvncjge.coblic.com",
+            "REACT_APP_DEV_API_ENDPOINT": "https://production-api-ln8l36h6vjpy4gfejda2sqttvu522gpl.coblic.com",
             "REACT_APP_DEV_API_VERSION": "v1.0",
-            "REACT_APP_DEV_PUBNUB_SUBSCRIBE_KEY": "sub-c-17e69c14-c2db-11e8-ab1e-765c49db24ca",
-            "REACT_APP_DEV_ASSET_ORIGIN": ""
+            "REACT_APP_DEV_PUBNUB_SUBSCRIBE_KEY": "sub-c-1c6e4688-c2db-11e8-a415-1a3a09e2960b",
+            "REACT_APP_DEV_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net"
         }
     }
 }
