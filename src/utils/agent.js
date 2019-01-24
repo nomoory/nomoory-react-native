@@ -395,8 +395,9 @@ let agent;
 console.log('is dev? :', __DEV__);
 if (__DEV__) {
     agent = new Agent(DEV_API_ROOT);
+    console.log('DEV_API_ROOT :', DEV_API_ROOT);
 } else {
     agent = new Agent(API_ROOT);
-    console.log('is API_ROOT :', DEV_API_ROOT);
+    console.log('API_ROOT :', API_ROOT);
 }
 export default agent;

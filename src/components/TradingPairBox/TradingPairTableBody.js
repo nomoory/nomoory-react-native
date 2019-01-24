@@ -9,18 +9,24 @@ import TradingPairRow from './TradingPairRow';
 @observer
 class TradingPairTableBody extends Component {
     render() {
-        const { tradingPairs } = this.props.tradingPairStore;
+        const { tradingPairs } = this.props.tradingPairStore || {};
+        console.log('TradingPairTableBody:tradingPairs', tradingPairs)
         return (
             <ScrollView style={styles.container}>
                 {
-                    tradingPairs && 
-                    tradingPairs.map((tradingPair, index) =>
-                        <TradingPairRow
-                            key={index}
-                            index={index}
-                            tradingPair={tradingPair}
-                        />
-                    )
+                    tradingPairs && tradingPairs.length > 0 ?
+                    tradingPairs.map((tradingPair, index) => {
+                        return (
+                            <TradingPairRow
+                                key={index}
+                                index={index}
+                                tradingPair={tradingPair}
+                            />
+                        );
+                    }
+
+                    ) :
+                    null
                 }
             </ScrollView>
         );

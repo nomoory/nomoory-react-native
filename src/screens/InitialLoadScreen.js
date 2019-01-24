@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import commonStyle from '../styles/commonStyle'
+import commonStyle from '../styles/commonStyle';
 import { SecureStore } from 'expo';
 import { withNavigation } from 'react-navigation';
 
@@ -22,12 +22,18 @@ export default class InitialLoadScreen extends Component {
         let accessToken = await SecureStore.getItemAsync('access_token');
         let userUuid = await SecureStore.getItemAsync('user_uuid');
         if (accessToken) { 
-            await this.props.userStore.loadUser(userUuid);
+            try {
+                await this.props.userStore.loadUser(userUuid);                
+            } catch (err) {
+                this.props.authStore.destroyAccessToken();
+            }
         }
+        
+        this._moveToExchangeScreen();
+    }
 
-        // if (!this.props.userStore.isLoggedIn) { await this.props.authStore.login(); } 
-
-        this._moveToMainStack();
+    _moveToExchangeScreen = () => {
+        this.props.navigation.navigate('Exchange');
     }
 
     render() {
@@ -42,10 +48,6 @@ export default class InitialLoadScreen extends Component {
                 <ActivityIndicator style={[styles.loadingIndicator]}size="large" color={commonStyle.color.coblicPaleBlue}/>
             </View>
         )            
-    }
-
-    _moveToMainStack = () => {
-        this.props.navigation.navigate('Exchange');
     }
 }
 

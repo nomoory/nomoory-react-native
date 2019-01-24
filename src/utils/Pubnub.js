@@ -33,8 +33,8 @@ export default class Pubnub {
         let message = msg.message;
         // store에 업데이트 시 method에 identification을 넘깁니다.
         // store에서 UUID와 authStore를 비교하여 업데이트 할지 여부를 결정합니다.
-        console.log('channelScope',channelScope)
-        console.log('msg',msg)
+        console.log('pubnub channelScope',channelScope);
+        console.log('pubnub msg', msg);
         switch (channelScope) {
             case 'ORDERBOOK':
                 orderbookStore.setOrderbook(message);

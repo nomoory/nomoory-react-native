@@ -93,7 +93,6 @@ class AuthStore {
     @action async setAccessToken(accessToken) { await SecureStore.setItemAsync('access_token', accessToken); }
     @action async setUserUuid(userUuid) { await SecureStore.setItemAsync('user_uuid', userUuid); }
     @action async destroyAccessToken() { 
-        
         SecureStore.deleteItemAsync('access_token'); 
         SecureStore.deleteItemAsync('user_uuid');
     }

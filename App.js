@@ -34,10 +34,11 @@ export default class App extends React.Component {
         let loginReaction = reaction(
             () => stores.userStore.currentUser,
             currentUser => {
+                console.log('currentUser changed', currentUser)
                 if (currentUser) {
                     this.order_pubnub_channel = `ORDER_${currentUser.personal_pubnub_uuid}`;
                     pubnub.subscribe(this.order_pubnub_channel);
-                    this.accuount_pubnub_channel = `ACCOUNT_${currentUser.personal_pubnub_uuid}`; 
+                    this.accuount_pubnub_channel = `ACCOUNT_${currentUser.personal_pubnub_uuid}`;
                     pubnub.subscribe(this.accuount_pubnub_channel);
                 } else {
                     if (this.order_pubnub_channel) {
