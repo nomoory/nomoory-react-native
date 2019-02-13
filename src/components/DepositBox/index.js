@@ -9,7 +9,6 @@ import number from '../../utils/number';
 @observer
 export default class DepositBox extends Component {
     componentDidMount() {
-        console.log('OrderBox is mounted |')
     }
 
     _handleIssueAddress = (e) => {

@@ -18,7 +18,6 @@ class CommonModal extends Component {
             buttons 
         } = this.props.modalStore || {};
         
-        console.log(typeof buttons);
         return (
             <Modal isVisible={isVisible}
                 onBackdropPress={this._closeModal}

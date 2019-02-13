@@ -14,8 +14,7 @@ class ErrorHelper{
             default_code,
             default_detail
         } = this.parseError(error);
-        console.log(this.parseError(error));
-
+        
         let message = null;
         /* not found */
         if (status_code == 404) { return ;}

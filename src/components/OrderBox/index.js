@@ -7,7 +7,6 @@ import OrderForm from './OrderForm';
 @observer
 export default class OrderBox extends Component {
     componentDidMount() {
-        console.log('OrderBox is mounted |')
     }
     render() {
         return (

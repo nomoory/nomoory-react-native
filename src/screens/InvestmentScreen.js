@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import headerStyle from '../styles/headerStyle';
 import commonStyle from '../styles/commonStyle';
 import tabStyle from '../styles/tabStyle';
-import { Tab, Tabs, TabHeading } from 'native-base';
 import { StyleSheet, View, Text, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
@@ -81,7 +80,6 @@ export default class InvestmentScreen extends Component {
         );
     };
     _onIndexChange = (index) => {
-        console.log('_onIndexChange index: ', index);
         this.props.transactionHistoryStore.clear();        
         this.setState({ index });
         try {

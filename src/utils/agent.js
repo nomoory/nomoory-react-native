@@ -122,7 +122,6 @@ class Agent {
     // Accounts
     async loadAccounts() {
         let userUuid = await this.getUserUuid();
-        console.log('userId on load accounts', userUuid);
         return this.get(`users/${userUuid}/accounts/`);
     }
 
@@ -343,7 +342,6 @@ class Agent {
                 }
             };
         }
-        console.log('accessToken on request (config): ', requestConfig);
 
         return requestConfig;
     }
@@ -378,7 +376,6 @@ class Agent {
             throw error;
         }
         errorHelper.handleErrorCode(error.response);
-        console.log('handle error : ', error.response);
         throw error;
     }
 
@@ -392,12 +389,9 @@ class Agent {
 }
 
 let agent;
-console.log('is dev? :', __DEV__);
 if (__DEV__) {
     agent = new Agent(DEV_API_ROOT);
-    console.log('DEV_API_ROOT :', DEV_API_ROOT);
 } else {
     agent = new Agent(API_ROOT);
-    console.log('API_ROOT :', API_ROOT);
 }
 export default agent;

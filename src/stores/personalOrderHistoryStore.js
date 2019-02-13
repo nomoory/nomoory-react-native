@@ -43,7 +43,6 @@ class PersonalOrderHistoryStore {
         if (['COMPLETED', 'CANCELLED'].includes(personalOrder.order_status)) {
             if (this.placedOrdersRegistry.get(personalOrder.uuid)){
                 this.placedOrdersRegistry.delete(personalOrder.uuid);
-                console.log('deleted', this.placedOrdersRegistry.get(personalOrder.uuid));
             }
         }
     }

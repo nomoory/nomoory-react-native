@@ -29,8 +29,6 @@ export default class AssetsAndEvaluationRow extends Component {
         const isRise = valueChange_decimal.greaterThan(0);
         const isFall = valueChange_decimal.lessThan(0);
 
-        console.log(this.props.portfolio)
-
         return (
             <View style={ styles.container }>
                 <View style={[styles.upperContainer]}>

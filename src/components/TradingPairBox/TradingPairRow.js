@@ -11,6 +11,7 @@ import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import commonStyle from '../../styles/commonStyle';
+import { computed } from 'mobx';
 
 @withNavigation
 @inject('tradingPairStore')
@@ -27,6 +28,11 @@ class TradingPairRow extends Component {
             baseKoreanName: tradingPair.base_korean_name,
             tradingPairName: tradingPair.name
         });
+    }
+
+    @computed get changeRate() {
+        let { change_rate, change } = this.props.tradingPair || {};
+        return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_rate ? number.putComma(Decimal(Decimal(change_rate).mul(100).toFixed(2)).toFixed()) : '- '}`
     }
 
     render() {
@@ -67,7 +73,7 @@ class TradingPairRow extends Component {
                             isIncreased ? styles.blueText : null,
                             isDecreased ? styles.redText : null,
                         ]}
-                    >{signed_change_rate ? number.putComma(Decimal(signed_change_rate).toFixed(2, Decimal.ROUND_UP)) : '-'} %</Text>
+                    >{this.changeRate} %</Text>
                 </View>
                 <View style={[styles.accTradeValue, styles.column]}>
                     <Text>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]}원</Text>

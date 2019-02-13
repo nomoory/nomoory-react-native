@@ -10,11 +10,10 @@ import TradingPairRow from './TradingPairRow';
 class TradingPairTableBody extends Component {
     render() {
         const { tradingPairs } = this.props.tradingPairStore || {};
-        console.log('TradingPairTableBody:tradingPairs', tradingPairs)
         return (
             <ScrollView style={styles.container}>
                 {
-                    tradingPairs && tradingPairs.length > 0 ?
+                    (tradingPairs && tradingPairs.length > 0) ?
                     tradingPairs.map((tradingPair, index) => {
                         return (
                             <TradingPairRow
@@ -23,9 +22,7 @@ class TradingPairTableBody extends Component {
                                 tradingPair={tradingPair}
                             />
                         );
-                    }
-
-                    ) :
+                    }) :
                     null
                 }
             </ScrollView>

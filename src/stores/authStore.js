@@ -67,8 +67,6 @@ class AuthStore {
                     otp_code: ''            
                 };
             } else {
-                console.log('token received: ', user.access_token)
-                console.log('user received: ', user)
                 this.setAccessToken(user.access_token);
                 this.setUserUuid(user.uuid);
                 delete user.access_token;                

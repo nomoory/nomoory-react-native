@@ -282,7 +282,6 @@ class OrderStore {
 
     @action registerOrder() {
         this.isLoading = true;
-        console.log(this.values)
         return agent.registerOrder({...this.values, unit_price: this.unit_price})
             .then(action((response) => {
                 this.isLoading = false;

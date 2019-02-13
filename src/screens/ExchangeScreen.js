@@ -22,7 +22,6 @@ export default class ExchangeScreen extends Component {
 
     constructor(props) {
         super(props);
-        console.log('ExchangeScreen | construct |');
 
         // this._openBTCKRWForDevelopTradingPairScreen();
     }
@@ -40,7 +39,6 @@ export default class ExchangeScreen extends Component {
     }
 
     componentWillUnmount() { 
-        console.log('ExchangeScreen | will unmount |');
         // this.props.pubnub.unsubscribe(this.pubnubChannel);
     }
 

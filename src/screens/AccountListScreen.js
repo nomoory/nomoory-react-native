@@ -34,7 +34,6 @@ export default class AccountListScreen extends Component {
 
     @observable showPossesionOnly = false;
     @action _handleChangeFilterCheckBox = (e) => {  
-        console.log(this.showPossesionOnly)
         this.showPossesionOnly = !this.showPossesionOnly;    
     }
 

@@ -13,11 +13,10 @@ class OrderFeeStore {
     @action loadOrderFee() {
         this.isLoading = true;
         return agent.loadOrderFee()
-            .then(action((response) => {
-                console.log('res orderfee', response)
+            .then((response) => {
                 this.orderFee = response.data;
                 this.isLoading = false;
-            }))
+            })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
                 this.isLoading = false;

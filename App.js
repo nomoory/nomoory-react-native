@@ -7,9 +7,6 @@ import AppNavigator from './src/navigation/AppNavigator';
 import Pubnub from './src/utils/Pubnub';
 import CommonModal from './src/components/CommonModal';
 
-import { StyleProvider } from 'native-base';
-import getTheme from './src/global/styles/native-base-theme/components';
-import commonColor from './src/global/styles/native-base-theme/variables/commonColor';
 import { enableLogging } from 'mobx-logger';
 import { observable, reaction } from 'mobx';
 
@@ -34,7 +31,6 @@ export default class App extends React.Component {
         let loginReaction = reaction(
             () => stores.userStore.currentUser,
             currentUser => {
-                console.log('currentUser changed', currentUser)
                 if (currentUser) {
                     this.order_pubnub_channel = `ORDER_${currentUser.personal_pubnub_uuid}`;
                     pubnub.subscribe(this.order_pubnub_channel);
@@ -66,18 +62,16 @@ export default class App extends React.Component {
     }
     render() {
         return (
-            <StyleProvider style={getTheme(commonColor)}>
-                <Provider
-                    {...stores}
-                    pubnub={pubnub}
-                >
-                    <View style={styles.container}>
-                        {typeof Platform && Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-                        <AppNavigator />
-                        <CommonModal />
-                    </View>
-                </Provider>
-            </StyleProvider>
+            <Provider
+                {...stores}
+                pubnub={pubnub}
+            >
+                <View style={styles.container}>
+                    {typeof Platform && Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+                    <AppNavigator />
+                    <CommonModal />
+                </View>
+            </Provider>
         );
     }
 }

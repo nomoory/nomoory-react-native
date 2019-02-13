@@ -12,7 +12,6 @@ class TradingPairStore {
         const selectedTradingPairNameReaction = reaction(
             () => this.selectedTradingPairName,
             async (selectedTradingPairName) => {
-                console.log('selectedTradingPairName', selectedTradingPairName)
                 orderbookStore.clearOrderbook();
                 await orderbookStore.loadOrderbook(selectedTradingPairName);
                 orderStore.setTradingPair(selectedTradingPairName);
@@ -55,22 +54,19 @@ class TradingPairStore {
     }
 
     getTradingPairByTradingPairName(tradingPairName) {
-        console.log('tradingPairName', tradingPairName)
         return this.tradingPairsRegistry.get(tradingPairName) || null;
     }
 
     @computed get tradingPairs() {
-        let tradingPairs = [];
+        let tradingPairArray = [];
         this.tradingPairsRegistry.forEach((tradingPair, key) => {
-            console.log('tradingPair : ', tradingPair)
-            tradingPairs.push(tradingPair);
+            tradingPairArray.push(tradingPair);
         });
         // tradingPairs = this._tab(tradingPairs);
         // tradingPairs = this._filter(tradingPairs);
-        tradingPairs = this._search(this.searchKeyword, tradingPairs);
-        tradingPairs = this._sort(tradingPairs);
-        console.log('tradingPairs : ', tradingPairs)
-        return tradingPairs;
+        tradingPairArray = this._search(this.searchKeyword, tradingPairArray);
+        tradingPairArray = this._sort(tradingPairArray);
+        return tradingPairArray;
     }
 
     @action loadTradingPairs() {
@@ -105,7 +101,6 @@ class TradingPairStore {
     }
 
     @action updateTickerInTradingPair(ticker) {
-        console.log('ticker', ticker)
         const tickerData = ticker || {};
         if (this.tradingPairsRegistry.has(tickerData.trading_pair_name)) {
             const tradingPair = 

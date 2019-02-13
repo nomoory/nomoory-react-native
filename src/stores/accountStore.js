@@ -169,7 +169,6 @@ class AccountStore {
             } 
             return result;
         } catch (err) {
-            console.log('err on get totalAssetsEvaluation of account: ', account)
             let result = {
                 total_evaluated_price_in_quote: null,
                 holding_quote: null,

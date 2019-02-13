@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import tabStyle from '../styles/tabStyle';
-
-import { Tab, Tabs, TabHeading } from 'native-base';
-
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Animated } from 'react-native';
@@ -47,9 +44,8 @@ export default class TradingPairScreen extends Component {
         };
     }
 
-    componentWillMount() { console.log('TradingPairScreen will mount |'); }
+    componentWillMount() {}
     componentWillUnmount() {
-        console.log('TradingPairScreen | will unmount |');
         this.props.pubnub.unsubscribe(this.pubnubChannel);
     }
 
@@ -94,7 +90,6 @@ export default class TradingPairScreen extends Component {
     };
 
     render() {
-        console.log('TradingPairScreen | render |')
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let {
             close_price,
@@ -102,7 +97,8 @@ export default class TradingPairScreen extends Component {
             high_price,
             low_price,
             open_price,
-            acc_trade_value_24h
+            acc_trade_value_24h,
+            signed_change_rate
         } = tradingPair || {};
         const result = number.getNumberAndPowerOfTenFromNumber_kr(acc_trade_value_24h);
 
@@ -190,6 +186,7 @@ const styles = StyleSheet.create({
         color: '#000000',
     },
     changeRateText: {
+        paddingLeft: 8,
         fontSize: 16,
         fontWeight: '500',
     },

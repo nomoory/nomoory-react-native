@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
-import { Container } from 'native-base';
 import { inject, observer } from 'mobx-react';
 import { QUOTE_SYMBOL } from '../stores/accountStore';
 import number from '../utils/number';
@@ -30,10 +29,8 @@ export default class AccountDepositWithdrawScreen extends Component {
     }
 
     componentWillMount() { 
-        console.log('AccountDepositWithdrawScreen will mount |'); 
     }
     componentDidMount() { 
-        console.log('AccountDepositWithdrawScreen did mount |')
         // this.props.pubnub.subscribe(this.pubnubChannel); 
     }
     componentWillUnmount() { this.props.pubnub.unsubscribe(this.pubnubChannel); }
@@ -41,18 +38,19 @@ export default class AccountDepositWithdrawScreen extends Component {
     render() {
 
         return (
-            <Container style={styles.container}>
+            <View style={styles.container}>
                 <DepositWithdrawInfoHeader />
                 <DepositBox />
-            </Container>
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        // width: '100%',
-        // hegith: '100%',
-        // flexDirection: 'column'
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+        backgroundColor: 'white'
     }
 })
