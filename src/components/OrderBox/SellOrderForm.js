@@ -13,9 +13,6 @@ import TRANSLATIONS from '../../TRANSLATIONS';
 @observer
 export default class SellOrderForm extends Component {
     componentDidMount() {
-        let { close_price } = this.props.tradingPairStore.selectedTradingPair || {};
-        this.props.orderStore.setPrice(close_price ? Decimal(close_price).toFixed() : '0');
-        this.props.orderStore.setVolume('0');
         this.props.orderStore.setSide('SELL'); // SELL side임을 보장하기 위함
     }
 

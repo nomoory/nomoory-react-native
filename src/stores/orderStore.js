@@ -30,7 +30,7 @@ class OrderStore {
             }
         };
     }
-    @computed get unit_price() { return number.getUnitPrice(this.values.price, this.quoteSymbol) }
+    @computed get unit_price() { return number.getUnitPrice(this.values.price, this.quoteSymbol, this.baseSymbol) }
     @computed get isBuy() { return this.values.side === 'BUY'; }
     @computed get isSell() { return this.values.side === 'SELL'; }
     @computed get amount() {
@@ -185,7 +185,7 @@ class OrderStore {
         }
     }
 
-    increasePriceByButton = action(() => {
+    @action increasePriceByButton() {
         try {
             let { price } = this.values;
             let unit_price = this.unit_price;
@@ -196,7 +196,7 @@ class OrderStore {
             if (rest_decimal.equals(0)) {
                 // 경계에서 호가단위가 바뀌는 것 처리. 1000 -> 995 가 아니라 999여야함
                 temp_price = price_decimal.plus(unit_price);
-                temp_unit_price = number.getUnitPrice(temp_price, this.quoteSymbol);
+                temp_unit_price = number.getUnitPrice(temp_price, this.quoteSymbol, this.baseSymbol);
                 // 경계에서 호가단위가 바뀌는 것 처리. 999 -> 1004 가 아니라 1000이여야함.
                 if ((temp_price.modulo(temp_unit_price)).equals(0)) {
                     price_decimal = temp_price;
@@ -210,9 +210,9 @@ class OrderStore {
         } catch (e) { 
             return;
         }
-    });
+    };
 
-    decreasePriceByButton = action(() => {
+    @action decreasePriceByButton() {
         try {
             let { price } = this.values;
             let unit_price = this.unit_price;
@@ -223,14 +223,14 @@ class OrderStore {
             if (rest_decimal.equals(0)) {
                 // 경계에서 호가단위가 바뀌는 것 처리. 1000 -> 995 가 아니라 999여야함
                 temp_price = price_decimal.minus(unit_price);
-                temp_unit_price = number.getUnitPrice(temp_price, this.quoteSymbol);
+                temp_unit_price = number.getUnitPrice(temp_price, this.quoteSymbol, this.baseSymbol);
                 price_decimal = price_decimal.minus(temp_unit_price);
             } else {
                 price_decimal = price_decimal.minus(rest_decimal);
             }
             this.setPrice(price_decimal.toFixed());
         } catch (e) { return; }
-    });
+    };
 
     @action submitOrder() {
         if (this.isValidOrder.state === false) {

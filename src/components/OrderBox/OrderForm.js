@@ -51,14 +51,14 @@ const orderFormStyle = StyleSheet.create({
     // liquid
     liquidContainer: {
         flexDirection: 'column',
-        marginTop: 5
+        marginTop: 4
     },
     liquidTitle: {
         fontWeight: '600',
         fontSize: 16,
     },
     liquidContentContainer: {
-        marginTop: 6,
+        marginTop: 4,
         flexDirection: 'row',
         justifyContent: 'flex-end'
     },
@@ -75,7 +75,7 @@ const orderFormStyle = StyleSheet.create({
 
     // price text input
     inputContainer: {
-        marginTop: 10,
+        marginTop: 8,
         width: '100%',
         flexDirection: 'row',
     },
@@ -111,7 +111,7 @@ const orderFormStyle = StyleSheet.create({
         fontSize: 11
     },
     setPriceButtonsContainer: {
-        marginTop: 6,
+        marginTop: 4,
         flexDirection: 'row',
         justifyContent: 'flex-end',
         width: '100%',
@@ -138,7 +138,7 @@ const orderFormStyle = StyleSheet.create({
     },
     // set volume buttons
     setVolumeButtons: {
-        marginTop: 6,
+        marginTop: 4,
         flexDirection: 'row',
         borderRadius: 5,
         borderWidth: 1.5,
@@ -171,7 +171,7 @@ const orderFormStyle = StyleSheet.create({
         fontSize: 11,
     },
     infoContainer: {
-        marginTop: 7,
+        marginTop: 5,
         alignItems: 'flex-end',
         flexDirection: 'row',
         justifyContent: 'space-between'

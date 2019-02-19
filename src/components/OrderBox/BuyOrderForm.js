@@ -12,11 +12,7 @@ import { withNavigation } from 'react-navigation';
 @observer
 export default class BuyOrderForm extends Component {
     componentDidMount() {
-        let { close_price } = this.props.tradingPairStore.selectedTradingPair || {};
-        this.props.orderStore.setPrice(close_price ? Decimal(close_price).toFixed() : '0');
-        this.props.orderStore.setVolume('0');
         this.props.orderStore.setSide('BUY'); // BUY side임을 보장하기 위함
-
     }
     
     @computed get maxFeePercentage() { return number.getRateAsFiexdPercentage(this.props.orderStore.maxFeeRate, 2); }

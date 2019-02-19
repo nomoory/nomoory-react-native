@@ -1,7 +1,10 @@
 import { Decimal } from './decimal.js';
 
 const MAX_SAFE_INTEGER = 9007199254740991;
-const unitPriceTable = {
+const UNIT_PRICE_TABLE = {
+    "DEFAULT": [
+        [MAX_SAFE_INTEGER, '0.00000001'],
+    ],
     "BTC": [
         [MAX_SAFE_INTEGER, '0.00000001'],
     ],
@@ -21,7 +24,54 @@ const unitPriceTable = {
         [1000000, '100'],
         [2000000, '500'],
         [MAX_SAFE_INTEGER, '1000']
-    ]
+    ],
+    "TOKA_KRW": [
+        [10, '0.1'],
+        [100, '0.1'],
+        [1000, '1'],
+        [10000, '5'],
+        [100000, '10'],
+        [500000, '50'],
+        [1000000, '100'],
+        [2000000, '500'],
+        [MAX_SAFE_INTEGER, '1000']
+    ],
+    "KRWb_KRW": [
+        [10, '0.001'],
+        [100, '0.1'],
+        [1000, '1'],
+        [10000, '5'],
+        [100000, '10'],
+        [500000, '50'],
+        [1000000, '100'],
+        [2000000, '500'],
+        [MAX_SAFE_INTEGER, '1000']
+    ],
+    'DEAL_KRW': [
+        [10, '0.1'],
+        [100, '0.5'],
+        [500, '1'],
+        [1000, '5'],
+        [5000, '10'],
+        [10000, '100'],
+        [100000, '250'],
+        [500000, '250'],
+        [1000000, '100'],
+        [2000000, '500'],
+        [MAX_SAFE_INTEGER, '1000']
+    ],
+    'PAX_KRW': [
+        [30, '0.1'],
+        [100, '0.5'],
+        [500, '1'],
+        [1000, '5'],
+        [10000, '10'],
+        [100000, '10'],
+        [500000, '50'],
+        [1000000, '100'],
+        [2000000, '500'],
+        [MAX_SAFE_INTEGER, '1000']
+    ],
 }
 
 const KOREAN_NUMBER_BY_NAME = {
@@ -62,28 +112,34 @@ class NumberHelper {
         return !value_string || value_string === '';
     }
 
-    getUnitPrice(price_string, symbol) {
-        let result_string = '0.00000001'
-        if (!price_string) return result_string;
-
-        const price_decimal = this.Decimal(price_string);
-        let index = 0;
-        for (let maxPriceAndUnit of unitPriceTable[symbol]) {
-            const maxPriceOfTheRange_decimal = this.Decimal(maxPriceAndUnit[0]);
-            if (price_decimal.lessThan(maxPriceOfTheRange_decimal)) {
-                const unit_string = maxPriceAndUnit[1];
-                return unit_string;
-            }
-            if (index === unitPriceTable[symbol].length - 1) {
-                if (price_decimal.greaterThanOrEqualTo(maxPriceOfTheRange_decimal)) {
-                    const unit_string = maxPriceAndUnit[1];
-                    return unit_string;    
+    getUnitPrice(price_string, quoteSymbol, baseSymbol) {
+        let unitPrice_string = '0.00000001';
+        let selectedUnitPriceTable = UNIT_PRICE_TABLE['DEFAULT'];
+        if (quoteSymbol) {
+            selectedUnitPriceTable = UNIT_PRICE_TABLE[quoteSymbol];
+            if (baseSymbol === 'TOKA') {
+                selectedUnitPriceTable = UNIT_PRICE_TABLE['TOKA_KRW'];
+            } else if (baseSymbol === 'KRWb') {
+                selectedUnitPriceTable = UNIT_PRICE_TABLE['KRWb_KRW'];
+            } else if (baseSymbol === 'DEAL') {
+                selectedUnitPriceTable = UNIT_PRICE_TABLE['DEAL_KRW'];
+            } else if (baseSymbol === 'PAX') {
+                selectedUnitPriceTable = UNIT_PRICE_TABLE['PAX_KRW'];
+            }    
+        }
+    
+        if (price_string) {
+            let price_decimal = Decimal(price_string);
+            for (let maxPriceAndUnit of selectedUnitPriceTable) {
+                let maxPriceOfTheRange_decimal = Decimal(maxPriceAndUnit[0]);
+                if (price_decimal.lessThan(maxPriceOfTheRange_decimal)) {
+                    let unit_string = maxPriceAndUnit[1];
+                    return unit_string;
                 }
             }
-            index += 1;
         }
-        result_string = unitPriceTable[symbol][0][1];
-        return result_string;
+        unitPrice_string = selectedUnitPriceTable[selectedUnitPriceTable.length - 1][1];
+        return unitPrice_string;
     }
 
     getFixedPrice(price_string, baseSymbol) {
