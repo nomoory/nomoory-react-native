@@ -11,7 +11,7 @@ import TradingPairBox from '../components/TradingPairBox';
 export default class ExchangeScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: '거래소',
+            title: '코블릭 거래소',
             // headerLeft: (
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
