@@ -1,0 +1,43 @@
+{
+  "name": "coblic-app",
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "scripts": {
+    "start": "expo start -c",
+    "test": "node_modules/.bin/jest",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject",
+    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'",
+    "upload:android": "expo upload:android --key ./api-7427826906815320302-18903-ec35548540f8.json --track production"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^9.0.0",
+    "axios": "^0.18.0",
+    "buffer": "^5.2.1",
+    "expo": "^32.0.0",
+    "hangul-js": "^0.2.5",
+    "mobx": "^5.8.0",
+    "mobx-react": "^5.4.3",
+    "moment": "^2.23.0",
+    "moment-timezone": "^0.5.23",
+    "pubnub": "^4.21.5",
+    "pubnub-react": "^1.2.0",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-modal": "^7.0.2",
+    "react-native-tab-view": "^1.3.1",
+    "react-navigation": "^2.18.2",
+    "wallet-address-validator": "^0.2.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-decorators": "^7.2.3",
+    "babel-preset-expo": "^5.0.0",
+    "jest-expo": "^32.0.0",
+    "mobx-logger": "^0.7.1"
+  }
+}

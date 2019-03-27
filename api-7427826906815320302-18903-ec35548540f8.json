@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "api-7427826906815320302-18903",
+  "private_key_id": "ec35548540f8ba3d14951588b97912b00f9cd27e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDCGlmtIsYpq+Yt\nn2ddthWIqXjNEgQul38PtM7amHBwiaMkdlJuhLIT0k9/HXSsfOMf8YomWPGuIokP\n/4KMGfmxYiU5I13iEIOOCbVe1UFX0IO7DPYUSLXox+4O7ZpIWeIFb820OuN1pteB\nYPjYf5zLVKsJLnqxvPcmGcav1Qta6ZtIpi2cBvjrdvnNXG9N5+PybWP9scVbnnnO\nML6WTjtLZUDzM8081Y8NoYmne/LAxktfXkKy9MhLde7T7EAy+2q5flyQSb9Q6TtL\njAQ1risPDAkLBgyUdskMTK+tIHzSIFtrFdnyQeHUuPn1IqIjhmXhrIANA5RMHaID\ns5d0584rAgMBAAECggEACezHx6S+1DenOwEx/UL5giB2DFUAjvZxIjAS4MRwVoN0\nDkH1eTA36pqMbfR1dMCkeRnygCoGc85DCuT8Bio+9xUpJYmg6kA6QA4zlau62nKW\nocYmY7V2hYTDIbacoZFzASB+/8sOZPWB2AbmLSw/D13ijhiTmSpzA6IBABjD1V+9\nBne+DvSMyXZYBkGrJGKucNvDfnq7CfrxcOGngBW82GSabUbWYfEpVipVRWSeBKF/\nPyGtt6/4+zi/ioG8j+jevD8Oi/Sns0XUFZtVw9AVSMLZvzOjZoswLZiad7+OVk1t\nbpdEQCVDvpvzJ/rwPvRacL3SY4pkpjfSSpJVwSLZcQKBgQD8Hv76p5ZZzgGMuRCw\nAdHOcD8EJHCOBTAmzr09qfRdo/4VXPr7V1wolyJVyJEPWZctkys9Q8qEZ6rWEeFV\nK/p1wlwk+y0QLodbA2jg5X7Eb5W9M7z8Ldrvg20VjIKksQEajDen2XC1wQdeIHDd\nqMZktgpVUPVkOBGf0p9Jdq4gUQKBgQDFFtgSdsBE4nBPCCffAUji7sjq7SEzlRv1\n8CcEVhmh52mJBpB6aIhw96/ngImH+GuZl7BBRx/bxpBLuzww6qMYkq7jADR9d4M4\nXmuzX0nujES5eqZQ73qCE3Fu2meSmKmX3WJi2N/QcZRm2TuMOCge1Figvm6KNdYh\nBCzxNfFDuwKBgQDlMWRIBrtWTkD4ZXB3IGBTU5Tlth6f7LV2QfCksvCTg7ZCQ3Fh\ntWvw9ltfMmI0WxRkeOoQ2qSqsvcJfd2jKMSZ8qMDd1bi4/lmUnYwJFCWUH4GLpd5\nhFIH9CjhMwe8obBIKvmZW8DraVvCRKl1x6z69sX0AxHhFltnN/hXt0zZ0QKBgAoO\ncFgA1y6sny5pLB+k4SMzK+1QzDDlmtehuVvvSL+KH0hunVChpNSezsrxNBNMCbF8\nm/G4v1dnelVi6F9WmZvXYDUU/ZipUHi/2J7+bbdOUPNl3raigY3BkDgnzMEeKQkm\nsq54gnMQWJIm43L0KpfoHd2V2e4TcSmeHOzx462hAoGBAPttA+tgr7gdTir1wNUd\nkIHXY4+ApiG0AdtgOg6ghP+Hm2sjxkL7v7wk4PVlJpCTICplU5PSQBkaB2qkvIAU\nplRz0w1nAGLueR4h7Glscx1YuyFZOKcx08i45AMaguNuRZ0dy0tCbDFLWFsrMBRH\nPJlAcSgyGkjrEMPGcMdY6Zag\n-----END PRIVATE KEY-----\n",
+  "client_email": "coblic-exchange-app-update-man@api-7427826906815320302-18903.iam.gserviceaccount.com",
+  "client_id": "112797233888909677251",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/coblic-exchange-app-update-man%40api-7427826906815320302-18903.iam.gserviceaccount.com"
+}
