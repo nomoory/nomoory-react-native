@@ -11,6 +11,7 @@ import realtimeTradeHistoryStore from './realtimeTradeHistoryStore';
 import personalOrderHistoryStore from './personalOrderHistoryStore';
 import whitelistedWithdrawalWalletAddressStore from './whitelistedWithdrawalWalletAddressStore';
 import transactionHistoryStore from './transactionHistoryStore';
+import socketStore from './socketStore';
 
 const stores = {
     accountStore,
@@ -25,7 +26,8 @@ const stores = {
     realtimeTradeHistoryStore,
     personalOrderHistoryStore,
     whitelistedWithdrawalWalletAddressStore,
-    transactionHistoryStore
+    transactionHistoryStore,
+    socketStore,
 };
 
 export default stores;

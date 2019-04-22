@@ -293,33 +293,33 @@ class Agent {
 
     /* Base REST API method */
     async get(url) {
-        console.log('request get | ', url);
+        // console.log('request get | ', url);
         return this.axios
             .get(url, await this._getRequestConfig())
             .catch(this._handleError);
     }
     async put(url, body) {
-        console.log('request put | ', url);
+        // console.log('request put | ', url);
         return this.axios
             .put(url, body, await this._getRequestConfig())
             .catch(this._handleError);
     }
     async patch(url, body) {
-        console.log('request patch | ', url);
+        // console.log('request patch | ', url);
 
         return this.axios
             .patch(url, body, await this._getRequestConfig())
             .catch(this._handleError);
     }
     async post(url, body) {
-        console.log('request post | ', url);
+        // console.log('request post | ', url);
 
         return this.axios
             .post(url, body, await this._getRequestConfig())
             .catch(this._handleError);
     }
     async delete(url) {
-        console.log('request delete | ', url);
+        // console.log('request delete | ', url);
 
         return this.axios
             .delete(url, await this._getRequestConfig())
