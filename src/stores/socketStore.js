@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import { Delibird } from '../utils/delibird';
 import userStore from './userStore';
-import placedOrderHistoryStore from './placedOrderHistoryStore';
+import personalOrderHistoryStore from './personalOrderHistoryStore';
 import accountStore from './accountStore';
 import orderbookStore from './orderbookStore';
 import realtimeTradeHistoryStore from './realtimeTradeHistoryStore';
@@ -10,6 +10,8 @@ import modalStore from './modalStore';
 // import snackbarHelper from 'utils/snackbarHelper';
 // import numberHelper from 'utils/numberHelper';
 import Decimal from '../utils/decimal.js';
+
+const WEBSOCKET_END_POINT = Expo.Constants.manifest.extra.WEBSOCKET_END_POINT;
 
 const CHANNEL_NAMES = {
     // no dependency
@@ -34,7 +36,7 @@ class SocketStore {
     }
     constructor() {
         try {
-            this.delibird = new Delibird(process.env.RAZZLE_PUBNUB_WEBSOCKET_ENDPOINT);
+            this.delibird = new Delibird(WEBSOCKET_END_POINT);
             this.delibird.connect();
             this.addListenersForAllChannels();
     
@@ -50,29 +52,29 @@ class SocketStore {
             } catch (err) {
 
             }
-            // console.log(err);
+            console.log(err);
             this.delibird = null;
         }
     }
 
     async loadAndSubscribeOnInit() {
-        // console.log(`%cLoadAndSubscribeOnInit`, "color: blue; font-size:15px;");
+        console.log(`%cLoadAndSubscribeOnInit`, "color: blue; font-size:15px;");
         try {
             const targetChannels = [ CHANNEL_NAMES.TICKER, CHANNEL_NAMES.SUMMARY ]
 
             for (let targetChannel of targetChannels) {
                 await this._loadDataByChannel(targetChannel);
                 this.delibird.subscribe(targetChannel);
-                // console.log(`%cSubscribe: ${targetChannel}`, "color: blue; font-size:15px;");
+                console.log(`%cSubscribe: ${targetChannel}`, "color: blue; font-size:15px;");
             }    
         } catch (err) {
-            // console.log('fail to load and subscribe initial channel.')
+            console.log('fail to load and subscribe initial channel.')
         }
     }
 
 
     async loadAndSubscribeOnTradingPairChange() {
-        // console.log(`%cLoadAndSubscribeOnTradingPairChange`, "color: blue; font-size:15px;");
+        console.log(`%cLoadAndSubscribeOnTradingPairChange`, "color: blue; font-size:15px;");
         try {
             const targetChannels = [ CHANNEL_NAMES.ORDERBOOK, CHANNEL_NAMES.TRADE ]
             if (tradingPairStore.selectedTradingPairName) {
@@ -86,19 +88,19 @@ class SocketStore {
                         }
                     }
                     // this.delibird.unSubscribe(targetChannel + '.*');
-                    // console.log(`%cUnsubscribe: All ${targetChannel} ${tradingPairStore.selectedTradingPairName}`, "color: blue; font-size:15px;");
+                    console.log(`%cUnsubscribe: All ${targetChannel} ${tradingPairStore.selectedTradingPairName}`, "color: blue; font-size:15px;");
                     this.delibird.subscribe(specificTargetChannel);
-                    // console.log(`%cSubscribe: ${targetChannel} ${tradingPairStore.selectedTradingPairName}`, "color: blue; font-size:15px;");
+                    console.log(`%cSubscribe: ${targetChannel} ${tradingPairStore.selectedTradingPairName}`, "color: blue; font-size:15px;");
                 }
             }    
         } catch (err) {
-            // console.log('fail to load and subscribe channel related to the trading pair.')
+            console.log('fail to load and subscribe channel related to the trading pair.')
         }
     }
 
 
     async loadAndSubscribeOnLogin() {
-        // console.log(`%cLoadAndSubscribeOnLogin`, "color: blue; font-size:15px;");
+        console.log(`%cLoadAndSubscribeOnLogin`, "color: blue; font-size:15px;");
         try {
             const targetChannels = [ CHANNEL_NAMES.ORDER, CHANNEL_NAMES.ACCOUNT ]
             if (userStore.isLoggedIn) {
@@ -106,46 +108,46 @@ class SocketStore {
                 for (let targetChannel of targetChannels) {
                     await this._loadDataByChannel(targetChannel);
                     // this.delibird.unSubscribe(targetChannel);
-                    // console.log(`%cUnSubscribe: ${targetChannel}`, "color: blue; font-size:15px;");
+                    console.log(`%cUnSubscribe: ${targetChannel}`, "color: blue; font-size:15px;");
                     this.delibird.subscribe(targetChannel);
-                    // console.log(`%cSubscribe: ${targetChannel}`, "color: blue; font-size:15px;");
+                    console.log(`%cSubscribe: ${targetChannel}`, "color: blue; font-size:15px;");
                 }
             }
         } catch (err) {
-            // console.log('fail to load and subscribe channel related to login.')
+            console.log('fail to load and subscribe channel related to login.')
         }
     }
 
     unsubscribeOnLogout() {
-        // console.log(`%cUnsubscribeOnLogout`, "color: blue; font-size:15px;");
+        console.log(`%cUnsubscribeOnLogout`, "color: blue; font-size:15px;");
         try {
             const targetChannels = [ CHANNEL_NAMES.ORDER, CHANNEL_NAMES.ACCOUNT ]
             for (let targetChannel of targetChannels) {
-                // console.log(`%cUnSubscribe: ${targetChannel}`, "color: blue; font-size:15px;");
+                console.log(`%cUnSubscribe: ${targetChannel}`, "color: blue; font-size:15px;");
                 this.delibird.unSubscribe(targetChannel);
             }
         } catch (err) {
-            // console.log('fail to unsubscribe channel related to logout.')
+            console.log('fail to unsubscribe channel related to logout.')
         }
     }
 
     unsubscribeAll() {
-        // console.log(`%cUnsubscribeAll`, "color: blue; font-size:15px;");
+        console.log(`%cUnsubscribeAll`, "color: blue; font-size:15px;");
         try {
             this.delibird.unSubscribeAll();
         } catch (err) {
-            // console.log('fail to unsubscribe all channel.')
+            console.log('fail to unsubscribe all channel.')
         }
     }
 
     authenticateOnUserChange() {
-        // console.log(`%cAuthenticateOnUserChange: `, "color: blue; font-size:15px;");
+        console.log(`%cAuthenticateOnUserChange: `, "color: blue; font-size:15px;");
         try {
             this.delibird.authenticate(userStore.currentUser.personal_pubnub_uuid);
-            // console.log(`%cAuthenticate: `, "color: blue; font-size:15px;");
-            // console.log({user: userStore.currentUser})
+            console.log(`%cAuthenticate: `, "color: blue; font-size:15px;");
+            console.log({user: userStore.currentUser})
         } catch (err) {
-            // console.log('fail to authenticate.')
+            console.log('fail to authenticate.')
         }
     }
     
@@ -158,7 +160,7 @@ class SocketStore {
                 tradingPairStore.loadTradingPairs();
                 break;
             case CHANNEL_NAMES.ORDER:
-                placedOrderHistoryStore.loadPersonalPlacedOrders();
+                personalOrderHistoryStore.load();
                 break;
             case CHANNEL_NAMES.TRADE:
                 realtimeTradeHistoryStore.loadRealtimeTrades();
@@ -172,30 +174,30 @@ class SocketStore {
     }
 
     _onReceiveMessage = (channel, data) => {
-        // console.log(data);
+        console.log(data);
         switch (channel) {
             case CHANNEL_NAMES.ORDERBOOK:
-                // console.log(`%cReceived: ORDERBOOK`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: ORDERBOOK`, "color: blue; font-size:15px;");
                 orderbookStore.setOrderbook(data);
                 break;
             case CHANNEL_NAMES.TICKER:
-                // console.log(`%cReceived: TICKER`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: TICKER`, "color: blue; font-size:15px;");
                 tradingPairStore.updateTickerInTradingPair(data);
                 break;
             case CHANNEL_NAMES.ORDER:
-                // console.log(`%cReceived: ORDER`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: ORDER`, "color: blue; font-size:15px;");
                 data.forEach((personalOrder) => {
                     // this._handleOrderByStatus(personalOrder);
-                    placedOrderHistoryStore.setPlacedOrder(personalOrder);
+                    personalOrderHistoryStore.setPlacedOrder(personalOrder);
                 });
                 break;
             case CHANNEL_NAMES.TRADE:
-                // console.log(`%cReceived: TRADE`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: TRADE`, "color: blue; font-size:15px;");
                 realtimeTradeHistoryStore.setRealTimeTrades([data]);
                 this._feedTradeToTradingView(data);
                 break;
             case CHANNEL_NAMES.ACCOUNT:
-                // console.log(`%cReceived: ACCOUNT`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: ACCOUNT`, "color: blue; font-size:15px;");
                 accountStore.setAccount(data);
                 break;
             default:
@@ -239,12 +241,12 @@ class SocketStore {
                 this._addListenerByChannelName(channelName);
             }    
         } catch (err) {
-            // console.log({ description: 'fail to addListeners for all channels', err });
+            console.log({ description: 'fail to addListeners for all channels', err });
         }
     }
     
     _addListenerByChannelName(channelName) {
-        // console.log('channel.' + channelName)
+        console.log('channel.' + channelName)
         let temp = (data) => {
                 this._onReceiveMessage(channelName, data)
         }
@@ -261,8 +263,8 @@ class SocketStore {
     }
     
     @action _feedTradeToTradingView(trade) {
-        // console.log('_feedTradeToTradingView');
-        // console.log({trade, subscribingChannelInfoForTradingView: this.subscribingChannelInfoForTradingView});
+        console.log('_feedTradeToTradingView');
+        console.log({trade, subscribingChannelInfoForTradingView: this.subscribingChannelInfoForTradingView});
         if (trade && this.subscribingChannelInfoForTradingView) {
             // 가장 최신 Candle 이전 Timeinterval의 Candle이 socket으로 도착한다면, disregard
             const lastTickerCreatedDateTime = new Date(trade.created).getTime();
@@ -273,7 +275,7 @@ class SocketStore {
 
             // 가장 최신 Ticker가 socket으로 잘 도착했다면 이를 바탕으로 Candle(lastBar)를 추가합니다.
             var newLastBar = this._getNewBarWithTrade(trade);
-            // console.log({lastBar, newLastBar});
+            console.log({lastBar, newLastBar});
 
             this.subscribingChannelInfoForTradingView.onRealtimeCallback(newLastBar);
             this.subscribingChannelInfoForTradingView.lastBar = newLastBar;
