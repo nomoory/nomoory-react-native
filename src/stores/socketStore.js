@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import { Delibird } from '../utils/delibird';
 import userStore from './userStore';
-import personalOrderHistoryStore from './personalOrderHistoryStore';
+import placedOrderHistoryStore from './placedOrderHistoryStore';
 import accountStore from './accountStore';
 import orderbookStore from './orderbookStore';
 import realtimeTradeHistoryStore from './realtimeTradeHistoryStore';
@@ -160,7 +160,7 @@ class SocketStore {
                 tradingPairStore.loadTradingPairs();
                 break;
             case CHANNEL_NAMES.ORDER:
-                personalOrderHistoryStore.load();
+                placedOrderHistoryStore.loadPersonalPlacedOrders();
                 break;
             case CHANNEL_NAMES.TRADE:
                 realtimeTradeHistoryStore.loadRealtimeTrades();
@@ -188,7 +188,7 @@ class SocketStore {
                 console.log(`%cReceived: ORDER`, "color: blue; font-size:15px;");
                 data.forEach((personalOrder) => {
                     // this._handleOrderByStatus(personalOrder);
-                    personalOrderHistoryStore.setPlacedOrder(personalOrder);
+                    placedOrderHistoryStore.setPlacedOrder(personalOrder);
                 });
                 break;
             case CHANNEL_NAMES.TRADE:
