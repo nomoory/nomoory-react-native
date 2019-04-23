@@ -28,7 +28,7 @@ export default class TransactionHistoryBox extends Component {
         // this.props.transactionHistoryStore.load(this.props.type || 'ALL_TRANSACTIONS');
     }
     
-    @computed get personalCompletedOrderHistoryHead() {
+    @computed get completedOrderHistoryHead() {
         return (
             <View style={[styles.head]}>
                 <View style={[styles.column, styles.firstColumn]}>
@@ -59,7 +59,7 @@ export default class TransactionHistoryBox extends Component {
         );
     };
 
-    _renderPersonalCompoletedOrderHistoryBody() {
+    _renderCompletedOrderHistoryBody() {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.transactionHistory);
         const isLoading = this.props.transactionHistoryStore.loadMoreValues.isLoading;
@@ -136,8 +136,8 @@ export default class TransactionHistoryBox extends Component {
     render() {
         return (
             <View style={[styles.container]}>
-                {this.personalCompletedOrderHistoryHead}
-                {this._renderPersonalCompoletedOrderHistoryBody()}
+                {this.completedOrderHistoryHead}
+                {this._renderCompletedOrderHistoryBody()}
             </View>
         )
     }

@@ -26,7 +26,6 @@ export default class App extends React.Component {
         super(props);
         // 필수로 load하고 subscribe 해야 할 데이터 처리
         stores.socketStore.loadAndSubscribeOnInit();
-        console.log('app')
         // 유저에 따라 load하고 subscribe 해야 할 데이터 처리
         const login_reaction = reaction(
             () => stores.userStore.isLoggedIn,

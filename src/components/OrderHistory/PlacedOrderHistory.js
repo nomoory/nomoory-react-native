@@ -8,26 +8,26 @@ import Decimal from '../../utils/decimal';
 import { reaction, computed } from 'mobx';
 import ScrollLoading from '../ScrollLoading';
 
-@inject('personalOrderHistoryStore', 'tradingPairStore')
+@inject('placedOrderHistoryStore', 'tradingPairStore')
 @observer
-export default class PersonalPlacedOrderHistory extends Component {
+export default class PlacedOrderHistory extends Component {
     componentDidMount() {
         reaction(
             () => this.props.tradingPairStore.selectedTradingPairName,
             (selectedTradingPairName) => {
-                this.props.personalOrderHistoryStore.clearRegistry();
-                this.props.personalOrderHistoryStore.load();
+                // this.props.placedOrderHistoryStore.clearRegistry();
+                this.props.placedOrderHistoryStore.loadPersonalPlacedOrders();
             }
         );
-        this.props.personalOrderHistoryStore.clearRegistry();
-        this.props.personalOrderHistoryStore.load();
+        // this.props.placedOrderHistoryStore.clearRegistry();
+        this.props.placedOrderHistoryStore.loadPersonalPlacedOrders();
     }
 
     _onPressDeleteOrder = (order_uuid) => () => {
-        this.props.personalOrderHistoryStore.deletePlacedOrder(order_uuid);
+        this.props.placedOrderHistoryStore.deletePlacedOrder(order_uuid);
     }
     
-    @computed get personalPlacedOrderHistoryHead() {
+    @computed get placedOrderHistoryHead() {
         return (
             <View style={[styles.head]}>
                 <View style={[styles.column]}>
@@ -61,18 +61,18 @@ export default class PersonalPlacedOrderHistory extends Component {
         );
     };
 
-    _renderPersonalPlacedOrderHistoryBody() {
+    _renderPlacedOrderHistoryBody() {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const dataSource = ds.cloneWithRows(this.props.personalOrderHistoryStore.placedOrders);
-        const isLoading = this.props.personalOrderHistoryStore.loadMoreValues.isLoading;
-        const isLoadable = this.props.personalOrderHistoryStore.isLoadable;
+        const dataSource = ds.cloneWithRows(this.props.placedOrderHistoryStore.placedOrders);
+        const isLoading = this.props.placedOrderHistoryStore.loadValues.isLoading;
+        const isLoadable = this.props.placedOrderHistoryStore.isLoadable;
         const message_code = isLoadable.message_code;
         return (
             <ListView style={[styles.container, styles.tuples]}
                 onEndReachedThreshold={30}
                 onEndReached={(e) => {
                     if (message_code === 'has_next_load') {
-                        this.props.personalOrderHistoryStore.loadNext();
+                        this.props.placedOrderHistoryStore.loadNextPersonalPlacedOrders();
                     }
                 }}
                 dataSource={dataSource}
@@ -149,9 +149,9 @@ export default class PersonalPlacedOrderHistory extends Component {
     render() {
         return (
             <View style={[styles.container]}>
-                {/* <Loading isOpened={this.props.personalOrderHistoryStore.isLoading} /> */}
-                {this.personalPlacedOrderHistoryHead}
-                {this._renderPersonalPlacedOrderHistoryBody()}
+                {/* <Loading isOpened={this.props.placedOrderHistoryStore.isLoading} /> */}
+                {this.placedOrderHistoryHead}
+                {this._renderPlacedOrderHistoryBody()}
             </View>
         )
     }

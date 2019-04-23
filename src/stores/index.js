@@ -8,11 +8,11 @@ import userStore from './userStore';
 import orderFeeStore from './orderFeeStore';
 import cryptoWithdrawStore from './cryptoWithdrawStore';
 import realtimeTradeHistoryStore from './realtimeTradeHistoryStore';
-import personalOrderHistoryStore from './personalOrderHistoryStore';
+// import personalOrderHistoryStore from './personalOrderHistoryStore';
 import whitelistedWithdrawalWalletAddressStore from './whitelistedWithdrawalWalletAddressStore';
 import transactionHistoryStore from './transactionHistoryStore';
 import socketStore from './socketStore';
-// import placedOrderHistoryStore from './placedOrderHistoryStore';
+import placedOrderHistoryStore from './placedOrderHistoryStore';
 
 const stores = {
     accountStore,
@@ -25,11 +25,11 @@ const stores = {
     orderFeeStore,
     cryptoWithdrawStore,
     realtimeTradeHistoryStore,
-    personalOrderHistoryStore,
+    // personalOrderHistoryStore,
     whitelistedWithdrawalWalletAddressStore,
     transactionHistoryStore,
     socketStore,
-    // placedOrderHistoryStore,
+    placedOrderHistoryStore,
 };
 
 export default stores;

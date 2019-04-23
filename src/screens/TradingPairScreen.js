@@ -8,7 +8,7 @@ import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Animated }
 import { inject, observer } from 'mobx-react';
 import { reaction, computed, observable, action } from 'mobx';
 import OrderBox from '../components/OrderBox';
-import PersonalOrderHistory from '../components/PersonalOrderHistory';
+import OrderHistory from '../components/OrderHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
 import TRANSLATIONS from '../TRANSLATIONS';
@@ -39,7 +39,7 @@ export default class TradingPairScreen extends Component {
             index: 0,
             routes: [
                 { key: 'OrderBox', title: '주문' },
-                { key: 'PersonalOrderHistory', title: '거래내역' },
+                { key: 'OrderHistory', title: '거래내역' },
             ],
         };
     }
@@ -147,7 +147,7 @@ export default class TradingPairScreen extends Component {
                         <View><Text>시세</Text></View>
                     </Tab>
                     <Tab heading={<TabHeading style={styles.tabStyle}><Text>거래내역</Text></TabHeading>}>
-                        <PersonalOrderHistory />
+                        <OrderHistory />
                     </Tab>
                 </Tabs> */}
 
@@ -155,7 +155,7 @@ export default class TradingPairScreen extends Component {
                     navigationState={this.state}
                     renderScene={SceneMap({
                         OrderBox: () => <OrderBox />,
-                        PersonalOrderHistory: PersonalOrderHistory,
+                        OrderHistory: OrderHistory,
                     })}
                     onIndexChange={(index) => {this.setState({ index })}}
                     renderTabBar={this._renderTabBar}

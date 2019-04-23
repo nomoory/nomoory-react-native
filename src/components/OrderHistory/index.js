@@ -4,21 +4,21 @@ import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
-import PersonalPlacedOrderHistory from './PersonalPlacedOrderHistory';
-import PersonalCompletedOrderHistory from './PersonalCompletedOrderHistory';
+import PlacedOrderHistory from './PlacedOrderHistory';
+import CompletedOrderHistory from './CompletedOrderHistory';
 import { observable, action } from 'mobx';
 
-@inject('pubnub', 'tradingPairStore', 'personalOrderHistoryStore', 'transactionHistoryStore')
+@inject('pubnub', 'tradingPairStore', 'transactionHistoryStore')
 @observer
-export default class PersonalOrderHistory extends Component {
-    @observable selectedTabType = 'PersonalPlacedOrderHistory'
+export default class OrderHistory extends Component {
+    @observable selectedTabType = 'PlacedOrderHistory'
 
     _onPressPlacedOrderHistoryTab = action(() => {
-        this.selectedTabType = 'PersonalPlacedOrderHistory';
+        this.selectedTabType = 'PlacedOrderHistory';
     });
 
     _onPressCompletedOrderHistoryTab = action(() => {
-        this.selectedTabType = 'PersonalCompletedOrderHistory';         
+        this.selectedTabType = 'CompletedOrderHistory';         
     });
 
     render() {
@@ -27,31 +27,31 @@ export default class PersonalOrderHistory extends Component {
                 <View style={[styles.tabs]}>
                     <TouchableOpacity 
                         style={[
-                            styles.tab, styles.personalPlacedOrderHistoryTab, 
-                            styles[this.selectedTabType === 'PersonalPlacedOrderHistory' && 'selected']
+                            styles.tab,
+                            styles[this.selectedTabType === 'PlacedOrderHistory' && 'selected']
                         ]}
                         onPress={this._onPressPlacedOrderHistoryTab}
                     >
                         <Text style={[
                             styles.tabText,
-                            styles[this.selectedTabType === 'PersonalPlacedOrderHistory' && 'selectedText']
+                            styles[this.selectedTabType === 'PlacedOrderHistory' && 'selectedText']
                         ]}>미체결</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style={[
-                            styles.tab, styles.personalCompletedOrderHistoryTab,
-                            styles[this.selectedTabType === 'PersonalCompletedOrderHistory' && 'selected']
+                            styles.tab,
+                            styles[this.selectedTabType === 'CompletedOrderHistory' && 'selected']
                         ]}
                         onPress={this._onPressCompletedOrderHistoryTab}
                     >
                         <Text style={[
                             styles.tabText,
-                            styles[this.selectedTabType === 'PersonalCompletedOrderHistory' && 'selectedText'
+                            styles[this.selectedTabType === 'CompletedOrderHistory' && 'selectedText'
                         ]]}>체결</Text>
                     </TouchableOpacity>
                 </View>
-                { this.selectedTabType === 'PersonalPlacedOrderHistory' && <PersonalPlacedOrderHistory />}
-                { this.selectedTabType === 'PersonalCompletedOrderHistory' && <PersonalCompletedOrderHistory />}
+                { this.selectedTabType === 'PlacedOrderHistory' && <PlacedOrderHistory />}
+                { this.selectedTabType === 'CompletedOrderHistory' && <CompletedOrderHistory />}
             </View>
         );
     }
