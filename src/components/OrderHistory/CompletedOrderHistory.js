@@ -8,7 +8,7 @@ import Decimal from '../../utils/decimal';
 import { reaction, computed } from 'mobx';
 import ScrollLoading from '../ScrollLoading';
 
-@inject('pubnub', 'transactionHistoryStore', 'tradingPairStore')
+@inject('transactionHistoryStore', 'tradingPairStore')
 @observer
 export default class CompletedOrderHistory extends Component {
     constructor(props) {

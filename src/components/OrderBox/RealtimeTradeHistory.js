@@ -6,27 +6,9 @@ import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
 import { reaction } from 'mobx';
 
-@inject('pubnub', 'tradingPairStore', 'realtimeTradeHistoryStore')
+@inject('tradingPairStore', 'realtimeTradeHistoryStore')
 @observer
 export default class RealtimeTradeHistory extends Component {
-    constructor(props) {
-        super(props);
-        this.trading_pair_reaction = reaction(
-            () => props.tradingPairStore.selectedTradingPairName,
-            (tradingPairName) => {
-                this.props.pubnub.unsubscribe(this.pubnub_channel);
-                this.pubnub_channel = `TRADE_${tradingPairName}`;
-                this.props.pubnub.subscribe(this.pubnub_channel);
-            }
-        );
-        this.pubnub_channel = `TRADE_${this.props.tradingPairStore.selectedTradingPairName}`;
-        this.props.pubnub.subscribe(this.pubnub_channel);
-    }
-    
-    componentWillUnmount() {
-        this.props.pubnub.unsubscribe(this.pubnub_channel);
-    }
-
     render() {
         let { realtimeTrades } = this.props.realtimeTradeHistoryStore;
         let { quote_symbol } = this.props.tradingPairStore.selectedTradingPair || {};

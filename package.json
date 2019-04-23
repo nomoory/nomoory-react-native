@@ -26,8 +26,6 @@
     "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
     "protobufjs": "^6.8.8",
-    "pubnub": "^4.21.5",
-    "pubnub-react": "^1.2.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-modal": "^7.0.2",

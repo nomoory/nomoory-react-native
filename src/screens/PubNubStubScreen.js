@@ -5,7 +5,7 @@ import { observable } from 'mobx';
 
 import TradingPairBox from '../components/TradingPairBox';
 
-@inject('pubnub', 'stubStore')
+@inject('stubStore')
 @observer
 export default class ExchangeScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -17,20 +17,6 @@ export default class ExchangeScreen extends Component {
             // ),
         };
     };
-
-    constructor(props) {
-        super(props);
-        this.pubnubChannel = "Channel-2b7qcypeg";
-    }
-
-    componentDidMount() {
-        this.props.pubnub.subscribe(this.pubnubChannel);
-    }
-
-    componentWillUnmount() {
-        this.props.pubnub.unsubscribe(this.pubnubChannel);
-    }
-
     render() {
         return (
             <View>

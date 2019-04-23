@@ -16,7 +16,7 @@ import UnmatchedOrderBox from '../components/UnmatchedOrderBox';
 import TransactionHistoryBox from '../components/TransactionHistoryBox';
 
 @withNavigation
-@inject('pubnub', 'userStore', 'transactionHistoryStore', 'authStore')
+@inject('userStore', 'transactionHistoryStore', 'authStore')
 @observer
 export default class InvestmentScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -28,7 +28,6 @@ export default class InvestmentScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.pubnubChannel = "";
 
         this.state = {
             index: 0,
@@ -47,12 +46,6 @@ export default class InvestmentScreen extends Component {
                 from: 'Investment'
             });
         }
-
-        // this.props.pubnub.subscribe(this.pubnubChannel);
-    }
-
-    componentWillUnmount() {
-        // this.props.pubnub.unsubscribe(this.pubnubChannel);
     }
 
     _renderTabBar = props => {

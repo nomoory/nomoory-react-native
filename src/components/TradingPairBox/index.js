@@ -6,7 +6,7 @@ import TradingPairSearchBar from './TradingPairSearchBar';
 // import TradingPairTab from './TradingPairTab'; // 원화 이외의 quote open시 적용
 import TradingPairTable from './TradingPairTable';
 
-@inject('tradingPairStore', 'pubnub')
+@inject('tradingPairStore')
 @observer
 class TradingPairBox extends Component {
     render() {

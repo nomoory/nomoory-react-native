@@ -16,7 +16,7 @@ import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 // import { Constants } from 'expo';
 
-@inject('pubnub', 'tradingPairStore')
+@inject('tradingPairStore')
 @observer
 export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -32,8 +32,6 @@ export default class TradingPairScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.pubnubChannel = `ORDERBOOK_${this.tradingPairName}`;
-        this.props.pubnub.subscribe(this.pubnubChannel);
 
         this.state = {
             index: 0,
@@ -42,11 +40,6 @@ export default class TradingPairScreen extends Component {
                 { key: 'OrderHistory', title: '거래내역' },
             ],
         };
-    }
-
-    componentWillMount() {}
-    componentWillUnmount() {
-        this.props.pubnub.unsubscribe(this.pubnubChannel);
     }
 
     @computed get changeRate() {

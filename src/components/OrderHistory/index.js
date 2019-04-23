@@ -8,7 +8,7 @@ import PlacedOrderHistory from './PlacedOrderHistory';
 import CompletedOrderHistory from './CompletedOrderHistory';
 import { observable, action } from 'mobx';
 
-@inject('pubnub', 'tradingPairStore', 'transactionHistoryStore')
+@inject('tradingPairStore', 'transactionHistoryStore')
 @observer
 export default class OrderHistory extends Component {
     @observable selectedTabType = 'PlacedOrderHistory'

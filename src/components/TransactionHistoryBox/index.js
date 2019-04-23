@@ -9,7 +9,7 @@ import { reaction, computed } from 'mobx';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import ScrollLoading from '../ScrollLoading';
 
-@inject('pubnub', 'transactionHistoryStore', 'tradingPairStore')
+@inject('transactionHistoryStore', 'tradingPairStore')
 @observer
 export default class TransactionHistoryBox extends Component {
     componentDidMount() {
