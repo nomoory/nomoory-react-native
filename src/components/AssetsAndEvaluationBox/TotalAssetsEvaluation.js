@@ -9,11 +9,6 @@ import commonStyle from '../../styles/commonStyle';
 @inject('accountStore')
 @observer
 export default class TotalAssetsEvaluation extends Component {
-    constructor(props) {
-        super(props);
-        // this.pubnubChannel = "";
-    }
-
     render() {
         const { accountStore } = this.props;
         const {

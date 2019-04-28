@@ -6,7 +6,7 @@ import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import TradingPairBox from '../components/TradingPairBox';
 
-@inject('pubnub', 'tradingPairStore')
+@inject('tradingPairStore')
 @observer
 export default class ExchangeScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -19,13 +19,6 @@ export default class ExchangeScreen extends Component {
             ...headerStyle.blue
         };
     };
-
-    constructor(props) {
-        super(props);
-
-        // this._openBTCKRWForDevelopTradingPairScreen();
-    }
-
     _openBTCKRWForDevelopTradingPairScreen = () => {
         this.props.tradingPairStore.setSelectedTradingPairName('TOKA-KRW');
         this.props.navigation.navigate('TradingPair', {
@@ -33,15 +26,6 @@ export default class ExchangeScreen extends Component {
             tradingPairName: 'TOKA-KRW'
         });
     }
-    componentDidMount() {
-        // this.pubnubChannel = `TEMP|TICKER`;
-        // this.props.pubnub.subscribe(this.pubnubChannel);
-    }
-
-    componentWillUnmount() { 
-        // this.props.pubnub.unsubscribe(this.pubnubChannel);
-    }
-
     render() {
         return (
             <View style={styles.container}>

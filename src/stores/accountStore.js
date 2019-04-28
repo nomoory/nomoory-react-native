@@ -207,7 +207,6 @@ class AccountStore {
     }
 
     @action setAccount(account) {
-        // pubnub 에서 넘어오는 정보에 누락이 있을 수 있기때문에 spread를 사용
         this.accountsRegistry.set(account.asset_symbol, {...this.accountsRegistry.get(account.asset_symbol), ...account});
     }
 

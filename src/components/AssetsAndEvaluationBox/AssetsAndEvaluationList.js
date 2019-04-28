@@ -9,11 +9,6 @@ import constants from '../../global/constants';
 @inject('accountStore')
 @observer
 class AssetsAndEvaluationList extends Component {
-    constructor(props) {
-        super(props);
-        // this.pubnubChannel = "";
-    }
-
     render() {
         const { portfolio } = this.props.accountStore.portfolio || {};
         const accountList = portfolio.map(

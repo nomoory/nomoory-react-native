@@ -8,7 +8,7 @@ import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Animated }
 import { inject, observer } from 'mobx-react';
 import { reaction, computed, observable, action } from 'mobx';
 import OrderBox from '../components/OrderBox';
-import PersonalOrderHistory from '../components/PersonalOrderHistory';
+import OrderHistory from '../components/OrderHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
 import TRANSLATIONS from '../TRANSLATIONS';
@@ -16,7 +16,7 @@ import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 // import { Constants } from 'expo';
 
-@inject('pubnub', 'tradingPairStore')
+@inject('tradingPairStore')
 @observer
 export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -32,21 +32,14 @@ export default class TradingPairScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.pubnubChannel = `ORDERBOOK_${this.tradingPairName}`;
-        this.props.pubnub.subscribe(this.pubnubChannel);
 
         this.state = {
             index: 0,
             routes: [
                 { key: 'OrderBox', title: '주문' },
-                { key: 'PersonalOrderHistory', title: '거래내역' },
+                { key: 'OrderHistory', title: '거래내역' },
             ],
         };
-    }
-
-    componentWillMount() {}
-    componentWillUnmount() {
-        this.props.pubnub.unsubscribe(this.pubnubChannel);
     }
 
     @computed get changeRate() {
@@ -147,7 +140,7 @@ export default class TradingPairScreen extends Component {
                         <View><Text>시세</Text></View>
                     </Tab>
                     <Tab heading={<TabHeading style={styles.tabStyle}><Text>거래내역</Text></TabHeading>}>
-                        <PersonalOrderHistory />
+                        <OrderHistory />
                     </Tab>
                 </Tabs> */}
 
@@ -155,7 +148,7 @@ export default class TradingPairScreen extends Component {
                     navigationState={this.state}
                     renderScene={SceneMap({
                         OrderBox: () => <OrderBox />,
-                        PersonalOrderHistory: PersonalOrderHistory,
+                        OrderHistory: OrderHistory,
                     })}
                     onIndexChange={(index) => {this.setState({ index })}}
                     renderTabBar={this._renderTabBar}

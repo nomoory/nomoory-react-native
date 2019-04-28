@@ -1,0 +1,1 @@
+export { Delibird, proto } from './delibird';
