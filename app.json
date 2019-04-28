@@ -9,7 +9,7 @@
             "ios",
             "android"
         ],
-        "version": "1.0.8",
+        "version": "1.0.9",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "splash": {
@@ -29,7 +29,7 @@
         "android": {
             "permissions": [],
             "package": "com.coblic.android.exchange",
-            "versionCode": 8
+            "versionCode": 9
         },
         "extra": {
             "REACT_APP_API_ENDPOINT": "https://staging-api-vgeynb6vsktxpsc88j3qmmhjpwvncjge.coblic.com",
