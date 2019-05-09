@@ -8,13 +8,13 @@ import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Animated }
 import { inject, observer } from 'mobx-react';
 import { reaction, computed, observable, action } from 'mobx';
 import OrderBox from '../components/OrderBox';
+import ChartBox from '../components/ChartBox';
 import OrderHistory from '../components/OrderHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
 import TRANSLATIONS from '../TRANSLATIONS';
 import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
-// import { Constants } from 'expo';
 
 @inject('tradingPairStore')
 @observer
@@ -37,6 +37,7 @@ export default class TradingPairScreen extends Component {
             index: 0,
             routes: [
                 { key: 'OrderBox', title: '주문' },
+                { key: 'ChartBox', title: '차트' },
                 { key: 'OrderHistory', title: '거래내역' },
             ],
         };
@@ -129,26 +130,12 @@ export default class TradingPairScreen extends Component {
                         </Text> */}
                     </View>
                 </View>
-                {/* <Tabs initialPage={0}>
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>주문</Text></TabHeading>}>
-                        <OrderBox />
-                    </Tab>
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>차트</Text></TabHeading>}>
-                        <View><Text>차트</Text></View>
-                    </Tab>                    
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>시세</Text></TabHeading>}>
-                        <View><Text>시세</Text></View>
-                    </Tab>
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>거래내역</Text></TabHeading>}>
-                        <OrderHistory />
-                    </Tab>
-                </Tabs> */}
-
                 <TabView
                     navigationState={this.state}
                     renderScene={SceneMap({
-                        OrderBox: () => <OrderBox />,
-                        OrderHistory: OrderHistory,
+                        OrderBox,
+                        OrderHistory,
+                        ChartBox,
                     })}
                     onIndexChange={(index) => {this.setState({ index })}}
                     renderTabBar={this._renderTabBar}
