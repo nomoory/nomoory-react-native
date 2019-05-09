@@ -34,8 +34,6 @@ export default class InvestmentScreen extends Component {
             routes: [
                 { key: 'AssetsAndEvaluationBox', title: '보유자산' },
                 { key: 'ALL_TRANSACTIONS', title: '모든내역' },
-                { key: 'MINING', title: '채굴내역' },
-                { key: 'DIVIDEND', title: '배당내역' },
             ],
         };
     }
@@ -85,10 +83,6 @@ export default class InvestmentScreen extends Component {
                 return <AssetsAndEvaluationBox />;
             case 'ALL_TRANSACTIONS':
                 return <TransactionHistoryBox type='ALL_TRANSACTIONS'/>;
-            case 'MINING':
-                return<TransactionHistoryBox type='MINING'/>;
-            case 'DIVIDEND':
-                return <TransactionHistoryBox type='DIVIDEND'/>;
             default:
                 return null;
         }
@@ -98,37 +92,16 @@ export default class InvestmentScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                {/* <Tabs 
-                    onChangeTab={this._onChangeTab} 
-                    // tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
-                    style={styles.tabStyle}
-                    >
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>보유자산</Text></TabHeading>}>
-                        <AssetsAndEvaluationBox />
-                    </Tab>
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>모든내역</Text></TabHeading>}>
-                        <TransactionHistoryBox type='ALL_TRANSACTIONS'/>
-                    </Tab>
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>채굴내역</Text></TabHeading>}>
-                        <TransactionHistoryBox type='MINING'/>
-                    </Tab>
-                    <Tab heading={<TabHeading style={styles.tabStyle}><Text>배당내역</Text></TabHeading>}>
-                        <TransactionHistoryBox type='DIVIDEND'/>
-                    </Tab>
-                </Tabs> */}
                 <TabView
                     navigationState={this.state}
                     renderScene={SceneMap({
                         AssetsAndEvaluationBox: AssetsAndEvaluationBox,
                         ALL_TRANSACTIONS: () => <TransactionHistoryBox type='ALL_TRANSACTIONS' />,
-                        MINING: () => <TransactionHistoryBox type='MINING' />,
-                        DIVIDEND: () => <TransactionHistoryBox type='DIVIDEND' />,
                     })}
                     onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
-
             </View>
         )
     }
