@@ -25,23 +25,38 @@ export default class OrderForm extends Component {
     });
 
     render() {
-        let { orderFormSelectedTabType } = this.props.orderStore || {};
+        const { orderFormSelectedTabType } = this.props.orderStore || {};
+        const isBuy = orderFormSelectedTabType === 'BUY';
+        const isSell = orderFormSelectedTabType === 'SELL';
+        const isRealtimeTradeHistory = orderFormSelectedTabType === 'REALTIME_TRADE_HISTORY';
         return (
             <View style={styles.container}>
                 <View style={styles.buttons}>
-                    <TouchableOpacity style={[styles.button, orderFormSelectedTabType === 'BUY' ? styles.selectedBuy : styles.unselected]} onPress={this._onPressBuy}>
-                        <Text style={[styles.buttonText, orderFormSelectedTabType === 'BUY' ? styles.selectedBuyText : null ]}>매수</Text>
+                    <TouchableOpacity 
+                        style={[styles.button, isBuy ? styles.selectedBuy : styles.unselected]}
+                        onPress={this._onPressBuy}
+                    >
+                        <Text style={[styles.buttonText, isBuy ? styles.selectedBuyText : null ]}
+                        >매수</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, orderFormSelectedTabType === 'SELL' ? styles.selectedSell : styles.unselected]} onPress={this._onPressSell}>
-                        <Text style={[styles.buttonText, orderFormSelectedTabType === 'SELL' ? styles.selectedSellText : null ]}>매도</Text>
+                    <TouchableOpacity
+                        style={[styles.button, isSell ? styles.selectedSell : styles.unselected]}
+                        onPress={this._onPressSell}
+                    >
+                        <Text style={[styles.buttonText, isSell ? styles.selectedSellText : null ]}
+                        >매도</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, orderFormSelectedTabType === 'REALTIME_TRADE_HISTORY' ? styles.selectedHistory : styles.unselected]} onPress={this._onPressRealtimeTrade}>
-                        <Text style={[styles.buttonText, orderFormSelectedTabType === 'REALTIME_TRADE_HISTORY' ? styles.selectedHistoryText : null]}>실시간</Text>
+                    <TouchableOpacity
+                        style={[styles.button, isRealtimeTradeHistory ? styles.selectedHistory : styles.unselected]}
+                        onPress={this._onPressRealtimeTrade}
+                    >
+                        <Text style={[styles.buttonText, isRealtimeTradeHistory ? styles.selectedHistoryText : null]}
+                        >실시간</Text>
                     </TouchableOpacity>
                 </View>
-                { orderFormSelectedTabType === 'BUY' && <BuyOrderForm orderFormStyle={orderFormStyle}/> }
-                { orderFormSelectedTabType === 'SELL' && <SellOrderForm orderFormStyle={orderFormStyle}/> }
-                { orderFormSelectedTabType === 'REALTIME_TRADE_HISTORY' && <RealtimeTradeHistory /> }
+                { isBuy && <BuyOrderForm orderFormStyle={orderFormStyle}/> }
+                { isSell && <SellOrderForm orderFormStyle={orderFormStyle}/> }
+                { isRealtimeTradeHistory && <RealtimeTradeHistory /> }
             </View>
         );
     }

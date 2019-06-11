@@ -3,6 +3,7 @@ import orderbookStore from './orderbookStore';
 import orderStore from './orderStore';
 import Hangul from 'hangul-js';
 import agent from '../utils/agent';
+import {Decimal} from '../utils/number';
 
 class TradingPairStore {
     constructor() {
@@ -65,6 +66,7 @@ class TradingPairStore {
         // tradingPairs = this._tab(tradingPairs);
         // tradingPairs = this._filter(tradingPairs);
         tradingPairArray = this._search(this.searchKeyword, tradingPairArray);
+        tradingPairArray = this._defaultSort(tradingPairArray);
         tradingPairArray = this._sort(tradingPairArray);
         return tradingPairArray;
     }
@@ -160,6 +162,7 @@ class TradingPairStore {
             return this._hasSearchKeywordInTradingPair(searcher, tradingPair); 
         });
     }
+
     _sort = (tradingPairs) => {
         for(let sort of this.sorts) {
             if(sort.direction) {
@@ -171,6 +174,27 @@ class TradingPairStore {
             }
         }
         return tradingPairs;
+    }
+
+    _defaultSort = (tradingPairs) => {
+        const sortedTtradingPairs = tradingPairs.sort((prev, next) => {
+            const prevValue = prev.acc_trade_value_24h;
+            const nextValue = next.acc_trade_value_24h;
+            if (prevValue === '') return 1;
+            if (nextValue === '') return -1;
+            const prevValue_decimal = Decimal(prevValue || 0);
+            const nextValue_decimal = Decimal(nextValue || 0);
+
+            if (prevValue_decimal.greaterThan(nextValue_decimal)) {
+                return -1;
+            }
+            if (nextValue_decimal.greaterThan(prevValue_decimal)) {
+                return 1;
+            }
+            return 0;
+        });
+
+        return sortedTtradingPairs;
     }
 
     _hasSearchKeywordInTradingPair(searcher, tradingPair) {

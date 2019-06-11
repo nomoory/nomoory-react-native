@@ -22,7 +22,7 @@ export default class InvestmentScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: '투자내역',
-            ...headerStyle.blue
+            ...headerStyle.white,
         };
     };
 

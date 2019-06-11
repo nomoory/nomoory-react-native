@@ -7,8 +7,7 @@ import {
 } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
-import number, { getNumberAndPowerOfTenFromNumber } from '../../utils/number';
-import Decimal from '../../utils/decimal';
+import number, { getNumberAndPowerOfTenFromNumber, Decimal } from '../../utils/number';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import commonStyle from '../../styles/commonStyle';
 import { computed } from 'mobx';
@@ -30,8 +29,10 @@ class TradingPairRow extends Component {
         });
     }
 
-    @computed get changeRate() {
+    @computed
+    get changeRate() {
         let { change_rate, change } = this.props.tradingPair || {};
+        if (Decimal(change_rate || 0).equals(0)) return '0.00 ';
         return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_rate ? number.putComma(Decimal(Decimal(change_rate).mul(100).toFixed(2)).toFixed()) : '- '}`
     }
 
@@ -47,7 +48,9 @@ class TradingPairRow extends Component {
         const result = getNumberAndPowerOfTenFromNumber(acc_trade_value_24h);
         const isIncreased = close_price && open_price && Decimal(close_price).lessThan(open_price);
         const isDecreased = close_price && open_price && Decimal(close_price).greaterThan(open_price);
-
+        let textStyle = null;
+        if (isIncreased) textStyle = styles.blueText;
+        if (isDecreased) textStyle = styles.redText;
 
         return (
             <TouchableOpacity
@@ -56,27 +59,22 @@ class TradingPairRow extends Component {
                 onPress={this._onPressTradingPairRow}
             >
                 <View style={[styles.name]}>
-                    <Text style={[styles.tokenNameText]}>{tokenNameForSelectedLanguage}</Text>
-                    <Text style={[styles.tradingPairNameText]}>{name}</Text>
-                </View>                
+                    <Text style={[styles.textSizeNormal]}>{tokenNameForSelectedLanguage}</Text>
+                    <Text style={[styles.textSizeNormal]}>{name}</Text>
+                </View>
                 <View style={[ styles.closePrice, styles.column ]}>
-                    <Text
-                        style={[
-                            isIncreased ? styles.blueText : null,
-                            isDecreased ? styles.redText : null,
-                        ]}
+                    <Text style={[textStyle, styles.textSizeNormal]}
                     >{close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원</Text>
                 </View>
-                <View style={[styles.signedChangeRate, styles.column]}>
-                    <Text
-                        style={[
-                            isIncreased ? styles.blueText : null,
-                            isDecreased ? styles.redText : null,
-                        ]}
+                <View style={[styles.column, styles.signedChangeRate]}>
+                    <Text style={[textStyle, styles.textSizeNormal]}
                     >{this.changeRate} %</Text>
+                    <Text style={[textStyle, styles.textSizeSmall]}
+                    >{number.putComma(Decimal(close_price).minus(open_price).abs().toFixed())}
+                    </Text>
                 </View>
                 <View style={[styles.accTradeValue, styles.column]}>
-                    <Text>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]}원</Text>
+                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]} 원</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -86,18 +84,20 @@ class TradingPairRow extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        height: 60,
+        height: 48,
+        paddingTop: 3,
+        paddingBottom: 3,
         flexDirection: 'row',
 
         borderStyle: 'solid',
-        borderWidth: 0.5,
+        borderWidth: 0.6,
         borderColor: '#e9eaea',
     },
     name: {
         paddingLeft: 10,
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'flex-start',
     },
     accTradeValue: {
@@ -119,5 +119,17 @@ const styles = StyleSheet.create({
     redText: {
         color: commonStyle.color.coblicRed
     },
+    signedChangeRate: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+    },
+    textSizeNormal: {
+        fontSize: 13,
+    },
+    textSizeSmall: {
+        fontSize: 11,
+    }
 })
 export default TradingPairRow;
