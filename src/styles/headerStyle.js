@@ -3,7 +3,7 @@ export default {
     blue: {
         headerStyle: {
             backgroundColor: commonStyle.color.coblicBlue,
-            height: 50,
+            height: 38,
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -13,10 +13,10 @@ export default {
     white: {
         headerStyle: {
             backgroundColor: commonStyle.color.white,
-            height: 50,
+            height: 38,
             borderBottomWidth: 0
         },
-        headerTintColor: 'black',
+        headerTintColor: commonStyle.color.main,
         headerTitleStyle: {
             fontWeight: '400',
         },

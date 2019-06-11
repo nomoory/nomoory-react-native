@@ -28,39 +28,27 @@ class TradingPairTableHeader extends Component {
                         onPress={this._toggleLanguageForTokenName}>
                         {displayNameOfLanguageForTokenName}
                     </Text>
-                    <Image style={{ width: 10, height: 13 }} 
-                        source={require('../../../assets/images/exchange/ic_change_s.png')} /> 
+                    <Image style={{ width: 14, height: 13 }}
+                        source={require('../../../assets/images/exchange/ic_change_s.png')} 
+                    />
                 </View>
                 {
                     this.props.tradingPairStore.sorts.map((sort, index) => {
+                        let source = require('../../../assets/images/exchange/ic_arow_default_s.png');
+                        if (sort.direction === 'desc') source = require('../../../assets/images/exchange/ic_arow_up_s.png');
+                        if (sort.direction === 'asc') source = require('../../../assets/images/exchange/ic_arow_down_s.png');
+
                         return (
                             <View key={sort.name} 
                                 style={[this.props.columStyles[index + 1], styles.column]}>
                                 <Text style={styles.headerFont}
                                     onPress={this._toggleSortDirectionOf(sort.name)}>
                                     {this._renderDisplayNameByName(sort.name) + ' '}
-                                    {
-                                        sort.direction === 'desc' ? 
-                                        <Image style={{ width: 10, height: 13 }} 
-                                            source={require('../../../assets/images/exchange/ic_arow_up_s.png')} /> 
-                                            :
-                                        null
-                                    }
-                                    {
-                                        sort.direction === 'asc' ? 
-                                        <Image style={{ width: 10, height: 13 }} 
-                                            source={require('../../../assets/images/exchange/ic_arow_down_s.png')} /> 
-                                            :
-                                        null
-                                    }
-                                    {
-                                        !sort.direction ? 
-                                        <Image style={{ width: 10, height: 13 }} 
-                                            source={require('../../../assets/images/exchange/ic_arow_default_s.png')} /> 
-                                            :
-                                        null
-                                    }
                                 </Text>
+                                <Image
+                                    style={{ width: 12, height: 13 }} 
+                                    source={source}
+                                /> 
                             </View>
                         );
                     })
@@ -75,10 +63,11 @@ const styles = StyleSheet.create({
         height: 32,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#f7f8fa',
 
         borderStyle: 'solid',
-        borderBottomWidth: 1,
+        borderTopWidth: 2,
+        borderTopColor: '#dedfe0',
+        borderBottomWidth: 2,
         borderBottomColor: '#dedfe0',
     },
     column: {
@@ -86,7 +75,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerFont: {
-        fontSize: 13
+        fontSize: 13,
+        color: '#333333',
     }
 })
 export default TradingPairTableHeader;

@@ -48,7 +48,8 @@ InvestmentStack.navigationOptions = {
             focused={focused}
             name="ios-clipboard"
             color={tintColor}
-            size={24} />
+            size={24}
+        />
     )
 };
 
@@ -67,7 +68,8 @@ DepositWithdrawStack.navigationOptions = {
             focused={focused}
             name="ios-swap"
             color={tintColor}
-            size={24} />
+            size={24}
+        />
     )
 };
 
@@ -82,7 +84,8 @@ EtcStack.navigationOptions = {
             focused={focused}
             name="ios-menu"
             color={tintColor}
-            size={24} />
+            size={24}
+        />
     )
 };
 
@@ -111,7 +114,7 @@ export default createBottomTabNavigator(
         /* Default header */
         navigationOptions: {
             headerStyle: {
-                backgroundColor: commonStyle.color.coblicBlue,
+                // backgroundColor: commonStyle.color.coblicBlue,
             },
             headerTintColor: '#fff',
             headerTitleStyle: {

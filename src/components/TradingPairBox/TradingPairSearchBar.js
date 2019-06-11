@@ -12,12 +12,10 @@ class TradingPareSearchBar extends Component {
     render() {
         return (
             <View style={[styles.container]}>
-                <View style={[styles.searchImageContainer]}>
-                    <Image style={[styles.searchImage]}
-                        style={{ width: 36, height: 36 }}
-                        source={require('../../../assets/images/exchange/icon_search.png')}
-                    />
-                </View>
+                <Image style={[styles.searchImage]}
+                    style={{ width: 36, height: 36 }}
+                    source={require('../../../assets/images/exchange/icon_search.png')}
+                />
                  <TextInput style={[styles.textInput]}
                     placeholder="코인명/심볼검색"
                     onChangeText={this._onChangeSearchBar} 
@@ -30,18 +28,9 @@ class TradingPareSearchBar extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: 40,
+        height: 44,
         backgroundColor: 'white',
         flexDirection: 'row',
-        alignItems: 'center',
-
-        borderStyle: 'solid',
-        borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
-    },
-    searchImageContainer: {
-        width: 50,
-        justifyContent: 'center',
         alignItems: 'center',
     },
     searchImage: {

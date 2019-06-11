@@ -7,7 +7,8 @@ export const color = {
     coblicGrey: '#999',
     coblicPaleGrey: '#dedfe0',
     coblicYellow: '#ffc107',
-    white: '#ffffff'
+    white: '#ffffff',
+    main: '#0052f3',
 };
 
 export const font = {
@@ -21,7 +22,7 @@ export const font = {
     }
 }
 
-export const commonStyle = {
+const commonStyle = {
     coblicBlueButton: {
         color: '#0052f3'
     },

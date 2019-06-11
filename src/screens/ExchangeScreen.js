@@ -14,7 +14,7 @@ export default class ExchangeScreen extends Component {
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
             // ),
-            ...headerStyle.blue
+            ...headerStyle.white,
         };
     };
     _openBTCKRWForDevelopTradingPairScreen = () => {
