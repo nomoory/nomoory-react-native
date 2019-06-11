@@ -30,7 +30,7 @@ class TradingPareSearchBar extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: 50,
+        height: 40,
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
