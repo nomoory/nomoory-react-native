@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import tabStyle from '../styles/tabStyle';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap } from 'react-native-tab-view';
 
 import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Animated } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { reaction, computed, observable, action } from 'mobx';
+import { computed } from 'mobx';
 import OrderBox from '../components/OrderBox';
 import OrderHistory from '../components/OrderHistory';
 import Decimal from '../utils/decimal';
-import number from '../utils/number';
+import number, { getNumberAndPowerOfTenFromNumber } from '../utils/number';
 import TRANSLATIONS from '../TRANSLATIONS';
 import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
@@ -93,7 +93,7 @@ export default class TradingPairScreen extends Component {
             acc_trade_value_24h,
             signed_change_rate
         } = tradingPair || {};
-        const result = number.getNumberAndPowerOfTenFromNumber_kr(acc_trade_value_24h);
+        const result = getNumberAndPowerOfTenFromNumber(acc_trade_value_24h);
 
         return (
             <View style={styles.container}>
