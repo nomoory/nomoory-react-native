@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
-import number from '../../utils/number';
+import number, { getNumberAndPowerOfTenFromNumber } from '../../utils/number';
 import Decimal from '../../utils/decimal';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import commonStyle from '../../styles/commonStyle';
@@ -44,7 +44,7 @@ class TradingPairRow extends Component {
         const tokenNameForSelectedLanguage = this.props.tradingPairStore.languageForTokenName === 'ko' ?
             base_korean_name :
             base_english_name;
-        const result = number.getNumberAndPowerOfTenFromNumber_kr(acc_trade_value_24h);
+        const result = getNumberAndPowerOfTenFromNumber(acc_trade_value_24h);
         const isIncreased = close_price && open_price && Decimal(close_price).lessThan(open_price);
         const isDecreased = close_price && open_price && Decimal(close_price).greaterThan(open_price);
 
