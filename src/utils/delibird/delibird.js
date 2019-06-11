@@ -1,5 +1,6 @@
 import * as proto from "./com.js"
-import {EventEmitter2} from "eventemitter2";
+import { EventEmitter2 } from "eventemitter2";
+import encoding from 'text-encoding';
 
 //Extend Decimal Type
 proto.Decimal.prototype.toString = function () {
@@ -18,7 +19,7 @@ class Delibird extends EventEmitter2 {
         this.state = {
             subscribes: [],
         };
-        this.textDecoder = new TextDecoder("utf-8");
+        this.textDecoder = new encoding.TextDecoder("utf-8");
         if (!Delibird.isNodejs()) {
             if (!window.WebSocket) {
                 throw new Error('this browser is not supported websocket');
