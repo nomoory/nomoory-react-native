@@ -7,7 +7,7 @@ export default {
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
-            fontWeight: '500',
+            fontWeight: '400',
         },    
     },
     white: {
@@ -18,7 +18,7 @@ export default {
         },
         headerTintColor: 'black',
         headerTitleStyle: {
-            fontWeight: '500',
+            fontWeight: '400',
         },
     }
 }

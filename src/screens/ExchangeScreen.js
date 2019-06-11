@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { observable } from 'mobx';
-import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import TradingPairBox from '../components/TradingPairBox';
 
@@ -11,7 +9,7 @@ import TradingPairBox from '../components/TradingPairBox';
 export default class ExchangeScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: '코블릭 거래소',
+            title: '거래소',
             // headerLeft: (
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
