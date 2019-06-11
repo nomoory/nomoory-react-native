@@ -7,7 +7,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import CommonModal from './src/components/CommonModal';
 
 import { enableLogging } from 'mobx-logger';
-import { observable, reaction } from 'mobx';
+import { reaction } from 'mobx';
 
 enableLogging({
     predicate: () => __DEV__ && Boolean(window.navigator.userAgent),

@@ -13,15 +13,23 @@ export default class OrderRow extends Component {
         this.props.orderStore.setPrice(order.price);
     }
 
-    _onPressOrderVolume = () => {
-        const { order } = this.props;
-        this.props.orderStore.setVolume(order.volume);
-    }
-
     render() {
         const { side, order } = this.props;
         const isSellOrder = side === 'SELL';
         const orderRowStyle = isSellOrder ? styles.sellOrderRow : styles.buyOrderRow;
+
+        if (!order) {
+            return (
+                <View
+                    style={[
+                        styles.container, orderRowStyle, styles[this.props.side], 
+                    ]}
+                >
+                    <TouchableOpacity style={[styles.price]} />
+                    <TouchableOpacity style={styles.volume} />
+                </View>
+            );
+        }
         const { maxOrderVolume } = this.props.orderbookStore;
         const dynamicStyle = 
             StyleSheet.create({
@@ -53,10 +61,14 @@ export default class OrderRow extends Component {
                             {number.putComma(Decimal(order.price).toFixed())}
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.volume} onPress={this._onPressOrderVolume}>
+                <View style={styles.volume}>
                     <View style={[dynamicStyle.volumnBar, styles['volumeBar'], styles['volumeBar_' + side]]} />
-                    <Text style={styles.volumeText}>{number.putComma(Decimal(order.volume).toFixed())}</Text>
-                </TouchableOpacity>
+                    <Text style={styles.volumeText}>{
+                        Decimal(order.volume).greaterThan(10)
+                        ? number.putComma(Decimal(order.volume).toFixed(0))
+                        : number.putComma(Decimal(order.volume).toFixed(3))
+                    }</Text>
+                </View>
             </View>
         );
     }
@@ -64,11 +76,14 @@ export default class OrderRow extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: 42,
+        height: 32,
         flexDirection: 'row',
         alignItems: 'center',
+        width: '100%',
+
         borderStyle: 'solid',
-        width: '100%'
+        borderWidth: 0.5,
+        borderColor: '#dedfe0',
     },
     sellOrderRow: {
         backgroundColor: '#f3fbff',
@@ -77,9 +92,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff4f8'
     },
     price: {
-        flex: 4,
+        flex: 3,
         alignItems: 'flex-end',
-        // paddingRight: 4,     
         height: '100%',
         justifyContent: 'center',
 
@@ -88,12 +102,11 @@ const styles = StyleSheet.create({
         borderRightColor: '#dedfe0',
     },
     priceText: {
-        fontSize: 13,
-        fontWeight: '600',
+        fontSize: 12,
         marginRight: 4,     
     },
     volume: {
-        flex: 5,
+        flex: 2,
         alignItems: 'flex-start',
         height: '100%',
         justifyContent: 'center',
@@ -103,10 +116,10 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     volumeBar_SELL: {
-        backgroundColor: '#cbf5fe'
+        backgroundColor: '#dbf0ff'
     },
     volumeBar_BUY: {
-        backgroundColor: '#ffdeea'
+        backgroundColor: '#ffdbe8'
     },
     volumeText: {
         fontSize: 10,

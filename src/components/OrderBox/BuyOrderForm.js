@@ -15,14 +15,19 @@ export default class BuyOrderForm extends Component {
         this.props.orderStore.setSide('BUY'); // BUY side임을 보장하기 위함
     }
     
-    @computed get maxFeePercentage() { return number.getRateAsFiexdPercentage(this.props.orderStore.maxFeeRate, 2); }
+    @computed
+    get maxFeePercentage() { 
+        return number.getRateAsFiexdPercentage(this.props.orderStore.maxFeeRate, 2);
+    }
 
-    _onChangePrice = (text) => {
-        this.props.orderStore.setPriceFromInput(text);
+    _onChangePrice = (text = '') => {
+        this.props.orderStore.setPriceFromInput(text.split(',').join(''));
     }
-    _onChangeVolume = (text) => {
-        this.props.orderStore.setVolumeFromInput(text);
+
+    _onChangeVolume = (text = '') => {
+        this.props.orderStore.setVolumeFromInput(text.split(',').join(''));
     }
+
     _onPressOrder = (e) => {
         let {
             values,
@@ -99,7 +104,7 @@ export default class BuyOrderForm extends Component {
         return (
             <View style={orderFormStyle.container}>
                 <View style={[orderFormStyle.liquidContainer]}>
-                    <Text style={orderFormStyle.liquidTitle}>구매가능</Text>
+                    <Text style={orderFormStyle.liquidTitle}>매수가능</Text>
                     <View style={orderFormStyle.liquidContentContainer}>
                         <Text style={orderFormStyle.liquidContentText}>
                             {
@@ -116,9 +121,8 @@ export default class BuyOrderForm extends Component {
                 <View style={[orderFormStyle.inputContainer, orderFormStyle.priceInputContainer]}>
                     <TextInput style={orderFormStyle.textInput}
                         onChangeText={this._onChangePrice}
-                        // placeholder={`가격`}
                         keyboardType={'numeric'}
-                        value={`${price}`}
+                        value={number.putComma(price)}
                     />
                     <View style={orderFormStyle.inputTitleContainer}>
                         <Text style={orderFormStyle.inputTitle}>{`가격`}</Text>
@@ -141,9 +145,8 @@ export default class BuyOrderForm extends Component {
                 <View style={[orderFormStyle.inputContainer, orderFormStyle.volumeInputContainer]}>
                     <TextInput style={orderFormStyle.textInput}
                         onChangeText={this._onChangeVolume}
-                        // placeholder={`수량`}
                         keyboardType={'numeric'}
-                        value={`${volume}`}
+                        value={number.putComma(volume)}
                     />
                     <View style={orderFormStyle.inputTitleContainer}>
                         <Text style={orderFormStyle.inputTitle}>{`수량`}</Text>
@@ -206,10 +209,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
-    },
-    info: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
     },
     liquidContent: {
         alignSelf: 'flex-end'

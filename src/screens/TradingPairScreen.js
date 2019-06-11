@@ -2,17 +2,24 @@ import React, { Component } from 'react';
 import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import tabStyle from '../styles/tabStyle';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap } from 'react-native-tab-view';
 
-import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Animated } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    Animated
+} from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { reaction, computed, observable, action } from 'mobx';
+import { computed } from 'mobx';
 import OrderBox from '../components/OrderBox';
 import ChartBox from '../components/ChartBox';
 import OrderHistory from '../components/OrderHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
-import TRANSLATIONS from '../TRANSLATIONS';
 import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 
@@ -24,7 +31,7 @@ export default class TradingPairScreen extends Component {
         this.tradingPairName = navigation.getParam('tradingPairName', '');
         
         return {
-            title: `${this.tradingPairName.split('-').join('/')}`,
+            title: `${this.tradingPairName.split('-').join(' / ')}`,
             tabBarVisible: false,
             ...headerStyle.white
         };
@@ -43,18 +50,22 @@ export default class TradingPairScreen extends Component {
         };
     }
 
-    @computed get changeRate() {
+    @computed get
+    changeRate() {
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let { change_rate, change } = tradingPair || {};
         return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_rate ? number.putComma(Decimal(Decimal(change_rate).mul(100).toFixed(2)).toFixed()) : '- '}`
     }
-    @computed get changePrice() {
+
+    @computed get
+    changePrice() {
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let { change, change_price } = tradingPair || {};
-        return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_price ? number.putComma(Decimal(change_price).toFixed()) : '- '}`
+        if (!change_price) return '0 ';
+        return `${change_price ? number.putComma(Decimal(change_price).toFixed()) : '- '}`
     }
 
-    _renderTabBar = props => {
+    _renderTabBar = (props) => {
         const inputRange = props.navigationState.routes.map((x, i) => i);
 
         return (
@@ -88,46 +99,34 @@ export default class TradingPairScreen extends Component {
         let {
             close_price,
             change, // 'RISE' | 'FALL'
-            high_price,
-            low_price,
-            open_price,
-            acc_trade_value_24h,
-            signed_change_rate
         } = tradingPair || {};
-        const result = number.getNumberAndPowerOfTenFromNumber_kr(acc_trade_value_24h);
 
         return (
             <View style={styles.container}>
                 <View style={styles.tradingPairSummaryContainer}>
-                    <View style={styles.leftContainer}>
-                        <View style={styles.leftUpperContainer}>
-                            <Text style={[styles.closePriceText, commonStyle[change]]}>
-                                {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
-                            </Text>
-                            <Text style={[styles.changeRateText, commonStyle[change]]}>
-                                {this.changeRate}%
+                    <Text style={[styles.closePriceText, commonStyle[change]]}>
+                        {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
+                    </Text>
+                    <View style={styles.bottomContainer}>
+                        <Text>24시간 대비</Text>
+                        <Text style={[styles.changeRateText, commonStyle[change]]}>
+                            {this.changeRate} %
+                        </Text>
+                        <View style={{ 
+                            marginLeft: 10, 
+                            flexDirection:'row',
+                            alignItems: 'center'
+                        }}>
+                            {(change === 'FALL' || change === 'RISE') ?
+                                <Image
+                                    style={{ width: 12, height: 6 }}
+                                    source={change === 'FALL' ? fallIcon : riseIcon}
+                                /> : null
+                            }
+                            <Text style={[styles.subText, commonStyle[change]]}>
+                                {this.changePrice} 원
                             </Text>
                         </View>
-                        <View style={styles.leftBotttomContainer}>
-                            <Text style={styles.highAndLowPriceText}>
-                                고가: {high_price ? number.putComma(Decimal(high_price).toFixed()) : '-'} 원 / 저가: {low_price ? number.putComma(Decimal(low_price).toFixed()) : '-'} 원
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={styles.rightContainer}>
-                        <Text>거래대금</Text> 
-                        <Text style={styles.accTradeValueText}>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]}원</Text>
-
-                        {/* <Text style={[styles.subText]}>24h</Text> */}
-                        {/* {(change === 'FALL' || change === 'RISE') ?
-                            <Image
-                                style={{ width: 16, height: 8 }}
-                                source={change === 'FALL' ? fallIcon : riseIcon}
-                            /> : null
-                        }
-                        <Text style={[styles.subText, commonStyle[change]]}>
-                            {this.changePrice}원
-                        </Text> */}
                     </View>
                 </View>
                 <TabView
@@ -151,55 +150,28 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tradingPairSummaryContainer: {
+        display: 'flex',
+        flexDirection: 'column',
         height: 60,
         width: '100%',
-        flexDirection: 'row',
-        padding: 6,
-        paddingTop: 12,
-        paddingRight: 18,
+        padding: 13,
         backgroundColor: 'white',
         justifyContent: 'space-between',
     },
     closePriceText: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         color: '#000000',
     },
     changeRateText: {
         paddingLeft: 8,
-        fontSize: 16,
-        fontWeight: '500',
     },
     leftContainer: {
         flexDirection: 'column',
         justifyContent: 'space-between'
     },
-    leftUpperContainer: {
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
-    leftBottomContainer: {
+    bottomContainer: {
         marginTop: 4,
         flexDirection: 'row',
-    },
-    rightContainer: {
-        height: '100%',
-        flexDirection: 'column',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
-    },
-    accTradeValueText: {
-        marginTop: 4,
-    },
-    tradingPairSubInfo: {
-        marginTop: 4,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-end'
-    },
-    tabStyle: {
-        backgroundColor: 'white',
-        borderBottomWidth: 0,
-        height: 40
     },
 })

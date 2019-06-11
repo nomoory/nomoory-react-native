@@ -20,7 +20,7 @@ export default class AccountListScreen extends Component {
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
             // ),
-            ...headerStyle.blue
+            ...headerStyle.white
         };
     };
     componentDidMount() {

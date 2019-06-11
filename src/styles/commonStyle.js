@@ -1,19 +1,17 @@
 import { StyleSheet } from 'react-native';
 
-const coblicButton = {
-};
-
-const color = {
+export const color = {
     coblicBlue: '#0052f3',
     coblicPaleBlue: '#81a6ef',
     coblicRed: '#da5f6e',
     coblicGrey: '#999',
     coblicPaleGrey: '#dedfe0',
     coblicYellow: '#ffc107',
-    white: '#ffffff'
+    white: '#ffffff',
+    main: '#0052f3',
 };
 
-const font = {
+export const font = {
     size: {
         modalHeader: 22,
         modalContent: 16,
@@ -24,12 +22,11 @@ const font = {
     }
 }
 
-
-let commonStyle = {
-    coblicBlueButton: { ...coblicButton,
+const commonStyle = {
+    coblicBlueButton: {
         color: '#0052f3'
     },
-    coblicRedButton: { ...coblicButton,
+    coblicRedButton: {
         color: '#da5f6e'
     },
     RISE: {
@@ -45,7 +42,7 @@ let commonStyle = {
         color: '#0052f3'
     },
     color,
-    font    
+    font,
 };
 
 /*
@@ -57,7 +54,5 @@ Object.keys(font.size).forEach((sizeName) => {
     let size = font.size[sizeName];
     commonStyle[sizeName + 'Text'] = { fontSize: size };
 });
-
-export { color, font };
 
 export default commonStyle;

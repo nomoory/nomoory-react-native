@@ -186,36 +186,6 @@ class CryptoWithdrawStore {
         }
     }
 
-    // @action openOtpVerificationForWithdrawReservation() {
-    //     modalStore.openCustom(
-    //         <div className='otp-verification-header'>
-    //             <img className="header-icon" width="32px" src={`${process.env.RAZZLE_ASSET_ORIGIN}/images/verificationPopup/otp_verification_icon.png`} />
-    //             <div>OTP 인증</div>
-    //         </div>,
-    //         () =>
-    //             <div className='otp-verification-body second-step' key='otp-verification-body'>
-    //                 <div className='notice'>OTP 앱에 생성된 6자리 코드를 입력하십시오.</div>
-    //                 <div className='otp-six-digit-code-container'>
-    //                     <input className="otp-code-input" type="text" placeholder="OTP 코드 6자리를 입력해주세요."
-    //                         onChange={(e) => { this.setWithdrawOtpCode(e.target.value) }} />
-    //                 </div>
-    //                 <button className={`otp-submit-button coblic-button coblic-blue-button 
-    //                 ${this.withdrawValues.otpCode.length !== 6 && 'coblic-disabled-button'}`}
-    //                     onClick={() => {
-    //                         modalStore.closeModal();
-    //                         this.createWithdrawReservationByAccount()
-    //                     }
-    //                     }>인증</button>
-    //                 <hr className='divide-bar' />
-    //             </div>,
-    //         <div className='otp-verification-footer'>
-    //             <div className="otp-footer-item-container">
-    //                 <div>OTP 인증 불가 및 복구코드 분실시 <a href="#">help@coblic.com</a>로 문의해주세요</div>
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
     @action createWithdrawReservationByAccount() {
         this.isLoading = true;
         let { uuid } = accountStore.selectedAccount || {};
@@ -225,14 +195,6 @@ class CryptoWithdrawStore {
             otp_code: this.withdrawValues.otpCode,
         })
             .then(action((response) => {
-                // modalStore.openPreset(
-                //     '출금 요청 성공',
-                //     <div>
-                //         <div>출금 요청이 정상처리 되었습니다.</div>
-                //         <div>입출금내역에서 처리상태를 확인하세요.</div>
-                //     </div>,
-                //     i18next.t('button/confirm')
-                // )
                 this.isLoading = false;
             }))
             .catch(action((err) => {

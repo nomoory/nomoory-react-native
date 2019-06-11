@@ -6,8 +6,6 @@ import OrderForm from './OrderForm';
 
 @observer
 export default class OrderBox extends Component {
-    componentDidMount() {
-    }
     render() {
         return (
             <View style={styles.container}>

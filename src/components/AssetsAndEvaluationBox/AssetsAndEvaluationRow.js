@@ -35,45 +35,51 @@ export default class AssetsAndEvaluationRow extends Component {
                             <Text style={[styles.upperRightItemTitle]}>평가 손익</Text>
                             <Text style={[
                                 styles.upperRightItemValue,
-                                // isFall ? styles.fall : null,
-                                // isRise ? styles.rise : null,
+                                isFall ? styles.fall : null,
+                                isRise ? styles.rise : null,
                             ]}>
-                                {/* {isRise ? '+' : ''}{ value_change ? number.putComma(Decimal(value_change).toFixed(0)) : '- ' } */}
-                                - 원</Text>
+                                { 
+                                    value_change
+                                    ? number.putComma(Decimal(value_change).toFixed(0))
+                                    : '- '
+                                } 원</Text>
                         </View>
                         <View style={[styles.upperRightItemContainer]}>
-                            <Text style={[styles.upperRightItemTitle]}>평가 수익률</Text>
+                            <Text style={[styles.upperRightItemTitle]}>평가수익률</Text>
                             <Text style={[
                                 styles.upperRightItemValue,
-                                // isFall ? styles.fall : null,
-                                // isRise ? styles.rise : null,
+                                isFall ? styles.fall : null,
+                                isRise ? styles.rise : null,
                             ]}>
-                                {/* {isRise ? '+' : ''}{ value_change_rate ? number.putComma(Decimal(value_change_rate).toFixed(2)) : '- ' } */}
-                                - %</Text>
+                                {
+                                    value_change_rate
+                                    ? number.putComma(Decimal(value_change_rate).mul(100).toFixed(2))
+                                    : '- '
+                                } %</Text>
                         </View>
                     </View>
                 </View>
 
                 <View style={ styles.bottomContainer }>
-                    <View style={ styles.bottomSubContainer }>
+                    <View style={[styles.bottomSubContainer, { paddingRight: 20}]}>
                         <View style={styles.bottomItemContainer}>
-                            <Text style={[styles.bottomItemTitle]}>보유수량</Text>
                             <Text style={[styles.bottomItemValue]}>{ balance ? number.putComma(number.getFixedPrice(balance, asset_symbol)) : '- ' } {asset_symbol}</Text>
+                            <Text style={[styles.bottomItemTitle]}>보유수량</Text>
                         </View>
-                        {/* <View style={styles.bottomItemContainer}>
-                            <Text style={[styles.bottomItemTitle]}>매수 평균가</Text>
+                        <View style={styles.bottomItemContainer}>
                             <Text style={[styles.bottomItemValue]}>{ avg_fiat_buy_price ? number.putComma(Decimal(avg_fiat_buy_price).toFixed(0)) : '- ' }원</Text>
-                        </View> */}
+                            <Text style={[styles.bottomItemTitle]}>매수평균가</Text>
+                        </View>
                     </View>
                     <View style={ styles.bottomSubContainer }>
                         <View style={styles.bottomItemContainer}>
-                            <Text style={[styles.bottomItemTitle]}>현재 가치</Text>
                             <Text style={[styles.bottomItemValue]}>{ value_present ? number.putComma(number.getFixedPrice(value_present, 'KRW')) : '-' } 원</Text>
+                            <Text style={[styles.bottomItemTitle]}>현재가치</Text>
                         </View>
-                        {/* <View style={styles.bottomItemContainer}>
-                            <Text style={[styles.bottomItemTitle]}>매수 금액</Text>
+                        <View style={styles.bottomItemContainer}>
                             <Text style={[styles.bottomItemValue]}>{ value_bought ? number.putComma(Decimal(value_bought).toFixed(0)) : '- ' }원</Text>
-                        </View> */}
+                            <Text style={[styles.bottomItemTitle]}>매수금액</Text>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -86,6 +92,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: 'white'
     },
+    
     upperContainer: {
         padding: 15,
         paddingTop: 8,
@@ -98,7 +105,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#dedfe0',
     },
     upperLeftContainer: {
-        flex: 4
+        flex: 1,
     },
     assetName: {
         fontSize: 16,
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
     },
     upperRightContainer: {
         flexDirection: 'column',
-        flex: 5,
+        flex: 1,
         width: 300,
         alignItems: 'stretch'
     },
