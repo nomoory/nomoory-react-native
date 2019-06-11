@@ -5,8 +5,6 @@ import {
 } from 'react-navigation';
 
 import { Icon } from 'expo';
-import commonStyle from '../styles/commonStyle'
-
 import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
@@ -28,7 +26,8 @@ ExchangeStack.navigationOptions = {
             focused={focused}
             name="ios-trending-up"
             color={tintColor}
-            size={24} />
+            size={24}
+        />
     ),
 };
 

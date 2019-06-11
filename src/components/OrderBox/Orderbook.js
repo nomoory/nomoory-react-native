@@ -33,8 +33,7 @@ export default class Orderbook extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fafafa',
-        flex: 1,
-        
+        width: 176,        
     },
     styleContainer: {
         flex: 1

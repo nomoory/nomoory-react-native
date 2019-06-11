@@ -18,11 +18,11 @@ import { computed } from 'mobx';
 class TradingPairRow extends Component {
     _onPressTradingPairRow = (e) => {
         this.props.tradingPairStore.setSelectedTradingPairName(this.props.tradingPair.name);
-        this._openTradingPairScreen();
+        let tradingPair = this.props.tradingPair;
+        this._openTradingPairScreen(tradingPair);
     }
 
-    _openTradingPairScreen = () => {
-        let tradingPair = this.props.tradingPair;
+    _openTradingPairScreen = (tradingPair) => {
         this.props.navigation.navigate('TradingPair', {
             baseKoreanName: tradingPair.base_korean_name,
             tradingPairName: tradingPair.name
@@ -32,8 +32,8 @@ class TradingPairRow extends Component {
     @computed
     get changeRate() {
         let { change_rate, change } = this.props.tradingPair || {};
-        if (Decimal(change_rate || 0).equals(0)) return '0.00 ';
-        return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_rate ? number.putComma(Decimal(Decimal(change_rate).mul(100).toFixed(2)).toFixed()) : '- '}`
+        if (Decimal(change_rate || 0).equals(0)) return '0.00';
+        return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_rate ? number.putComma(Decimal(Decimal(change_rate).mul(100).toFixed(2)).toFixed()) : '-'}`
     }
 
     render() {
