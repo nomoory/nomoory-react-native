@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import agent from '../utils/agent';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
@@ -13,27 +13,33 @@ class OrderbookStore {
     @observable baseSymbolOfSelectedTradingPair = null;
 
     @computed get sellOrders() {
-        let sellOrders = [];
-        this.sellOrdersRegistry.forEach((sellOrder) => {
-            sellOrders.unshift(this._reformatOrderForDisplay(sellOrder));
-        });
-        return sellOrders;
+        const tempSellOrders = [];
+        for (let index = 0; index < 10; index++) {
+            const sellOrder = this.sellOrdersRegistry[index] || null;
+            tempSellOrders.unshift(this._reformatOrderForDisplay(sellOrder));
+        }
+
+        return tempSellOrders;
     };
 
     @computed get buyOrders() {
-        let buyOrders = [];
-        this.buyOrdersRegistry.forEach((buyOrder) => {
-            buyOrders.push(this._reformatOrderForDisplay(buyOrder));
-        });
-        return buyOrders;
+        const tempBuyOrders = [];
+        for (let index = 0; index < 10; index++) {
+            const buyOrder = this.buyOrdersRegistry[index] || null;
+            tempBuyOrders.push(this._reformatOrderForDisplay(buyOrder));
+        }
+
+        return tempBuyOrders;
     };
 
     _reformatOrderForDisplay = (order) => {
+        if (!order) return null;
+
         return {
             price: tradingPairStore.selectedTradingPair ? 
                 number.getFixedPrice(order.price, tradingPairStore.selectedTradingPair.base_symbol) :
                 Decimal(order.price).toFixed(),
-            volume: number.getFixed(order.volume)
+            volume: number.getFixed(order.volume, 3)
         };
     };
 
