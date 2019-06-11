@@ -37,7 +37,7 @@ export default {
     "MINING": "거래채굴",
     "TAKEAWAY": "회수",
     "GIVEAWAY": "지급",
-    "TRADE": "거래내역",
+    "TRADE": "주문내역",
     "INVITATION_MINING": "초대채굴",
     "DIVIDEND": "배당",
     "catch-phrase-mining-inline": "거래를 할수록 토큰이 쌓인다.",
@@ -127,7 +127,7 @@ export default {
     "price_to_buy": "매수가격",
     "price_to_sell": "매도가격",
 
-    "Orders": "거래내역",
+    "Orders": "주문내역",
     "total_gain": "수령량",
     "total_amount_to_order": "총금액",
     "total_amount_to_take": "수령총액",

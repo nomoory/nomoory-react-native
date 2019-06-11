@@ -18,9 +18,6 @@ class AssetsAndEvaluationList extends Component {
         );
         return (
             <View style={ styles.container }>
-                {/* <View style={ styles.header }>
-                    <Text style={ styles.title }>보유 자산별 손익</Text>
-                </View> */}
                 <ScrollView>
                     {   
                         accountList.length > 0 ?
@@ -38,7 +35,7 @@ class AssetsAndEvaluationList extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8',  
+        backgroundColor: '#f8f8f8',
     },
     header: {
         flexDirection: 'row',
