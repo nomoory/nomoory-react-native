@@ -6,18 +6,6 @@ import { inject, observer } from 'mobx-react';
 
 @observer
 export default class AssetsAndEvaluationBox extends Component {
-  constructor(props) {
-    super(props);
-    // this.pubnubChannel = "";
-  }
-
-  componentDidMount() {
-    // this.props.pubnub.subscribe(this.pubnubChannel);
-  }
-  componentWillUnmount() {
-    // this.props.pubnub.unsubscribe(this.pubnubChannel);
-  }
-
   render() {
     return (
       <View style={ styles.container }>

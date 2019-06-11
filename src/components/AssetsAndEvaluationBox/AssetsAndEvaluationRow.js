@@ -7,11 +7,6 @@ import number from '../../utils/number';
 @inject('accountStore')
 @observer
 export default class AssetsAndEvaluationRow extends Component {
-    constructor(props) {
-        super(props);
-        // this.pubnubChannel = "";
-    }
-
     render() {
         const {
             asset_symbol,

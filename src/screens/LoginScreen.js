@@ -57,6 +57,7 @@ export default class LoginScreen extends Component {
                         onChangeText={this._onChangeEmail}
                         placeholder={`이메일`}
                         value={email}
+                        autoCapitalize="none"
                     />
                     <TextInput
                         style={[styles.passwordInput, styles.input]}
@@ -64,6 +65,7 @@ export default class LoginScreen extends Component {
                         onChangeText={this._onChangePassword} 
                         placeholder={`비밀번호`}
                         value={password}
+                        autoCapitalize="none"
                     />
                     <TouchableOpacity 
                         style={[styles.loginButton]}

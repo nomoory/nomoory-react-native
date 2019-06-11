@@ -9,7 +9,7 @@ import Decimal from '../utils/decimal';
 import DepositWithdrawInfoHeader from '../components/DepositWithdrawInfoHeader';
 import DepositBox from '../components/DepositBox';
 
-@inject('pubnub', 'accountStore')
+@inject('accountStore')
 @observer
 export default class AccountDepositWithdrawScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -21,20 +21,6 @@ export default class AccountDepositWithdrawScreen extends Component {
             ...headerStyle.white
         };
     };
-
-
-    constructor(props) {
-        super(props);
-        // this.pubnubChannel = "ACCOUNT";
-    }
-
-    componentWillMount() { 
-    }
-    componentDidMount() { 
-        // this.props.pubnub.subscribe(this.pubnubChannel); 
-    }
-    componentWillUnmount() { this.props.pubnub.unsubscribe(this.pubnubChannel); }
-
     render() {
 
         return (

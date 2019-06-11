@@ -8,9 +8,9 @@ import Decimal from '../../utils/decimal';
 import { reaction, computed } from 'mobx';
 import ScrollLoading from '../ScrollLoading';
 
-@inject('pubnub', 'transactionHistoryStore', 'tradingPairStore')
+@inject('transactionHistoryStore', 'tradingPairStore')
 @observer
-export default class PersonalCompletedOrderHistory extends Component {
+export default class CompletedOrderHistory extends Component {
     constructor(props) {
         super(props);
         reaction(
@@ -25,7 +25,7 @@ export default class PersonalCompletedOrderHistory extends Component {
 
     }
     
-    @computed get personalCompletedOrderHistoryHead() {
+    @computed get completedOrderHistoryHead() {
         return (
             <View style={[styles.head]}>
                 <View style={[styles.column]}>
@@ -49,7 +49,7 @@ export default class PersonalCompletedOrderHistory extends Component {
         );
     };
 
-    _renderPersonalCompoletedOrderHistoryBody() {
+    _renderCompoletedOrderHistoryBody() {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.tradeHistory);
         const isLoading = this.props.transactionHistoryStore.loadMoreValuesTradeHistory.isLoading;
@@ -121,9 +121,8 @@ export default class PersonalCompletedOrderHistory extends Component {
     render() {
         return (
             <View style={[styles.container]}>
-                {/* <Loading isOpened={this.props.personalOrderHistoryStore.isLoading} /> */}
-                {this.personalCompletedOrderHistoryHead}
-                {this._renderPersonalCompoletedOrderHistoryBody()}
+                {this.completedOrderHistoryHead}
+                {this._renderCompoletedOrderHistoryBody()}
             </View>
         )
     }
