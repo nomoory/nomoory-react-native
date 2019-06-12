@@ -34,15 +34,14 @@
         "extra": {
             "REACT_APP_API_ENDPOINT": "https://production-api-ln8l36h6vjpy4gfejda2sqttvu522gpl.coblic.com",
             "REACT_APP_API_VERSION": "v1.0",
-            "REACT_APP_PUBNUB_SUBSCRIBE_KEY": "sub-c-1c6e4688-c2db-11e8-a415-1a3a09e2960b",
-            "REACT_APP_ASSET_ORIGIN": "https://d1z4k3y8q0paf8.cloudfront.net",
-            "WEBSOCKET_END_POINT": "wss://staging-ws.coblic.com/v1/ws",
+            "REACT_APP_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",
+            "WEBSOCKET_END_POINT": "wss://ws.coblic.com/v1/ws",
 
             "REACT_APP_DEV_API_ENDPOINT": "https://staging-api-vgeynb6vsktxpsc88j3qmmhjpwvncjge.coblic.com",
             "REACT_APP_DEV_API_VERSION": "v1.0",
-            "REACT_APP_DEV_PUBNUB_SUBSCRIBE_KEY": "sub-c-1c6e4688-c2db-11e8-a415-1a3a09e2960b",
             "REACT_APP_DEV_ASSET_ORIGIN": "https://d1z4k3y8q0paf8.cloudfront.net",
-            "DEV_WEBSOCKET_END_POINT": "wss://staging-ws.coblic.com/v1/ws"
+            "DEV_WEBSOCKET_END_POINT": "wss://staging-ws.coblic.com/v1/ws",
+            "REACT_WEB_API_ENDPOINT": "https://coblic.com"
         }
     }
 }

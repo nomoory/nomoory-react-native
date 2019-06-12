@@ -11,7 +11,11 @@ import modalStore from './modalStore';
 // import numberHelper from 'utils/numberHelper';
 import Decimal from '../utils/decimal.js';
 
-const WEBSOCKET_END_POINT = Expo.Constants.manifest.extra.WEBSOCKET_END_POINT;
+let WEBSOCKET_END_POINT = Expo.Constants.manifest.extra.WEBSOCKET_END_POINT;
+
+if (__DEV__) {
+    WEBSOCKET_END_POINT = Expo.Constants.manifest.extra.DEV_WEBSOCKET_END_POINT;
+}
 
 const CHANNEL_NAMES = {
     // no dependency
@@ -145,7 +149,6 @@ class SocketStore {
         try {
             this.delibird.authenticate(userStore.currentUser.personal_pubnub_uuid);
             console.log(`%cAuthenticate: `, "color: blue; font-size:15px;");
-            console.log({user: userStore.currentUser})
         } catch (err) {
             console.log('fail to authenticate.')
         }

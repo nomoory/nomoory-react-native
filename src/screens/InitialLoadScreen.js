@@ -31,7 +31,7 @@ export default class InitialLoadScreen extends Component {
     }
 
     _moveToExchangeScreen = () => {
-        this.props.navigation.navigate('Investment');
+        this.props.navigation.navigate('Exchange');
     }
 
     render() {
