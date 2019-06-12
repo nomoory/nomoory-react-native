@@ -46,8 +46,8 @@ class TradingPairRow extends Component {
             base_korean_name :
             base_english_name;
         const result = getNumberAndPowerOfTenFromNumber(acc_trade_value_24h);
-        const isIncreased = close_price && open_price && Decimal(close_price).lessThan(open_price);
-        const isDecreased = close_price && open_price && Decimal(close_price).greaterThan(open_price);
+        const isIncreased = close_price && open_price ? Decimal(close_price).lessThan(open_price) : false;
+        const isDecreased = close_price && open_price ? Decimal(close_price).greaterThan(open_price) : false;
         let textStyle = null;
         if (isIncreased) textStyle = styles.blueText;
         if (isDecreased) textStyle = styles.redText;
@@ -64,17 +64,17 @@ class TradingPairRow extends Component {
                 </View>
                 <View style={[ styles.closePrice, styles.column ]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
-                    >{close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원</Text>
+                    >{close_price ? number.putComma(Decimal(close_price ||0 ).toFixed()) : '-'} 원</Text>
                 </View>
                 <View style={[styles.column, styles.signedChangeRate]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
                     >{this.changeRate} %</Text>
                     <Text style={[textStyle, styles.textSizeSmall]}
-                    >{number.putComma(Decimal(close_price).minus(open_price).abs().toFixed())}
+                    >{number.putComma(Decimal(close_price || 0).minus(open_price || 0).abs().toFixed())}
                     </Text>
                 </View>
                 <View style={[styles.accTradeValue, styles.column]}>
-                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number).toFixed()) : '-'} {TRANSLATIONS[result.type]} 원</Text>
+                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed()) : '-'} {TRANSLATIONS[result.type]} 원</Text>
                 </View>
             </TouchableOpacity>
         );

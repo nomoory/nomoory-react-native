@@ -18,6 +18,7 @@ import { computed } from 'mobx';
 import OrderBox from '../components/OrderBox';
 import ChartBox from '../components/ChartBox';
 import OrderHistory from '../components/OrderHistory';
+import TradeHistory from '../components/TradeHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
 import riseIcon from '../../assets/images/exchange/ic_up_s.png';
@@ -45,7 +46,8 @@ export default class TradingPairScreen extends Component {
             routes: [
                 { key: 'OrderBox', title: '주문' },
                 { key: 'ChartBox', title: '차트' },
-                { key: 'OrderHistory', title: '거래내역' },
+                { key: 'OrderHistory', title: '주문내역' },
+                { key: 'TradeHistory', title: '시세' },
             ],
         };
     }
@@ -80,7 +82,12 @@ export default class TradingPairScreen extends Component {
                     return (
                         <TouchableOpacity
                             key={route.key}
-                            style={[tabStyle.tabItem, this.state.index === i ? tabStyle.selectedTabItem : null]}
+                            style={[
+                                tabStyle.tabItem,
+                                this.state.index === i
+                                ? tabStyle.selectedTabItem
+                                : null
+                            ]}
                             onPress={() => this.setState({ index: i })}>
                             <Animated.Text style={[ 
                                 { color },
@@ -133,8 +140,9 @@ export default class TradingPairScreen extends Component {
                     navigationState={this.state}
                     renderScene={SceneMap({
                         OrderBox,
-                        OrderHistory,
                         ChartBox,
+                        OrderHistory,
+                        TradeHistory,
                     })}
                     onIndexChange={(index) => {this.setState({ index })}}
                     renderTabBar={this._renderTabBar}

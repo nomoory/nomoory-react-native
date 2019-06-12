@@ -17,7 +17,7 @@ export default class EtcScreen extends Component {
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
             // ),
-            ...headerStyle.white
+            ...headerStyle.blue
         };
     };
 
@@ -75,7 +75,7 @@ export default class EtcScreen extends Component {
                         onPress={this._onPressWhitePaper}
                         >
                         <Ionicons name="md-paper" size={iconSize} color={iconColor}/>
-                        <Text style={[styles.scrollItemText]}>코블릭백서</Text>
+                        <Text style={[styles.scrollItemText]}>백서</Text>
                     </TouchableOpacity>
                     {
                         this.props.userStore.isLoggedIn ? 
