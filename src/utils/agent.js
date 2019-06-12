@@ -3,19 +3,24 @@ import errorHelper from '../utils/errorHelper';
 import { SecureStore } from 'expo';
 import { Platform } from 'react-native';
 
+let API_ENDPOINT = null;
+let API_VERSION = null;
 
-const REACT_APP_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
-const REACT_APP_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_API_VERSION;
-const API_ROOT = `${REACT_APP_API_ENDPOINT}/api/${REACT_APP_API_VERSION}`;
+if (__DEV__) {
+    API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_DEV_API_ENDPOINT;
+    API_VERSION = Expo.Constants.manifest.extra.REACT_APP_DEV_API_VERSION;
+} else {
+    API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_API_ENDPOINT;
+    API_VERSION = Expo.Constants.manifest.extra.REACT_APP_API_VERSION;
+}
 
-const REACT_APP_DEV_API_ENDPOINT = Expo.Constants.manifest.extra.REACT_APP_DEV_API_ENDPOINT;
-const REACT_APP_DEV_API_VERSION = Expo.Constants.manifest.extra.REACT_APP_DEV_API_VERSION;
-const DEV_API_ROOT = `${REACT_APP_DEV_API_ENDPOINT}/api/${REACT_APP_DEV_API_VERSION}`;
+const API_ROOT = `${API_ENDPOINT}/api/${API_VERSION}`;
 
 class Agent {
     constructor(baseURL = null) {
         
         this.axios = axios.create({ baseURL });
+        this.API_ROOT = baseURL;
         if (Platform.OS) {
             this.axios.defaults.headers.common['User-Agent'] =                         
                 (
@@ -388,10 +393,6 @@ class Agent {
     }
 }
 
-let agent;
-if (__DEV__) {
-    agent = new Agent(DEV_API_ROOT);
-} else {
-    agent = new Agent(API_ROOT);
-}
+let agent = new Agent(API_ROOT);
+
 export default agent;

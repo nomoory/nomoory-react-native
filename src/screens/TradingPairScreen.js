@@ -16,6 +16,7 @@ import {
 import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
 import OrderBox from '../components/OrderBox';
+import ChartBox from '../components/ChartBox';
 import OrderHistory from '../components/OrderHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
@@ -43,6 +44,7 @@ export default class TradingPairScreen extends Component {
             index: 0,
             routes: [
                 { key: 'OrderBox', title: '주문' },
+                { key: 'ChartBox', title: '차트' },
                 { key: 'OrderHistory', title: '거래내역' },
             ],
         };
@@ -130,8 +132,9 @@ export default class TradingPairScreen extends Component {
                 <TabView
                     navigationState={this.state}
                     renderScene={SceneMap({
-                        OrderBox: () => <OrderBox />,
-                        OrderHistory: OrderHistory,
+                        OrderBox,
+                        OrderHistory,
+                        ChartBox,
                     })}
                     onIndexChange={(index) => {this.setState({ index })}}
                     renderTabBar={this._renderTabBar}

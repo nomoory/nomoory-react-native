@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import commonStyle, { color } from '../../styles/commonStyle';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import number from '../../utils/number';
-import Decimal from '../../utils/decimal';
 import PlacedOrderHistory from './PlacedOrderHistory';
 import CompletedOrderHistory from './CompletedOrderHistory';
 import { observable, action } from 'mobx';

@@ -13,7 +13,10 @@ class AssetsAndEvaluationList extends Component {
         const { portfolio } = this.props.accountStore.portfolio || {};
         const accountList = portfolio.map(
             portfolio => (
-                <AssetsAndEvaluationRow key={ portfolio.uuid } portfolio={ portfolio } />
+                <AssetsAndEvaluationRow
+                    key={ portfolio.uuid }
+                    portfolio={ portfolio }
+                />
             )
         );
         return (
