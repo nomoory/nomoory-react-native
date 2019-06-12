@@ -13,6 +13,7 @@ import whitelistedWithdrawalWalletAddressStore from './whitelistedWithdrawalWall
 import transactionHistoryStore from './transactionHistoryStore';
 import socketStore from './socketStore';
 import placedOrderHistoryStore from './placedOrderHistoryStore';
+import dailyTradeHistoryStore from './dailyTradeHistoryStore';
 
 const stores = {
     accountStore,
@@ -30,6 +31,7 @@ const stores = {
     transactionHistoryStore,
     socketStore,
     placedOrderHistoryStore,
+    dailyTradeHistoryStore,
 };
 
 export default stores;

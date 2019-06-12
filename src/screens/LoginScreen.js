@@ -47,7 +47,11 @@ export default class LoginScreen extends Component {
             <View style={[styles.container]}>
                 <View style={[styles.logoContainer]}>
                     <Image
-                        style={{width: 200, height: 52}}
+                        style={[
+                            {
+                                resizeMode: 'cover'
+                            }]
+                        }
                         source={require('../../assets/images/login/ic_navi_logo.png')}
                     />
                 </View>
@@ -110,11 +114,16 @@ const styles = StyleSheet.create({
         height: '100%',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
     },
     logoContainer: { 
-        paddingTop: 138,
-        paddingBottom: 30
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 360,
+        height: 100,
+        marginBottom: 20,
     },
     inputContainer: {
         width: '100%',

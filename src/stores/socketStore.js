@@ -166,7 +166,7 @@ class SocketStore {
                 placedOrderHistoryStore.loadPersonalPlacedOrders();
                 break;
             case CHANNEL_NAMES.TRADE:
-                realtimeTradeHistoryStore.loadRealtimeTrades();
+                realtimeTradeHistoryStore.load();
                 break;
             case CHANNEL_NAMES.ACCOUNT:
                 await accountStore.loadAccounts();

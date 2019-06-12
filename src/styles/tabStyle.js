@@ -4,28 +4,26 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
     tabBar: {
         flexDirection: 'row',
-        height: 34,
+        height: 30,
         // paddingTop: Constants.statusBarHeight,
     },
     selectedTabItem: {
-        borderBottomWidth: 2,
-        borderBottomColor: commonStyle.color.coblicBlue,
         fontWeight: '700'
     },
     tabItem: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
-        borderBottomWidth: 2,
-        borderBottomColor: commonStyle.color.coblicPaleGrey,
+        backgroundColor: '#0042b7',
     },
     tabText: {
-        fontWeight: '600', 
-        fontSize: 13
+        fontWeight: '400', 
+        fontSize: 13,
+        color: 'white',
     },
     selectedTabText: {
-        fontWeight: '700',
-        fontSize: 13
+        fontWeight: '900',
+        fontSize: 13,
+        color: 'white',
     }
 })
