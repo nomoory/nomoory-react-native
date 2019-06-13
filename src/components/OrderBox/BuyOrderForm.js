@@ -134,12 +134,13 @@ export default class BuyOrderForm extends Component {
                 <View style={[orderFormStyle.setPriceButtonsContainer]}>
                     <View style={[orderFormStyle.emptySpace]}></View>
                     <View style={[orderFormStyle.setPriceButtons]}>
+                        <TouchableOpacity style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} onPress={this._onPressDecreasePrice}>
+                            <Text>-</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={[orderFormStyle.plusButton, orderFormStyle.priceButton]} onPress={this._onPressIncreasePrice}>
                             <Text>+</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} onPress={this._onPressDecreasePrice}>
-                            <Text>-</Text>
-                        </TouchableOpacity> 
+                         
                     </View>
                 </View>
                 <View style={[orderFormStyle.inputContainer, orderFormStyle.volumeInputContainer]}>

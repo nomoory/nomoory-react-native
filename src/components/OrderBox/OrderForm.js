@@ -150,7 +150,8 @@ const orderFormStyle = StyleSheet.create({
         height: 30,
     },
     minusButton: {
-        borderLeftWidth: 1.5,
+        //borderLeftWidth: 1.5,
+        borderRightWidth: 1.2,
         borderLeftColor: '#d8dbde',
     },
 
