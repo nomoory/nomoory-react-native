@@ -1,14 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 export const color = {
-    coblicBlue: '#0052f3',
+    coblicBlue: '#0051c7',
     coblicPaleBlue: '#81a6ef',
-    coblicRed: '#da5f6e',
+    coblicRed: '#d60000',
     coblicGrey: '#999',
     coblicPaleGrey: '#dedfe0',
     coblicYellow: '#ffc107',
     white: '#ffffff',
     main: '#0052f3',
+    mainThemeColor: "rgb(20, 40, 120)",
 };
 
 export const font = {
