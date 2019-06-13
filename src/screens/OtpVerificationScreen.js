@@ -54,7 +54,7 @@ export default class OtpVerificationScreen extends Component {
         }
     }
 
-    onPressZendesk = () => { Linking.openURL('https://coblic.zendesk.com/hc/ko'); }
+    onPressZendesk = () => { Linking.openURL(Expo.Constants.manifest.extra.CUSTOMER_CENTER_LINK); }
     _onPressCloseOtpScreen = (e) => { this.props.navigation.navigate('Exchange'); }
 
     render() {
