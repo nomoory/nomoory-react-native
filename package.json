@@ -12,7 +12,9 @@
     "ios": "expo start --ios",
     "eject": "expo eject",
     "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'",
-    "upload:android": "expo upload:android --key ./api-7427826906815320302-18903-ec35548540f8.json --track production"
+    "upload:android": "expo upload:android --key ./api-7427826906815320302-18903-ec35548540f8.json --track production",
+    "build:android": "expo build:android -c",
+    "build:ios": "expo build:ios -c"
   },
   "dependencies": {
     "@expo/vector-icons": "^9.0.0",
