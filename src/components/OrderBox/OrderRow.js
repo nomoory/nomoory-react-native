@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     },
     recentlyTraded: {
         borderColor: 'black',
-        borderWidth: 2
+        borderWidth: 1.2
     },
     blueText: {
         color: commonStyle.color.coblicBlue

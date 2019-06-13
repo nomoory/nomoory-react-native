@@ -17,7 +17,6 @@ import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
 import OrderBox from '../components/OrderBox';
 import ChartBox from '../components/ChartBox';
-import OrderHistory from '../components/OrderHistory';
 import TradeHistory from '../components/TradeHistory';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
@@ -46,7 +45,6 @@ export default class TradingPairScreen extends Component {
             routes: [
                 { key: 'OrderBox', title: '주문' },
                 { key: 'ChartBox', title: '차트' },
-                { key: 'OrderHistory', title: '주문내역' },
                 { key: 'TradeHistory', title: '시세' },
             ],
         };
@@ -141,7 +139,6 @@ export default class TradingPairScreen extends Component {
                     renderScene={SceneMap({
                         OrderBox,
                         ChartBox,
-                        OrderHistory,
                         TradeHistory,
                     })}
                     onIndexChange={(index) => {this.setState({ index })}}

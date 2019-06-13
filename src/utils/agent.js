@@ -1,7 +1,10 @@
 import axios from 'axios';
+import qs from 'qs';
 import errorHelper from '../utils/errorHelper';
 import { SecureStore } from 'expo';
 import { Platform } from 'react-native';
+import authStore from '../stores/authStore';
+import { computed } from 'mobx';
 
 let API_ENDPOINT = null;
 let API_VERSION = null;
@@ -18,11 +21,13 @@ const API_ROOT = `${API_ENDPOINT}/api/${API_VERSION}`;
 
 class Agent {
     constructor(baseURL = null) {
-        
-        this.axios = axios.create({ baseURL });
+        this.axios = axios.create({
+            baseURL,        
+            paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
+        });
         this.API_ROOT = baseURL;
         if (Platform.OS) {
-            this.axios.defaults.headers.common['User-Agent'] =                         
+            this.axios.defaults.headers.common['User-Agent'] =
                 (
                     Platform.OS === "ios" ? 
                     "CoblicAppiOS/1.0.0" : 
@@ -33,12 +38,11 @@ class Agent {
                     '' 
                 );
         }
-
     }
 
-    async getUserUuid() {
-        let userUuid = await SecureStore.getItemAsync('user_uuid');
-        return userUuid;
+    @computed
+    get userUuid() {
+        return authStore.userUuid;
     }
 
     /** 
@@ -78,12 +82,12 @@ class Agent {
     }
 
     async getOtpQrcodeUrl() {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.get(`/users/${userUuid}/otp_qrcode/`);
     }
 
     async verifyOTP(otpInfo) {        
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
 
         return axios.post(`${API_ROOT}/verify/otp/?user_uuid=${userUuid}`, otpInfo).catch(this._handleError);
     }
@@ -118,7 +122,7 @@ class Agent {
 
     //TransactionHistory
     async loadTransactionHistory(transaction_type, trading_pair_name) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         let url = `users/${userUuid}/transaction_histories/?transaction_type=${transaction_type}`;
         if (trading_pair_name) url += `&trading_pair_name=${trading_pair_name}`;
         return this.get(url);
@@ -126,19 +130,31 @@ class Agent {
 
     // Accounts
     async loadAccounts() {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.get(`users/${userUuid}/accounts/`);
     }
 
     // Personal Trades
     async loadPersonalTrades(selectedTradingPairName) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.get(`users/${userUuid}/trades/?trading_pair_name=${selectedTradingPairName}`);
     }
 
-    async loadPersonalPlacedOrders(selectedTradingPairName) {
-        let userUuid = await this.getUserUuid();
-        return this.get(`users/${userUuid}/orders/?trading_pair_name=${selectedTradingPairName}&order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
+    async loadPersonalPlacedOrders(tradingPairName) {
+        let userUuid = this.userUuid;
+        if (!tradingPairName) {
+            return this.get(`users/${userUuid}/orders/?order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
+        }
+
+        return this.get(`users/${userUuid}/orders/?trading_pair_name=${tradingPairName}&order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
+
+        // let params = {
+        //     order_status: [
+        //         'PLACED', 'PENDING', 'PARTIALLY_FILLED',
+        //     ],
+        // };
+        // if (tradingPairName) params.trading_pair_name = tradingPairName;
+        // return this.get(`users/${commonStore.user_uuid}/orders/`, params);
     }
 
     createAndGetWarmWalletAddress(account_uuid) {
@@ -151,7 +167,7 @@ class Agent {
 
     // Email Verification
     async requestActivateEmailAgain() {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.post(`/users/${userUuid}/resend_activate_email/`, null);
     }
 
@@ -174,15 +190,15 @@ class Agent {
 
     // Bank account 
     async loadBankAccount() {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.get(`/users/${userUuid}/bank_accounts/latest/`);
     }
     async registerBankAccount(accountInfo) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.post(`/users/${userUuid}/bank_accounts/`, accountInfo);
     }
     async deleteBankAccount(bankAccountUuid) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.delete(`/users/${userUuid}/bank_accounts/${bankAccountUuid}/`);
     }
 
@@ -216,32 +232,32 @@ class Agent {
     }
     // verification kyc
     async uploadIdPhotoImage(data) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.postFile(`/users/${userUuid}/upload_id_photo/`, data);
     }
 
     async uploadKycPhotoImage(data) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.postFile(`/users/${userUuid}/upload_kyc_photo/`, data);
     }
 
     async updatePersonalIdentificationAgreement(agreements) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.post(`/users/${userUuid}/identification_agreement/`, agreements);
     }
 
     // Register referral code
     async registerReferralCode(referralCodeInfo) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.post(`/users/${userUuid}/referrals/`, referralCodeInfo);
     }
     async updatePersonalAgreement(agreements) {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.post(`/users/${userUuid}/phone_agreement/`, agreements);
     }
     // load my rank
     async loadMyRank() {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return this.get(`/users/${userUuid}/rank/me/`);
     }
 
@@ -297,37 +313,38 @@ class Agent {
     }
 
     /* Base REST API method */
-    async get(url) {
+    get(url, params = {}) {
         // console.log('request get | ', url);
+        const config = this.requestConfig;
         return this.axios
-            .get(url, await this._getRequestConfig())
+            .get(url, { params, ...config })
             .catch(this._handleError);
     }
     async put(url, body) {
         // console.log('request put | ', url);
         return this.axios
-            .put(url, body, await this._getRequestConfig())
+            .put(url, body, this.requestConfig)
             .catch(this._handleError);
     }
     async patch(url, body) {
         // console.log('request patch | ', url);
 
         return this.axios
-            .patch(url, body, await this._getRequestConfig())
+            .patch(url, body, this.requestConfig)
             .catch(this._handleError);
     }
     async post(url, body) {
         // console.log('request post | ', url);
 
         return this.axios
-            .post(url, body, await this._getRequestConfig())
+            .post(url, body, this.requestConfig)
             .catch(this._handleError);
     }
     async delete(url) {
         // console.log('request delete | ', url);
 
         return this.axios
-            .delete(url, await this._getRequestConfig())
+            .delete(url, this.requestConfig)
             .catch(this._handleError);
     }
 
@@ -337,9 +354,11 @@ class Agent {
             .catch(this._handleError);
 
     }
-    async _getRequestConfig() {
+
+    @computed
+    get requestConfig() {
         let requestConfig = null;
-        let accessToken = await SecureStore.getItemAsync('access_token');
+        let accessToken = authStore.accessToken;
         if (accessToken) {
             requestConfig = { 
                 headers: { 
@@ -385,7 +404,7 @@ class Agent {
     }
 
     getPayFormValue = async () => {
-        let userUuid = await this.getUserUuid();
+        let userUuid = this.userUuid;
         return `${API_ROOT}/verify/mcash/?user_uuid=${userUuid}`;
     }
     getAPIRoot = () => {

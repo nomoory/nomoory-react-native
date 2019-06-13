@@ -12,15 +12,7 @@ import ScrollLoading from '../ScrollLoading';
 @observer
 export default class PlacedOrderHistory extends Component {
     componentDidMount() {
-        reaction(
-            () => this.props.tradingPairStore.selectedTradingPairName,
-            (selectedTradingPairName) => {
-                // this.props.placedOrderHistoryStore.clearRegistry();
-                this.props.placedOrderHistoryStore.loadPersonalPlacedOrders();
-            }
-        );
-        // this.props.placedOrderHistoryStore.clearRegistry();
-        this.props.placedOrderHistoryStore.loadPersonalPlacedOrders();
+        this.props.placedOrderHistoryStore.loadAllPersonalPlacedOrders();
     }
 
     _onPressDeleteOrder = (order_uuid) => () => {

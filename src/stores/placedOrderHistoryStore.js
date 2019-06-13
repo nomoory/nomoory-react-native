@@ -67,13 +67,16 @@ class PlacedOrderHistoryStore {
         }));
     }
 
-    @action loadPersonalOrders() {
-        const selectedTradingPairName = tradingPairStore.selectedTradingPairName;
-        if (selectedTradingPairName) {
-            this.loadPersonalPlacedOrders(selectedTradingPairName);
-        } else {
-            this.loadPersonalPlacedOrders();
+    @action loadPersonalOrders(tradingPairName) {
+        if (tradingPairName) {
+            this.loadPersonalPlacedOrders(tradingPairName);
         }
+    }
+
+    @action
+    loadAllPersonalPlacedOrders() {
+        // 인자를 넘기지 않으면 유저의 모든 PlacedOrder를 로드합니다.
+        this.loadPersonalPlacedOrders();
     }
 
     @action listenScrollEvent = (event) => {
@@ -89,7 +92,7 @@ class PlacedOrderHistoryStore {
 
     @action loadPersonalPlacedOrders(tradingPairName) {
         this.loadValues.isLoading = true;
-        return agent.loadPersonalPlacedOrders({ tradingPairName })
+        return agent.loadPersonalPlacedOrders(tradingPairName)
         .then(action((response) => {
             let { results, next, previous } = response.data;
             this.placedOrdersRegistry.clear();
