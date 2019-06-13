@@ -4,10 +4,23 @@ import { inject, observer } from 'mobx-react';
 import Decimal from '../../utils/decimal';
 import number from '../../utils/number';
 import commonStyle from '../../styles/commonStyle';
+import { computed } from 'mobx';
 
-@inject('orderStore', 'orderbookStore')
+@inject('orderStore', 'orderbookStore', 'tradingPairStore')
 @observer
 export default class OrderRow extends Component {
+    @computed
+    get percentage_decimal() {
+        let tradingPair = this.props.tradingPairStore.selectedTradingPair || {};
+        let price = this.props.order ? this.props.order.price : '';
+        let percentage = '';
+        let price_decimal = Decimal(price);
+        if (tradingPair.open_price) {
+            percentage = price_decimal.minus(tradingPair.open_price).div(tradingPair.open_price).mul(100).toFixed(2, Decimal.ROUND_DOWN);
+        }
+        let percentage_decimal = Decimal(percentage || 0);
+        return percentage_decimal;
+    }
     _onPressOrderPrice = () => {
         const { order } = this.props;
         this.props.orderStore.setPrice(order.price);
@@ -60,6 +73,14 @@ export default class OrderRow extends Component {
                         ]}>
                             {number.putComma(Decimal(order.price).toFixed())}
                     </Text>
+                    <Text 
+                        style={[
+                            styles.dayBeforeRateText,
+                            isLessThanOpenPrice ? styles.blueText : null,
+                            isBiggerThanOpenPrice ? styles.redText : null,
+                        ]}>
+                            {number.putComma(this.percentage_decimal.toFixed())} %
+                    </Text>
                 </TouchableOpacity>
                 <View style={styles.volume}>
                     <View style={[dynamicStyle.volumnBar, styles['volumeBar'], styles['volumeBar_' + side]]} />
@@ -104,6 +125,11 @@ const styles = StyleSheet.create({
     priceText: {
         fontSize: 12,
         marginRight: 4,     
+    },
+    dayBeforeRateText: {
+        fontSize: 10,
+        fontWeight: '200',
+        marginRight: 4,
     },
     volume: {
         flex: 2,

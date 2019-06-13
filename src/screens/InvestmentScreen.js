@@ -7,7 +7,6 @@ import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
-
 import AssetsAndEvaluationBox from '../components/AssetsAndEvaluationBox';
 import TradeHistoryBox from '../components/TradeHistoryBox';
 import UnmatchedOrderBox from '../components/UnmatchedOrderBox';
@@ -61,9 +60,12 @@ export default class InvestmentScreen extends Component {
                     return (
                         <TouchableOpacity
                             key={route.key}
-                            style={[tabStyle.tabItem, this.state.index === i ? tabStyle.selectedTabItem : null]}
+                            style={[
+                                tabStyle.tabItem,
+                                this.state.index === i ? tabStyle.selectedTabItem : null
+                            ]}
                             onPress={(e) => {this._onIndexChange(i)}}>
-                            <Animated.Text style={[{ color, fontWeight: '600', fontSize: 16 },]}>{route.title}</Animated.Text>
+                            <Animated.Text style={[tabStyle.tabText]}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
                 })}
