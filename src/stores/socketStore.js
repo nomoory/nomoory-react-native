@@ -163,7 +163,7 @@ class SocketStore {
                 tradingPairStore.loadTradingPairs();
                 break;
             case CHANNEL_NAMES.ORDER:
-                placedOrderHistoryStore.loadPersonalPlacedOrders();
+                placedOrderHistoryStore.loadPersonalOrders();
                 break;
             case CHANNEL_NAMES.TRADE:
                 realtimeTradeHistoryStore.load();

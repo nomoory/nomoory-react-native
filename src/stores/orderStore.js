@@ -276,8 +276,25 @@ class OrderStore {
         this.values.volume = volume;
     }
 
+    @action
+    setOrderValueByTradingPair(tradingPair) {
+        const {
+            name,
+            close_price,
+            is_fee_paid,
+        } = tradingPair || {};
+        this.values.trading_pair = name;
+        this.setPrice(close_price ? Decimal(close_price).toFixed() : 0);
+        this.setIsFeePaid(is_fee_paid);
+    }
+
     @action changeOrderSide(side) {
         this.values.side = side;
+    }
+
+    @action
+    setIsFeePaid(is_fee_paid) {
+        this.values.is_fee_paid = is_fee_paid;
     }
 
     @action registerOrder() {

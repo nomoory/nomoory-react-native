@@ -12,7 +12,9 @@
     "ios": "expo start --ios",
     "eject": "expo eject",
     "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'",
-    "upload:android": "expo upload:android --key ./api-7427826906815320302-18903-ec35548540f8.json --track production"
+    "upload:android": "expo upload:android --key ./api-7427826906815320302-18903-ec35548540f8.json --track production",
+    "build:android": "expo build:android -c",
+    "build:ios": "expo build:ios -c"
   },
   "dependencies": {
     "@expo/vector-icons": "^9.0.0",
@@ -26,6 +28,7 @@
     "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
     "protobufjs": "^6.8.8",
+    "qs": "^6.7.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-modal": "^7.0.2",
