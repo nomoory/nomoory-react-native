@@ -13,6 +13,7 @@ import UnmatchedOrderBox from '../components/UnmatchedOrderBox';
 // import DividendHistoryBox from '../components/DividenHistroyBox';
 // import MiningHistoryBox from '../components/MiningHistoryBox';
 import TransactionHistoryBox from '../components/TransactionHistoryBox';
+import OrderHistory from '../components/OrderHistory';
 
 @withNavigation
 @inject('userStore', 'transactionHistoryStore', 'authStore')
@@ -33,6 +34,7 @@ export default class InvestmentScreen extends Component {
             routes: [
                 { key: 'AssetsAndEvaluationBox', title: '보유자산' },
                 { key: 'ALL_TRANSACTIONS', title: '모든내역' },
+                { key: 'ORDER_HISTORY', title: '주문내역' },
             ],
         };
     }
@@ -79,17 +81,6 @@ export default class InvestmentScreen extends Component {
             this.props.transactionHistoryStore.changeSelectedOption(this.state.routes[index].key);
         } catch (err) { }
     }
-    _renderScene = ({ route }) => {
-        switch (route.key) {
-            case 'AssetsAndEvaluationBox':
-                return <AssetsAndEvaluationBox />;
-            case 'ALL_TRANSACTIONS':
-                return <TransactionHistoryBox type='ALL_TRANSACTIONS'/>;
-            default:
-                return null;
-        }
-
-    }
 
     render() {
         return (
@@ -97,8 +88,9 @@ export default class InvestmentScreen extends Component {
                 <TabView
                     navigationState={this.state}
                     renderScene={SceneMap({
-                        AssetsAndEvaluationBox: AssetsAndEvaluationBox,
+                        AssetsAndEvaluationBox,
                         ALL_TRANSACTIONS: () => <TransactionHistoryBox type='ALL_TRANSACTIONS' />,
+                        ORDER_HISTORY: () => <OrderHistory />,
                     })}
                     onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}

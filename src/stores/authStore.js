@@ -31,6 +31,8 @@ class AuthStore {
     /* Login */
     @observable isLoading = false;
     @observable errors = null;
+    @observable
+    accessToken = '';
 
     @observable loginValues = {
         email: '',
@@ -88,8 +90,25 @@ class AuthStore {
         let hasAccessToken = await SecureStore.getItemAsync('access_token') ? true : false;
         return hasAccessToken;
     }
-    @action async setAccessToken(accessToken) { await SecureStore.setItemAsync('access_token', accessToken); }
-    @action async setUserUuid(userUuid) { await SecureStore.setItemAsync('user_uuid', userUuid); }
+
+    @action async setAccessTokenOnStore(accessToken) { 
+        this.accessToken = accessToken;
+    }
+
+    @action async setUserUuidOnStore(userUuid) { 
+        this.userUuid = userUuid;
+    }
+
+    @action async setAccessToken(accessToken) { 
+        this.accessToken = accessToken;
+        await SecureStore.setItemAsync('access_token', accessToken);
+    }
+
+    @action async setUserUuid(userUuid) { 
+        this.userUuid = userUuid;
+        await SecureStore.setItemAsync('user_uuid', userUuid);
+    }
+
     @action async destroyAccessToken() { 
         SecureStore.deleteItemAsync('access_token'); 
         SecureStore.deleteItemAsync('user_uuid');

@@ -40,6 +40,10 @@ export default class App extends React.Component {
             () => stores.tradingPairStore.selectedTradingPairName,
             (tradingPairName) => {
                 stores.socketStore.loadAndSubscribeOnTradingPairChange();
+                if (tradingPairName) {
+                    stores.placedOrderHistoryStore.loadPersonalOrders(tradingPairName);
+                }
+                stores.orderStore.setOrderValueByTradingPair(stores.tradingPairStore.selectedTradingPair || {});
             }
         );
     }
