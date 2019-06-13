@@ -43,9 +43,9 @@ export default class EtcScreen extends Component {
             ]
         });
     }
-    _onPressAnnouncement = (e) => { Linking.openURL('https://coblic.com/announcements'); }
-    _onPressZendesk = (e) => { Linking.openURL('https://coblic.zendesk.com/hc/ko'); }
-    _onPressWhitePaper = (e) => { Linking.openURL('https://bit.ly/Coblic_WhitePaper'); }
+    _onPressAnnouncement = (e) => { Linking.openURL(Expo.Constants.manifest.extra.ANNOUNCEMENT_LINK); }
+    _onPressZendesk = (e) => { Linking.openURL(Expo.Constants.manifest.extra.CUSTOMER_CENTER_LINK); }
+    _onPressWhitePaper = (e) => { Linking.openURL(Expo.Constants.manifest.extra.WHITEPAPER_LINK); }
     render() {
         const { profile, email } = this.props.userStore.currentUser || {};
         const { real_name_masked } = profile || {};

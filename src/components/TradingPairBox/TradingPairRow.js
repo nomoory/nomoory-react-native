@@ -64,17 +64,17 @@ class TradingPairRow extends Component {
                 </View>
                 <View style={[ styles.closePrice, styles.column ]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
-                    >{close_price ? number.putComma(Decimal(close_price ||0 ).toFixed()) : '-'} 원</Text>
+                    >{close_price ? number.putComma(Decimal(close_price ||0 ).toFixed()) : '-'}</Text>
                 </View>
                 <View style={[styles.column, styles.signedChangeRate]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
-                    >{this.changeRate} %</Text>
+                    >{this.changeRate}%</Text>
                     <Text style={[textStyle, styles.textSizeSmall]}
                     >{number.putComma(Decimal(close_price || 0).minus(open_price || 0).abs().toFixed())}
                     </Text>
                 </View>
                 <View style={[styles.accTradeValue, styles.column]}>
-                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed()) : '-'} {TRANSLATIONS[result.type]} 원</Text>
+                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed()) : '-'}{TRANSLATIONS[result.type]}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -126,10 +126,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     textSizeNormal: {
-        fontSize: 13,
+        fontSize: 12,
+        fontWeight:'200'
     },
     textSizeSmall: {
         fontSize: 11,
+        fontWeight:'200'
     }
 })
 export default TradingPairRow;

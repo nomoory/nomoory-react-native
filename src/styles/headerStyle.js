@@ -14,9 +14,14 @@ export default {
         headerStyle: {
             backgroundColor: commonStyle.color.white,
             height: 38,
-            borderBottomWidth: 0
+            borderBottomWidth: 0,
+            shadowOpacity: 0,
+            shadowOffset: {
+                height: 0,
+            },
+            shadowRadius: 0,
         },
-        headerTintColor: commonStyle.color.main,
+        headerTintColor: commonStyle.color.mainThemeColor,
         headerTitleStyle: {
             fontWeight: '400',
         },

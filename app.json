@@ -1,47 +1,50 @@
 {
-    "expo": {
-        "name": "coblic-app",
-        "description": "지속가능한 채굴형 거래소 코블릭",
-        "slug": "coblic-app",
-        "privacy": "public",
-        "sdkVersion": "32.0.0",
-        "platforms": [
-            "ios",
-            "android"
-        ],
-        "version": "1.0.11",
-        "orientation": "portrait",
-        "icon": "./assets/icon.png",
-        "splash": {
-            "image": "./assets/splash_icon.png",
-            "backgroundColor": "#0052f3"
-        },
-        "updates": {
-            "fallbackToCacheTimeout": 0
-        },
-        "assetBundlePatterns": [
-            "**/*"
-        ],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "permissions": [],
-            "package": "com.coblic.android.exchange",
-            "versionCode": 11
-        },
-        "extra": {
-            "REACT_APP_API_ENDPOINT": "https://production-api-ln8l36h6vjpy4gfejda2sqttvu522gpl.coblic.com",
-            "REACT_APP_API_VERSION": "v1.0",
-            "REACT_APP_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",
-            "WEBSOCKET_END_POINT": "wss://ws.coblic.com/v1/ws",
-
-            "REACT_APP_DEV_API_ENDPOINT": "https://staging-api-vgeynb6vsktxpsc88j3qmmhjpwvncjge.coblic.com",
-            "REACT_APP_DEV_API_VERSION": "v1.0",
-            "REACT_APP_DEV_ASSET_ORIGIN": "https://d1z4k3y8q0paf8.cloudfront.net",
-            "DEV_WEBSOCKET_END_POINT": "wss://staging-ws.coblic.com/v1/ws",
-            "REACT_WEB_API_ENDPOINT": "https://coblic.com"
-        }
+  "expo": {
+    "name": "coinbit-app",
+    "description": "지속가능한 채굴형 거래소 코블릭",
+    "slug": "coinbit-app",
+    "privacy": "public",
+    "sdkVersion": "32.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.0.11",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash_icon.png",
+      "backgroundColor": "#0052f3"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "permissions": [],
+      "package": "com.coblic.android.exchange",
+      "versionCode": 11
+    },
+    "extra": {
+      "REACT_APP_API_ENDPOINT": "https://production-api-ln8l36h6vjpy4gfejda2sqttvu522gpl.coblic.com",
+      "REACT_APP_API_VERSION": "v1.0",
+      "REACT_APP_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",
+      "WEBSOCKET_END_POINT": "wss://ws.coblic.com/v1/ws",
+      "REACT_APP_DEV_API_ENDPOINT": "https://staging-api-vgeynb6vsktxpsc88j3qmmhjpwvncjge.coblic.com",
+      "REACT_APP_DEV_API_VERSION": "v1.0",
+      "REACT_APP_DEV_ASSET_ORIGIN": "https://d1z4k3y8q0paf8.cloudfront.net",
+      "DEV_WEBSOCKET_END_POINT": "wss://staging-ws.coblic.com/v1/ws",
+      "REACT_WEB_API_ENDPOINT": "https://coblic.com",
+      "ANNOUNCEMENT_LINK": "https://coblic.com/announcements",
+      "CUSTOMER_CENTER_LINK": "https://coblic.zendesk.com/hc/ko",
+      "WHITEPAPER_LINK": "https://bit.ly/Coblic_WhitePaper",
+      "RESETPASSWORD_LINK": "https://coblic.com/reset-password",
+      "SIGNUP_LINK": "https://coblic.com/signup"
     }
+  }
 }
-
