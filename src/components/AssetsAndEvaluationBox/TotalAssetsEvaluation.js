@@ -79,7 +79,7 @@ export default class TotalAssetsEvaluation extends Component {
                                 (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)
                             ]}>
                                 { evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : '' }
-                                { evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).toFixed(2)).toFixed()) : '-'} %
+                                { evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).mul(100).toFixed(2)).toFixed()) : '-'} %
                             </Text>
                         </View>
                     </View>
