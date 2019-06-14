@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f7f8fa',
     },
     tupleColumnText: {
-        fontSize: 10
+        fontSize: 11
     },
     created: {
         flexDirection: 'row'
