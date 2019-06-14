@@ -22,16 +22,24 @@ import Decimal from '../utils/decimal';
 import number from '../utils/number';
 import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
+import modalStore from '../stores/modalStore';
 
-@inject('tradingPairStore')
+@inject('tradingPairStore', 'modalStore')
 @observer
 export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
-        this.baseKoreanName = navigation.getParam('baseKoreanName', '토큰');
+        this.baseName = navigation.getParam('baseName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
         
         return {
-            title: `${this.tradingPairName.split('-').join(' / ')}`,
+            title: <Text 
+                style={{fontSize: 15}}
+                onPress={() => {
+                    modalStore.openCustomModal({
+                        modal: <View><Text>test</Text></View>,
+                    })
+                }}
+            >{`${baseName} (${this.tradingPairName.split('-').join(' / ')})`}</Text>,
             tabBarVisible: false,
             ...headerStyle.white
         };

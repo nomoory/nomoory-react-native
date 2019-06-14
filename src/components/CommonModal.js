@@ -15,14 +15,15 @@ class CommonModal extends Component {
             type, 
             title, 
             content, 
-            buttons 
+            buttons,
+            config,
         } = this.props.modalStore || {};
         
         return (
             <Modal isVisible={isVisible}
                 onBackdropPress={this._closeModal}
-                animationIn='slideInRight'
-                animationOut='slideOutRight'
+                animationIn={config.animationIn}
+                animationOut={config.animationOut}
                 animationInTiming={200}
                 animationOutTiming={200}
             >
@@ -30,7 +31,10 @@ class CommonModal extends Component {
                     onPress={this._closeModal}
                     style={[styles.transparentContainer]}
                 >
-                    <View style={[styles.container]}>
+                    <View style={[
+                        styles.container,
+                        this.props.modalStore.styles.container]}
+                    >
                         <View style={[styles.headerContainer]}>
                             <Text style={[styles.headerText, styles[type + 'HeaderText']]}>{title}</Text>
                         </View>                    
@@ -46,17 +50,24 @@ class CommonModal extends Component {
                         <View style={styles.buttons}>
                             { 
                                 buttons && buttons.map((button, index) => {
-                                    let { containerStyle, textStyle, title, onPress } = button;
+                                    let { 
+                                        containerStyle,
+                                        textStyle,
+                                        title,
+                                        onPress,
+                                    } = button;
+
                                     return (
                                         <TouchableOpacity
                                             key={index}
                                             style={[
                                                 styles.button, 
                                                 containerStyle, 
-                                                index !== buttons.length - 1 && styles.borderOnRight
+                                                index !== buttons.length - 1
+                                                && styles.borderOnRight
                                             ]}
                                             onPress={onPress}
-                                            >
+                                        >
                                             <Text style={[styles.buttonText, textStyle]}>{title}</Text>
                                         </TouchableOpacity>
                                     )

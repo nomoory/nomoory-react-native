@@ -5,6 +5,7 @@ import { Provider } from 'mobx-react';
 import stores from './src/stores';
 import AppNavigator from './src/navigation/AppNavigator';
 import CommonModal from './src/components/CommonModal';
+import CustomModal from './src/components/CustomModal';
 
 import { enableLogging } from 'mobx-logger';
 import { reaction } from 'mobx';
@@ -56,6 +57,7 @@ export default class App extends React.Component {
                     {typeof Platform && Platform.OS === 'ios' && <StatusBar barStyle="default" />}
                     <AppNavigator />
                     <CommonModal />
+                    <CustomModal />
                 </View>
             </Provider>
         );
