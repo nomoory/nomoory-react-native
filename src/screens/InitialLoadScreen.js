@@ -14,16 +14,15 @@ export default class InitialLoadScreen extends Component {
     }
 
     async componentDidMount() {
-        await this.props.orderFeeStore.loadOrderFee(); 
+        this.props.orderFeeStore.loadOrderFee(); 
 
-        // await this.props.tradingPairStore.loadTradingPairs();
         let accessToken = await SecureStore.getItemAsync('access_token');
         let userUuid = await SecureStore.getItemAsync('user_uuid');
         if (accessToken) { 
             try {
                 this.props.authStore.setAccessTokenOnStore(accessToken);
                 this.props.authStore.setUserUuidOnStore(userUuid);
-                await this.props.userStore.loadUser(userUuid);                
+                await this.props.userStore.loadUser(userUuid);
             } catch (err) {
                 this.props.authStore.destroyAccessToken();
             }

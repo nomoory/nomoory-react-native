@@ -108,7 +108,7 @@ export default class LoginScreen extends Component {
 const width = 270;
 const height = 45;
 const marginTop = 16;
-const borderRadius = 6;
+const borderRadius = 0;
 
 const styles = StyleSheet.create({
     container: {
@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
         width,
         height,
         marginTop: 26, 
-        backgroundColor: '#ffc107',
+        backgroundColor: '#F7B03E', // #ffc107',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius
     },
     loginButtonText: {
-        color: color.coblicBlue,
+        color: 'white',//color.coblicBlue,
         fontSize: 19,
         fontWeight: '700'
     },

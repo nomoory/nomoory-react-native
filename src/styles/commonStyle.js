@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export const color = {
-    coblicBlue: '#0051c7',
+    coblicBlue: '#0446b4',
     coblicPaleBlue: '#81a6ef',
     coblicRed: '#d60000',
     coblicGrey: '#999',
