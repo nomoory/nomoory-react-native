@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 import commonStyle from '../../styles/commonStyle';
@@ -7,13 +7,17 @@ import commonStyle from '../../styles/commonStyle';
 @inject('tradingPairStore')
 @observer
 class TradingPairTableHeader extends Component {
-    @observable variable = 4;
+    @observable
+    variable = 4;
+
     _toggleLanguageForTokenName = () => {
         this.props.tradingPairStore.toggleLanguageForTokenName();
     };
+
     _toggleSortDirectionOf = (target) => () => {
             this.props.tradingPairStore.toggleSortDirectionOf(target);
     };
+
     _renderDisplayNameByName = (name) => {
         if ( name === 'close_price') return '현재가';
         if ( name === 'signed_change_rate') return '24시간대비';
@@ -23,15 +27,16 @@ class TradingPairTableHeader extends Component {
         const { displayNameOfLanguageForTokenName } = this.props.tradingPairStore || {};
         return (
             <View style={styles.container}>
-                <View style={[styles.column, this.props.columStyles[0] ]}>
-                    <Text style={styles.headerFont}
-                        onPress={this._toggleLanguageForTokenName}>
+                <TouchableOpacity style={[styles.column, this.props.columStyles[0] ]}
+                    onPress={this._toggleLanguageForTokenName}
+                >
+                    <Text style={styles.headerFont}>
                         {displayNameOfLanguageForTokenName}
                     </Text>
                     <Image style={{ width: 14, height: 13 }}
                         source={require('../../../assets/images/exchange/ic_change_s.png')} 
                     />
-                </View>
+                </TouchableOpacity>
                 {
                     this.props.tradingPairStore.sorts.map((sort, index) => {
                         let source = require('../../../assets/images/exchange/ic_arow_default_s.png');
@@ -39,17 +44,18 @@ class TradingPairTableHeader extends Component {
                         if (sort.direction === 'asc') source = require('../../../assets/images/exchange/ic_arow_down_s.png');
 
                         return (
-                            <View key={sort.name} 
-                                style={[this.props.columStyles[index + 1], styles.column]}>
-                                <Text style={styles.headerFont}
-                                    onPress={this._toggleSortDirectionOf(sort.name)}>
+                            <TouchableOpacity key={sort.name} 
+                                onPress={this._toggleSortDirectionOf(sort.name)}
+                                style={[this.props.columStyles[index + 1], styles.column]}
+                            >
+                                <Text style={styles.headerFont}>
                                     {this._renderDisplayNameByName(sort.name) + ' '}
                                 </Text>
                                 <Image
                                     style={{ width: 12, height: 13 }} 
                                     source={source}
                                 /> 
-                            </View>
+                            </TouchableOpacity>
                         );
                     })
                 }

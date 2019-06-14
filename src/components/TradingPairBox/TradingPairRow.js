@@ -62,13 +62,17 @@ class TradingPairRow extends Component {
                 onPress={this._onPressTradingPairRow}
             >
                 <View style={[styles.name]}>
-                    <Text style={[
-                        styles.textSizeBig,
-                        isKorean && 6 < tokenName.length && styles.textSizeNormal,
-                        isKorean && 8 < tokenName.length && styles.textSizeSmall,
-                        isEnglish && 8 < tokenName.length && styles.textSizeNormal,
-                        isEnglish && 10 < tokenName.length && styles.textSizeSmall,                        
-                    ]}>
+                    <Text 
+                        style={[
+                            styles.textSizeBig,
+                            isKorean && 6 < tokenName.length && styles.textSizeNormal,
+                            isKorean && 8 < tokenName.length && styles.textSizeSmall,
+                            isEnglish && 8 < tokenName.length && styles.textSizeNormal,
+                            isEnglish && 10 < tokenName.length && styles.textSizeSmall,
+                        ]}
+                        ellipsizeMode='tail'
+                        numberOfLines={1}
+                    >
                         {tokenName}
                     </Text>
                     <Text style={[styles.textSizeNormal]}>{name}</Text>
@@ -105,6 +109,7 @@ const styles = StyleSheet.create({
         borderColor: '#e9eaea',
     },
     name: {
+        width: 100,
         paddingLeft: 10,
         flex: 1,
         flexDirection: 'column',
@@ -137,15 +142,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     textSizeBig: {
-        fontSize: 13,
-        fontWeight:'200'
-    },
-    textSizeNormal: {
         fontSize: 12,
         fontWeight:'200'
     },
-    textSizeSmall: {
+    textSizeNormal: {
         fontSize: 11,
+        fontWeight:'200'
+    },
+    textSizeSmall: {
+        fontSize: 10,
         fontWeight:'200'
     }
 })
