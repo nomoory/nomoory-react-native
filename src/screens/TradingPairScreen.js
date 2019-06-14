@@ -80,12 +80,7 @@ export default class TradingPairScreen extends Component {
                     return (
                         <TouchableOpacity
                             key={route.key}
-                            style={[
-                                tabStyle.tabItem,
-                                this.state.index === i
-                                ? tabStyle.selectedTabItem
-                                : null
-                            ]}
+                            style={[tabStyle.tabItem]}
                             onPress={() => this.setState({ index: i })}>
                             <Animated.Text style={[ 
                                 { color },

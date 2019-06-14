@@ -5,6 +5,7 @@ import Decimal from '../../utils/decimal.js';
 import number from '../../utils/number';
 import images from './images';
 import { withNavigation } from 'react-navigation';
+import commonStyle from '../../styles/commonStyle.js';
 
 @withNavigation
 @inject('accountStore', 'modalStore')
@@ -39,7 +40,7 @@ export default class AccountItem extends Component {
         let { total_evaluated_price_in_quote } = accountStore.totalAssetsEvaluation || {};
         let balanceWeight = '0';
         if (total_evaluated_price_in_quote && total_evaluated_price_in_quote !== '0') {
-            balanceWeight = Decimal(evaluated_in_base_currency).div(total_evaluated_price_in_quote).mul(100).toFixed(2);
+            balanceWeight = Decimal(Decimal(evaluated_in_base_currency).div(total_evaluated_price_in_quote).mul(100).toFixed(2)).toFixed();
         }
 
         return (
@@ -49,7 +50,7 @@ export default class AccountItem extends Component {
                 <View style={[styles.left]}>
                     <Image
                         style={{ width: 28, height: 28 }}
-                        source={images.logos[asset_symbol]}
+                        source={{ uri: `${Expo.Constants.manifest.extra.REACT_APP_ASSET_ORIGIN}/logos/${asset_symbol}.png` }}
                     />
                     <View style={[styles.coinNameAndSymbol]}>
                         <Text style={[styles.coinName]}>{asset_korean_name}</Text>
@@ -66,17 +67,17 @@ export default class AccountItem extends Component {
                         {
                             asset_symbol !== 'KRW' ?
                             <View style={[styles.evaluatedBalanceAmount]}>
-                                <Text style={[styles.amount]}>
-                                    {evaluated_in_base_currency ? number.putComma(number.getFixedPrice(evaluated_in_base_currency, 'KRW')) : '-'}
+                                <Text style={[styles.evaluatedAmount]}>
+                                    {evaluated_in_base_currency ? `≈ ${number.putComma(number.getFixedPrice(evaluated_in_base_currency, 'KRW'))}` : '-'}
                                 </Text>
-                                <Text style={[styles.unit]}> {'KRW'}</Text>
+                                <Text style={[styles.evaluatedUnit]}> {'KRW'}</Text>
                             </View> :
                             null
                         }
                     </View>
-                    {/* <View style={[styles.balanceWeight]}>
+                    <View style={[styles.balanceWeight]}>
                         <Text style={[styles.balanceWeightText]}>{`${balanceWeight}%`}</Text>
-                    </View> */}
+                    </View>
                     <View style={[styles.emptyColumn]}>
                         { 
                             ['BTC', 'BCH', 'ETH'].includes(asset_symbol) ?
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 15,
-        height: 80,
+        height: 60,
 
         borderStyle: 'solid',
         // borderTopWidth: 0.5,
@@ -116,11 +117,11 @@ const styles = StyleSheet.create({
     },
     coinName: {
         fontWeight: '500',
-        fontSize: 16
+        fontSize: 13
     },
     coinSymbol: {
         marginTop: 4,
-        fontSize: 14,
+        fontSize: 13,
         color: '#747474'
     },
     balanceAndPriceContainer: {
@@ -141,11 +142,21 @@ const styles = StyleSheet.create({
     },
     assetAmount: {
         fontWeight: '500',
-        fontSize: 14
+        fontSize: 13
 
     },
     assetUnit: {
         fontWeight: '500',
-        fontSize: 14
+        fontSize: 13
+    },
+    evaluatedAmount: {
+        fontSize: 11,
+    },
+    evaluatedUnit: {
+        fontSize: 11,
+    },
+    balanceWeightText: {
+        fontWeight: '300',
+        fontSize: 13,
     }
 })

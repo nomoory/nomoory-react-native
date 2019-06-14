@@ -62,12 +62,12 @@ export default class InvestmentScreen extends Component {
                     return (
                         <TouchableOpacity
                             key={route.key}
-                            style={[
-                                tabStyle.tabItem,
-                                this.state.index === i ? tabStyle.selectedTabItem : null
-                            ]}
+                            style={[tabStyle.tabItem]}
                             onPress={(e) => {this._onIndexChange(i)}}>
-                            <Animated.Text style={[tabStyle.tabText]}>{route.title}</Animated.Text>
+                            <Animated.Text style={[
+                                tabStyle.tabText,,
+                                this.state.index === i ? tabStyle.selectedTabText : null
+                            ]}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
                 })}
