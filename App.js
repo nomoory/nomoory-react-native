@@ -10,6 +10,9 @@ import CustomModal from './src/components/CustomModal';
 import { enableLogging } from 'mobx-logger';
 import { reaction } from 'mobx';
 
+import NavigationService from './src/utils/NavigationService';
+
+
 enableLogging({
     predicate: () => __DEV__ && Boolean(window.navigator.userAgent),
     action: __DEV__ && Boolean(window.navigator.userAgent),
@@ -55,7 +58,11 @@ export default class App extends React.Component {
             >
                 <View style={styles.container}>
                     {typeof Platform && Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-                    <AppNavigator />
+                    <AppNavigator 
+                        ref={navigatorRef => {
+                            NavigationService.setTopLevelNavigator(navigatorRef);
+                        }}
+                    />
                     <CommonModal />
                     <CustomModal />
                 </View>

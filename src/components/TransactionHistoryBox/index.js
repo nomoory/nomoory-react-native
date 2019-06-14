@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import commonStyles, { font }from '../../styles/commonStyle';
+import commonStyles from '../../styles/commonStyle';
 import { StyleSheet, View, ListView, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
-import Decimal from '../../utils/decimal';
-import { reaction, computed } from 'mobx';
+import { computed } from 'mobx';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import ScrollLoading from '../ScrollLoading';
 
@@ -64,6 +63,7 @@ export default class TransactionHistoryBox extends Component {
         const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.transactionHistory);
         const isLoading = this.props.transactionHistoryStore.loadMoreValues.isLoading;
         const isLoadable = this.props.transactionHistoryStore.isLoadable;
+        
         return (
             <ListView style={[styles.container]}
                 onEndReachedThreshold={30}

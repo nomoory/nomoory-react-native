@@ -3,6 +3,7 @@ import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import tabStyle from '../styles/tabStyle';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
 
 import {
     StyleSheet,
@@ -11,7 +12,8 @@ import {
     Image,
     Dimensions,
     TouchableOpacity,
-    Animated
+    Animated,
+    Picker,
 } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
@@ -23,25 +25,31 @@ import number from '../utils/number';
 import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 import modalStore from '../stores/modalStore';
+import { withNavigation } from 'react-navigation';
 
+@withNavigation
 @inject('tradingPairStore', 'modalStore')
 @observer
 export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseName = navigation.getParam('baseName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
-        
+
         return {
-            title: <Text 
-                style={{fontSize: 15}}
-                onPress={() => {
-                    modalStore.openCustomModal({
-                        modal: <View><Text>test</Text></View>,
-                    })
-                }}
-            >{`${baseName} (${this.tradingPairName.split('-').join(' / ')})`}</Text>,
+            title: (
+                <Text 
+                    style={{fontSize: 15, textDecorationLine: 'underline'}}
+                    onPress={() => {
+                        modalStore.openCustomModal({
+                            modal: 
+                            <TradingPairSelectionModal />,
+                        })
+                    }}
+                >{`${baseName} (${this.tradingPairName.split('-').join('/')})`}
+                </Text>
+            ),
             tabBarVisible: false,
-            ...headerStyle.white
+            ...headerStyle.white,
         };
     };
 
@@ -58,15 +66,15 @@ export default class TradingPairScreen extends Component {
         };
     }
 
-    @computed get
-    changeRate() {
+    @computed
+    get changeRate() {
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let { change_rate, change } = tradingPair || {};
         return ` ${change === 'RISE' ? '+' : ''}${change === 'FALL' ? '-' : ''}${change_rate ? number.putComma(Decimal(Decimal(change_rate).mul(100).toFixed(2)).toFixed()) : '- '}`
     }
 
-    @computed get
-    changePrice() {
+    @computed
+    get changePrice() {
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let { change, change_price } = tradingPair || {};
         if (!change_price) return '0 ';

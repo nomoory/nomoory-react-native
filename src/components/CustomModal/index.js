@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { color, font } from '../../styles/commonStyle';
-import { StyleSheet, Button, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import Modal from "react-native-modal";
 import { inject, observer } from 'mobx-react';
 
@@ -28,12 +28,15 @@ export default class CommonModal extends Component {
                 animationInTiming={200}
                 animationOutTiming={200}
             >
-                <View 
+                <TouchableWithoutFeedback
                     onPress={this._closeModal}
-                    style={[styles.transparentContainer]}
                 >
-                    {modal}
-                </View>
+                    <View
+                        style={styles.transparentContainer}
+                    >
+                        {modal}
+                    </View>
+                </TouchableWithoutFeedback>
             </Modal>
         );
     }
@@ -41,10 +44,12 @@ export default class CommonModal extends Component {
 
 const styles = StyleSheet.create({
     transparentContainer: {
+        display: 'flex',
         width: '100%',
         height: '100%',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
     },
 });

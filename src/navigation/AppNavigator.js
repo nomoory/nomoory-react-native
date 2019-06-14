@@ -1,6 +1,7 @@
 import {
     createStackNavigator,
-    createSwitchNavigator
+    createSwitchNavigator,
+    createAppContainer,
 } from 'react-navigation';
 
 import InitialLoadScreen from '../screens/InitialLoadScreen';
@@ -15,7 +16,8 @@ const AuthStack = createStackNavigator(
     }
 );
 
-export default createSwitchNavigator(
+export default createAppContainer
+(createSwitchNavigator(
     { 
         InitialLoad: InitialLoadScreen,
         Auth: AuthStack,
@@ -24,4 +26,4 @@ export default createSwitchNavigator(
     { 
         initialRouteName: 'InitialLoad'
     } 
-);
+));

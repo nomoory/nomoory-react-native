@@ -34,6 +34,20 @@ export default class InitialLoadScreen extends Component {
 
     _moveToExchangeScreen = () => {
         this.props.navigation.navigate('Exchange');
+        // this._onPressTradingPairRow();
+    }
+
+    _onPressTradingPairRow = () => {
+        this.props.tradingPairStore.setSelectedTradingPairName('BTC-KRW');
+        let tradingPair = this.props.tradingPairStore.selectedTradingPair;
+        this._openTradingPairScreen(tradingPair);
+    }
+
+    _openTradingPairScreen = (tradingPair) => {
+        this.props.navigation.navigate('TradingPair', {
+            baseName: this.props.tradingPairStore.languageForTokenName === 'ko' ? tradingPair.base_korean_name : tradingPair.base_english_name,
+            tradingPairName: tradingPair.name
+        });
     }
 
     render() {

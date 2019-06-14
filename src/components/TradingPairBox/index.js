@@ -3,12 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import TradingPairSearchBar from './TradingPairSearchBar';
 import AccountStatus from './AccountStatus';
-// import TradingPairTab from './TradingPairTab'; // 원화 이외의 quote open시 적용
 import TradingPairTable from './TradingPairTable';
 
 @inject('tradingPairStore')
 @observer
-class TradingPairBox extends Component {
+export default class TradingPairBox extends Component {
     render() {
         return (
             <View style={styles.container}>
@@ -30,5 +29,3 @@ const styles = StyleSheet.create({
         flex: 1
     }
 });
-
-export default TradingPairBox;
