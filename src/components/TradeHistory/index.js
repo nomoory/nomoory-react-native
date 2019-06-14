@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     },
     selected: {
         borderStyle: 'solid',
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: color.coblicPaleBlue,
     },
     selectedText: {

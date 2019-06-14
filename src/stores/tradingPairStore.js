@@ -20,23 +20,35 @@ class TradingPairStore {
         );
     }
     
-    @observable isLoading = false;
-    @observable errors = null;
+    @observable
+    isLoading = false;
 
-    @observable selectedTradingPairName = null; // 거래소 스크린상에서 선택된 trading pair
+    @observable
+    selectedTradingPairName = null; // 거래소 스크린상에서 선택된 trading pair
 
-    @observable searchKeyword = '';
-    @observable filters = {
+    @observable
+    searchKeyword = '';
+
+    @observable
+    filters = {
         'interest': false,
     };
-    @observable languageForTokenName = 'ko';
-    @observable sorts = [ // direction: asc|desc|null
+
+    @observable
+    languageForTokenName = 'ko';
+
+    @observable
+    sorts = [ // direction: asc|desc|null
         { name: 'close_price', direction: null }, // 현재가
         { name: 'signed_change_rate', direction: null }, // 부호가 있는 변화율 (24시간 대비)
         { name: 'acc_trade_value_24h', direction: null }, // 24시간 누적 거래대금
     ];
-    @observable selectedTradingPairTab = 'KRW';
-    @observable tradingPairsRegistry = observable.map();
+
+    @observable
+    selectedTradingPairTab = 'KRW';
+
+    @observable
+    tradingPairsRegistry = observable.map();
 
     @computed 
     get selectedTradingPair() {

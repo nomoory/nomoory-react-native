@@ -42,9 +42,12 @@ class TradingPairRow extends Component {
             base_korean_name, base_english_name, name, 
             open_price
         } = this.props.tradingPair || {};
-        const tokenNameForSelectedLanguage = this.props.tradingPairStore.languageForTokenName === 'ko' ?
+        const isKorean = this.props.tradingPairStore.languageForTokenName === 'ko';
+        const isEnglish = !isKorean;
+        const tokenName = isKorean ?
             base_korean_name :
             base_english_name;
+
         const result = getNumberAndPowerOfTenFromNumber(acc_trade_value_24h);
         const isIncreased = close_price && open_price ? Decimal(close_price).lessThan(open_price) : false;
         const isDecreased = close_price && open_price ? Decimal(close_price).greaterThan(open_price) : false;
@@ -59,7 +62,19 @@ class TradingPairRow extends Component {
                 onPress={this._onPressTradingPairRow}
             >
                 <View style={[styles.name]}>
-                    <Text style={[styles.textSizeNormal]}>{tokenNameForSelectedLanguage}</Text>
+                    <Text 
+                        style={[
+                            styles.textSizeBig,
+                            isKorean && 6 < tokenName.length && styles.textSizeNormal,
+                            isKorean && 8 < tokenName.length && styles.textSizeSmall,
+                            isEnglish && 8 < tokenName.length && styles.textSizeNormal,
+                            isEnglish && 10 < tokenName.length && styles.textSizeSmall,
+                        ]}
+                        ellipsizeMode='tail'
+                        numberOfLines={1}
+                    >
+                        {tokenName}
+                    </Text>
                     <Text style={[styles.textSizeNormal]}>{name}</Text>
                 </View>
                 <View style={[ styles.closePrice, styles.column ]}>
@@ -94,6 +109,7 @@ const styles = StyleSheet.create({
         borderColor: '#e9eaea',
     },
     name: {
+        width: 100,
         paddingLeft: 10,
         flex: 1,
         flexDirection: 'column',
@@ -125,12 +141,16 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'center',
     },
-    textSizeNormal: {
+    textSizeBig: {
         fontSize: 12,
         fontWeight:'200'
     },
-    textSizeSmall: {
+    textSizeNormal: {
         fontSize: 11,
+        fontWeight:'200'
+    },
+    textSizeSmall: {
+        fontSize: 10,
         fontWeight:'200'
     }
 })

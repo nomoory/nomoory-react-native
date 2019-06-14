@@ -7,9 +7,6 @@ export default StyleSheet.create({
         height: 30,
         // paddingTop: Constants.statusBarHeight,
     },
-    selectedTabItem: {
-        fontWeight: '700'
-    },
     tabItem: {
         flex: 1,
         justifyContent: 'center',

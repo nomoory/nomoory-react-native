@@ -47,7 +47,7 @@ export default class AccountListScreen extends Component {
         return (
             <View style={[styles.container]}>
                 <View style={[styles.totalEvaluatedPriceContainer]}>
-                    <Text style={[styles.title]}>총 보유자산</Text>
+                    <Text style={[styles.title]}>총보유자산</Text>
                     <View style={[styles['priceContainer']]}>
                         <Text style={[styles['price']]}>
                             {total_evaluated_price_in_quote ? number.putComma(Decimal(total_evaluated_price_in_quote).toFixed(0)) : '-'} KRW
@@ -68,7 +68,7 @@ export default class AccountListScreen extends Component {
                             this.showDepositableOnly && styles.checked
                         ]}>
                             <Image
-                                style={{ height: 8, resizeMode: 'contain' }}
+                                style={{ height: 6, resizeMode: 'contain' }}
                                 source={require('../../assets/images/depositWithdraw/ic_check_small.png')}
                             />
                         </View>
@@ -82,7 +82,7 @@ export default class AccountListScreen extends Component {
                             this.showPossesionOnly && styles.checked
                         ]}>
                             <Image
-                                style={{ height: 8, resizeMode: 'contain' }}
+                                style={{ height: 6, resizeMode: 'contain' }}
                                 source={require('../../assets/images/depositWithdraw/ic_check_small.png')}
                             />
                         </View>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     totalEvaluatedPriceContainer: {
         width: '100%',
         flexDirection: 'row',
-        height: 70,
+        height: 60,
         padding,
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -120,12 +120,12 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: '500',
-        fontSize: 18,
+        fontSize: 16,
         color: '#333333',
     },
     price: {
-        fontWeight: '700',
-        fontSize: 18,
+        fontWeight: '600',
+        fontSize: 16,
     },
 
     searchContainer: {
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
     checkBox: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: 18,
-        height: 18,
+        width: 13,
+        height: 13,
         borderRadius: 11,
         borderWidth: 1.5,
         borderColor: color.coblicPaleGrey,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     checkboxText: {
-        fontSize: 14,
+        fontSize: 13,
     },
     checked: {
         backgroundColor: color.coblicBlue,
