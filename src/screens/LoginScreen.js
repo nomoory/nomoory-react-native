@@ -32,7 +32,10 @@ export default class LoginScreen extends Component {
             }).catch((err) => {});
     }
     _onPressResetPassword = (e) => { Linking.openURL(Expo.Constants.manifest.extra.RESETPASSWORD_LINK); }
-    _onPressSignup = (e) => { Linking.openURL(Expo.Constants.manifest.extra.SIGNUP_LINK); }
+    _onPressSignup = (e) => { 
+        this.props.navigation.navigate('Signup');
+        // Linking.openURL(Expo.Constants.manifest.extra.SIGNUP_LINK); 
+    }
     _onPressCloseLoginScreen = (e) => { this.props.navigation.navigate('Exchange'); }
 
     render() {

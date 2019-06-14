@@ -31,7 +31,7 @@ class Agent {
                 (
                     Platform.OS === "ios" ? 
                     "CoblicAppiOS/1.0.0" : 
-                    "CoblicAppAndroid/1.0.0" 
+                    "CoblicAppAndroid/1.0.0"
                 ) + ( 
                     this.axios.defaults.headers.common['User-Agent'] ? 
                     ' ' + this.axios.defaults.headers.common['User-Agent'] : 
@@ -53,6 +53,7 @@ class Agent {
 
     // User and Auth
     signup(signupInfo) {
+        console.log(signupInfo)
         return axios.post(`${API_ROOT}/users/signup/`, signupInfo).catch(this._handleError);
     }
 
@@ -395,6 +396,7 @@ class Agent {
         return requestConfig;
     }
     _handleError(error) {
+
         if (!error.response) {
             // 서버 꺼져있을때 에러 핸들링
             throw error;

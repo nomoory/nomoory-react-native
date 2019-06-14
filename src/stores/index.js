@@ -13,6 +13,7 @@ import transactionHistoryStore from './transactionHistoryStore';
 import socketStore from './socketStore';
 import placedOrderHistoryStore from './placedOrderHistoryStore';
 import dailyTradeHistoryStore from './dailyTradeHistoryStore';
+import signupStore from './signupStore';
 
 const stores = {
     accountStore,
@@ -30,6 +31,7 @@ const stores = {
     socketStore,
     placedOrderHistoryStore,
     dailyTradeHistoryStore,
+    signupStore,
 };
 
 export default stores;

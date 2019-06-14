@@ -6,12 +6,14 @@ import {
 
 import InitialLoadScreen from '../screens/InitialLoadScreen';
 import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
 import OtpVerificationScreen from '../screens/OtpVerificationScreen';
 import MainTabNavigator from './MainTabNavigator';
 
 const AuthStack = createStackNavigator(
     {
         Login: LoginScreen,
+        Signup: SignupScreen,
         OtpVerification: OtpVerificationScreen,
     }
 );
