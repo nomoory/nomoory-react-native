@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import NavigationService from '../../utils/NavigationService';
 import commonStyle from '../../styles/commonStyle';
 
-@inject('tradingPairStore')
+@inject('tradingPairStore', 'modalStore')
 @observer
 export default class TradingPairSelectionModal extends Component {
     _onPressTradingPairRow = (tradingPairName) => () => {
@@ -19,6 +19,7 @@ export default class TradingPairSelectionModal extends Component {
                 this.props.tradingPairStore.languageForTokenName === 'ko' ? tradingPair.base_korean_name : tradingPair.base_english_name,
             tradingPairName: tradingPair.name
         });
+        this.props.modalStore.closeCustomModal();
     }
     render() {
         const { tradingPairs, selectedTradingPairName, languageForTokenName } = this.props.tradingPairStore || {};
