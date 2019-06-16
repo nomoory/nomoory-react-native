@@ -3,11 +3,13 @@ import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import headerStyle from '../styles/headerStyle';
 import TradingPairBox from '../components/TradingPairBox';
+import tradingPairStore from '../stores/tradingPairStore'
 
 @inject('tradingPairStore')
 @observer
 export default class ExchangeScreen extends Component {
     static navigationOptions = ({ navigation }) => {
+        tradingPairStore.loadTradingPairs();
         return {
             title: '거래소',
             // headerLeft: (
@@ -24,6 +26,7 @@ export default class ExchangeScreen extends Component {
             tradingPairName: 'TOKA-KRW'
         });
     }
+
     render() {
         return (
             <View style={styles.container}>

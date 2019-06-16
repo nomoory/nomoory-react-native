@@ -24,7 +24,8 @@ class TradingPairRow extends Component {
 
     _openTradingPairScreen = (tradingPair) => {
         this.props.navigation.navigate('TradingPair', {
-            baseKoreanName: tradingPair.base_korean_name,
+            baseName: 
+                this.props.tradingPairStore.languageForTokenName === 'ko' ? tradingPair.base_korean_name : tradingPair.base_english_name,
             tradingPairName: tradingPair.name
         });
     }

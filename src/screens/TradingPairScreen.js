@@ -121,12 +121,12 @@ export default class TradingPairScreen extends Component {
             <View style={styles.container}>
                 <View style={styles.tradingPairSummaryContainer}>
                     <Text style={[styles.closePriceText, commonStyle[change]]}>
-                        {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'} 원
+                        {close_price ? number.putComma(Decimal(close_price).toFixed()) : '-'}
                     </Text>
                     <View style={styles.bottomContainer}>
-                        <Text>24시간 대비</Text>
-                        <Text style={[styles.changeRateText, commonStyle[change]]}>
-                            {this.changeRate} %
+                        <Text style={styles.title}>전일대비</Text>
+                        <Text style={[styles.subText, commonStyle[change]]}>
+                            {this.changeRate}%
                         </Text>
                         <View style={{ 
                             marginLeft: 10, 
@@ -135,12 +135,12 @@ export default class TradingPairScreen extends Component {
                         }}>
                             {(change === 'FALL' || change === 'RISE') ?
                                 <Image
-                                    style={{ width: 12, height: 6 }}
+                                    style={{ width: 10, height: 6 }}
                                     source={change === 'FALL' ? fallIcon : riseIcon}
                                 /> : null
                             }
                             <Text style={[styles.subText, commonStyle[change]]}>
-                                {this.changePrice} 원
+                                {this.changePrice}
                             </Text>
                         </View>
                     </View>
@@ -170,17 +170,15 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         height: 60,
         width: '100%',
-        padding: 13,
+        padding: 10,
+        paddingLeft: 14,
         backgroundColor: 'white',
         justifyContent: 'space-between',
     },
     closePriceText: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '400',
         color: '#000000',
-    },
-    changeRateText: {
-        paddingLeft: 8,
     },
     leftContainer: {
         flexDirection: 'column',
@@ -189,5 +187,13 @@ const styles = StyleSheet.create({
     bottomContainer: {
         marginTop: 4,
         flexDirection: 'row',
+        alignItems: 'center',
+    },
+    title: {
+        color: '#777777',
+        fontSize: 12,
+    },
+    subText: {
+        fontSize: 12,
     },
 })

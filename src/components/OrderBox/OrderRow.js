@@ -17,6 +17,8 @@ export default class OrderRow extends Component {
         let price_decimal = Decimal(price);
         if (tradingPair.open_price) {
             percentage = price_decimal.minus(tradingPair.open_price).div(tradingPair.open_price).mul(100).toFixed(2, Decimal.ROUND_DOWN);
+        } else {
+            return null;
         }
         let percentage_decimal = Decimal(percentage || 0);
         return percentage_decimal;
@@ -79,11 +81,21 @@ export default class OrderRow extends Component {
                             isLessThanOpenPrice ? styles.blueText : null,
                             isBiggerThanOpenPrice ? styles.redText : null,
                         ]}>
-                            {number.putComma(this.percentage_decimal.toFixed())} %
+                            {
+                                this.percentage_decimal === null 
+                                ? '-'
+                                : number.putComma(this.percentage_decimal.toFixed())
+                            }%
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.volume}>
-                    <View style={[dynamicStyle.volumnBar, styles['volumeBar'], styles['volumeBar_' + side]]} />
+                    <View
+                        style={[
+                            dynamicStyle.volumnBar,
+                            styles['volumeBar'],
+                            styles['volumeBar_' + side],
+                        ]}
+                    />
                     <Text style={styles.volumeText}>{
                         Decimal(order.volume).greaterThan(10)
                         ? number.putComma(Decimal(order.volume).toFixed(0))
