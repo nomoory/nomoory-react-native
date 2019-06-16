@@ -23,6 +23,7 @@ class TradingPairTableHeader extends Component {
         if ( name === 'signed_change_rate') return '24시간대비';
         if ( name === 'acc_trade_value_24h') return '거래대금';
     }
+
     render() {
         const { displayNameOfLanguageForTokenName } = this.props.tradingPairStore || {};
         return (

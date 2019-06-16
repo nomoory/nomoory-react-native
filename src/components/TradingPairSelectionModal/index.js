@@ -15,7 +15,8 @@ export default class TradingPairSelectionModal extends Component {
 
     _openTradingPairScreen = (tradingPair) => {
         NavigationService.navigate('TradingPair', {
-            baseName: this.props.tradingPairStore.languageForTokenName === 'ko' ? tradingPair.base_korean_name : tradingPair.base_english_name,
+            baseName: 
+                this.props.tradingPairStore.languageForTokenName === 'ko' ? tradingPair.base_korean_name : tradingPair.base_english_name,
             tradingPairName: tradingPair.name
         });
     }

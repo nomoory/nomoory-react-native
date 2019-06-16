@@ -30,7 +30,6 @@ export default class SignupScreen extends Component {
 
     _onChangePasswordConfirmation = (text) => { 
         this.props.signupStore.setPasswordConfirmation(text);
-        console.log(this.props.signupStore.values) 
     }
     
     _toggleCheckBoxByName = (name) => () => {

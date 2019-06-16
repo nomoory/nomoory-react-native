@@ -175,9 +175,9 @@ export default {
 
     "/* translation for error ": "translation for error */",
     "unknown_error_title": "알 수 없는 에러",
-    "unknown_error_message": "애러 발생 상황과 함께 아래에 문의해주세요.\n문의메일: help@coblic.com",
+    "unknown_error_message": "애러 발생 상황과 함께 아래에 문의해주세요.\n문의메일: @.com",
     "invalid_grant": "아이디 혹은 비밀번호를 잘못 입력하였습니다.",
-    "user_is_blocked_for_abusing_attempts": "로그인 시도 횟수를 초과했거나 악의적인 로그인 시도를 감지했습니다.\n문의메일: help@coblic.com",
+    "user_is_blocked_for_abusing_attempts": "로그인 시도 횟수를 초과했거나 악의적인 로그인 시도를 감지했습니다.\n문의메일: @.com",
     "user_already_exists": "이미 등록된 메일주소입니다.",
     "password_not_equal": "비밀번호가 동일하지 않습니다.",
     "wrong_otp_code": "OTP 코드가 올바르지 않습니다.",
@@ -190,7 +190,7 @@ export default {
     "modulated_phone_verification_data": "핸드폰 인증에 실패했습니다. 다시 시도해주세요",
     "wrong_temporary_password_reset_token": "인증과정에 에러가 발생하였습니다. 다시 시도해주세요.",
     "expired_temporary_password_reset_token": "인증시간을 초과하였습니다. 다시 시도해주세요.",
-    "oauth-server_is_abnormal": "인증 서버에 에러가 발생하였습니다. 문의: help@coblic.com",
+    "oauth-server_is_abnormal": "인증 서버에 에러가 발생하였습니다. 문의: @.com",
     "bank_account_already_verified": "인증을 완료한 계좌입니다.",
     "refresh_token_not_valid": "인증 과정에 에러가 발생하였습니다. 다시 시도해주세요.",
     "verification_not_enough": "인증 레벨이 충분하지 않습니다. 마이페이지에서 보안인증을 해주세요!",
@@ -340,10 +340,10 @@ export default {
     "lockup_amount_below_zero": "락업량을 입력해주세요.",
     "on_loading": "응답을 기다리는 중입니다.",
     "lockup_is_not_retriable": "락업 해제 후 25시간이 지나야 다시 락업이 가능합니다.",
-    "order_price_boundary_exceeded": "주문가능한 가격 범위를 넘었습니다. 주문가능가격의 범위는 현재가 기준으로 상하 50%입니다. \n문의: help@coblic.com",
+    "order_price_boundary_exceeded": "주문가능한 가격 범위를 넘었습니다. 주문가능가격의 범위는 현재가 기준으로 상하 50%입니다. \n문의: @.com",
 
     "warning_deposit_withdraw_reopen_title_old": "코블릭 입금 재개 안내 및 유의사항",
-    "warning_deposit_withdraw_reopen_content_old": "현 시간부로 코블릭에 원화 및 암호화폐 입금이 가능합니다.\n암호화폐 및 원화 입금은 100% 자동화 되어 있으며, <b>오입금 등으로 인해 자동 처리가 되지 않는 경우 이를 수동으로 처리하는데 최소 72시간이 소요</b>됩니다.\n\n또한 입금 지연으로 발생한 재산상의 손해는 코블릭에서 책임을 질 수 없으니 원활한 입금 및 거래를 위해 아래 유의사항을 숙지해주시기 바랍니다.\n\n<b>원화 입금</b>\n- 입금 페이지에서 신청 필수\n- <b>정확한 입금코드 작성</b> 필수(미입력 및 오입력 시 처리에 최소 72시간 소요)\n- <b>정확한 금액 이체</b> 필수(신청 금액과 다른 경우 처리에 최소 72시간 소요)\n\n<b>암호화폐 입금</b>\n- 정확한 입금 주소 사용\n- 전송하고자 하는 블록체인 네트워크 상태 수시 확인 권장\n- 현재 대부분의 트랜잭션 처리속도가 느리므로 가능한 경우 수수료 상향 조정 권장\n\n<b>출금</b>\n- 원화를 최초로 입금하는 경우, 72시간 동안 암호화폐+원화 모두 입출금 제한\n- 암호화폐만 입금하는 경우, 제한 없이 출금 가능(다만 KYC 레벨에 따른 출금액수 한도 존재)\n- CT토큰 입출금은 추후 오픈 예정\n- 비트코인캐시(BCH)는 구주소 출금만 가능\n\n미입금, 이중입금 등의 입금 관련 이슈가 발생하는 경우 지체없이 고객센터로 연락 바랍니다. (코블릭 아이디, 현재 이슈 내용을 메일로 전송)\n\n코블릭 고객센터: help@coblic.com\n\n감사합니다.",
+    "warning_deposit_withdraw_reopen_content_old": "현 시간부로 코블릭에 원화 및 암호화폐 입금이 가능합니다.\n암호화폐 및 원화 입금은 100% 자동화 되어 있으며, <b>오입금 등으로 인해 자동 처리가 되지 않는 경우 이를 수동으로 처리하는데 최소 72시간이 소요</b>됩니다.\n\n또한 입금 지연으로 발생한 재산상의 손해는 코블릭에서 책임을 질 수 없으니 원활한 입금 및 거래를 위해 아래 유의사항을 숙지해주시기 바랍니다.\n\n<b>원화 입금</b>\n- 입금 페이지에서 신청 필수\n- <b>정확한 입금코드 작성</b> 필수(미입력 및 오입력 시 처리에 최소 72시간 소요)\n- <b>정확한 금액 이체</b> 필수(신청 금액과 다른 경우 처리에 최소 72시간 소요)\n\n<b>암호화폐 입금</b>\n- 정확한 입금 주소 사용\n- 전송하고자 하는 블록체인 네트워크 상태 수시 확인 권장\n- 현재 대부분의 트랜잭션 처리속도가 느리므로 가능한 경우 수수료 상향 조정 권장\n\n<b>출금</b>\n- 원화를 최초로 입금하는 경우, 72시간 동안 암호화폐+원화 모두 입출금 제한\n- 암호화폐만 입금하는 경우, 제한 없이 출금 가능(다만 KYC 레벨에 따른 출금액수 한도 존재)\n- CT토큰 입출금은 추후 오픈 예정\n- 비트코인캐시(BCH)는 구주소 출금만 가능\n\n미입금, 이중입금 등의 입금 관련 이슈가 발생하는 경우 지체없이 고객센터로 연락 바랍니다. (코블릭 아이디, 현재 이슈 내용을 메일로 전송)\n\n코블릭 고객센터: @.com\n\n감사합니다.",
 
     "warning_deposit_withdraw_reopen_title": "입출금 및 KYC 관련 중요 공지",
     "warning_deposit_withdraw_reopen_content": "입출금 및 KYC 문의가 있으신 분들은 아래 내용을 꼭 확인해주시기 바랍니다.\n\n<b>입금</b>\n- 원화: 24시간 자동(입금 코드를 제대로 적지 않을 경우 정상 처리에 최소 72시간 소요)\n- 암호화폐: 24시간 자동\n\n<b>출금</b>\n- 암호화폐: 24시간 자동\n- 원화: 수동(요청 순서대로 처리되며, 출금 안해주는 일 없이 모두 해드립니다. 요청이 많아 늦어지는 경우가 많습니다.)\n\n<b>KYC</b>\n- 주민번호 뒷자리/운전면허증 뒷자리/여권번호 등의 개인정보를 가리지 않는 경우 반려되고 있습니다. 이에 KYC가 반려된 유저들께서는 꼭 개인정보를 가려주시기바랍니다.",

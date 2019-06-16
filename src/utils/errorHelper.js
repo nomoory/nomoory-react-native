@@ -49,7 +49,7 @@ class ErrorHelper{
             modalStore.openModal({
                 type: 'error',
                 title: '거래 이상',
-                content: '3036 에러. 메일로 문의 부탁 드립니다. 문의메일:help@coblic.com',
+                content: '3036 에러. 메일로 문의 부탁 드립니다. 문의메일: @.com',
             });
             return;
         }

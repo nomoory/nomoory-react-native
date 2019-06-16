@@ -88,7 +88,6 @@ export default class RealtimeTradeHistory extends Component {
                         created,
                         side,
                     } = realtimeTrade;
-                    console.log(realtimeTrade);
                     let amount = Decimal(price || 0).mul(volume || 0).toFixed();
                     let dateAndTime_string = momentHelper.getLocaleDatetime(created);
                     let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
