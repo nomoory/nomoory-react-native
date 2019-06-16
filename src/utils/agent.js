@@ -53,7 +53,6 @@ class Agent {
 
     // User and Auth
     signup(signupInfo) {
-        console.log(signupInfo)
         return axios.post(`${API_ROOT}/users/signup/`, signupInfo).catch(this._handleError);
     }
 

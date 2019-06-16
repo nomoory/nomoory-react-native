@@ -38,6 +38,7 @@ class SocketStore {
         isLoading: false,
         nextUrl: null
     }
+
     constructor() {
         try {
             this.delibird = new Delibird(WEBSOCKET_END_POINT);
