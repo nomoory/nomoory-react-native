@@ -41,7 +41,7 @@
 
       "DEV_WEBSOCKET_END_POINT": "wss://staging-ws.coblic.com/v1/ws",
 
-      "REACT_WEB_API_ENDPOINT": "https://coblic.com",
+      "REACT_WEB_API_ENDPOINT": "https://staging.coinbit.global",
 
       "ANNOUNCEMENT_LINK": "https://staging.coinbit.global/announcements",
       "CUSTOMER_CENTER_LINK": "https://coblic.zendesk.com/hc/ko",
