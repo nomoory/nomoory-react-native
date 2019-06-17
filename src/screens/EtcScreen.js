@@ -43,9 +43,12 @@ export default class EtcScreen extends Component {
             ]
         });
     }
-    _onPressAnnouncement = (e) => { Linking.openURL(Expo.Constants.manifest.extra.ANNOUNCEMENT_LINK); }
     _onPressZendesk = (e) => { Linking.openURL(Expo.Constants.manifest.extra.CUSTOMER_CENTER_LINK); }
     _onPressWhitePaper = (e) => { Linking.openURL(Expo.Constants.manifest.extra.WHITEPAPER_LINK); }
+    _onPressAnnouncement = (e) => {
+        this.props.navigation.navigate('AnnouncementList');
+        // Linking.openURL(Expo.Constants.manifest.extra.ANNOUNCEMENT_LINK); 
+    }
     render() {
         const { profile, email } = this.props.userStore.currentUser || {};
         const { real_name_masked } = profile || {};
