@@ -4,12 +4,17 @@ import { inject, observer } from 'mobx-react';
 import headerStyle from '../styles/headerStyle';
 import momentHelper from '../utils/momentHelper';
 
+let uuid = null;
+
 @inject('tradingPairStore', 'announcementStore', 'modalStore')
 @observer
 export default class AnnouncementDetailScreen extends Component {
+    state = {
+        announcement: {}
+    };
+    
     static navigationOptions = ({ navigation }) => {
-        this.uuid = navigation.getParam('uuid', '');
-
+        uuid = navigation.getParam('uuid', '');
         return {
             title: '공지사항',
             // headerLeft: (
@@ -21,43 +26,47 @@ export default class AnnouncementDetailScreen extends Component {
     };
 
     async componentDidMount() {
-        this.announcement = this.props.announcementStore.getAnnouncementById(this.uuid);
-        if (!this.announcement) {
+        this.setState({
+            announcement: this.props.announcementStore.getAnnouncementById(uuid)
+        });
+
+        if (Obejct.keys(this.state.announcement).length === 0) {
             this.props.modalStore.openModal({
                 type: 'preset',
-                title: '공지사항 조회 불가',
+                title: '조회 불가',
                 content: '해당 공지사항을 불러올 수 없습니다.',
             });
         } else {
-            await this.announcement.loadAnnouncement();
+            await this.state.announcement.loadAnnouncement();
         }
     }
 
     render() {
         const {
             korean_title, english_title, korean_content, english_content, created,
-        } = announcement || {};
+        } = this.state.announcement || {};
+        let title = korean_title;
+        let content = korean_content;
+
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <View style={styles.title}>
-                        <View style={styles.titleText}>
+                        <Text style={styles.titleText}>
                             {title}
-                        </View>
-                    </View>
-                    <View className="date-container">
-                        <Text style={styles.text}>
+                        </Text>
+                    <View style={styles.date}>
+                        <Text style={styles.dateTitleText}>
                             발행일
                         </Text>
-                        <Text style={styles.text}>
-                            {momentHelper(created).format('L')}
+                        <Text style={styles.dateContentText}>
+                            {momentHelper.getLocaleDatetime(created)}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.content}>
-                    <View style={styles.contentText}>
+                    <Text style={styles.contentText}>
                         {content}
-                    </View>
+                    </Text>
                 </View>
             </View>
         )
