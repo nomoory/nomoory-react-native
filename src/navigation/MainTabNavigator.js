@@ -87,7 +87,7 @@ EtcStack.navigationOptions = {
             focused={focused}
             name="ios-menu"
             color={tintColor}
-            size={24}
+            size={24} 
         />
     )
 };

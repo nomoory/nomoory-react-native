@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import { inject, observer } from 'mobx-react';
+import { withNavigation } from 'react-navigation';
 import headerStyle from '../styles/headerStyle';
 import momentHelper from '../utils/momentHelper';
 
+@withNavigation
 @inject('tradingPairStore', 'announcementStore')
 @observer
 export default class AnnouncementListScreen extends Component {
@@ -18,6 +20,12 @@ export default class AnnouncementListScreen extends Component {
         };
     };
 
+    _onPressAnnouncement = (uuid) => () => {
+        this.props.navigation.navigate('AnnouncementDetail', {
+            uuid,
+        });
+    }
+
     componentDidMount() {
         this.props.announcementStore.loadAnnouncementList();
     }
@@ -28,6 +36,7 @@ export default class AnnouncementListScreen extends Component {
                 {
                     this.props.announcementStore.announcements.map((announcement) => {
                         const {
+                            uuid,
                             korean_title, english_title,
                         } = announcement;
                         let isKorean = true;
@@ -35,8 +44,7 @@ export default class AnnouncementListScreen extends Component {
                         return (
                             <TouchableOpacity
                                 style={styles.row}
-                                key={announcement.uuid}
-                                to={`/announcements/${announcement.uuid}`}
+                                onPress={this._onPressAnnouncement(uuid)}
                             >
                                 <View style={styles.column}>
                                     <Text  style={styles.title}>{title}</Text>
