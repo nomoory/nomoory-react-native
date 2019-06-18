@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
 import PlacedOrder from './PlacedOrder';
 import CompletedOrder from './CompletedOrder';
@@ -11,12 +11,14 @@ const TAB_TYPES = {
     COMPLETD_ORDER: 'COMPLETD_ORDER',
 };
 
+@inject('placedOrderHistoryStore', 'tradingPairStore')
 @observer
 export default class TransactionHistory extends Component {
     @observable
     selectedTabType = TAB_TYPES.PLACED_ORDER;
 
     _onPressTab = (tabType) => action((e) => {
+        this.props.placedOrderHistoryStore.loadPersonalOrders(this.props.tradingPairStore.selectedTradingPairName);
         this.selectedTabType = tabType;
     })
 
@@ -90,5 +92,6 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 15,
         flex: 1,
+        width: '100%',
     }
 });

@@ -41,6 +41,7 @@ class TransactionHistoryStore {
 
     @observable registry = observable.array();
     @observable tradeHistoryRegistry = observable.array();
+    @observable selectedTradeHistoryRegistry = observable.array();
 
     @computed get transactionHistory() {
         let transactionHistory = [];
@@ -58,11 +59,23 @@ class TransactionHistoryStore {
         return tradeHistories;
     }
 
+    @computed get selectedTradeHistory() {
+        let tradeHistories = [];
+        this.selectedTradeHistoryRegistry.forEach((trade) => {
+            tradeHistories.push(trade);
+        });
+        return tradeHistories;
+    }
+
 
     @action clearRegistry() {
         this.registry.clear();
     }
     @action clearTradeHistoryRegistry() {
+        this.tradeHistoryRegistry.clear();
+    }
+
+    @action clearSelectedTradeHistoryRegistry() {
         this.tradeHistoryRegistry.clear();
     }
 
@@ -210,9 +223,8 @@ class TransactionHistoryStore {
     @action loadTradeHistory() {
         this.loadMoreValuesTradeHistory.isLoading = true;
         let selectedOption = 'TRADE';
-        let tradingPairName = tradingPairStore.selectedTradingPairName;
         
-        return agent.loadTransactionHistory(selectedOption, tradingPairName)
+        return agent.loadTransactionHistory(selectedOption)
         .then(action((response) => {
             let { results, next, previous } = response.data;
             this.tradeHistoryRegistry.replace(results);
@@ -252,6 +264,53 @@ class TransactionHistoryStore {
         } else {
         }
     }
+
+    @action loadSelectedTradeHistory() {
+        this.loadMoreValuesTradeHistory.isLoading = true;
+        let selectedOption = 'TRADE';
+        let tradingPairName = tradingPairStore.selectedTradingPairName;
+        
+        return agent.loadTransactionHistory(selectedOption, tradingPairName)
+        .then(action((response) => {
+            let { results, next, previous } = response.data;
+            this.selectedTradeHistoryRegistry.replace(results);
+            this.loadMoreValuesTradeHistory = { ...this.loadMoreValuesTradeHistory,
+                isFirstLoad: false,
+                nextUrl: next,
+                isLoading: false
+            };
+        }))
+        .catch(action((err) => {
+            this.errors = err.response && err.response.body && err.response.body.errors;
+            this.loadMoreValuesTradeHistory.isLoading = false;
+            this.loadMoreValuesTradeHistory.isFirstLoad = false;
+            throw err;
+        }));
+    }
+
+    @action loadNextSelectedTradeHistory() {
+        if(this.loadMoreValuesTradeHistory.nextUrl) {
+            this.loadMoreValuesTradeHistory.isLoading = true;
+            return agent.get(this.loadMoreValuesTradeHistory.nextUrl)
+            .then(action((response) => {
+                let { results, next, previous } = response.data;
+                this.selectedTradeHistoryRegistry.replace([...this.selectedTradeHistoryRegistry, ...results]);
+                this.loadMoreValuesTradeHistory = { ...this.loadMoreValuesTradeHistory,
+                    isFirstLoad: false,
+                    nextUrl: next,
+                    isLoading: false
+                };
+            }))
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+                this.loadMoreValuesTradeHistory.isLoading = false;
+                this.loadMoreValuesTradeHistory.isFirstLoad = false;
+                throw err;
+            }));
+        } else {
+        }
+    }
+
 }
 
 export default new TransactionHistoryStore();

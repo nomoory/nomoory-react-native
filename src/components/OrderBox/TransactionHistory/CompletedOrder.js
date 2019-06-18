@@ -15,18 +15,18 @@ export default class CompletedOrder extends Component {
         reaction(
             () => this.props.tradingPairStore.selectedTradingPairName,
             (selectedTradingPairName) => {
-                this.props.transactionHistoryStore.clearTradeHistoryRegistry();
-                this.props.transactionHistoryStore.loadTradeHistory();
+                this.props.transactionHistoryStore.clearSelectedTradeHistoryRegistry();
+                this.props.transactionHistoryStore.loadSelectedTradeHistory();
             }
         );
-        this.props.transactionHistoryStore.clearTradeHistoryRegistry();
-        this.props.transactionHistoryStore.loadTradeHistory();
+        this.props.transactionHistoryStore.clearSelectedTradeHistoryRegistry();
+        this.props.transactionHistoryStore.loadSelectedTradeHistory();
 
     }
 
     _renderCompoletedOrderHistoryBody() {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.tradeHistory);
+        const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.selectedTradeHistory);
         const isLoading = this.props.transactionHistoryStore.loadMoreValuesTradeHistory.isLoading;
         const message_code = this.props.transactionHistoryStore.isTradeHistoryLoadable.message_code;
         const isLoadable = this.props.transactionHistoryStore.isTradeHistoryLoadable;
@@ -36,7 +36,7 @@ export default class CompletedOrder extends Component {
                 onEndReachedThreshold={30}
                 onEndReached={(e) => {
                     if (message_code === 'has_next_load') {
-                        this.props.transactionHistoryStore.loadNextTradeHistory();
+                        this.props.transactionHistoryStore.loadNextSelectedTradeHistory();
                     }
                 }}
                 dataSource={dataSource}
