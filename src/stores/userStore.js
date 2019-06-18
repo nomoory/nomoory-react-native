@@ -40,7 +40,31 @@ class UserStore {
             return false;
         }
     }
+    
+    @computed
+    get verificationProgress() {
+        let stepCount = 0;
+        try {
+            const {
+                is_email_verified,
+                is_otp_registered,
+                is_phone_verified,
+                is_bank_account_verified,
+                id_photo_verification_status, // ('NONE', 'PENDING', 'DENIED', 'VERIFIED')
+                kyc_verification_status, // ('NONE', 'PENDING', 'DENIED', 'VERIFIED')
+            } = this.currentUser.verification;
+            if (is_email_verified) stepCount += 1;
+            if (is_otp_registered) stepCount += 1;
+            if (is_phone_verified) stepCount += 1;
+            if (is_bank_account_verified) stepCount += 1;
+            if (id_photo_verification_status === 'VERIFIED' && kyc_verification_status === 'VERIFIED') stepCount += 1;
 
+            return stepCount;
+        } catch (e) {
+            return stepCount;
+        }
+    }
+    
     @computed get needEmailVerification() {
         try {
             let { is_email_verified } = this.currentUser.verification;

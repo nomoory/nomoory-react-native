@@ -26,6 +26,18 @@ class AnnouncementStore {
         return announcements;
     }
 
+
+    @computed
+    get latestAnnouncements() {
+        let announcements = [];
+        let index = 5;
+        this.announcementRegistry.forEach((announcement) => {
+            if (index-- > 0) announcements.push(announcement);
+        });
+        return announcements;
+    }
+
+
     _sortAnnouncements(announcements) {
         return announcements.sort((prev, next) => {
             return Date(prev.modified) > Date(next.modified);

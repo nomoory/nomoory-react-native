@@ -3,11 +3,11 @@ import headerStyle from '../styles/headerStyle';
 import { Linking, Text, StyleSheet, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
-import logoSrc from '../../assets/images/logos/logo_blue.png'
+import AnnouncementBox from '../components/AnnouncementBox';
+import commonStyle from '../styles/commonStyle';
 
 @withNavigation
-@inject('userStore', 'authStore', 'modalStore')
+@inject('userStore', 'authStore', 'modalStore', 'announcementStore')
 @observer
 export default class EtcScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -20,6 +20,19 @@ export default class EtcScreen extends Component {
             ...headerStyle.blue
         };
     };
+
+    componentDidMount() {
+        this.props.announcementStore.loadAnnouncementList();
+    }
+
+    _showMoreImage() {
+        return <Image
+            style={{ width: 10, resizeMode: 'contain' }}
+            source={
+                require('../../assets/images/depositWithdraw/btn_arrow_small.png')
+            }
+        />;
+    }
 
     _onPressLogin = () => {
         this.props.navigation.navigate('Login');
@@ -43,105 +56,126 @@ export default class EtcScreen extends Component {
             ]
         });
     }
-    _onPressAnnouncement = (e) => {
-        // Linking.openURL(Expo.Constants.manifest.extra.ANNOUNCEMENT_LINK); 
-    }
     _onPressZendesk = (e) => { 
         // Linking.openURL(Expo.Constants.manifest.extra.CUSTOMER_CENTER_LINK);
     }
     _onPressWhitePaper = (e) => {
         // Linking.openURL(Expo.Constants.manifest.extra.WHITEPAPER_LINK);
     }
+    _onPressAnnouncement = (e) => {
+        this.props.navigation.navigate('AnnouncementList');
+    }
+    _onPressSecurityLevel = (e) => {
+        // this.props.navigation.navigate('AnnouncementList');
+    }
     render() {
-        const { profile, email } = this.props.userStore.currentUser || {};
-        const { real_name_masked } = profile || {};
+        const { verificationProgress, currentUser } = this.props.userStore
+        const { profile, email } = currentUser || {};
+        const { real_name_masked, real_name } = profile || {};
         return (
-            <View style={[styles.container]}>
-                <View style={styles.welcomeContainer}>
-                    <Image
-                        style={{ height: 50, resizeMode: 'contain' }}
-                        source={logoSrc}
-                    />
+            <ScrollView style={[styles.scrollContainer]}>
+                { 
+                    this.props.userStore.isLoggedIn
+                    ? (
+                        <View style={[
+                            styles.userInfo, styles.listContainer
+                        ]}>
+                            <TouchableOpacity
+                                style={[styles.row]}>
+                                <Text style={styles.emailText}>{email} 님, 환영합니다!</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.row, styles.securityLevel]}
+                                onPress={this._onPressSecurityLevel}
+                            >
+                                <Text 
+                                    style={styles.securityLevelText}>
+                                보안등급 {this.props.userStore.verificationProgress || '-'}/5 단계
+                                </Text>
+                                { this._showMoreImage() }
+                            </TouchableOpacity>
+                        </View>
+                    ) : null
+                }
+                <View style={styles.listContainer}>    
+                    <AnnouncementBox />
                 </View>
-                <ScrollView style={[styles.scrollContainer]}>
-                    <TouchableOpacity style={[styles.scrollItem, styles.scrollItemFirst]}
-                        onPress={this._onPressAnnouncement}
-                        >
-                        <Ionicons name="md-checkmark-circle" size={iconSize} color={iconColor} />
-                        <Text style={[styles.scrollItemText]}>공지사항</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.scrollItem]}
+                <View style={styles.listContainer}>                    
+                    <TouchableOpacity style={[styles.row]}
                         onPress={this._onPressZendesk}
                         >
-                        <Ionicons name="md-business" size={iconSize} color={iconColor}/>
-                        <Text style={[styles.scrollItemText]}>고객센터</Text>
+                        <Text style={[styles.rowText]}>고객센터</Text>
+                        { this._showMoreImage() }
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[styles.scrollItem]}
+                        style={[styles.row]}
                         onPress={this._onPressWhitePaper}
                         >
-                        <Ionicons name="md-paper" size={iconSize} color={iconColor}/>
-                        <Text style={[styles.scrollItemText]}>백서</Text>
-                    </TouchableOpacity>
+                        <Text style={[styles.rowText]}>백서</Text>
+                        { this._showMoreImage() }
+                    </TouchableOpacity>                    
+                </View>
+                <View style={styles.listContainer}>
                     {
                         this.props.userStore.isLoggedIn ? 
-                        <TouchableOpacity style={[styles.scrollItem]}
+                        <TouchableOpacity style={[styles.row]}
                             onPress={this._onPressLogout}
                             >
-                            <Ionicons name="md-log-out" size={iconSize} color={iconColor}/>
-                            <Text style={[styles.scrollItemText]}>로그아웃</Text>
+                            <Text style={[styles.logoutText]}>로그아웃</Text>
                         </TouchableOpacity> : 
-                        <TouchableOpacity style={[styles.scrollItem]}
+                        <TouchableOpacity style={[styles.row]}
                             onPress={this._onPressLogin}
                             >
-                            <Ionicons name="md-log-in" size={iconSize} color={iconColor}/>
-                            <Text style={[styles.scrollItemText]}>로그인</Text>
+                            <Text style={[styles.loginText]}>로그인</Text>
                         </TouchableOpacity>
                     }
-                </ScrollView>
-            </View>
+                </View>
+            </ScrollView>
         )
     }
 }
-
-const iconSize = 28;
-const iconColor = '#0042b7';
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
     },
-    welcomeContainer: {
-        width: '100%',
-        height: 292,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white'
-    },
-    scrollItemFirst: {
-        borderTopWidth: 1,
-        borderTopColor: '#e9eaea',
-    },
-    scrollItem: {
-        paddingLeft: 15,
-        flexDirection: 'row',
-        width: '100%',
-        height: 64,
-        borderBottomWidth: 1,
-        borderBottomColor: '#e9eaea',
+    securityLevel: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'white'
     },
-    scrollItemText: {
-        marginLeft: 12,
-        fontSize: 14,
-        color: iconColor,
-        fontWeight: '600'
+    securityLevelText: {
+        marginRight: 10,
+    },
+    listContainer: {
+        backgroundColor: 'white',
+        marginBottom: 15,
+    },
+    emailText: {
+        fontWeight: '600',
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderWidth: 0.5,
+        borderColor: '#f7f8fa',
+        height: 36,
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    rowText: {
+        fontWeight: '600',
     },
     scrollContainer: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: '#f7f8fa'
     },
+    loginText: {
+        color: commonStyle.color.coblicYellow,
+    },
+    logoutText: {
+        color: commonStyle.color.coblicBlue,
+    },
+
 })

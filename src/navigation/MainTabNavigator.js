@@ -11,6 +11,8 @@ import InvestmentScreen from '../screens/InvestmentScreen';
 import AccountListScreen from '../screens/AccountListScreen';
 import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScreen';
 import EtcScreen from '../screens/EtcScreen';
+import AnnouncementListScreen from '../screens/AnnouncementListScreen';
+import AnnouncementDetailScreen from '../screens/AnnouncementDetailScreen';
 
 const ExchangeStack = createStackNavigator(
     {
@@ -73,7 +75,9 @@ DepositWithdrawStack.navigationOptions = {
 };
 
 const EtcStack = createStackNavigator({
-    EtcMain: EtcScreen
+    EtcMain: EtcScreen,
+    AnnouncementList: AnnouncementListScreen,
+    AnnouncementDetail: AnnouncementDetailScreen,
 });
 
 EtcStack.navigationOptions = {
@@ -83,7 +87,7 @@ EtcStack.navigationOptions = {
             focused={focused}
             name="ios-menu"
             color={tintColor}
-            size={24}
+            size={24} 
         />
     )
 };
