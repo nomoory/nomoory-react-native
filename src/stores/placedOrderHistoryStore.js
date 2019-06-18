@@ -57,6 +57,7 @@ class PlacedOrderHistoryStore {
         return agent.deletePlacedOrderById(uuid)
         .then(action((response) => {
             // front 상에서 삭제는 socket을 통해 this.setPlacedOrder가 진행합니다.
+            this.loadPersonalPlacedOrders(tradingPairStore.selectedTradingPairName);
             this.loadValues.isLoading = false;
         }))
         .catch(action((err) => {

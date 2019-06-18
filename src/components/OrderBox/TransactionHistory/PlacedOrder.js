@@ -21,7 +21,7 @@ export default class PlacedOrder extends Component {
         const isLoadable = this.props.placedOrderHistoryStore.isLoadable;
         const message_code = isLoadable.message_code;
         return (
-            <ListView style={[styles.container, styles.tuples]}
+            <ListView style={[styles.container]}
                 onEndReachedThreshold={30}
                 onEndReached={(e) => {
                     if (message_code === 'has_next_load') {
