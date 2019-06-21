@@ -134,17 +134,21 @@ export default class TradingPairScreen extends Component {
                     </Text>
                     <View style={styles.bottomContainer}>
                         <Text style={styles.title}>전일대비</Text>
-                        <Text style={[styles.subText, commonStyle[change]]}>
+                        <Text style={[styles.rateText, commonStyle[change]]}>
                             {this.changeRate}%
                         </Text>
                         <View style={{ 
-                            marginLeft: 10, 
+                            marginLeft: 13, 
                             flexDirection:'row',
                             alignItems: 'center'
                         }}>
                             {(change === 'FALL' || change === 'RISE') ?
                                 <Image
-                                    style={{ width: 10, height: 6 }}
+                                    style={{ 
+                                        marginRight: 3,
+                                        width: 10, 
+                                        height: 6,
+                                    }}
                                     source={change === 'FALL' ? fallIcon : riseIcon}
                                 /> : null
                             }
@@ -212,7 +216,13 @@ const styles = StyleSheet.create({
         color: '#777777',
         fontSize: 12,
     },
+    rateText: {
+        marginLeft: 13,
+        fontSize: 12,
+        fontWeight: '300',
+    },
     subText: {
         fontSize: 12,
+        fontWeight: '300',
     },
 })

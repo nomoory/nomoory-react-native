@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
         width: '100%',
 
         borderStyle: 'solid',
-        borderWidth: 0.5,
-        borderColor: '#dedfe0',
+        borderWidth: 1,
+        borderColor: 'white',
     },
     sellOrderRow: {
         backgroundColor: '#f3fbff',
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
 
         borderStyle: 'solid',
         borderRightWidth: 1,
-        borderRightColor: '#dedfe0',
+        borderRightColor: 'white',
     },
     priceText: {
         fontSize: 12,

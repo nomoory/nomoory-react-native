@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'black',
-        fontWeight: '600',
+        fontWeight: '400',
         fontSize: 13,
     },
     selectedBuyText: {
@@ -170,26 +170,26 @@ const orderFormStyle = StyleSheet.create({
         marginRight: 4,
     },
     textInput: {
-        paddingRight: 42,
+        paddingRight: 36,
         textAlign: 'right',
         height: 36,
         backgroundColor: '#ffffff',
         borderColor: '#a2abb6',
         borderWidth: 0.5,
-        fontSize: 12,
+        fontSize: 11,
     },
     inputTitleContainer: {
-        left: 10,
-        top: 9,
+        left: 8,
+        top: 11,
         position: 'absolute',
     },
     inputTitle: {
         color: '#747474',
-        fontWeight: '500',
+        fontSize: 11,
     },
     inputUnitContainer: {
-        right: 10,
-        top: 10.5,
+        right: 8,
+        top: 11,
         position: 'absolute',
     },
     inputUnit: {
@@ -211,7 +211,7 @@ const orderFormStyle = StyleSheet.create({
     },
     plusButton: {
         //borderLeftWidth: 1.5,
-        borderRightWidth: 1,
+        borderLeftWidth: 1,
         borderLeftColor: '#d8dbde',
     },
 
@@ -254,24 +254,28 @@ const orderFormStyle = StyleSheet.create({
         fontSize: 11,
     },
     infoContainer: {
-        marginTop: 5,
+        marginTop: 13,
+        marginBottom: 8,
+        paddingLeft: 4,
+        paddingRight: 4,
         alignItems: 'flex-end',
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     infoTitle: {
-        fontWeight: '500'
+        fontWeight: '300'
     },
     infoContent: {
         fontSize: 12,
     },
-    minimumOrderAmountContainer: {
-        marginTop: marginBetween,
+    minorInfoRow: {
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        marginTop: 3,
+        justifyContent: 'space-between',
+        alignItems: 'center',
 
     },
-    minimumOrderAmountContent: {
+    minorInfoRowText: {
         color: '#747474',
         fontSize: 11        
     },
