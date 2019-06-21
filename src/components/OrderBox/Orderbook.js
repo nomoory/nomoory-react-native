@@ -25,7 +25,7 @@ export default class Orderbook extends Component {
                     }
                     {
                         buyOrders.map((order, index) =>
-                            <OrderRow 
+                            <OrderRow
                                 key={'buy_' + index} side={'BUY'}
                                 order={order} closePrice={close_price}
                                 openPrice={open_price}

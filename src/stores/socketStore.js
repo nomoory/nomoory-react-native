@@ -178,30 +178,30 @@ class SocketStore {
     }
 
     _onReceiveMessage = (channel, data) => {
-        console.log(data);
+        // console.log(data);
         switch (channel) {
             case CHANNEL_NAMES.ORDERBOOK:
-                console.log(`%cReceived: ORDERBOOK`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: ORDERBOOK`);
                 orderbookStore.setOrderbook(data);
                 break;
             case CHANNEL_NAMES.TICKER:
-                console.log(`%cReceived: TICKER`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: TICKER`);
                 tradingPairStore.updateTickerInTradingPair(data);
                 break;
             case CHANNEL_NAMES.ORDER:
-                console.log(`%cReceived: ORDER`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: ORDER`);
                 data.forEach((personalOrder) => {
                     // this._handleOrderByStatus(personalOrder);
                     placedOrderHistoryStore.setPlacedOrder(personalOrder);
                 });
                 break;
             case CHANNEL_NAMES.TRADE:
-                console.log(`%cReceived: TRADE`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: TRADE`);
                 realtimeTradeHistoryStore.setRealTimeTrades([data]);
                 this._feedTradeToTradingView(data);
                 break;
             case CHANNEL_NAMES.ACCOUNT:
-                console.log(`%cReceived: ACCOUNT`, "color: blue; font-size:15px;");
+                console.log(`%cReceived: ACCOUNT`);
                 accountStore.setAccount(data);
                 break;
             default:
@@ -267,8 +267,8 @@ class SocketStore {
     }
     
     @action _feedTradeToTradingView(trade) {
-        console.log('_feedTradeToTradingView');
-        console.log({trade, subscribingChannelInfoForTradingView: this.subscribingChannelInfoForTradingView});
+        // console.log('_feedTradeToTradingView');
+        // console.log({trade, subscribingChannelInfoForTradingView: this.subscribingChannelInfoForTradingView});
         if (trade && this.subscribingChannelInfoForTradingView) {
             // 가장 최신 Candle 이전 Timeinterval의 Candle이 socket으로 도착한다면, disregard
             const lastTickerCreatedDateTime = new Date(trade.created).getTime();
