@@ -33,7 +33,7 @@
       "REACT_APP_API_ENDPOINT": "https://staging-api.coinbit.global",
       "REACT_APP_API_VERSION": "v1.0",
       "REACT_APP_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",
-      "WEBSOCKET_END_POINT": "wss://staging-ws.coinbit.global",
+      "WEBSOCKET_END_POINT": "wss://staging-ws.coinbit.global/v1/ws",
 
       "REACT_APP_DEV_API_ENDPOINT": "https://staging-api-vgeynb6vsktxpsc88j3qmmhjpwvncjge.coblic.com",
       "REACT_APP_DEV_API_VERSION": "v1.0",
