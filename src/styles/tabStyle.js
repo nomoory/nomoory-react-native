@@ -11,7 +11,7 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#0042b7',
+        backgroundColor: commonStyle.color.coblicBlue,
     },
     tabText: {
         fontWeight: '400', 

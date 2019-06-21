@@ -37,13 +37,9 @@ export default class TradingPairScreen extends Component {
         
         return {
             headerTitle: (
-                <View style={{
-                        display: 'flex',
-                        flexDirection: 'row', 
-                        alignItems:'center'
-                    }}>
+                <View style={styles.headerContainer}>
                     <Text 
-                        style={{fontSize: 16, color: commonStyle.color.coblicBlue}}
+                        style={styles.headerText}
                         onPress={() => {
                             modalStore.openCustomModal({
                                 modal: 
@@ -55,7 +51,7 @@ export default class TradingPairScreen extends Component {
                     >
                         {`${baseName} (${this.tradingPairName.split('-').join('/')}) `}
                         <Image
-                            style={{ width: 10, height: 10 }}
+                            style={styles.headerImage}
                             source={fallIcon}
                         /> 
                     </Text>
@@ -175,6 +171,16 @@ export default class TradingPairScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    headerContainer: {
+        // display: 'flex',
+        // flexDirection: 'row',
+        // alignItems:'center'
+    },
+    headerText: {
+        fontSize: 16, 
+        color: commonStyle.color.coblicBlue
+    },
+    headerImage: { width: 10, height: 10 },
     container: {
         flex: 1
     },

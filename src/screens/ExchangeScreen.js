@@ -10,6 +10,7 @@ import tradingPairStore from '../stores/tradingPairStore'
 export default class ExchangeScreen extends Component {
     static navigationOptions = ({ navigation, navigationOptions }) => {        
         tradingPairStore.loadTradingPairs();
+        console.log('loadTradingPairs')
         return {
             title: '거래소',
             // headerLeft: (

@@ -89,6 +89,7 @@ class TradingPairStore {
         console.log('load trading pair');
         agent.loadTradingPairs()
             .then(action((response) => {
+                console.log('loaded trading pair');
                 let tradingPairs = response.data;
                 this.tradingPairsRegistry.clear();
                 tradingPairs.forEach((tradingPair) => {

@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
+
+        borderBottomWidth: 2,
+        borderBottomColor: commonStyle.color.mainThemeColor,
     },
     searchImage: {
         width: 25,

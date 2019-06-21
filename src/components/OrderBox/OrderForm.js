@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     buttons: {
         height: 30,
         width: '100%',
+        display: 'flex',
         flexDirection: 'row',
     },
     button: {
@@ -93,14 +94,14 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'black',
-        fontWeight: '300',
+        fontWeight: '600',
         fontSize: 13,
     },
     selectedBuyText: {
-        color: '#da5f6e',
+        color: commonStyle.color.coblicRed,
     },
     selectedSellText: {
-        color: '#0042b7',
+        color: commonStyle.color.coblicBlue,
     },
     selectedHistoryText: {
 
@@ -131,6 +132,7 @@ const marginBetween = 6;
 const orderFormStyle = StyleSheet.create({
     // liquid
     liquidContainer: {
+        display: 'flex',
         flexDirection: 'row',
         marginTop: marginBetween,
         alignItems: 'center',
@@ -168,7 +170,6 @@ const orderFormStyle = StyleSheet.create({
         marginRight: 4,
     },
     textInput: {
-        flex: 1,
         paddingRight: 42,
         textAlign: 'right',
         height: 36,
@@ -197,7 +198,6 @@ const orderFormStyle = StyleSheet.create({
         fontSize: 11
     },
     setPriceButtons: {
-        flex: '0 0 70',
         flexDirection: 'row',
         borderWidth: 1,
         borderColor: '#d8dbde',
@@ -285,15 +285,16 @@ const orderFormStyle = StyleSheet.create({
         alignItems: 'center'
     },
     blueButton: {
-        backgroundColor: commonStyle.color.coblicBlue,
+        backgroundColor: commonStyle.color.coblicSellButtonBackground,
     },
     redButton: {
-        backgroundColor: commonStyle.color.coblicRed,
+        backgroundColor: commonStyle.color.coblicBuyButtonBackground,
     },
     yellowButton: {
         backgroundColor: commonStyle.color.coblicYellow,
     },
     buttonText: {
+        fontWeight: '600',
         color: 'white'
     }
 

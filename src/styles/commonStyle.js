@@ -1,12 +1,14 @@
 import { StyleSheet } from 'react-native';
 
 export const color = {
-    coblicBlue: '#0446b4',
+    coblicBlue: '#093687',
     coblicPaleBlue: '#81a6ef',
     coblicRed: '#d60000',
     coblicGrey: '#999',
     coblicPaleGrey: '#dedfe0',
     coblicYellow: '#ffc107',
+    coblicSellButtonBackground: '#115dcb',
+    coblicBuyButtonBackground: '#d80e35',
     white: '#ffffff',
     main: '#0052f3',
     mainThemeColor: "rgb(20, 40, 120)",
@@ -25,22 +27,22 @@ export const font = {
 
 const commonStyle = {
     coblicBlueButton: {
-        color: '#0052f3'
+        color: '#0051c7'
     },
     coblicRedButton: {
-        color: '#da5f6e'
+        color: '#d60000'
     },
     RISE: {
-        color: '#da5f6e'
+        color: '#d60000'
     },
     FALL: {
-        color: '#0052f3'
+        color: '#0051c7'
     },
     BUY: {
-        color: '#da5f6e'
+        color: '#d60000'
     },
     SELL: {
-        color: '#0052f3'
+        color: '#0051c7'
     },
     color,
     font,
