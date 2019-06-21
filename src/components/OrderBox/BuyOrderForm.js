@@ -83,6 +83,10 @@ export default class BuyOrderForm extends Component {
             this.props.orderStore.setVolumeByRate(rate); 
         }
     }
+    _onPressInitPrice = (e) => {
+        this.props.orderStore.setPrice(Decimal(this.props.tradingPairStore.selectedTradingPair.close_price).toFixed());
+    }
+
     _onPressLogin = (e) => {
         this.props.navigation.navigate('Login');
     }
@@ -173,10 +177,16 @@ export default class BuyOrderForm extends Component {
                     <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {quoteSymbol}</Text>
                 </View>
                 {
-                    this.props.userStore.isLoggedIn ? 
-                    <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.redButton]} onPress={this._onPressOrder}>
-                        <Text style={[orderFormStyle.buttonText]}>매수</Text>
-                    </TouchableOpacity> :
+                    this.props.userStore.isLoggedIn ?
+                    <View style={[orderFormStyle.buttons]}>
+                        <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.initButton]} onPress={this._onPressInitPrice}>
+                            <Text style={[orderFormStyle.buttonText]}>초기화</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.redButton]} onPress={this._onPressOrder}>
+                            <Text style={[orderFormStyle.buttonText]}>매수</Text>
+                        </TouchableOpacity>
+                    </View>
+                        :
                     <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressLogin}>
                         <Text style={[orderFormStyle.buttonText]}>로그인</Text>
                     </TouchableOpacity>
@@ -205,9 +215,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
-    },
-    liquidContent: {
-        alignSelf: 'flex-end'
     },
     maxFeePercentageContainer: {
         flexDirection: 'row',

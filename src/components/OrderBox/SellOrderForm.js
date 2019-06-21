@@ -80,6 +80,11 @@ export default class SellOrderForm extends Component {
     _onPressIncreasePrice = (e) => { this.props.orderStore.increasePriceByButton(); }
     _onPressDecreasePrice = (e) => { this.props.orderStore.decreasePriceByButton(); }
     _onPressSetVolumeByRate = (rate) => () => { if (this.props.userStore.isLoggedIn) this.props.orderStore.setVolumeByRate(rate); }
+
+    _onPressInitPrice = (e) => {
+        this.props.orderStore.setPrice(Decimal(this.props.tradingPairStore.selectedTradingPair.close_price).toFixed());
+    }
+
     _onPressLogin = (e) => {
         this.props.navigation.navigate('Login');
     }
@@ -166,14 +171,19 @@ export default class SellOrderForm extends Component {
                     </View>
                 </View>
                 <View style={[styles.amountContainer, orderFormStyle.infoContainer]}>
-                    <Text style={[styles.amountTitle, orderFormStyle.infoTitle]}>매도금액</Text>
-                    <Text style={[styles.amountContent, orderFormStyle.infoContent]}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {quoteSymbol}</Text>
+                    <Text style={[styles.liquidTitle, orderFormStyle.infoTitle]}>매도금액</Text>
+                    <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {quoteSymbol}</Text>
                 </View>
                 {
                     this.props.userStore.isLoggedIn ? 
-                    <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressOrder}>
-                        <Text style={[orderFormStyle.buttonText]}>매도</Text>
-                    </TouchableOpacity> :
+                    <View style={[orderFormStyle.buttons]}>
+                        <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.initButton]} onPress={this._onPressInitPrice}>
+                            <Text style={[orderFormStyle.buttonText]}>초기화</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressOrder}>
+                            <Text style={[orderFormStyle.buttonText]}>매도</Text>
+                        </TouchableOpacity>
+                    </View> :
                     <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressLogin}>
                         <Text style={[orderFormStyle.buttonText]}>로그인</Text>
                     </TouchableOpacity>

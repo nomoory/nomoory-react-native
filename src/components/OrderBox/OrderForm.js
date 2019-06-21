@@ -135,13 +135,14 @@ const orderFormStyle = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         marginTop: marginBetween,
+        marginBottom: 10,
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     liquidTitle: {
-        fontWeight: '300',
-        fontSize: 13,
-        color: '#747474',
+        fontWeight: '200',
+        fontSize: 11,
+        color: '#343434'
     },
     liquidContentContainer: {
         flexDirection: 'row',
@@ -154,7 +155,6 @@ const orderFormStyle = StyleSheet.create({
     liquidContentUnitText: {
         fontWeight: '500',
         fontSize: 13,
-        marginLeft: 3
     },
 
     // price text input
@@ -184,8 +184,9 @@ const orderFormStyle = StyleSheet.create({
         position: 'absolute',
     },
     inputTitle: {
-        color: '#747474',
+        color: '#343434',
         fontSize: 11,
+        fontWeight: '300'
     },
     inputUnitContainer: {
         right: 8,
@@ -199,13 +200,15 @@ const orderFormStyle = StyleSheet.create({
     },
     setPriceButtons: {
         flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: '#d8dbde',
+        // borderWidth: 1,
+        // borderColor: '#d8dbde',
     },
     priceButton: {
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: '#d8dbde',
+        backgroundColor: '#d8dbde',
+        marginLeft: 3,
         width: 36,
         height: 36,
     },
@@ -258,15 +261,20 @@ const orderFormStyle = StyleSheet.create({
         marginBottom: 8,
         paddingLeft: 4,
         paddingRight: 4,
-        alignItems: 'flex-end',
+        alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        borderColor: '#a2abb6',
+        borderWidth: 0.5,
+        height: 36,
     },
     infoTitle: {
-        fontWeight: '300'
+        fontWeight: '300',
+        color: '#a2abb6',
     },
     infoContent: {
         fontSize: 12,
+        color: '#a2abb6',
     },
     minorInfoRow: {
         flexDirection: 'row',
@@ -276,30 +284,39 @@ const orderFormStyle = StyleSheet.create({
 
     },
     minorInfoRowText: {
-        color: '#747474',
+        color: '#444444',
         fontSize: 11        
     },
 
     // button
     button: {
         marginTop: 8,
-        width: '100%',
-        height: 36,
+        height: 30,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1,
     },
     blueButton: {
         backgroundColor: commonStyle.color.coblicSellButtonBackground,
+        marginLeft: 4,
     },
     redButton: {
         backgroundColor: commonStyle.color.coblicBuyButtonBackground,
+        marginLeft: 4,
+    },
+    initButton: {
+        backgroundColor: '#777777',
     },
     yellowButton: {
         backgroundColor: commonStyle.color.coblicYellow,
     },
     buttonText: {
-        fontWeight: '600',
+        fontWeight: '500',
         color: 'white'
+    },
+    buttons: {
+        display: 'flex',
+        flexDirection: 'row',
     }
 
 });
