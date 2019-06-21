@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, ListView } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number, { Decimal } from '../../../utils/number';
 import momentHelper from '../../../utils/momentHelper';
-import { reaction, computed } from 'mobx';
+import { reaction } from 'mobx';
 import ScrollLoading from '../../ScrollLoading';
 
 @inject('transactionHistoryStore', 'tradingPairStore')

@@ -4,7 +4,7 @@
     "description": "코인빗",
     "slug": "coinbit-app",
     "privacy": "public",
-    "sdkVersion": "32.0.0",
+    "sdkVersion": "33.0.0",
     "platforms": [
       "ios",
       "android"
@@ -41,7 +41,7 @@
 
       "DEV_WEBSOCKET_END_POINT": "wss://staging-ws.coblic.com/v1/ws",
 
-      "REACT_WEB_API_ENDPOINT": "https://staging.coinbit.global",
+      "REACT_WEB_API_ENDPOINT": "http://staging.coinbit.global",
 
       "ANNOUNCEMENT_LINK": "https://staging.coinbit.global/announcements",
       "CUSTOMER_CENTER_LINK": "https://coblic.zendesk.com/hc/ko",

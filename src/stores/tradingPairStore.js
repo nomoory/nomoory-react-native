@@ -86,6 +86,7 @@ class TradingPairStore {
     @action loadTradingPairs() {
         this.isLoading = true;
         this.errors = undefined;
+        console.log('load trading pair');
         agent.loadTradingPairs()
             .then(action((response) => {
                 let tradingPairs = response.data;

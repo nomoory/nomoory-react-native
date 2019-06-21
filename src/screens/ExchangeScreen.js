@@ -8,7 +8,7 @@ import tradingPairStore from '../stores/tradingPairStore'
 @inject('tradingPairStore')
 @observer
 export default class ExchangeScreen extends Component {
-    static navigationOptions = ({ navigation }) => {
+    static navigationOptions = ({ navigation, navigationOptions }) => {        
         tradingPairStore.loadTradingPairs();
         return {
             title: '거래소',
@@ -16,7 +16,8 @@ export default class ExchangeScreen extends Component {
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
             // ),
-            ...headerStyle.white,
+            ...headerStyle.white,  
+            headerLayoutPreset: 'center'
         };
     };
     _openBTCKRWForDevelopTradingPairScreen = () => {

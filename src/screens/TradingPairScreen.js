@@ -34,17 +34,19 @@ export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseName = navigation.getParam('baseName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
-
+        
         return {
-            title: (
+            headerTitle: (
                 <Text 
-                    style={{fontSize: 15, textDecorationLine: 'underline'}}
+                    style={{fontSize: 20, textDecorationLine: 'underline'}}
                     onPress={() => {
                         modalStore.openCustomModal({
                             modal: 
                             <TradingPairSelectionModal />,
                         })
                     }}
+                    maxFontSizeMultiplier={20}
+                    allowFontScaling={false}
                 >{`${baseName} (${this.tradingPairName.split('-').join('/')})`}
                 </Text>
             ),

@@ -18,6 +18,15 @@ const ExchangeStack = createStackNavigator(
     {
         Exchange: ExchangeScreen,
         TradingPair: TradingPairScreen,
+    },{
+        defaultNavigationOptions: {
+            headerTitleAllowFontScaling: false,
+            headerBackAllowFontScaling: false,    
+            headerTitleStyle: {
+                flex: 1,
+                textAlign: "center", 
+            },
+        }
     }
 );
 
@@ -31,13 +40,22 @@ ExchangeStack.navigationOptions = {
             size={24}
         />
     ),
+    headerLayoutPreset: 'center'
+
 };
 
 ExchangeStack.headerMode = 'none';
 
-const InvestmentStack = createStackNavigator({
-    Investment: InvestmentScreen
-});
+const InvestmentStack = createStackNavigator(
+    {
+        Investment: InvestmentScreen
+    },{
+        defaultNavigationOptions: {
+            headerTitleAllowFontScaling: false,
+            headerBackAllowFontScaling: false,    
+        }
+    }
+);
 
 InvestmentStack.navigationOptions = {
     header: {
@@ -54,10 +72,17 @@ InvestmentStack.navigationOptions = {
     )
 };
 
-const DepositWithdrawStack = createStackNavigator({
-    Accounts: AccountListScreen, 
-    AccountDepositWithdraw:  AccountDepositWithdrawScreen
-});
+const DepositWithdrawStack = createStackNavigator(
+    {
+        Accounts: AccountListScreen, 
+        AccountDepositWithdraw:  AccountDepositWithdrawScreen
+    }, {
+        defaultNavigationOptions: {
+            headerTitleAllowFontScaling: false,
+            headerBackAllowFontScaling: false,    
+        }
+    }
+);
 
 DepositWithdrawStack.navigationOptions = {
     header: {
@@ -74,11 +99,22 @@ DepositWithdrawStack.navigationOptions = {
     )
 };
 
-const EtcStack = createStackNavigator({
-    EtcMain: EtcScreen,
-    AnnouncementList: AnnouncementListScreen,
-    AnnouncementDetail: AnnouncementDetailScreen,
-});
+const EtcStack = createStackNavigator(
+    {
+        EtcMain: EtcScreen,
+        AnnouncementList: AnnouncementListScreen,
+        AnnouncementDetail: AnnouncementDetailScreen,
+    }, {
+        headerTitleStyle: {
+            flex: 1,
+            textAlign: "center", 
+        },
+        defaultNavigationOptions: {
+            headerTitleAllowFontScaling: false,
+            headerBackAllowFontScaling: false,
+        }
+    }
+);
 
 EtcStack.navigationOptions = {
     tabBarLabel: '더 보기',
@@ -89,7 +125,8 @@ EtcStack.navigationOptions = {
             color={tintColor}
             size={24} 
         />
-    )
+    ),
+
 };
 
 export default createBottomTabNavigator(
@@ -104,6 +141,7 @@ export default createBottomTabNavigator(
         tabBarOptions: {
             activeTintColor: 'black',
             inactiveTintColor: 'grey',
+            allowFontScaling: false,
             style: {
                 backgroundColor: 'white',
                 borderTopWidth: 0,
@@ -111,18 +149,25 @@ export default createBottomTabNavigator(
                 shadowColor: 'black',
                 shadowOpacity: 0.5,
                 elevation: 5
-            }
+            },
         },
 
         /* Default header */
         navigationOptions: {
+            headerTitleAllowFontScaling: false,
+            headerBackAllowFontScaling: false,
+        },
+        defaultNavigationOptions: {
             headerStyle: {
                 // backgroundColor: commonStyle.color.coblicBlue,
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
                 fontWeight: 'bold',
+                alignSelf: 'center',
             },
+            headerTitleAllowFontScaling: false,
+            headerBackAllowFontScaling: false,
         },
     }
 );
