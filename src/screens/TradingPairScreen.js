@@ -37,18 +37,29 @@ export default class TradingPairScreen extends Component {
         
         return {
             headerTitle: (
-                <Text 
-                    style={{fontSize: 20, textDecorationLine: 'underline'}}
-                    onPress={() => {
-                        modalStore.openCustomModal({
-                            modal: 
-                            <TradingPairSelectionModal />,
-                        })
-                    }}
-                    maxFontSizeMultiplier={20}
-                    allowFontScaling={false}
-                >{`${baseName} (${this.tradingPairName.split('-').join('/')})`}
-                </Text>
+                <View style={{
+                        display: 'flex',
+                        flexDirection: 'row', 
+                        alignItems:'center'
+                    }}>
+                    <Text 
+                        style={{fontSize: 16, color: commonStyle.color.coblicBlue}}
+                        onPress={() => {
+                            modalStore.openCustomModal({
+                                modal: 
+                                <TradingPairSelectionModal />,
+                            })
+                        }}
+                        maxFontSizeMultiplier={20}
+                        allowFontScaling={false}
+                    >
+                        {`${baseName} (${this.tradingPairName.split('-').join('/')}) `}
+                        <Image
+                            style={{ width: 10, height: 10 }}
+                            source={fallIcon}
+                        /> 
+                    </Text>
+                </View>
             ),
             tabBarVisible: false,
             ...headerStyle.white,

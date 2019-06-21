@@ -101,7 +101,7 @@ export default class SellOrderForm extends Component {
         return (
             <View style={styles.container}>
                 <View style={[orderFormStyle.liquidContainer]}>
-                    <Text style={orderFormStyle.liquidTitle}>매도가능</Text>
+                    <Text style={orderFormStyle.liquidTitle}>주문가능</Text>
                     <View style={orderFormStyle.liquidContentContainer}>
                         <Text style={orderFormStyle.liquidContentText}>
                             {
@@ -115,21 +115,20 @@ export default class SellOrderForm extends Component {
                         </Text>
                     </View>
                 </View>
-                <View style={[orderFormStyle.inputContainer, orderFormStyle.priceInputContiner]}>
-                    <TextInput style={orderFormStyle.textInput}
-                        onChangeText={this._onChangePrice}
-                        keyboardType={'numeric'}
-                        value={number.putComma(price)}
-                    />
-                    <View style={orderFormStyle.inputTitleContainer}>
-                        <Text style={orderFormStyle.inputTitle}>{`가격`}</Text>
+                <View style={[orderFormStyle.priceInputContiner]}>
+                    <View style={[orderFormStyle.inputContainer]}>
+                        <TextInput style={orderFormStyle.textInput}
+                            onChangeText={this._onChangePrice}
+                            keyboardType={'numeric'}
+                            value={number.putComma(price)}
+                        />
+                        <View style={orderFormStyle.inputTitleContainer}>
+                            <Text style={orderFormStyle.inputTitle}>{`가격`}</Text>
+                        </View>
+                        <View style={orderFormStyle.inputUnitContainer}>
+                            <Text style={orderFormStyle.inputUnit}>{`${quoteSymbol}`}</Text>
+                        </View>
                     </View>
-                    <View style={orderFormStyle.inputUnitContainer}>
-                        <Text style={orderFormStyle.inputUnit}>{`${quoteSymbol}`}</Text>
-                    </View>
-                </View>
-                <View style={[orderFormStyle.setPriceButtonsContainer]}>
-                    <View style={[orderFormStyle.emptySpace]}></View>
                     <View style={[orderFormStyle.setPriceButtons]}>
                         <TouchableOpacity style={[orderFormStyle.plusButton, orderFormStyle.priceButton]} onPress={this._onPressIncreasePrice}>
                             <Text>+</Text>
@@ -139,7 +138,7 @@ export default class SellOrderForm extends Component {
                         </TouchableOpacity>    
                     </View>
                 </View>
-                <View style={[orderFormStyle.inputContainer, orderFormStyle.volumeInputContainer]}>
+                <View style={[orderFormStyle.volumeInputContainer]}>
                     <TextInput style={orderFormStyle.textInput}
                         onChangeText={this._onChangeVolume}
                         keyboardType={'numeric'}
@@ -183,20 +182,20 @@ export default class SellOrderForm extends Component {
                     <Text style={[styles.totalGainTitle, orderFormStyle.infoTitle]}>수령총액</Text>
                     <Text style={[styles.totalGainContent, orderFormStyle.infoContent]}>{totalGain ? number.putComma(Decimal(totalGain).toFixed()) : '-'} {quoteSymbol}</Text>
                 </View>
-                <View style={orderFormStyle.minimumOrderAmountContainer}>
-                    <Text style={orderFormStyle.minimumOrderAmountContent}>
-                        최소주문금액 {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
-                    </Text>
-                </View>
                 {
                     this.props.userStore.isLoggedIn ? 
                     <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressOrder}>
-                        <Text style={[orderFormStyle.buttonText]}>판매</Text>
+                        <Text style={[orderFormStyle.buttonText]}>매도</Text>
                     </TouchableOpacity> :
                     <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressLogin}>
                         <Text style={[orderFormStyle.buttonText]}>로그인</Text>
                     </TouchableOpacity>
                 }
+                <View style={orderFormStyle.minimumOrderAmountContainer}>
+                    <Text style={orderFormStyle.minimumOrderAmountContent}>
+                        최소주문금액 {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
+                    </Text>
+                </View>
             </View>
         );
     }

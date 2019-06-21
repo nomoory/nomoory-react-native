@@ -126,45 +126,52 @@ const styles = StyleSheet.create({
 
 });
 
+const marginBetween = 6;
+
 const orderFormStyle = StyleSheet.create({
     // liquid
     liquidContainer: {
-        flexDirection: 'column',
-        marginTop: 4
+        flexDirection: 'row',
+        marginTop: marginBetween,
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     liquidTitle: {
-        fontWeight: '600',
-        fontSize: 16,
+        fontWeight: '300',
+        fontSize: 13,
+        color: '#747474',
     },
     liquidContentContainer: {
-        marginTop: 4,
         flexDirection: 'row',
         justifyContent: 'flex-end'
     },
     liquidContentText: {
-        fontWeight: '400',
-        fontSize: 15
+        fontWeight: '500',
+        fontSize: 13
     },
     liquidContentUnitText: {
-        fontWeight: '600',
-        fontSize: 15,
-        color: '#747474',
-        marginLeft: 6
+        fontWeight: '500',
+        fontSize: 13,
+        marginLeft: 3
     },
 
     // price text input
-    inputContainer: {
+    priceInputContiner: {
+        display: 'flex',
+        flexDirection: 'row',
         marginTop: 8,
         width: '100%',
-        flexDirection: 'row',
+        height: 36,
+    },
+    inputContainer: {
+        flex: 1,
+        marginRight: 4,
     },
     textInput: {
-        width: '100%',
+        flex: 1,
         paddingRight: 42,
-        borderWidth: 1,
         textAlign: 'right',
         height: 36,
-        borderRadius: 4,
         backgroundColor: '#ffffff',
         borderColor: '#a2abb6',
         borderWidth: 0.5,
@@ -189,40 +196,35 @@ const orderFormStyle = StyleSheet.create({
         fontWeight: '500',
         fontSize: 11
     },
-    setPriceButtonsContainer: {
-        marginTop: 4,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        width: '100%',
-    },
     setPriceButtons: {
+        flex: '0 0 70',
         flexDirection: 'row',
-        borderRadius: 5,
-        borderWidth: 1.5,
+        borderWidth: 1,
         borderColor: '#d8dbde',
-    },
-    emptySpace: {
-        flex: 1,
     },
     priceButton: {
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: '#d8dbde',
-        width: 30,
-        height: 30,
+        width: 36,
+        height: 36,
     },
-    minusButton: {
+    plusButton: {
         //borderLeftWidth: 1.5,
-        borderRightWidth: 1.2,
+        borderRightWidth: 1,
         borderLeftColor: '#d8dbde',
+    },
+
+    volumeInputContainer: {
+        marginTop: marginBetween,
+        height: 36,
     },
 
     // set volume buttons
     setVolumeButtons: {
-        marginTop: 4,
+        marginTop: marginBetween,
         flexDirection: 'row',
-        borderRadius: 5,
-        borderWidth: 1.5,
+        borderWidth: 1,
         borderColor: '#d8dbde',
         width: '100%',
         height: 36,
@@ -243,7 +245,7 @@ const orderFormStyle = StyleSheet.create({
 
     // infos
     maxFeePercentageContainer: {
-        marginTop: 4,
+        marginTop: marginBetween,
         flexDirection: 'row',
         justifyContent: 'flex-end'
     },
@@ -264,7 +266,7 @@ const orderFormStyle = StyleSheet.create({
         fontSize: 12,
     },
     minimumOrderAmountContainer: {
-        marginTop: 4,
+        marginTop: marginBetween,
         flexDirection: 'row',
         justifyContent: 'flex-end'
 
@@ -277,7 +279,6 @@ const orderFormStyle = StyleSheet.create({
     // button
     button: {
         marginTop: 8,
-        borderRadius: 5,
         width: '100%',
         height: 36,
         justifyContent: 'center',
