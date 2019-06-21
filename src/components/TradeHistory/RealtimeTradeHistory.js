@@ -155,10 +155,84 @@ export default class RealtimeTradeHistory extends Component {
     }
 
     render() {
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const dataSource = ds.cloneWithRows(this.props.realtimeTradeHistoryStore.realtimeTrades);
+
         return (
             <View style={[styles.container]}>
                 {this.realtimeTradeHistoryHead}
-                {this._renderRealtimeTradeHistoryBody()}
+                <ListView style={[styles.container]}
+                dataSource={dataSource}
+                renderRow={(realtimeTrade, mode, index) => {
+                    let { 
+                        price,
+                        volume,
+                        created,
+                        side,
+                    } = realtimeTrade;
+                    let amount = Decimal(price || 0).mul(volume || 0).toFixed();
+                    let dateAndTime_string = momentHelper.getLocaleDatetime(created);
+                    let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
+
+                    return (
+                        <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={index}>
+                            <View style={[
+                                styles.column, 
+                                styles.columnItem,
+                                styles.created]}
+                            >
+                                <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date : ''} </Text>
+                                <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
+                            </View>
+                            <View style={[
+                                styles.column,
+                                styles.columnItem,
+                                styles.price
+                            ]}>
+                                <Text style={[
+                                    styles.tupleColumnText, 
+                                    styles.priceText,
+                                    styles[side],
+                                ]}>
+                                    {number.putComma(Decimal(price).toFixed())}
+                                </Text>     
+                            </View>
+                            <View style={[
+                                styles.column,
+                                styles.columnItem,
+                                styles.volume,
+                            ]}>
+                                <Text style={[
+                                    styles.tupleColumnText,
+                                    styles.volumeText,
+                                    styles[side],
+                                ]}>
+                                    {
+                                        number.putComma(
+                                            Decimal(volume).greaterThan(10)
+                                            ? Decimal(Decimal(volume).toFixed(3)).toFixed()
+                                            : Decimal(volume).toFixed()
+                                        )
+                                    }
+                                </Text>
+                            </View>
+                            <View style={[
+                                styles.column,
+                                styles.columnItem,
+                                styles.amount,
+                            ]}>
+                                <Text style={[
+                                    styles.tupleColumnText,
+                                    styles.amountText,
+                                    styles[side],
+                                ]}>
+                                    {number.putComma(Decimal(amount).toFixed(0))}
+                                </Text>
+                            </View>
+                        </View>
+                    );
+                }}
+            />
             </View>
         )
     }

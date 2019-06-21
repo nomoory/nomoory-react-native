@@ -35,11 +35,11 @@ class RealtimeTradeHistoryStore {
     }
     @action setRealTimeTrades(trades) {
         if (trades.length > 20){
-            this.realtimeTradeRegistry = trades.splice(trades.length - 20, 20);
+            this.realtimeTradeRegistry = trades.slice(0, 20);
         } else {
             if (20 <= this.realtimeTradeRegistry.length) {
                 // multiple pop
-                this.realtimeTradeRegistry.splice(-trades.length,trades.length)
+                this.realtimeTradeRegistry = this.realtimeTradeRegistry.slice(0, 20 - trades.length);
             }
             this.realtimeTradeRegistry.unshift(...trades);
         }
