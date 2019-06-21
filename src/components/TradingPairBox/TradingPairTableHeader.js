@@ -72,9 +72,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
         borderStyle: 'solid',
-        borderTopWidth: 2,
-        borderTopColor: '#dedfe0',
-        borderBottomWidth: 2,
+        borderTopWidth: 1,
+        borderTopColor: '#9e9f90',
+        borderBottomWidth: 1,
         borderBottomColor: '#dedfe0',
     },
     column: {

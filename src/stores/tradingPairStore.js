@@ -50,6 +50,12 @@ class TradingPairStore {
     @observable
     tradingPairsRegistry = observable.map();
 
+    @observable
+    quoteTabTypes = {}
+
+    @observable
+    selectedQuoteTabType = 'KRW';
+
     @computed 
     get selectedTradingPair() {
         return this.getTradingPairByTradingPairName(this.selectedTradingPairName);
@@ -75,6 +81,8 @@ class TradingPairStore {
         this.tradingPairsRegistry.forEach((tradingPair, key) => {
             tradingPairArray.push(tradingPair);
         });
+
+        tradingPairArray = this._filterByQuoteType(tradingPairArray);
         // tradingPairs = this._tab(tradingPairs);
         // tradingPairs = this._filter(tradingPairs);
         tradingPairArray = this._search(this.searchKeyword, tradingPairArray);
@@ -91,6 +99,7 @@ class TradingPairStore {
             .then(action((response) => {
                 console.log('loaded trading pair');
                 let tradingPairs = response.data;
+                this.updateQuoteTabTypesByTradingPairs(tradingPairs);
                 this.tradingPairsRegistry.clear();
                 tradingPairs.forEach((tradingPair) => {
                     this.tradingPairsRegistry.set(tradingPair.name, tradingPair);
@@ -165,6 +174,21 @@ class TradingPairStore {
         }
         return tradingPairs;
     }
+
+    _filterByQuoteType = (tradingPairs) => {
+        const filteredTradingPairs = tradingPairs.filter(tradingPair => this._isRightQuoteTabType(tradingPair)) || tradingPairs;
+
+        return filteredTradingPairs;
+    }
+
+    _isRightQuoteTabType(tradingPair) {
+        if (!this.selectedQuoteTabType) {
+            return true;
+        }
+
+        return tradingPair.quote_symbol === this.selectedQuoteTabType;
+    }
+
     _userHasInterestIn(tradingPair) {
         // TODO user의 관심리스트에 tradingPair가 있는지 여부 확인하여 return
         return true;
@@ -234,6 +258,24 @@ class TradingPairStore {
     _hasClickedBaseSymbolInTradingPair(baseSymbol) {
         // 현재 유저가 누른 TradingPairTab(base_symbol)의 Base Symbol에 해당하는 TradingPair인지를 확인한다.
         return this.selectedTradingPairTab === baseSymbol ? true : false;
+    }
+
+    @action
+    updateQuoteTabTypesByTradingPairs(tradingPairs) {
+        this.quoteTabTypes = { };
+        tradingPairs.forEach(action((tradingPair) => {
+            const upperCasedQuoteName = typeof tradingPair.quote_symbol === 'string'
+                ? tradingPair.quote_symbol.toUpperCase()
+                : '';
+            if (upperCasedQuoteName) {
+                this.quoteTabTypes[upperCasedQuoteName] = upperCasedQuoteName;
+            }
+        }));
+    }
+
+    @action
+    changeSelectedQuoteTabType(quoteTabType) {
+        this.selectedQuoteTabType = quoteTabType;
     }
 }
 

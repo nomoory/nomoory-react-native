@@ -71,6 +71,9 @@ const styles = StyleSheet.create({
     container: {
         flexDirection:'row',
         justifyContent: 'space-around',
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#bebfc0',
+
     },
     column: {
         flex: 1,
