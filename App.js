@@ -1,6 +1,6 @@
 import './init';
 import React from 'react';
-import { StyleSheet, View, StatusBar, Platform } from 'react-native';
+import { StyleSheet, View, StatusBar, Platform, AppState } from 'react-native';
 import { Provider } from 'mobx-react';
 import stores from './src/stores';
 import AppNavigator from './src/navigation/AppNavigator';
@@ -22,8 +22,13 @@ enableLogging({
 });
 
 export default class App extends React.Component {
+    state = {
+      appState: AppState.currentState,
+    };
+
     constructor(props) {
         super(props);
+        
         // 필수로 load하고 subscribe 해야 할 데이터 처리
         stores.socketStore.loadAndSubscribeOnInit();
         // 유저에 따라 load하고 subscribe 해야 할 데이터 처리
@@ -51,6 +56,42 @@ export default class App extends React.Component {
             }
         );
     }
+
+    _reloadAndResubscribeOnBackToForeground() {
+        stores.socketStore.loadAndSubscribeOnInit();
+
+        if (stores.userStore.isLoggedIn) {
+            stores.socketStore.authenticateOnUserChange();
+            stores.socketStore.loadAndSubscribeOnLogin();
+        }
+
+        stores.socketStore.loadAndSubscribeOnTradingPairChange();
+        if (stores.tradingPairStore.selectedTradingPairName) {
+            stores.placedOrderHistoryStore.loadPersonalOrders(stores.tradingPairStore.selectedTradingPairName);
+        }
+        stores.orderStore.setOrderValueByTradingPair(stores.tradingPairStore.selectedTradingPair || {});
+    }
+
+    componentDidMount() {
+        AppState.addEventListener('change', this._handleAppStateChange);
+    }
+
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+
+    _handleAppStateChange = (nextAppState) => {
+        if (
+            this.state.appState.match(/inactive|background/) &&
+            nextAppState === 'active'
+        ) {
+            console.log('App has come to the foreground!');
+            this._reloadAndResubscribeOnBackToForeground();
+        }
+        this.setState({ appState: nextAppState });
+    };
+
+
     render() {
         return (
             <Provider
@@ -58,7 +99,7 @@ export default class App extends React.Component {
             >
                 <View style={styles.container}>
                     {typeof Platform && Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-                    <AppNavigator 
+                    <AppNavigator
                         ref={navigatorRef => {
                             NavigationService.setTopLevelNavigator(navigatorRef);
                         }}
