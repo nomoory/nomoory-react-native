@@ -179,29 +179,30 @@ class SocketStore {
 
     _onReceiveMessage = (channel, data) => {
         // console.log(data);
+
         switch (channel) {
             case CHANNEL_NAMES.ORDERBOOK:
-                console.log(`%cReceived: ORDERBOOK`);
+                // console.log(`%cReceived: ORDERBOOK`);
                 orderbookStore.setOrderbook(data);
                 break;
             case CHANNEL_NAMES.TICKER:
-                console.log(`%cReceived: TICKER`);
+                // console.log(`%cReceived: TICKER`);
                 tradingPairStore.updateTickerInTradingPair(data);
                 break;
             case CHANNEL_NAMES.ORDER:
-                console.log(`%cReceived: ORDER`);
+                // console.log(`%cReceived: ORDER`);
                 data.forEach((personalOrder) => {
                     // this._handleOrderByStatus(personalOrder);
                     placedOrderHistoryStore.setPlacedOrder(personalOrder);
                 });
                 break;
             case CHANNEL_NAMES.TRADE:
-                console.log(`%cReceived: TRADE`);
+                // console.log(`%cReceived: TRADE`);
                 realtimeTradeHistoryStore.setRealTimeTrades([data]);
                 this._feedTradeToTradingView(data);
                 break;
             case CHANNEL_NAMES.ACCOUNT:
-                console.log(`%cReceived: ACCOUNT`);
+                // console.log(`%cReceived: ACCOUNT`);
                 accountStore.setAccount(data);
                 break;
             default:

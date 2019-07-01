@@ -74,6 +74,7 @@ export default class InvestmentScreen extends Component {
             </View>
         );
     };
+    
     _onIndexChange = (index) => {
         this.props.transactionHistoryStore.clear();        
         this.setState({ index });

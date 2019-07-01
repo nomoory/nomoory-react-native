@@ -27,6 +27,12 @@ import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 import modalStore from '../stores/modalStore';
 import { withNavigation } from 'react-navigation';
 
+const TAB_BODY = {
+    OrderBox: () => <OrderBox />,
+    ChartBox: () => <ChartBox />,
+    TradeHistory: () => <TradeHistory />
+};
+
 @withNavigation
 @inject('tradingPairStore', 'modalStore')
 @observer
@@ -105,10 +111,16 @@ export default class TradingPairScreen extends Component {
                     return (
                         <TouchableOpacity
                             key={route.key}
-                            style={[tabStyle.tabItem]}
-                            onPress={() => this.setState({ index: i })}>
+                            style={[
+                                tabStyle.tabItem,
+                                // this.state.index === i
+                                // ? tabStyle.selectedTabItem
+                                // : null
+                            ]}
+                            onPress={(e) => {this._onIndexChange(i)}}
+                        >
                             <Animated.Text style={[ 
-                                { color },
+                                // { color },
                                 tabStyle.tabText,
                                 this.state.index === i  ? tabStyle.selectedTabText : null
                             ]}>{route.title}</Animated.Text>
@@ -118,14 +130,18 @@ export default class TradingPairScreen extends Component {
             </View>
         );
     };
+        
+    _onIndexChange = (index) => {
+        this.setState({ index });
+    }
 
     render() {
-        let tradingPair = this.props.tradingPairStore.selectedTradingPair;
         let {
             close_price,
             change, // 'RISE' | 'FALL'
-        } = tradingPair || {};
-
+        } = this.props.tradingPairStore.selectedTradingPair || {};
+        console.log(this.state.routes[this.state.index].key);
+        console.log('asdfklasjdfkljsadkljaskldjaskld')
         return (
             <View style={styles.container}>
                 <View style={styles.tradingPairSummaryContainer}>
@@ -158,20 +174,45 @@ export default class TradingPairScreen extends Component {
                         </View>
                     </View>
                 </View>
-                <TabView
+                {/* <TabView
                     navigationState={this.state}
                     renderScene={SceneMap({
                         OrderBox,
-                        ChartBox,
+                        ChartBox: () => <ChartBox />,
                         TradeHistory,
                     })}
-                    onIndexChange={(index) => {this.setState({ index })}}
+                    onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}
                     initialLayout={{ width: Dimensions.get('window').width }}
-                />
+                /> */}
+                <View style={styles.tabs}>
+                    { this.state.routes.map((tab, index) => {
+                        return (
+                            <TouchableOpacity style={[
+                                styles.tab,
+                                index === this.state.index ? 
+                                styles.selectedTab :
+                                null
+                            ]}
+                                onPress={() => { this.setState({index})}}
+                            >
+                                <Text style={[
+                                    styles.tabText,
+                                    index === this.state.index ? 
+                                    styles.selectedTabText :
+                                    null
+                                ]}>{tab.title}</Text>
+                            </TouchableOpacity>
+                        )
+                    })}
+                </View>
+                <View style={styles.tabBody}>
+                    {TAB_BODY[this.state.routes[this.state.index].key]()}
+                </View>
             </View>
         )
     }
+
 }
 
 const styles = StyleSheet.create({
@@ -225,4 +266,33 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '300',
     },
+
+
+    tabs: {
+        width: '100%',
+        height: 30,
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    tab: {
+        height: '100%',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: commonStyle.color.coblicBlue,
+    },
+    tabText: {
+        fontWeight: '400', 
+        fontSize: 13,
+        color: 'white',
+    },
+    selectedTabText: {
+        fontWeight: '900',
+        fontSize: 13,
+        color: 'white',
+    },
+    tabBody: {
+        flex: 1,
+    }
+
 })

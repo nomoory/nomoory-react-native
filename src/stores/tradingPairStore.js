@@ -90,6 +90,14 @@ class TradingPairStore {
         tradingPairArray = this._sort(tradingPairArray);
         return tradingPairArray;
     }
+    @computed
+    get allTradingPairs() {
+        let tradingPairArray = [];
+        this.tradingPairsRegistry.forEach((tradingPair, key) => {
+            tradingPairArray.push(tradingPair);
+        });
+        return tradingPairArray;
+    }
 
     @action loadTradingPairs() {
         this.isLoading = true;

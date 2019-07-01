@@ -22,7 +22,7 @@ export default class TradingPairSelectionModal extends Component {
         this.props.modalStore.closeCustomModal();
     }
     render() {
-        const { tradingPairs, selectedTradingPairName, languageForTokenName } = this.props.tradingPairStore || {};
+        const { allTradingPairs, selectedTradingPairName, languageForTokenName } = this.props.tradingPairStore || {};
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -30,8 +30,8 @@ export default class TradingPairSelectionModal extends Component {
                 </View>
                 <ScrollView>
                     {
-                        (tradingPairs && tradingPairs.length > 0) ?
-                        tradingPairs.map((tradingPair, index) => {
+                        (allTradingPairs && allTradingPairs.length > 0) ?
+                        allTradingPairs.map((tradingPair, index) => {
                             const {
                                 close_price,
                                 signed_change_rate,

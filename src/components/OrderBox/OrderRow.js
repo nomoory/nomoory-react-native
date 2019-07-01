@@ -119,10 +119,10 @@ const styles = StyleSheet.create({
         borderColor: 'white',
     },
     sellOrderRow: {
-        backgroundColor: '#f3fbff',
+        backgroundColor: '#f0f6fe',
     },
     buyOrderRow: {
-        backgroundColor: '#fff4f8'
+        backgroundColor: '#fcf0ef'
     },
     price: {
         flex: 3,
@@ -151,13 +151,14 @@ const styles = StyleSheet.create({
     },
     volumeBar: {
         position: 'absolute',
-        height: '100%',
+        top: '20%',
+        height: '60%',
     },
     volumeBar_SELL: {
-        backgroundColor: '#dbf0ff'
+        backgroundColor: '#d1e0f4'
     },
     volumeBar_BUY: {
-        backgroundColor: '#ffdbe8'
+        backgroundColor: '#f2d9d7'
     },
     volumeText: {
         fontSize: 10,

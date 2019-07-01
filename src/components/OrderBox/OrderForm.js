@@ -167,10 +167,10 @@ const orderFormStyle = StyleSheet.create({
     },
     inputContainer: {
         flex: 1,
-        marginRight: 4,
+        marginRight: 2,
     },
     textInput: {
-        paddingRight: 36,
+        paddingRight: 6,
         textAlign: 'right',
         height: 36,
         backgroundColor: '#ffffff',
@@ -228,7 +228,7 @@ const orderFormStyle = StyleSheet.create({
         marginTop: marginBetween,
         flexDirection: 'row',
         borderWidth: 1,
-        borderColor: '#d8dbde',
+        borderColor: 'white',
         width: '100%',
         height: 36,
         alignItems: 'center'
@@ -238,6 +238,9 @@ const orderFormStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: '100%',
+        borderWidth: 1,
+        borderColor: 'white',
+        backgroundColor: '#d8dbde',
     },
     setVolumeButtonNotInFirst: {
         borderLeftWidth: 1.5,
@@ -257,8 +260,8 @@ const orderFormStyle = StyleSheet.create({
         fontSize: 11,
     },
     infoContainer: {
-        marginTop: 13,
-        marginBottom: 8,
+        marginTop: 10,
+        marginBottom: 10,
         paddingLeft: 4,
         paddingRight: 4,
         alignItems: 'center',
@@ -274,7 +277,7 @@ const orderFormStyle = StyleSheet.create({
     },
     infoContent: {
         fontSize: 12,
-        color: '#a2abb6',
+        color: 'black',
     },
     minorInfoRow: {
         flexDirection: 'row',
@@ -290,22 +293,24 @@ const orderFormStyle = StyleSheet.create({
 
     // button
     button: {
-        marginTop: 8,
-        height: 30,
+        height: 34,
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 1,
     },
     blueButton: {
         backgroundColor: commonStyle.color.coblicSellButtonBackground,
-        marginLeft: 4,
+        height: 34,
+        flex: 1,
     },
     redButton: {
         backgroundColor: commonStyle.color.coblicBuyButtonBackground,
-        marginLeft: 4,
+        height: 34,
+        flex: 1,
     },
     initButton: {
+        marginRight: 3,
         backgroundColor: '#777777',
+        flex: 1,
     },
     yellowButton: {
         backgroundColor: commonStyle.color.coblicYellow,
@@ -317,6 +322,7 @@ const orderFormStyle = StyleSheet.create({
     buttons: {
         display: 'flex',
         flexDirection: 'row',
+        marginBottom: 10,
     }
 
 });

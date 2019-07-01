@@ -81,8 +81,13 @@ export default class SellOrderForm extends Component {
     _onPressDecreasePrice = (e) => { this.props.orderStore.decreasePriceByButton(); }
     _onPressSetVolumeByRate = (rate) => () => { if (this.props.userStore.isLoggedIn) this.props.orderStore.setVolumeByRate(rate); }
 
+
     _onPressInitPrice = (e) => {
-        this.props.orderStore.setPrice(Decimal(this.props.tradingPairStore.selectedTradingPair.close_price).toFixed());
+        this.props.orderStore.setVolume(0);
+        if (this.props.tradingPairStore.selectedTradingPair) {
+            this.props.orderStore.setPrice(Decimal(this.props.tradingPairStore.selectedTradingPair.close_price || 0).toFixed());
+
+        }
     }
 
     _onPressLogin = (e) => {
@@ -129,9 +134,9 @@ export default class SellOrderForm extends Component {
                     <View style={orderFormStyle.inputTitleContainer}>
                         <Text style={orderFormStyle.inputTitle}>{`수량`}</Text>
                     </View>
-                    <View style={orderFormStyle.inputUnitContainer}>
+                    {/* <View style={orderFormStyle.inputUnitContainer}>
                         <Text style={orderFormStyle.inputUnit}>{`${baseSymbol}`}</Text>
-                    </View>
+                    </View> */}
                 </View>
                 <View style={orderFormStyle.setVolumeButtons}>
                     <TouchableOpacity style={[orderFormStyle.setVolumeButton]} onPress={this._onPressSetVolumeByRate(0.25)}>
@@ -157,9 +162,9 @@ export default class SellOrderForm extends Component {
                         <View style={orderFormStyle.inputTitleContainer}>
                             <Text style={orderFormStyle.inputTitle}>{`가격`}</Text>
                         </View>
-                        <View style={orderFormStyle.inputUnitContainer}>
+                        {/* <View style={orderFormStyle.inputUnitContainer}>
                             <Text style={orderFormStyle.inputUnit}>{`${quoteSymbol}`}</Text>
-                        </View>
+                        </View> */}
                     </View>
                     <View style={[orderFormStyle.setPriceButtons]}>
                         <TouchableOpacity style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} onPress={this._onPressDecreasePrice}>
@@ -184,14 +189,16 @@ export default class SellOrderForm extends Component {
                             <Text style={[orderFormStyle.buttonText]}>매도</Text>
                         </TouchableOpacity>
                     </View> :
-                    <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressLogin}>
-                        <Text style={[orderFormStyle.buttonText]}>로그인</Text>
-                    </TouchableOpacity>
+                    <View style={[orderFormStyle.buttons]}>
+
+                        <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.blueButton]} onPress={this._onPressLogin}>
+                            <Text style={[orderFormStyle.buttonText]}>로그인</Text>
+                        </TouchableOpacity>
+                    </View>
                 }
                 <View style={orderFormStyle.minorInfoRow}> 
-                    <Text style={orderFormStyle.minorInfoRowText}>
-                        최소주문금액
-                        </Text>
+                    <Text style={orderFormStyle.minorInfoRowText}>최소주문금액
+                    </Text>
                     <Text style={orderFormStyle.minorInfoRowText}>
                         {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
                     </Text>

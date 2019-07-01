@@ -62,7 +62,7 @@ class TradingPairRow extends Component {
                 style={[styles.container]}
                 onPress={this._onPressTradingPairRow}
             >
-                <View style={[styles.name]}>
+                <View style={[styles.name, styles.paddingTop]}>
                     <Text 
                         style={[
                             styles.textSizeBig,
@@ -78,18 +78,18 @@ class TradingPairRow extends Component {
                     </Text>
                     <Text style={[styles.textSizeNormal]}>{name}</Text>
                 </View>
-                <View style={[ styles.closePrice, styles.column ]}>
+                <View style={[ styles.closePrice, styles.column, styles.paddingTop ]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
                     >{close_price ? number.putComma(Decimal(close_price ||0 ).toFixed()) : '-'}</Text>
                 </View>
-                <View style={[styles.column, styles.signedChangeRate]}>
+                <View style={[styles.signedChangeRate, styles.paddingTop]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
                     >{this.changeRate}%</Text>
                     <Text style={[textStyle, styles.textSizeSmall]}
                     >{number.putComma(Decimal(close_price || 0).minus(open_price || 0).abs().toFixed())}
                     </Text>
                 </View>
-                <View style={[styles.accTradeValue, styles.column]}>
+                <View style={[styles.accTradeValue, styles.column, styles.paddingTop]}>
                     <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed()) : '-'}{TRANSLATIONS[result.type]}</Text>
                 </View>
             </TouchableOpacity>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     column: {
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'flex-end',
     },
     blueText: {
@@ -138,21 +138,25 @@ const styles = StyleSheet.create({
     },
     signedChangeRate: {
         display: 'flex',
+        flex: 1,
         flexDirection: 'column',
         alignItems: 'flex-end',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
     textSizeBig: {
-        fontSize: 12,
+        fontSize: 13,
         fontWeight:'200'
     },
     textSizeNormal: {
-        fontSize: 11,
+        fontSize: 12,
         fontWeight:'200'
     },
     textSizeSmall: {
-        fontSize: 10,
+        fontSize: 11,
         fontWeight:'200'
+    },
+    paddingTop: {
+        paddingTop: 2
     }
 })
 export default TradingPairRow;

@@ -22,7 +22,7 @@ class OrderbookStore {
                 count = index + 1;
             }
         });
-        while (count++ <= 15)  {
+        while (count++ < 15)  {
             tempSellOrders.unshift(this._reformatOrderForDisplay(null));
         }
 
@@ -38,7 +38,7 @@ class OrderbookStore {
                 count = index + 1;
             }
         });
-        while (count++ <= 15)  {
+        while (count++ < 15)  {
             tempBuyOrders.push(this._reformatOrderForDisplay(null));
         }
         
