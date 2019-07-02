@@ -3,8 +3,6 @@ import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import tabStyle from '../styles/tabStyle';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
-import * as Icon from '@expo/vector-icons'
 
 import {
     StyleSheet,
@@ -27,6 +25,8 @@ import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 import modalStore from '../stores/modalStore';
 import { withNavigation } from 'react-navigation';
+import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
+import TradingPairHeaderButtons from '../components/TradingPairHeaderButtons';
 
 const TAB_BODY = {
     OrderBox: <OrderBox />,
@@ -63,14 +63,7 @@ export default class TradingPairScreen extends Component {
                 </View>
             ),
             headerRight: (
-                <TouchableOpacity
-                    onPress={() => alert('This is a button!')}
-                >
-                    <Icon.Ionicons
-                        name="ios-star"
-                        // style={styles.favoriteIcon}
-                    />
-                </TouchableOpacity>
+                <TradingPairHeaderButtons />
             ),
             tabBarVisible: false,
             ...headerStyle.white,

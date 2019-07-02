@@ -4,28 +4,24 @@ import {
     reaction,
     computed,
 } from 'mobx';
-import { AsyncStorage } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import userStore from './userStore';
 
 class CommonStore {
     constructor() {
-        reaction(
-            () => this.isToastifyOff,
-            (isToastifyOff) => {
-                if (isToastifyOff) {
-                    window.localStorage.setItem('isToastifyOff', isToastifyOff);
-                } else {
-                    window.localStorage.removeItem('isToastifyOff');
-                }
-            },
-        );
+        SecureStore.getItemAsync('favorite_trading_pairs')
+            .then(action((value) => {
+                this.localFavoriteTradingPairNames = value || [];
+            }))
+            // ? 
+            // SecureStore.getItemAsync('favorite_trading_pairs') //.split(',') 
+            // || []
+            // : [];
     }
 
     // Favorite trading pair
     @observable
-    localFavoriteTradingPairNames = AsyncStorage.getItem('favorite_trading_pairs')
-        ? AsyncStorage.getItem('favorite_trading_pairs').split(',') || []
-        : [];
+    localFavoriteTradingPairNames = [];
 
     @action
     toggleFavoriteTradingPair(targetTradingPairName) {
@@ -37,7 +33,13 @@ class CommonStore {
             } else {
                 this.localFavoriteTradingPairNames = [...this.localFavoriteTradingPairNames, targetTradingPairName];
             }
-            AsyncStorage.setItem('favorite_trading_pairs', this.localFavoriteTradingPairNames);
+            SecureStore.setItemAsync('favorite_trading_pairs', this.localFavoriteTradingPairNames)
+                .then(() => {
+                    SecureStore.getItemAsync('favorite_trading_pairs')
+                    .then(action((value) => {
+                        this.localFavoriteTradingPairNames = value || [];
+                    }))
+                });
         }
     }
 
