@@ -27,7 +27,6 @@ export default class Orderbook extends Component {
                     // onRefresh={this.onRefresh}
                     enableEmptySections={true}
                     renderItem={({item, index}) => {
-                        console.log(item);
                         return (
                             <OrderRow
                                 key={`sell_${index}`}

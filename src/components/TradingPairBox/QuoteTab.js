@@ -6,7 +6,7 @@ import commonStyle from '../../styles/commonStyle';
 
 @inject('tradingPairStore')
 @observer
-export default class QutoeTab extends Component {
+export default class QuoteTab extends Component {
     _onPressTab = (tabType) => action((e) => {
         this.props.tradingPairStore.changeSelectedQuoteTabType(tabType);
     })
@@ -16,16 +16,16 @@ export default class QutoeTab extends Component {
         let quoteTabTypeOrigin = this.props.tradingPairStore.quoteTabTypes;
         let quoteTabTypes = Object.keys(quoteTabTypeOrigin);
         if (quoteTabTypes.length) {
-            if (quoteTabTypeOrigin['KRW']) sortedQuoteTabTypes.push['KRW'];
-            if (quoteTabTypeOrigin['BTC']) sortedQuoteTabTypes.push['BTC'];
-            if (quoteTabTypeOrigin['ETH']) sortedQuoteTabTypes.push['ETH'];
-            if (quoteTabTypeOrigin['USDT']) sortedQuoteTabTypes.push['USDT'];
+            if (quoteTabTypes.includes('KRW')) sortedQuoteTabTypes.push('KRW');
+            if (quoteTabTypes.includes('BTC')) sortedQuoteTabTypes.push('BTC');
+            if (quoteTabTypes.includes('ETH')) sortedQuoteTabTypes.push('ETH');
+            if (quoteTabTypes.includes('USDT')) sortedQuoteTabTypes.push('USDT');
 
             sortedQuoteTabTypes.push(...quoteTabTypes.filter((tabType) => {
                 return !['KRW', 'BTC', 'ETH', 'USDT'].includes(tabType);
-            }))
-            console.log(quoteTabTypes);
-            return quoteTabTypes.map((quoteTabType, idx) => (
+            }));
+            
+            return sortedQuoteTabTypes.map((quoteTabType, idx) => (
                 <TouchableOpacity 
                     key={quoteTabType}
                     style={[

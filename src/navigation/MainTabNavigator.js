@@ -4,6 +4,7 @@ import {
     createBottomTabNavigator
 } from 'react-navigation';
 
+// https://expo.github.io/vector-icons/
 import * as Icon from '@expo/vector-icons'
 import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
@@ -33,14 +34,28 @@ const ExchangeStack = createStackNavigator(
 
 ExchangeStack.navigationOptions = {
     tabBarLabel: '거래소',
-    tabBarIcon: ({ tintColor, focused }) => (
-        <Icon.Ionicons
-            focused={focused}
-            name="ios-trending-up"
-            color={tintColor}
-            size={24}
-        />
-    ),
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.MaterialCommunityIcons
+                    focused={focused}
+                    name="home"
+                    color={tintColor}
+                    size={24} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.MaterialCommunityIcons
+                    focused={focused}
+                    name="home-outline"
+                    color={tintColor}
+                    size={24} 
+                /> 
+            );
+        }
+
+    },
     headerLayoutPreset: 'center'
 
 };
@@ -64,14 +79,27 @@ InvestmentStack.navigationOptions = {
         visible: false,
     },
     tabBarLabel: '투자내역',
-    tabBarIcon: ({ tintColor, focused }) => (
-        <Icon.Ionicons
-            focused={focused}
-            name="ios-clipboard"
-            color={tintColor}
-            size={24}
-        />
-    )
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.MaterialCommunityIcons
+                    focused={focused}
+                    name="file-document-box"
+                    color={tintColor}
+                    size={24} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.MaterialCommunityIcons
+                    focused={focused}
+                    name="file-document-box-outline"
+                    color={tintColor}
+                    size={24} 
+                /> 
+            );
+        }
+    },
 };
 
 const DepositWithdrawStack = createStackNavigator(
@@ -91,14 +119,28 @@ DepositWithdrawStack.navigationOptions = {
         visible: false,
     },
     tabBarLabel: '입금', // '입출금',
-    tabBarIcon: ({ tintColor, focused }) => (
-        <Icon.Ionicons
-            focused={focused}
-            name="ios-swap"
-            color={tintColor}
-            size={24}
-        />
-    )
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.Ionicons
+                    focused={focused}
+                    name="md-swap"
+                    color={tintColor}
+                    size={24} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.Ionicons
+                    focused={focused}
+                    name="ios-swap"
+                    color={tintColor}
+                    size={24} 
+                /> 
+            );
+        }
+    },
+
 };
 
 const EtcStack = createStackNavigator(
@@ -120,14 +162,27 @@ const EtcStack = createStackNavigator(
 
 EtcStack.navigationOptions = {
     tabBarLabel: '더 보기',
-    tabBarIcon: ({ tintColor, focused }) => (
-        <Icon.Ionicons
-            focused={focused}
-            name="ios-menu"
-            color={tintColor}
-            size={24} 
-        />
-    ),
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.MaterialIcons
+                    focused={focused}
+                    name="person"
+                    color={tintColor}
+                    size={24} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.MaterialIcons
+                    focused={focused}
+                    name="person-outline"
+                    color={tintColor}
+                    size={24} 
+                /> 
+            );
+        }
+    },
 
 };
 

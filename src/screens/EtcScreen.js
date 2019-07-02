@@ -17,7 +17,7 @@ export default class EtcScreen extends Component {
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
             // ),
-            ...headerStyle.blue,
+            ...headerStyle.white,
         };
     };
 

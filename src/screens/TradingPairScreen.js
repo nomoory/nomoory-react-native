@@ -3,7 +3,6 @@ import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import tabStyle from '../styles/tabStyle';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
 
 import {
     StyleSheet,
@@ -26,6 +25,8 @@ import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 import modalStore from '../stores/modalStore';
 import { withNavigation } from 'react-navigation';
+import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
+import TradingPairHeaderButtons from '../components/TradingPairHeaderButtons';
 
 const TAB_BODY = {
     OrderBox: <OrderBox />,
@@ -43,12 +44,11 @@ export default class TradingPairScreen extends Component {
         return {
             headerTitle: (
                 <View style={styles.headerContainer}>
-                    <Text 
+                    <Text
                         style={styles.headerText}
                         onPress={() => {
                             modalStore.openCustomModal({
-                                modal: 
-                                <TradingPairSelectionModal />,
+                                modal: <TradingPairSelectionModal />,
                             })
                         }}
                         maxFontSizeMultiplier={20}
@@ -58,9 +58,12 @@ export default class TradingPairScreen extends Component {
                         <Image
                             style={styles.headerImage}
                             source={fallIcon}
-                        /> 
+                        />
                     </Text>
                 </View>
+            ),
+            headerRight: (
+                <TradingPairHeaderButtons />
             ),
             tabBarVisible: false,
             ...headerStyle.white,
@@ -116,12 +119,12 @@ export default class TradingPairScreen extends Component {
                                 // ? tabStyle.selectedTabItem
                                 // : null
                             ]}
-                            onPress={(e) => {this._onIndexChange(i)}}
+                            onPress={(e) => { this._onIndexChange(i) }}
                         >
-                            <Animated.Text style={[ 
+                            <Animated.Text style={[
                                 // { color },
                                 tabStyle.tabText,
-                                this.state.index === i  ? tabStyle.selectedTabText : null
+                                this.state.index === i ? tabStyle.selectedTabText : null
                             ]}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
@@ -129,7 +132,7 @@ export default class TradingPairScreen extends Component {
             </View>
         );
     };
-        
+
     _onIndexChange = (index) => {
         this.setState({ index });
     }
@@ -150,16 +153,16 @@ export default class TradingPairScreen extends Component {
                         <Text style={[styles.rateText, commonStyle[change]]}>
                             {this.changeRate}%
                         </Text>
-                        <View style={{ 
-                            marginLeft: 10, 
-                            flexDirection:'row',
+                        <View style={{
+                            marginLeft: 10,
+                            flexDirection: 'row',
                             alignItems: 'center'
                         }}>
                             {(change === 'FALL' || change === 'RISE') ?
                                 <Image
-                                    style={{ 
+                                    style={{
                                         marginRight: 1,
-                                        width: 13, 
+                                        width: 13,
                                         height: 13,
                                     }}
                                     source={change === 'FALL' ? fallIcon : riseIcon}
@@ -180,7 +183,7 @@ export default class TradingPairScreen extends Component {
                     })}
                     onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}
-                    initialLayout={{ 
+                    initialLayout={{
                         width: Dimensions.get('window').width,
                         height: Dimensions.get('window').height,
                     }}
@@ -220,8 +223,11 @@ export default class TradingPairScreen extends Component {
 const styles = StyleSheet.create({
     headerContainer: {
     },
+    headerRight: {
+
+    },
     headerText: {
-        fontSize: 16, 
+        fontSize: 16,
         color: commonStyle.color.brandBlue
     },
     headerImage: { width: 10, height: 10 },
@@ -278,7 +284,7 @@ const styles = StyleSheet.create({
         backgroundColor: commonStyle.color.brandBlue,
     },
     tabText: {
-        fontWeight: '400', 
+        fontWeight: '400',
         fontSize: 13,
         color: 'white',
     },
@@ -289,5 +295,12 @@ const styles = StyleSheet.create({
     },
     tabBody: {
         flex: 1,
+    },
+    favoriteIcon: {
+        backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: 'red',
+        color: 'blue',
+        fontSize: 14,
     }
 })
