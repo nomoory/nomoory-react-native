@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         color: commonStyle.color.coblicYellow,
     },
     logoutText: {
-        color: commonStyle.color.coblicBlue,
+        color: commonStyle.color.brandBlue,
     },
 
 })

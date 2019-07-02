@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
         borderColor: color.coblicPaleBlue,
     },
     selectedText: {
-        color: color.coblicBlue,
+        color: color.brandBlue,
     }
 });

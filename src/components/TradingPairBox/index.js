@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import TradingPairSearchBar from './TradingPairSearchBar';
 import AccountStatus from './AccountStatus';
 import TradingPairTable from './TradingPairTable';
-import QutoeTab from './QuoteTab';
+import QuoteTab from './QuoteTab';
 
 @inject('tradingPairStore')
 @observer
@@ -14,7 +14,7 @@ export default class TradingPairBox extends Component {
             <View style={styles.container}>
                 <TradingPairSearchBar />
                 <AccountStatus />
-                <QutoeTab />
+                <QuoteTab />
                 <View style={styles.tradingPairTableContainer}>
                     <TradingPairTable />
                 </View>

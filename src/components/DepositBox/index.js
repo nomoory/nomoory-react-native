@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 8,
-        backgroundColor: commonStyle.color.coblicBlue,
+        backgroundColor: commonStyle.color.brandBlue,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 4,
-        backgroundColor: commonStyle.color.coblicBlue,
+        backgroundColor: commonStyle.color.brandBlue,
     },
     copyAddressButtonText: {
         fontWeight: '600',

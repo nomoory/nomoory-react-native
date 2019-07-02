@@ -4,7 +4,7 @@ import {
     createBottomTabNavigator
 } from 'react-navigation';
 
-import { Icon } from 'expo';
+import * as Icon from '@expo/vector-icons'
 import ExchangeScreen from '../screens/ExchangeScreen';
 import TradingPairScreen from '../screens/TradingPairScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
@@ -13,6 +13,7 @@ import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScree
 import EtcScreen from '../screens/EtcScreen';
 import AnnouncementListScreen from '../screens/AnnouncementListScreen';
 import AnnouncementDetailScreen from '../screens/AnnouncementDetailScreen';
+import commonStyle from '../styles/commonStyle';
 
 const ExchangeStack = createStackNavigator(
     {
@@ -49,12 +50,13 @@ ExchangeStack.headerMode = 'none';
 const InvestmentStack = createStackNavigator(
     {
         Investment: InvestmentScreen
-    },{
-        defaultNavigationOptions: {
-            headerTitleAllowFontScaling: false,
-            headerBackAllowFontScaling: false,    
-        }
-    }
+    },
+    // {
+    //     defaultNavigationOptions: {
+    //         headerTitleAllowFontScaling: false,
+    //         headerBackAllowFontScaling: false,    
+    //     }
+    // }
 );
 
 InvestmentStack.navigationOptions = {
@@ -137,13 +139,13 @@ export default createBottomTabNavigator(
         Etc: EtcStack
     },
     {
-        initialRouteName: 'Exchange',
+        initialRouteName: 'Investment',
         tabBarOptions: {
-            activeTintColor: 'black',
-            inactiveTintColor: 'grey',
+            activeTintColor: 'white',
+            inactiveTintColor: 'white',
             allowFontScaling: false,
             style: {
-                backgroundColor: 'white',
+                backgroundColor: commonStyle.color.brandBlue,
                 borderTopWidth: 0,
                 shadowOffset: { width: 5, height: 3 },
                 shadowColor: 'black',
@@ -153,13 +155,9 @@ export default createBottomTabNavigator(
         },
 
         /* Default header */
-        navigationOptions: {
-            headerTitleAllowFontScaling: false,
-            headerBackAllowFontScaling: false,
-        },
         defaultNavigationOptions: {
             headerStyle: {
-                // backgroundColor: commonStyle.color.coblicBlue,
+                backgroundColor: '#aa11aa',
             },
             headerTintColor: '#fff',
             headerTitleStyle: {

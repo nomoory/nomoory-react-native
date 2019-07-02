@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     checked: {
-        backgroundColor: color.coblicBlue,
-        borderColor: color.coblicBlue,
+        backgroundColor: color.brandBlue,
+        borderColor: color.brandBlue,
     },
     accountListContainer: {
         flex: 1,

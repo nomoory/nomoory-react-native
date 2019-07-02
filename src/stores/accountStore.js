@@ -26,7 +26,8 @@ class AccountStore {
     }
 
 
-    @action setSelectedAccountSymbol(symbol) {
+    @action
+    setSelectedAccountSymbol(symbol) {
         if (!symbol) {
             this.selectedAccountSymbol = '';
         } else {

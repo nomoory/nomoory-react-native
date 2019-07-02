@@ -9,7 +9,6 @@ import { withNavigation } from 'react-navigation';
 @inject('accountStore')
 @observer
 export default class AccountList extends Component {
-
     _renderAccountList() {
         const { accounts } = this.props.accountStore;
 

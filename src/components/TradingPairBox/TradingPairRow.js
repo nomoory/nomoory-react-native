@@ -17,8 +17,8 @@ import { computed } from 'mobx';
 @observer
 class TradingPairRow extends Component {
     _onPressTradingPairRow = (e) => {
-        this.props.tradingPairStore.setSelectedTradingPairName(this.props.tradingPair.name);
         let tradingPair = this.props.tradingPair;
+        this.props.tradingPairStore.setSelectedTradingPairName(tradingPair.name);
         this._openTradingPairScreen(tradingPair);
     }
 
@@ -65,6 +65,7 @@ class TradingPairRow extends Component {
                 <View style={[styles.name, styles.paddingTop]}>
                     <Text 
                         style={[
+                            styles.nameText,
                             styles.textSizeBig,
                             isKorean && 6 < tokenName.length && styles.textSizeNormal,
                             isKorean && 8 < tokenName.length && styles.textSizeSmall,
@@ -76,7 +77,7 @@ class TradingPairRow extends Component {
                     >
                         {tokenName}
                     </Text>
-                    <Text style={[styles.textSizeNormal]}>{name}</Text>
+                    <Text style={[styles.textSizeSmall]}>{name}</Text>
                 </View>
                 <View style={[ styles.closePrice, styles.column, styles.paddingTop ]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
@@ -90,7 +91,7 @@ class TradingPairRow extends Component {
                     </Text>
                 </View>
                 <View style={[styles.accTradeValue, styles.column, styles.paddingTop]}>
-                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed()) : '-'}{TRANSLATIONS[result.type]}</Text>
+                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed(), 0) : '-'}{TRANSLATIONS[result.type]}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -101,13 +102,12 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         height: 48,
-        paddingTop: 3,
-        paddingBottom: 3,
+        paddingTop: 4,
+        paddingBottom: 4,
         flexDirection: 'row',
 
-        borderStyle: 'solid',
-        borderWidth: 0.6,
-        borderColor: '#e9eaea',
+        borderBottomWidth: 1,
+        borderBottomColor: '#dedfe0',
     },
     name: {
         width: 100,
@@ -116,6 +116,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'flex-start',
+    },
+    nameText: {
+        paddingLeft: 1,
     },
     accTradeValue: {
         paddingRight: 10,
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     blueText: {
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     },
     redText: {
         color: commonStyle.color.coblicRed

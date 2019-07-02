@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         tintColor: commonStyle.color.mainThemeColor,
     },
     textInput: {
-        fontSize: 14,
+        fontSize: 12,
         height: '100%',
         flex: 1,
     }

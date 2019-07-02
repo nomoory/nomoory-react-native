@@ -152,6 +152,6 @@ const styles = StyleSheet.create({
         color: commonStyle.color.coblicRed
     },
     fall: {
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     }
 })

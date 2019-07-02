@@ -33,11 +33,14 @@ export default class OrderRow extends Component {
         const isSellOrder = side === 'SELL';
         const orderRowStyle = isSellOrder ? styles.sellOrderRow : styles.buyOrderRow;
 
-        if (!order) {
+        if (
+            !order.key
+        ) {
+            console.log('no order key');
             return (
                 <View
                     style={[
-                        styles.container, orderRowStyle, styles[this.props.side], 
+                        styles.container, orderRowStyle, styles[side], 
                     ]}
                 >
                     <TouchableOpacity style={[styles.price]} />
@@ -59,6 +62,9 @@ export default class OrderRow extends Component {
         const isLessThanOpenPrice = openPrice && order.price && Decimal(order.price).lessThan(openPrice);
         const isBiggerThanOpenPrice = openPrice && order.price && Decimal(order.price).greaterThan(openPrice);
     
+        console.log('order key');
+        console.log(order);
+
         return (
             <View
                 style={[
@@ -115,7 +121,7 @@ const styles = StyleSheet.create({
         width: '100%',
 
         borderStyle: 'solid',
-        borderWidth: 1,
+        borderWidth: 0.7,
         borderColor: 'white',
     },
     sellOrderRow: {
@@ -131,7 +137,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
         borderStyle: 'solid',
-        borderRightWidth: 1,
+        borderRightWidth: 1.4,
         borderRightColor: 'white',
     },
     priceText: {
@@ -170,7 +176,7 @@ const styles = StyleSheet.create({
         borderWidth: 1.2
     },
     blueText: {
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     },
     redText: {
         color: commonStyle.color.coblicRed

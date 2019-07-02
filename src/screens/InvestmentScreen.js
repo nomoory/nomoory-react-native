@@ -56,7 +56,7 @@ export default class InvestmentScreen extends Component {
                     const color = props.position.interpolate({
                         inputRange,
                         outputRange: inputRange.map(
-                            inputIndex => (inputIndex === i ? commonStyle.color.coblicBlue : '#222')
+                            inputIndex => (inputIndex === i ? commonStyle.color.brandBlue : '#222')
                         ),
                     });
                     return (
@@ -95,7 +95,10 @@ export default class InvestmentScreen extends Component {
                     })}
                     onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}
-                    initialLayout={{ width: Dimensions.get('window').width }}
+                    initialLayout={{ 
+                        width: Dimensions.get('window').width,
+                        height: Dimensions.get('window').height,
+                    }}
                 />
             </View>
         )
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     activeTextStyle: {
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     },
     tabStyle: {
         backgroundColor: 'white',

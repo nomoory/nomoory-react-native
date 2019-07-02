@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: font.size.modalHeader,
         fontWeight: font.weight.bold,
-        color: color.coblicBlue
+        color: color.brandBlue
     },
     contentScrollableContainer: {
         marginBottom: 5,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: font.size.default,
         fontWeight: '600',
-        color: color.coblicBlue
+        color: color.brandBlue
 
     },
     borderOnRight: {

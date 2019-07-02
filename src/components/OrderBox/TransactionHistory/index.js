@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
     },
     selectedTab: {
         borderWidth: 0.5,
-        borderColor: commonStyle.color.coblicBlue,
+        borderColor: commonStyle.color.brandBlue,
     },
     tabText: {
         color: 'black',
     },
     selectedText: {
-        color: commonStyle.color.coblicBlue,
+        color: commonStyle.color.brandBlue,
     },
     tabBody: {
         paddingTop: 15,

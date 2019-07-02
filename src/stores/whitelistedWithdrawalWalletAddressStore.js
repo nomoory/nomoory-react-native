@@ -3,8 +3,6 @@ import { observable, action, computed } from 'mobx';
 import agent from '../utils/agent';
 
 import WAValidator from 'wallet-address-validator';
-import accountStore from './accountStore';
-import TRANSLATIONS from '../TRANSLATIONS';
 
 class WhitelistedWithdrawalWalletAddressStore {
     @observable errors = undefined;
@@ -39,11 +37,6 @@ class WhitelistedWithdrawalWalletAddressStore {
         return options;
     };
 
-    @action setWithdrawdWalletAddressByIndex(index) {
-        let wallet = this.withdrawalWalletAddresses[index];
-        accountStore.setWithdrawAddress(wallet.address);
-    }
-
     @action setWithdrawalWalletAddress(address) {
         this.walletValues.address = address;
     }
@@ -77,11 +70,15 @@ class WhitelistedWithdrawalWalletAddressStore {
 
     @action registerWithdrawalWalletAddress() {
         this.loadMoreValues.isLoading = true;
+        let {
+            asset_symbol
+        } = this.walletValues;
+
 
         return agent.registerWithdrawalWalletAddress(this.walletValues)
             .then(action((response) => {
                 this.clearLoadMoreWithdrawalWalletAddress();
-                this.loadWithdrawalWalletAddresses();
+                this.loadWithdrawalWalletAddresses(asset_symbol);
                 this.loadMoreValues.isLoading = false;
             }))
             .catch(action((err) => {
@@ -111,11 +108,11 @@ class WhitelistedWithdrawalWalletAddressStore {
         this.withdrawalWalletAddressRegistry.clear();
     }
 
-    @action loadWithdrawalWalletAddresses() {
+    @action loadWithdrawalWalletAddresses(asset_symbol) {
         this.loadMoreValues.isLoading = true;
 
         if (this.loadMoreValues.isFirstLoad) {
-            return agent.loadWithdrawalWalletAddresses(accountStore.selectedAccountSymbol)
+            return agent.loadWithdrawalWalletAddresses(asset_symbol)
             .then(action((response) => {
                 this.withdrawalWalletAddressRegistry.replace(response.data.results);
                 this.loadMoreValues.nextUrl = response.data.next;
@@ -170,7 +167,7 @@ class WhitelistedWithdrawalWalletAddressStore {
     }
 
     @computed get isWalletAddresValid() {
-        if ( WAValidator.validate(this.walletValues.address, accountStore.selectedAccountSymbol) ) {
+        if ( WAValidator.validate(this.walletValues.address, this.walletValues.asset_symbol) ) {
             return {
                 message_code: 'register_wallet/valid_wallet_address',
                 state: true

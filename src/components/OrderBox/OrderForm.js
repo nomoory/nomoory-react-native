@@ -76,7 +76,7 @@ export default class OrderForm extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        minWidth: 220,
         height: '100%',
         backgroundColor: 'white'
     },
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         color: commonStyle.color.coblicRed,
     },
     selectedSellText: {
-        color: commonStyle.color.coblicBlue,
+        color: commonStyle.color.brandBlue,
     },
     selectedHistoryText: {
 

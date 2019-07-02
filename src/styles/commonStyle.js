@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export const color = {
-    coblicBlue: '#093687',
+    brandBlue: '#093687',
     coblicPaleBlue: '#81a6ef',
     coblicRed: '#d60000',
     coblicGrey: '#999',
@@ -26,7 +26,7 @@ export const font = {
 }
 
 const commonStyle = {
-    coblicBlueButton: {
+    brandBlueButton: {
         color: '#0051c7'
     },
     coblicRedButton: {

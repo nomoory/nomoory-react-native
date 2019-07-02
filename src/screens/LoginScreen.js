@@ -113,7 +113,7 @@ const borderRadius = 0;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: color.coblicBlue,
+        backgroundColor: color.brandBlue,
         height: '100%',
         flexDirection: 'column',
         alignItems: 'center',
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         borderRadius
     },
     loginButtonText: {
-        color: 'white',//color.coblicBlue,
+        color: 'white',//color.brandBlue,
         fontSize: 19,
         fontWeight: '700'
     },

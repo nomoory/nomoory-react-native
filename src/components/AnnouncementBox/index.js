@@ -34,6 +34,7 @@ export default class AnnouncementBox extends Component {
             const title = isKorean ? korean_title : english_title;
             return (
                 <TouchableOpacity
+                    key={uuid}
                     style={styles.row}
                     onPress={this._onPressAnnouncementById(uuid)}
                 >

@@ -1,5 +1,4 @@
-import React from 'react';
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 import tradingPairStore from './tradingPairStore';
 import accountStore from './accountStore';

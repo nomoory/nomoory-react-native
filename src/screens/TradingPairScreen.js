@@ -28,9 +28,9 @@ import modalStore from '../stores/modalStore';
 import { withNavigation } from 'react-navigation';
 
 const TAB_BODY = {
-    OrderBox: () => <OrderBox />,
-    ChartBox: () => <ChartBox />,
-    TradeHistory: () => <TradeHistory />
+    OrderBox: <OrderBox />,
+    ChartBox: <ChartBox />,
+    TradeHistory: <TradeHistory />
 };
 
 @withNavigation
@@ -40,7 +40,6 @@ export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseName = navigation.getParam('baseName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
-        
         return {
             headerTitle: (
                 <View style={styles.headerContainer}>
@@ -55,7 +54,7 @@ export default class TradingPairScreen extends Component {
                         maxFontSizeMultiplier={20}
                         allowFontScaling={false}
                     >
-                        {`${baseName} (${this.tradingPairName.split('-').join('/')}) `}
+                        {`${this.baseName} (${this.tradingPairName.split('-').join('/')}) `}
                         <Image
                             style={styles.headerImage}
                             source={fallIcon}
@@ -105,7 +104,7 @@ export default class TradingPairScreen extends Component {
                     const color = props.position.interpolate({
                         inputRange,
                         outputRange: inputRange.map(
-                            inputIndex => (inputIndex === i ? commonStyle.color.coblicBlue : '#222')
+                            inputIndex => (inputIndex === i ? commonStyle.color.brandBlue : '#222')
                         ),
                     });
                     return (
@@ -140,8 +139,6 @@ export default class TradingPairScreen extends Component {
             close_price,
             change, // 'RISE' | 'FALL'
         } = this.props.tradingPairStore.selectedTradingPair || {};
-        console.log(this.state.routes[this.state.index].key);
-        console.log('asdfklasjdfkljsadkljaskldjaskld')
         return (
             <View style={styles.container}>
                 <View style={styles.tradingPairSummaryContainer}>
@@ -154,16 +151,16 @@ export default class TradingPairScreen extends Component {
                             {this.changeRate}%
                         </Text>
                         <View style={{ 
-                            marginLeft: 13, 
+                            marginLeft: 10, 
                             flexDirection:'row',
                             alignItems: 'center'
                         }}>
                             {(change === 'FALL' || change === 'RISE') ?
                                 <Image
                                     style={{ 
-                                        marginRight: 3,
-                                        width: 10, 
-                                        height: 6,
+                                        marginRight: 1,
+                                        width: 13, 
+                                        height: 13,
                                     }}
                                     source={change === 'FALL' ? fallIcon : riseIcon}
                                 /> : null
@@ -174,26 +171,31 @@ export default class TradingPairScreen extends Component {
                         </View>
                     </View>
                 </View>
-                {/* <TabView
+                <TabView
                     navigationState={this.state}
                     renderScene={SceneMap({
                         OrderBox,
-                        ChartBox: () => <ChartBox />,
+                        ChartBox,
                         TradeHistory,
                     })}
                     onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}
-                    initialLayout={{ width: Dimensions.get('window').width }}
-                /> */}
-                <View style={styles.tabs}>
+                    initialLayout={{ 
+                        width: Dimensions.get('window').width,
+                        height: Dimensions.get('window').height,
+                    }}
+                />
+                {/* <View style={styles.tabs}>
                     { this.state.routes.map((tab, index) => {
                         return (
-                            <TouchableOpacity style={[
-                                styles.tab,
-                                index === this.state.index ? 
-                                styles.selectedTab :
-                                null
-                            ]}
+                            <TouchableOpacity 
+                                key={tab.title}
+                                style={[
+                                    styles.tab,
+                                    index === this.state.index ? 
+                                    styles.selectedTab :
+                                    null
+                                ]}
                                 onPress={() => { this.setState({index})}}
                             >
                                 <Text style={[
@@ -207,8 +209,8 @@ export default class TradingPairScreen extends Component {
                     })}
                 </View>
                 <View style={styles.tabBody}>
-                    {TAB_BODY[this.state.routes[this.state.index].key]()}
-                </View>
+                    {TAB_BODY[this.state.routes[this.state.index].key]}
+                </View> */}
             </View>
         )
     }
@@ -217,13 +219,10 @@ export default class TradingPairScreen extends Component {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        // display: 'flex',
-        // flexDirection: 'row',
-        // alignItems:'center'
     },
     headerText: {
         fontSize: 16, 
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     },
     headerImage: { width: 10, height: 10 },
     container: {
@@ -232,15 +231,14 @@ const styles = StyleSheet.create({
     tradingPairSummaryContainer: {
         display: 'flex',
         flexDirection: 'column',
-        height: 60,
         width: '100%',
-        padding: 10,
-        paddingLeft: 14,
+        padding: 8,
+        paddingLeft: 20,
         backgroundColor: 'white',
         justifyContent: 'space-between',
     },
     closePriceText: {
-        fontSize: 18,
+        fontSize: 21,
         fontWeight: '400',
         color: '#000000',
     },
@@ -254,20 +252,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        color: '#777777',
-        fontSize: 12,
+        color: '#333333',
+        fontSize: 11,
     },
     rateText: {
-        marginLeft: 13,
-        fontSize: 12,
+        marginLeft: 7,
+        fontSize: 13,
         fontWeight: '300',
     },
     subText: {
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: '300',
     },
-
-
     tabs: {
         width: '100%',
         height: 30,
@@ -279,7 +275,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: commonStyle.color.coblicBlue,
+        backgroundColor: commonStyle.color.brandBlue,
     },
     tabText: {
         fontWeight: '400', 
@@ -294,5 +290,4 @@ const styles = StyleSheet.create({
     tabBody: {
         flex: 1,
     }
-
 })

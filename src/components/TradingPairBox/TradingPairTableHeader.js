@@ -20,7 +20,7 @@ class TradingPairTableHeader extends Component {
 
     _renderDisplayNameByName = (name) => {
         if ( name === 'close_price') return '현재가';
-        if ( name === 'signed_change_rate') return '24시간대비';
+        if ( name === 'signed_change_rate') return '전일대비';
         if ( name === 'acc_trade_value_24h') return '거래대금';
     }
 
@@ -47,7 +47,11 @@ class TradingPairTableHeader extends Component {
                         return (
                             <TouchableOpacity key={sort.name} 
                                 onPress={this._toggleSortDirectionOf(sort.name)}
-                                style={[this.props.columStyles[index + 1], styles.column]}
+                                style={[
+                                    this.props.columStyles[index + 1],
+                                    styles.column,
+                                    styles[sort.name]
+                                ]}
                             >
                                 <Text style={styles.headerFont}>
                                     {this._renderDisplayNameByName(sort.name) + ' '}
@@ -72,9 +76,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
         borderStyle: 'solid',
-        borderTopWidth: 1,
+        borderTopWidth: 0.8,
         borderTopColor: '#9e9f90',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.8,
         borderBottomColor: '#dedfe0',
     },
     column: {
@@ -84,6 +88,9 @@ const styles = StyleSheet.create({
     headerFont: {
         fontSize: 13,
         color: '#333333',
-    }
+    },
+    close_price: {
+        flex: 1.5,
+    },
 })
 export default TradingPairTableHeader;

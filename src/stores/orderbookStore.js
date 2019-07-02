@@ -18,12 +18,12 @@ class OrderbookStore {
         let count = 0;
         this.sellOrdersRegistry.forEach((sellOrder, index) => {
             if (index < ORDER_LENGTH_OF_EACH_SIDE) {
-                tempSellOrders.unshift(this._reformatOrderForDisplay(sellOrder));
+                tempSellOrders.unshift(this._reformatOrderForDisplay(sellOrder, 'SELL'));
                 count = index + 1;
             }
         });
         while (count++ < 15)  {
-            tempSellOrders.unshift(this._reformatOrderForDisplay(null));
+            tempSellOrders.unshift(this._reformatOrderForDisplay(null, 'SELL'));
         }
 
         return tempSellOrders;
@@ -34,25 +34,27 @@ class OrderbookStore {
         let count = 0;
         this.buyOrdersRegistry.forEach((buyOrder, index) => {
             if (index < ORDER_LENGTH_OF_EACH_SIDE) {
-                tempBuyOrders.push(this._reformatOrderForDisplay(buyOrder));
+                tempBuyOrders.push(this._reformatOrderForDisplay(buyOrder, 'BUY'));
                 count = index + 1;
             }
         });
         while (count++ < 15)  {
-            tempBuyOrders.push(this._reformatOrderForDisplay(null));
+            tempBuyOrders.push(this._reformatOrderForDisplay(null, 'BUY'));
         }
         
         return tempBuyOrders;
     };
 
-    _reformatOrderForDisplay = (order) => {
-        if (!order) return null;
+    _reformatOrderForDisplay = (order, side) => {
+        if (!order) return { key: null, side };
 
         return {
             price: tradingPairStore.selectedTradingPair ? 
                 number.getFixedPrice(order.price, tradingPairStore.selectedTradingPair.base_symbol) :
                 Decimal(order.price).toFixed(),
-            volume: number.getFixed(order.volume, 3)
+            volume: number.getFixed(order.volume, 3),
+            key: order.price,
+            side,
         };
     };
 

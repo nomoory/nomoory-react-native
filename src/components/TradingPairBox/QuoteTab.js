@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { observer, inject } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 import commonStyle from '../../styles/commonStyle';
 
 @inject('tradingPairStore')
@@ -12,11 +12,22 @@ export default class QutoeTab extends Component {
     })
 
     _renderTabButtons = () => {
-        let quoteTabTypes = Object.keys(this.props.tradingPairStore.quoteTabTypes);
+        let sortedQuoteTabTypes = [];
+        let quoteTabTypeOrigin = this.props.tradingPairStore.quoteTabTypes;
+        let quoteTabTypes = Object.keys(quoteTabTypeOrigin);
         if (quoteTabTypes.length) {
-            quoteTabTypes = quoteTabTypes.sort((a, b) => { if (a === 'KRW') return -1; })
+            if (quoteTabTypeOrigin['KRW']) sortedQuoteTabTypes.push['KRW'];
+            if (quoteTabTypeOrigin['BTC']) sortedQuoteTabTypes.push['BTC'];
+            if (quoteTabTypeOrigin['ETH']) sortedQuoteTabTypes.push['ETH'];
+            if (quoteTabTypeOrigin['USDT']) sortedQuoteTabTypes.push['USDT'];
+
+            sortedQuoteTabTypes.push(...quoteTabTypes.filter((tabType) => {
+                return !['KRW', 'BTC', 'ETH', 'USDT'].includes(tabType);
+            }))
+            console.log(quoteTabTypes);
             return quoteTabTypes.map((quoteTabType, idx) => (
                 <TouchableOpacity 
+                    key={quoteTabType}
                     style={[
                         styles.tab, 
                         quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
@@ -69,14 +80,14 @@ const styles = StyleSheet.create({
     },
     selectedTab: {
         borderWidth: 1,
-        borderColor: commonStyle.color.coblicBlue,
+        borderColor: commonStyle.color.brandBlue,
     },
     tabText: {
         fontSize: 13,
         color: '#7c7c7c',
     },
     selectedText: {
-        color: commonStyle.color.coblicBlue,
+        color: commonStyle.color.brandBlue,
     },
     tabBody: {
         paddingTop: 15,
