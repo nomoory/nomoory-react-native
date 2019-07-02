@@ -4,6 +4,7 @@ import orderStore from './orderStore';
 import Hangul from 'hangul-js';
 import agent from '../utils/agent';
 import {Decimal} from '../utils/number';
+import TradingPairModel from './models/TradingPairModel';
 
 class TradingPairStore {
     constructor() {
@@ -56,6 +57,9 @@ class TradingPairStore {
     @observable
     selectedQuoteTabType = 'KRW';
 
+    @observable
+    favoriteOnly = false;
+
     @computed 
     get selectedTradingPair() {
         return this.getTradingPairByTradingPairName(this.selectedTradingPairName);
@@ -68,7 +72,8 @@ class TradingPairStore {
         return '한글명';
     }
     
-    @action clear() {
+    @action
+    clear() {
         this.tradingPairsRegistry.clear();
     }
 
@@ -76,7 +81,8 @@ class TradingPairStore {
         return this.tradingPairsRegistry.get(tradingPairName) || null;
     }
 
-    @computed get tradingPairs() {
+    @computed
+    get tradingPairs() {
         let tradingPairArray = [];
         this.tradingPairsRegistry.forEach((tradingPair, key) => {
             tradingPairArray.push(tradingPair);
@@ -85,11 +91,13 @@ class TradingPairStore {
         tradingPairArray = this._filterByQuoteType(tradingPairArray);
         // tradingPairs = this._tab(tradingPairs);
         // tradingPairs = this._filter(tradingPairs);
+        tradingPairArray = this._filterByFavorite(tradingPairArray);
         tradingPairArray = this._search(this.searchKeyword, tradingPairArray);
         tradingPairArray = this._defaultSort(tradingPairArray);
         tradingPairArray = this._sort(tradingPairArray);
         return tradingPairArray;
     }
+
     @computed
     get allTradingPairs() {
         let tradingPairArray = [];
@@ -99,9 +107,9 @@ class TradingPairStore {
         return tradingPairArray;
     }
 
-    @action loadTradingPairs() {
+    @action
+    loadTradingPairs() {
         this.isLoading = true;
-        this.errors = undefined;
         console.log('load trading pair');
         agent.loadTradingPairs()
             .then(action((response) => {
@@ -110,30 +118,29 @@ class TradingPairStore {
                 this.updateQuoteTabTypesByTradingPairs(tradingPairs);
                 this.tradingPairsRegistry.clear();
                 tradingPairs.forEach((tradingPair) => {
-                    this.tradingPairsRegistry.set(tradingPair.name, tradingPair);
+                    this.tradingPairsRegistry.set(tradingPair.name, new TradingPairModel(tradingPair));
                 });
                 // trading_pair들이 존재해야, price를 받아올수 있기때문에 여기다 배치.
                 // orderStore.setPriceForOrder();
             }))
             .catch(action((err) => {
-                this.errors = 
-                    err.response && 
-                    err.response.body && 
-                    err.response.body.errors;
             }))
             .then(action(() => {
                 this.isLoading = false;
             }));
     }
-    @action setSelectedTradingPairName(tradingPairName) {
+    @action
+    setSelectedTradingPairName(tradingPairName) {
         this.selectedTradingPairName = tradingPairName;
     }
     
-    @action setSearchKeyword(keyword = '') {
+    @action
+    setSearchKeyword(keyword = '') {
         this.searchKeyword = keyword;
     }
 
-    @action updateTickerInTradingPair(ticker) {
+    @action
+    updateTickerInTradingPair(ticker) {
         const tickerData = ticker || {};
         if (this.tradingPairsRegistry.has(tickerData.trading_pair_name)) {
             const tradingPair = 
@@ -141,14 +148,17 @@ class TradingPairStore {
             Object.assign(tradingPair, tickerData);
         };
     }
-    @action setSelectedTradingPairTab(baseSymbol) {
+    @action
+    setSelectedTradingPairTab(baseSymbol) {
         this.selectedTradingPairTab = baseSymbol;
     }
-    @action toggleLanguageForTokenName() {
+    @action
+    toggleLanguageForTokenName() {
         this.languageForTokenName = 
             this.languageForTokenName === 'ko' ? 'en' : 'ko';
     }
-    @action toggleSortDirectionOf(target) {
+    @action
+    toggleSortDirectionOf(target) {
         this.sorts = this.sorts.map((sort) => {
             let newSort = { name: sort.name };
             if(sort.name !== target) {
@@ -167,6 +177,11 @@ class TradingPairStore {
             return newSort;
         });
     }    
+    
+    @action
+    toggleFavorite() {
+        this.favoriteOnly = !this.favoriteOnly;
+    }
 
     _tab = (tradingPairs) => {
         tradingPairs = tradingPairs.filter((tradingPair) => 
@@ -187,6 +202,26 @@ class TradingPairStore {
         const filteredTradingPairs = tradingPairs.filter(tradingPair => this._isRightQuoteTabType(tradingPair)) || tradingPairs;
 
         return filteredTradingPairs;
+    }
+
+    _filterByFavorite = (tradingPairs) => {
+        if (this.favoriteOnly) {
+            const filteredTradingPairs = tradingPairs.filter(tradingPair => tradingPair.isFavorite) || tradingPairs;
+            return filteredTradingPairs;
+        }
+        return tradingPairs;
+    }
+
+
+    _sortByFavorite = (tradingPairs) => {
+        if (this.favoriteOnly) {
+            const filteredTradingPairs = tradingPairs.sort((prev, next) => {
+                if (prev.isFavorite) return -1;
+                return 1;
+            });
+            return filteredTradingPairs;
+        }
+        return tradingPairs;
     }
 
     _isRightQuoteTabType(tradingPair) {

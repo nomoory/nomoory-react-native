@@ -27,7 +27,7 @@ export default class InitialLoadScreen extends Component {
                 this.props.authStore.destroyAccessToken();
             }
         }
-
+        console.log('init')
         this._moveToExchangeScreen();
     }
 

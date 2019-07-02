@@ -38,12 +38,12 @@ const styles = StyleSheet.create({
         borderBottomColor: commonStyle.color.mainThemeColor,
     },
     searchImage: {
-        width: 25,
-        height: 25,
+        width: 30,
+        height: 30,
         tintColor: commonStyle.color.mainThemeColor,
     },
     textInput: {
-        fontSize: 12,
+        fontSize: 14,
         height: '100%',
         flex: 1,
     }
