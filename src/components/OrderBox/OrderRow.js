@@ -36,7 +36,6 @@ export default class OrderRow extends Component {
         if (
             !order.key
         ) {
-            console.log('no order key');
             return (
                 <View
                     style={[
@@ -61,9 +60,6 @@ export default class OrderRow extends Component {
         const openPrice = this.props.openPrice;
         const isLessThanOpenPrice = openPrice && order.price && Decimal(order.price).lessThan(openPrice);
         const isBiggerThanOpenPrice = openPrice && order.price && Decimal(order.price).greaterThan(openPrice);
-    
-        console.log('order key');
-        console.log(order);
 
         return (
             <View

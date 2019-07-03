@@ -16,7 +16,7 @@ export default class TradingPairTableBody extends Component {
             return tradingPairs.map((tradingPair, index) => {
                 return (
                     <TradingPairRow
-                        key={index}
+                        key={tradingPair.name}
                         index={index}
                         tradingPair={tradingPair}
                     />

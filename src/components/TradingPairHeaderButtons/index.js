@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import commonStyle from '../../styles/commonStyle';
-import * as Icon from '@expo/vector-icons'
+import * as Icon from '@expo/vector-icons';
 // https://expo.github.io/vector-icons/
 @inject('tradingPairStore', 'commonStore')
 @observer
@@ -25,7 +25,7 @@ export default class TradingPairHeaderButtons extends Component {
                         />
                         : <Icon.FontAwesome
                             name="star-o"
-                            size={21} color={commonStyle.color.brandBlue}                        
+                            size={21} color={commonStyle.color.brandBlue}
                             // style={styles.favoriteIcon}
                         />
                         

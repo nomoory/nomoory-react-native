@@ -7,6 +7,7 @@ import TradingPairTable from './TradingPairTable';
 import QuoteTab from './QuoteTab';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import commonStyle from '../../styles/commonStyle';
+import * as Icon from '@expo/vector-icons';
 
 @inject('tradingPairStore')
 @observer
@@ -35,15 +36,19 @@ export default class TradingPairBox extends Component {
                         style={styles.favoriteButton}
                         onPress={this._onPressFavoriteOnly}
                     >
-                        <View
-                            style={[styles.check, checkBackgroundStyle]}
-                        >
-                            <Image
-                                style={{ width: 10, height: 8 }}
-                                source={require(`../../../assets/images/commons/check-small.png`)
-                                }
+                        {
+                            this.props.tradingPairStore.favoriteOnly
+                            ? <Icon.FontAwesome
+                                name="star"
+                                size={18} color={commonStyle.color.brandBlue}
+                                // style={styles.favoriteIcon}
                             />
-                        </View>
+                            : <Icon.FontAwesome
+                                name="star-o"
+                                size={18} color={commonStyle.color.brandBlue}                        
+                                // style={styles.favoriteIcon}
+                            />
+                        }
                         <Text 
                             style={styles.favoriteText}
                         >
@@ -84,23 +89,6 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: '400',
         fontSize: 13,
+        marginLeft: 4,
     },
-    check: {
-        borderRadius: 50,
-        width: 16,
-        height: 16,
-        borderWidth: 1.4,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 4,
-    },
-    checked: {
-        backgroundColor: commonStyle.color.brandBlue,
-        borderColor: commonStyle.color.brandBlue,
-    },
-    unchecked: {
-        backgroundColor: 'white',
-        borderColor: '#acacac',
-    }
 });
