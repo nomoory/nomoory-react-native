@@ -27,6 +27,7 @@ import modalStore from '../stores/modalStore';
 import { withNavigation } from 'react-navigation';
 import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
 import TradingPairHeaderButtons from '../components/TradingPairHeaderButtons';
+import tradingPairStore from '../stores/tradingPairStore';
 
 const TAB_BODY = {
     OrderBox: <OrderBox />,
@@ -41,6 +42,8 @@ export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseName = navigation.getParam('baseName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
+        tradingPairStore.loadTradingPairs();
+
         return {
             headerTitle: (
                 <View style={styles.headerContainer}>
