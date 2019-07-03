@@ -113,6 +113,7 @@ class OrderbookStore {
         this.clearOrderbook();
         return agent.loadOrderbookByTradingPairName(selectedTradingPairName || tradingPairStore.selectedTradingPairName)
         .then(action((response) => {
+            this.clearOrderbook();
             this.buyOrdersRegistry = response.data.buys;
             this.sellOrdersRegistry = response.data.sells;
             this.isLoading = false;

@@ -14,7 +14,6 @@ class TradingPairStore {
         const selectedTradingPairNameReaction = reaction(
             () => this.selectedTradingPairName,
             async (selectedTradingPairName) => {
-                orderbookStore.clearOrderbook();
                 await orderbookStore.loadOrderbook(selectedTradingPairName);
                 orderStore.setTradingPair(selectedTradingPairName);
             }
@@ -111,7 +110,7 @@ class TradingPairStore {
     loadTradingPairs() {
         this.isLoading = true;
         console.log('load trading pair');
-        agent.loadTradingPairs()
+        return agent.loadTradingPairs()
             .then(action((response) => {
                 console.log('loaded trading pair');
                 let tradingPairs = response.data;
@@ -129,6 +128,7 @@ class TradingPairStore {
                 this.isLoading = false;
             }));
     }
+
     @action
     setSelectedTradingPairName(tradingPairName) {
         this.selectedTradingPairName = tradingPairName;
