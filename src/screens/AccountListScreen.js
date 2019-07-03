@@ -15,7 +15,7 @@ import { withNavigation } from 'react-navigation';
 export default class AccountListScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: '입금',
+            title: '입출금',
             // headerLeft: (
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>

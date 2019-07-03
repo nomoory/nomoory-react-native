@@ -81,7 +81,11 @@ export default class EtcScreen extends Component {
                             styles.userInfo, styles.listContainer
                         ]}>
                             <TouchableOpacity
-                                style={[styles.row]}>
+                                style={[
+                                    styles.userInfo,
+                                    styles.row,
+                                ]}
+                            >
                                 <Text style={styles.emailText}>{email} 님, 환영합니다!</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -153,6 +157,9 @@ const styles = StyleSheet.create({
     },
     emailText: {
         fontWeight: '600',
+    },
+    userInfo: {
+        backgroundColor: '#f7f8fa'
     },
     row: {
         flexDirection: 'row',

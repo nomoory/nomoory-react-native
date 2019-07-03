@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     signupButton: {
         width: '100%',
         height,
-        marginTop: 30, 
+        marginTop: 20, 
         backgroundColor: 'black', // #ffc107',
         justifyContent: 'center',
         alignItems: 'center',
@@ -290,23 +290,23 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         position: 'absolute',
-        top: 6,
-        left: 6,
+        top: 10,
+        left: 10,
         alignItems: 'center',
         justifyContent: 'center'
     },
     checkboxContainer: {
         marginTop: 10,
-        paddingLeft: 10,
-        paddingRight: 20,
+        paddingLeft: 5,
+        paddingRight: 15,
         flexDirection: 'row',
         alignItems: 'center',
     },
     checkBox: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: 13,
-        height: 13,
+        width: 15,
+        height: 15,
         borderRadius: 11,
         borderWidth: 1.5,
         borderColor: color.coblicPaleGrey,
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     },
     checkboxText: {
         color: 'white',
-        fontSize: 12,
+        fontSize: 10,
     },
     checked: {
         backgroundColor: 'black',

@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: 360,
         height: 100,
+        marginTop: 20,
         marginBottom: 20,
     },
     inputContainer: {
@@ -205,8 +206,8 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         position: 'absolute',
-        top: 6,
-        left: 6,
+        top: 10,
+        left: 10,
         alignItems: 'center',
         justifyContent: 'center'
     },

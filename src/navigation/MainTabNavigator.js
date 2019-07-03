@@ -118,7 +118,7 @@ DepositWithdrawStack.navigationOptions = {
     header: {
         visible: false,
     },
-    tabBarLabel: '입금', // '입출금',
+    tabBarLabel: '입출금',
     tabBarIcon: ({ tintColor, focused }) => {
         if (focused) {
             return (

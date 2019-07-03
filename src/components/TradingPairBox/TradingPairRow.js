@@ -174,7 +174,7 @@ class TradingPairRow extends Component {
                     :
                     {
                         borderStyle: 'solid',
-                        borderWidth: 0.5,
+                        borderWidth: 0.8,
                         borderColor: this.color,
                     }
                 ]}>

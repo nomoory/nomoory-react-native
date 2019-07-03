@@ -7,6 +7,7 @@ import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
 import { withNavigation } from 'react-navigation';
 import TRANSLATIONS from '../../TRANSLATIONS';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 @withNavigation
 @inject('tradingPairStore', 'orderStore', 'accountStore', 'userStore', 'modalStore')
@@ -22,10 +23,12 @@ export default class SellOrderForm extends Component {
     }
 
     _onChangePrice = (text = '') => {
+        if (this.dropdown) this.dropdown.select(-1);
         this.props.orderStore.setPriceFromInput(text.split(',').join(''));
     }
 
     _onChangeVolume = (text = '') => {
+        if (this.dropdown) this.dropdown.select(-1);
         this.props.orderStore.setVolumeFromInput(text.split(',').join(''));
     }
 
@@ -77,9 +80,19 @@ export default class SellOrderForm extends Component {
 
 
     }
-    _onPressIncreasePrice = (e) => { this.props.orderStore.increasePriceByButton(); }
-    _onPressDecreasePrice = (e) => { this.props.orderStore.decreasePriceByButton(); }
-    _onPressSetVolumeByRate = (rate) => () => { if (this.props.userStore.isLoggedIn) this.props.orderStore.setVolumeByRate(rate); }
+    _onPressIncreasePrice = (e) => {
+        this.props.orderStore.increasePriceByButton();
+    }
+
+    _onPressDecreasePrice = (e) => {
+        this.props.orderStore.decreasePriceByButton();
+    }
+
+    _onPressSetVolumeByRate = (rate) => {
+        if (this.props.userStore.isLoggedIn) {
+            this.props.orderStore.setVolumeByRate(rate); 
+        }
+    }
 
 
     _onPressInitPrice = (e) => {
@@ -125,32 +138,59 @@ export default class SellOrderForm extends Component {
                         </Text>
                     </View>
                 </View>
-                <View style={[orderFormStyle.volumeInputContainer]}>
-                    <TextInput style={orderFormStyle.textInput}
-                        onChangeText={this._onChangeVolume}
-                        keyboardType={'numeric'}
-                        value={number.putComma(volume)}
-                    />
-                    <View style={orderFormStyle.inputTitleContainer}>
-                        <Text style={orderFormStyle.inputTitle}>{`수량`}</Text>
+
+                <View
+                    style={[orderFormStyle.volumeRow]}
+                >
+                    <View style={[orderFormStyle.volumeInputContainer]}>
+                        <TextInput style={orderFormStyle.textInput}
+                            onChangeText={this._onChangeVolume}
+                            keyboardType={'numeric'}
+                            value={number.putComma(volume)}
+                        />
+                        <View style={orderFormStyle.inputTitleContainer}>
+                            <Text style={orderFormStyle.inputTitle}>{`수량`}</Text>
+                        </View>
                     </View>
-                    {/* <View style={orderFormStyle.inputUnitContainer}>
-                        <Text style={orderFormStyle.inputUnit}>{`${baseSymbol}`}</Text>
-                    </View> */}
-                </View>
-                <View style={orderFormStyle.setVolumeButtons}>
-                    <TouchableOpacity style={[orderFormStyle.setVolumeButton]} onPress={this._onPressSetVolumeByRate(0.25)}>
-                        <Text style={orderFormStyle.setVolumeButtonText}>25%</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[orderFormStyle.setVolumeButton, orderFormStyle.setVolumeButtonNotInFirst]} onPress={this._onPressSetVolumeByRate(0.5)}>
-                        <Text style={orderFormStyle.setVolumeButtonText}>50%</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[orderFormStyle.setVolumeButton, orderFormStyle.setVolumeButtonNotInFirst]} onPress={this._onPressSetVolumeByRate(0.75)}>
-                        <Text style={orderFormStyle.setVolumeButtonText}>75%</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[orderFormStyle.setVolumeButton, orderFormStyle.setVolumeButtonNotInFirst]} onPress={this._onPressSetVolumeByRate(1)}>
-                        <Text style={orderFormStyle.setVolumeButtonText}>100%</Text>
-                    </TouchableOpacity> 
+                    <View>
+                        <ModalDropdown 
+                            ref={(ref) => { this.dropdown = ref; }}
+                            style={orderFormStyle.volumeButton}
+                            dropdownStyle= {
+                                orderFormStyle.dropdownStyle
+                            }
+                            defaultValue="가능"
+                            options={[
+                                '최대',
+                                '50%',
+                                '25%',
+                                '10%',
+                            ]}
+                            renderRow={(option, index, isSelected) => {
+                                return (
+                                    <View
+                                        style={[orderFormStyle.setVolumeButton]}
+                                    >
+                                        <Text style={
+                                            orderFormStyle.setVolumeButtonText
+                                        }>
+                                            {option}
+                                        </Text>
+                                    </View>
+                                );
+                            }}
+                            adjustFrame={(style) => {
+                                let adjustedStyle = {...style};
+                                adjustedStyle.top = adjustedStyle.top - 17;
+                                adjustedStyle.right = adjustedStyle.right - 20;
+                                return adjustedStyle;
+                            }}
+                            onSelect={(index, value)=>{
+                                const rate = value === '최대' ? 1 : +value.split('%')[0] / 100;
+                                this._onPressSetVolumeByRate(rate);
+                            }}
+                        />
+                    </View>
                 </View>
                 <View style={[orderFormStyle.priceInputContiner]}>
                     <View style={[orderFormStyle.inputContainer]}>
