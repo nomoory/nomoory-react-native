@@ -171,7 +171,7 @@ class TradingPairRow extends Component {
                     this.state.isFirstLoad 
                     ? 
                     {}
-                    : 
+                    :
                     {
                         borderStyle: 'solid',
                         borderWidth: 0.5,
