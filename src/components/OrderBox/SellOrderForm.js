@@ -9,10 +9,19 @@ import { withNavigation } from 'react-navigation';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import ModalDropdown from 'react-native-modal-dropdown';
 
+const OPTIONS = [
+    '최대',
+    '50%',
+    '25%',
+    '10%',
+];
+
 @withNavigation
 @inject('tradingPairStore', 'orderStore', 'accountStore', 'userStore', 'modalStore')
 @observer
 export default class SellOrderForm extends Component {
+    selectedIndex = -1;
+
     componentDidMount() {
         this.props.orderStore.setSide('SELL'); // SELL side임을 보장하기 위함
     }
@@ -23,13 +32,18 @@ export default class SellOrderForm extends Component {
     }
 
     _onChangePrice = (text = '') => {
-        if (this.dropdown) this.dropdown.select(-1);
+        this._resetSelection();
         this.props.orderStore.setPriceFromInput(text.split(',').join(''));
     }
 
     _onChangeVolume = (text = '') => {
-        if (this.dropdown) this.dropdown.select(-1);
+        this._resetSelection();
         this.props.orderStore.setVolumeFromInput(text.split(',').join(''));
+    }
+
+    _resetSelection = () => {
+        this.selectedIndex = -1;
+        if (this.dropdown) this.dropdown.select(-1);
     }
 
     _onPressOrder = (e) => {
@@ -50,11 +64,14 @@ export default class SellOrderForm extends Component {
             try {
                 this.props.modalStore.openModal({
                     title: '주문 확인',
-                    content: <Text style={{ textAlign: 'center', fontSize: 16}}>{`
+                    content: () => <Text style={{
+                        textAlign: 'center',
+                        fontSize: 16,
+                        height: 160,
+                    }}>{`
 거래자산 : ${baseSymbol}/${quoteSymbol}
 판매가격 : ${number.putComma(price)} ${quoteSymbol}
-판매수량 : ${number.putComma(volume)} ${baseSymbol}
-수수료 : ${number.putComma(number.getFixedPrice(maxFee, quoteSymbol)) } ${quoteSymbol}
+판매수량 : ${number.putComma(volume)} ${baseSymbol}\n
 총수령액 : ${number.putComma(number.getFixedPrice(totalGain, quoteSymbol))} ${quoteSymbol}
                     `}</Text>,
                     buttons: [
@@ -81,10 +98,12 @@ export default class SellOrderForm extends Component {
 
     }
     _onPressIncreasePrice = (e) => {
+        this._resetSelection();
         this.props.orderStore.increasePriceByButton();
     }
 
     _onPressDecreasePrice = (e) => {
+        this._resetSelection();
         this.props.orderStore.decreasePriceByButton();
     }
 
@@ -96,6 +115,7 @@ export default class SellOrderForm extends Component {
 
 
     _onPressInitPrice = (e) => {
+        this._resetSelection();
         this.props.orderStore.setVolume(0);
         if (this.props.tradingPairStore.selectedTradingPair) {
             this.props.orderStore.setPrice(Decimal(this.props.tradingPairStore.selectedTradingPair.close_price || 0).toFixed());
@@ -120,6 +140,7 @@ export default class SellOrderForm extends Component {
         const { price, volume } = values || {};
         const targetAccount = this.props.accountStore.getAccountByAssetSymbol(baseSymbol)  || {}
         const orderFormStyle = this.props.orderFormStyle;
+        const selectedText = OPTIONS[this.selectedIndex] || '가능';
 
         return (
             <View style={styles.container}>
@@ -159,13 +180,8 @@ export default class SellOrderForm extends Component {
                             dropdownStyle= {
                                 orderFormStyle.dropdownStyle
                             }
-                            defaultValue="가능"
-                            options={[
-                                '최대',
-                                '50%',
-                                '25%',
-                                '10%',
-                            ]}
+                            // defaultValue="가능"
+                            options={OPTIONS}
                             renderRow={(option, index, isSelected) => {
                                 return (
                                     <View
@@ -181,15 +197,22 @@ export default class SellOrderForm extends Component {
                             }}
                             adjustFrame={(style) => {
                                 let adjustedStyle = {...style};
-                                adjustedStyle.top = adjustedStyle.top - 17;
                                 adjustedStyle.right = adjustedStyle.right - 20;
                                 return adjustedStyle;
                             }}
                             onSelect={(index, value)=>{
+                                this.selectedIndex = index;
                                 const rate = value === '최대' ? 1 : +value.split('%')[0] / 100;
                                 this._onPressSetVolumeByRate(rate);
                             }}
-                        />
+                        >
+                            <TouchableOpacity 
+                                style={orderFormStyle.volumeButton}
+                                // style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} 
+                                onPress={() => { this.dropdown.show() }}>
+                                <Text>{selectedText}</Text>
+                            </TouchableOpacity>
+                        </ModalDropdown>
                     </View>
                 </View>
                 <View style={[orderFormStyle.priceInputContiner]}>
@@ -217,7 +240,17 @@ export default class SellOrderForm extends Component {
                 </View>
                 <View style={[styles.amountContainer, orderFormStyle.infoContainer]}>
                     <Text style={[styles.liquidTitle, orderFormStyle.infoTitle]}>매도금액</Text>
-                    <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {quoteSymbol}</Text>
+                    <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{
+                        amount
+                        ?
+                        (
+                            quoteSymbol === 'KRW'
+                            ? number.putComma(Decimal(amount).toFixed(0))
+                            : number.putComma(Decimal(amount).toFixed())
+                        )
+                        :
+                        '-'
+                    } {quoteSymbol}</Text>
                 </View>
                 {
                     this.props.userStore.isLoggedIn ? 

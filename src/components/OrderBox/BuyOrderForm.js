@@ -9,10 +9,19 @@ import { withNavigation } from 'react-navigation';
 // https://www.npmjs.com/package/react-native-modal-dropdown
 import ModalDropdown from 'react-native-modal-dropdown';
 
+const OPTIONS = [
+    '최대',
+    '50%',
+    '25%',
+    '10%',
+];
+
 @withNavigation
 @inject('tradingPairStore', 'orderStore', 'accountStore', 'userStore', 'modalStore')
 @observer
 export default class BuyOrderForm extends Component {
+    selectedIndex = -1;
+
     componentDidMount() {
         this.props.orderStore.setSide('BUY'); // BUY side임을 보장하기 위함
     }
@@ -23,13 +32,18 @@ export default class BuyOrderForm extends Component {
     }
 
     _onChangePrice = (text = '') => {
-        if (this.dropdown) this.dropdown.select(-1);
+        this._resetSelection();
         this.props.orderStore.setPriceFromInput(text.split(',').join(''));
     }
 
     _onChangeVolume = (text = '') => {
-        if (this.dropdown) this.dropdown.select(-1);
+        this._resetSelection();
         this.props.orderStore.setVolumeFromInput(text.split(',').join(''));
+    }
+
+    _resetSelection = () => {
+        this.selectedIndex = -1;
+        if (this.dropdown) this.dropdown.select(-1);
     }
 
     _onPressOrder = (e) => {
@@ -49,20 +63,26 @@ export default class BuyOrderForm extends Component {
             })
         } else { 
             try {
+                console.log('success')
                 this.props.modalStore.openModal({
                     title: '주문 확인',
-                    content: <Text style={{ textAlign: 'center', fontSize: 16}}>{`
+                    content: () => <Text style={{
+                            textAlign: 'center', 
+                            fontSize: 16,
+                            height: 160,
+                        }}>
+                    {`
 거래자산 : ${baseSymbol}/${quoteSymbol}
 구매가격 : ${number.putComma(price)} ${quoteSymbol}
-구매수량 : ${number.putComma(volume)} ${baseSymbol}
-수수료 : ${number.putComma(number.getFixedPrice(maxFee, baseSymbol)) } ${baseSymbol}
-수령량 : ${number.putComma(totalGain)} ${baseSymbol}\n
+구매수량 : ${number.putComma(volume)} ${baseSymbol}\n
 총금액 : ${number.putComma(number.getFixedPrice(amount, quoteSymbol))} ${quoteSymbol}
                     `}</Text>,
                     buttons: [
                         {
                             title: '취소',
-                            onPress: () => {this.props.modalStore.closeModal()}
+                            onPress: () => {
+                                this.props.modalStore.closeModal()
+                            }
                         },{
                             title: '확인',
                             onPress: () => {
@@ -73,6 +93,7 @@ export default class BuyOrderForm extends Component {
                     ]
                 })
             } catch (err) {
+                console.log('fail')
                 this.props.modalStore.openModal({
                     title: '주문 실패',
                     content: '입력 값들을 확인해주세요.',
@@ -80,14 +101,21 @@ export default class BuyOrderForm extends Component {
             }
         }
     }
-    _onPressIncreasePrice = (e) => { this.props.orderStore.increasePriceByButton(); }
-    _onPressDecreasePrice = (e) => { this.props.orderStore.decreasePriceByButton(); }
+    _onPressIncreasePrice = (e) => { 
+        this._resetSelection();
+        this.props.orderStore.increasePriceByButton(); 
+    }
+    _onPressDecreasePrice = (e) => { 
+        this._resetSelection();
+        this.props.orderStore.decreasePriceByButton(); 
+    }
     _onPressSetVolumeByRate = (rate) => {
         if (this.props.userStore.isLoggedIn) {
             this.props.orderStore.setVolumeByRate(rate); 
         }
     }
     _onPressInitPrice = (e) => {
+        this._resetSelection();
         this.props.orderStore.setVolume(0);
         if (this.props.tradingPairStore.selectedTradingPair) {
             this.props.orderStore.setPrice(Decimal(this.props.tradingPairStore.selectedTradingPair.close_price || 0).toFixed());
@@ -112,7 +140,7 @@ export default class BuyOrderForm extends Component {
         const { price, volume } = values || {};
         const targetAccount = this.props.accountStore.getAccountByAssetSymbol(quoteSymbol)  || {}
         const orderFormStyle = this.props.orderFormStyle;
-
+        const selectedText = OPTIONS[this.selectedIndex] || '가능';
         return (
             <View style={orderFormStyle.container}>
                 <View style={[orderFormStyle.liquidContainer]}>
@@ -146,17 +174,11 @@ export default class BuyOrderForm extends Component {
                     <View>
                         <ModalDropdown 
                             ref={(ref) => { this.dropdown = ref; }}
-                            style={orderFormStyle.volumeButton}
                             dropdownStyle= {
                                 orderFormStyle.dropdownStyle
                             }
-                            defaultValue="가능"
-                            options={[
-                                '최대',
-                                '50%',
-                                '25%',
-                                '10%',
-                            ]}
+                            // defaultValue="가능"
+                            options={OPTIONS}
                             renderRow={(option, index, isSelected) => {
                                 return (
                                     <View
@@ -172,15 +194,22 @@ export default class BuyOrderForm extends Component {
                             }}
                             adjustFrame={(style) => {
                                 let adjustedStyle = {...style};
-                                adjustedStyle.top = adjustedStyle.top - 17;
-                                adjustedStyle.right = adjustedStyle.right - 20;
+                                adjustedStyle.top = adjustedStyle.top - 24;
                                 return adjustedStyle;
                             }}
                             onSelect={(index, value)=>{
+                                this.selectedIndex = index;
                                 const rate = value === '최대' ? 1 : +value.split('%')[0] / 100;
                                 this._onPressSetVolumeByRate(rate);
                             }}
-                        />
+                        >
+                            <TouchableOpacity 
+                                style={orderFormStyle.volumeButton}
+                                // style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} 
+                                onPress={() => { this.dropdown.show() }}>
+                                <Text>{selectedText}</Text>
+                            </TouchableOpacity>
+                        </ModalDropdown>
                     </View>
                 </View>
                 <View style={[orderFormStyle.priceInputContiner]}>
@@ -208,7 +237,17 @@ export default class BuyOrderForm extends Component {
                 </View>
                 <View style={[styles.fee, orderFormStyle.infoContainer]}>
                     <Text style={[styles.liquidTitle, orderFormStyle.infoTitle]}>총금액</Text>
-                    <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{amount ? number.putComma(Decimal(amount).toFixed()) : '-'} {quoteSymbol}</Text>
+                    <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{
+                        amount
+                        ?
+                        ( 
+                            quoteSymbol === 'KRW'
+                            ? number.putComma(Decimal(amount).toFixed(0))
+                            : number.putComma(Decimal(amount).toFixed())
+                        )
+                        :
+                        '-'
+                    } {quoteSymbol}</Text>
                 </View>
                 {
                     this.props.userStore.isLoggedIn ?

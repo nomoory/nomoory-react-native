@@ -37,14 +37,26 @@ class CommonModal extends Component {
                     >
                         <View style={[styles.headerContainer]}>
                             <Text style={[styles.headerText, styles[type + 'HeaderText']]}>{title}</Text>
-                        </View>                    
-                        <ScrollView style={[styles.contentScrollableContainer]}>
+                        </View>
+                        <ScrollView
+                            style={[styles.contentScrollableContainer]}
+                        >
                             <View style={[styles.contentContainer]}>
-                                {
-                                    typeof content === 'string' ?
-                                    <Text style={[styles.contentText]}>{content}</Text> :
-                                    content
-                                }
+                                    {
+                                        typeof content === 'string' ?
+                                        <Text style={[styles.contentText]}>{content}</Text> :
+                                        null
+                                    }
+                                    {
+                                        typeof content === 'function' ?
+                                        content() :
+                                        null
+                                    }
+                                    {
+                                        typeof content !== 'function' && typeof content !== 'string' ?
+                                        {content} :
+                                        null
+                                    }
                             </View>
                         </ScrollView>
                         <View style={styles.buttons}>
@@ -110,16 +122,14 @@ const styles = StyleSheet.create({
         color: color.brandBlue
     },
     contentScrollableContainer: {
-        marginBottom: 5,
-        paddingTop: 5,
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingBottom: 5,
-        marginBottom: 15,
+        maxHeight: 400,
         minHeight: 40,
-        maxHeight: 350,
     },
     contentContainer: {
+        marginBottom: 5,
+        paddingLeft: 30,
+        paddingRight: 30,
+        marginBottom: 15,
 
     },
     contentText: {

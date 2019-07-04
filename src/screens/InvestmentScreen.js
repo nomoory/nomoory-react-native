@@ -32,7 +32,7 @@ export default class InvestmentScreen extends Component {
         this.state = {
             index: 0,
             routes: [
-                { key: 'AssetsAndEvaluationBox', title: '보유자산' },
+                { key: 'AssetsAndEvaluationBox', title: '보유코인' },
                 { key: 'ALL_TRANSACTIONS', title: '모든내역' },
                 { key: 'ORDER_HISTORY', title: '주문내역' },
             ],

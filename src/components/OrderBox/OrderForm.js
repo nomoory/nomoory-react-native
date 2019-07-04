@@ -76,6 +76,7 @@ export default class OrderForm extends Component {
 const styles = StyleSheet.create({
     container: {
         minWidth: 220,
+        maxWidth: 220,
         height: '100%',
         backgroundColor: 'white'
     },
@@ -219,7 +220,7 @@ const orderFormStyle = StyleSheet.create({
 
     volumeButton: {
         width: 62,
-        height: '100%',
+        height: 30,
         backgroundColor: '#d8dbde',
         display: 'flex',
         justifyContent: 'center',
@@ -245,6 +246,7 @@ const orderFormStyle = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         height: 30,
+        width: 62,
     },
     setVolumeButtonText: {
         fontSize: 12,
