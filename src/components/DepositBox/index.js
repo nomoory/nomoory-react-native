@@ -36,7 +36,7 @@ export default class DepositBox extends Component {
                     onPress={ this.props.accountStore.isLoading ? () => {} : this._handleIssueAddress}>
                     {
                         this.props.accountStore.isLoading ?
-                        <ActivityIndicator size="small" color={commonStyle.color.coblicPaleBlue}/> :
+                        <ActivityIndicator size="small" color={commonStyle.color.brandPaleBlue}/> :
                         <Image
                             style={{ width: 46, height: 46 }}                                
                             source={require('../../../assets/images/depositWithdraw/ic_plus_big.png')}

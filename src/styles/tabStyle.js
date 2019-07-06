@@ -14,13 +14,14 @@ export default StyleSheet.create({
         backgroundColor: commonStyle.color.brandBlue,
     },
     tabText: {
-        fontWeight: '400', 
-        fontSize: 13,
+        fontWeight: '300',
+        fontSize: 14,
         color: 'white',
+        opacity: 0.8,
     },
     selectedTabText: {
         fontWeight: '900',
-        fontSize: 13,
         color: 'white',
+        opacity: 1,
     }
 })

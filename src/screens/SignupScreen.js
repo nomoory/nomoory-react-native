@@ -197,7 +197,7 @@ export default class SignupScreen extends Component {
                         onPress={this._onPressSignupButton}>
                         {
                             this.props.signupStore.isLoading ?
-                            <ActivityIndicator size="small" color={commonStyles.color.coblicPaleBlue}/> :
+                            <ActivityIndicator size="small" color={commonStyles.color.brandPaleBlue}/> :
                             <Text style={[styles.signupButtonText]}>회원가입</Text>
                         }
                     </TouchableOpacity>
@@ -260,13 +260,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height,
         marginTop: 20, 
-        backgroundColor: 'black', // #ffc107',
+        backgroundColor: 'white', // #ffc107',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius
     },
     signupButtonText: {
-        color: 'white',//color.brandBlue,
+        color: color.brandBlue,
         fontSize: 16,
         fontWeight: '700'
     },

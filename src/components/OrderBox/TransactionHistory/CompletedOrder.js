@@ -10,17 +10,14 @@ import ScrollLoading from '../../ScrollLoading';
 @inject('transactionHistoryStore', 'tradingPairStore')
 @observer
 export default class CompletedOrder extends Component {
-    constructor(props) {
-        super(props);
+    componentDidMount() {
         reaction(
-            () => this.props.tradingPairStore.selectedTradingPairName,
-            (selectedTradingPairName) => {
-                this.props.transactionHistoryStore.clearSelectedTradeHistoryRegistry();
-                this.props.transactionHistoryStore.loadSelectedTradeHistory();
+            () => this.props.targetTradingPairName,
+            (targetTradingPairName) => {
+                this.props.transactionHistoryStore.loadSelectedTradeHistory(targetTradingPairName);
             }
         );
-        this.props.transactionHistoryStore.clearSelectedTradeHistoryRegistry();
-        this.props.transactionHistoryStore.loadSelectedTradeHistory();
+        this.props.transactionHistoryStore.loadSelectedTradeHistory(this.props.targetTradingPairName);
 
     }
 

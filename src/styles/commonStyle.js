@@ -1,17 +1,21 @@
 import { StyleSheet } from 'react-native';
 
 export const color = {
-    brandBlue: '#093687',
-    coblicPaleBlue: '#81a6ef',
+    brandBlue: '#0062df', // '#093687',
+    brandPaleBlue: '#81a6ef',
     coblicRed: '#d60000',
-    coblicGrey: '#999',
+    brandGrey: '#999',
     coblicPaleGrey: '#dedfe0',
     coblicYellow: '#ffc107',
     coblicSellButtonBackground: '#115dcb',
     coblicBuyButtonBackground: '#d80e35',
     white: '#ffffff',
     main: '#0052f3',
-    mainThemeColor: "rgb(20, 40, 120)",
+    mainThemeColor: '#0062df',
+    headerTextColor: '#093687',
+    fontTextColor: '#093687',
+    emptyBackgroundColor: '#f6f6f6',
+    subTitleGreyColor: '#333',
 };
 
 export const font = {

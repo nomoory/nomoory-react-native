@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import commonStyle from '../../styles/commonStyle'
 
+const searchUiColor = commonStyle.color.fontTextColor;
 @inject('tradingPairStore')
 @observer
 class TradingPareSearchBar extends Component {
@@ -18,7 +19,7 @@ class TradingPareSearchBar extends Component {
                 />
                  <TextInput style={[styles.textInput]}
                     placeholder="코인명/심볼검색"
-                    placeholderTextColor={commonStyle.color.mainThemeColor}
+                    placeholderTextColor={searchUiColor}
                     onChangeText={this._onChangeSearchBar} 
                 />
             </View>
@@ -35,16 +36,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
         borderBottomWidth: 2,
-        borderBottomColor: commonStyle.color.mainThemeColor,
+        borderBottomColor: searchUiColor,
     },
     searchImage: {
         width: 30,
         height: 30,
-        tintColor: commonStyle.color.mainThemeColor,
+        tintColor: searchUiColor,
     },
     textInput: {
         fontSize: 14,
         height: '100%',
+        color: searchUiColor,
         flex: 1,
     }
 })

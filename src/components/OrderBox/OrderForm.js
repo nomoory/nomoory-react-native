@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     buttons: {
-        height: 30,
+        height: 36,
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
@@ -171,6 +171,7 @@ const orderFormStyle = StyleSheet.create({
     },
     textInput: {
         paddingRight: 6,
+        paddingLeft: 34,
         textAlign: 'right',
         height: '100%',
         backgroundColor: '#ffffff',

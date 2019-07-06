@@ -102,7 +102,6 @@ export default class App extends React.Component {
         }
     };
 
-
     _handleAppStateChange = (nextAppState) => {
         if (
             this.state.appState.match(/inactive|background/) &&

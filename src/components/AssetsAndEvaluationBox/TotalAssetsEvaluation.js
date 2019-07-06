@@ -21,128 +21,170 @@ export default class TotalAssetsEvaluation extends Component {
         const evaluatedRevenueRatio_decimal = Decimal(evaluated_revenue || '0');
 
         return (
-            <View style={ styles.container }>
-                <View style={ styles.assetInfoContainer }>
-                    <Text style={ styles.assetInfoTitle }>총보유자산</Text>
-                    <View style={[styles.assetInfoContentContainer]}>
-                        <View style={[styles.assetItemContainer]}>
-                            <Text style={[styles.assetItemTitle]}>보유 KRW</Text>
-                            <Text style={[styles.assetItemValue]}>{ 
+            <View style={styles.container}>
+                <View style={styles.assetInfoContainer}>
+                    <Text style={styles.assetInfoTitle}>
+                        총보유자산
+                    </Text>
+                </View>
+                <View style={[styles.assetInfoContentContainer]}>
+                    <View style={[styles.assetItemContainer]}>
+                        <Text style={[styles.assetItemTitle]}>
+                            보유KRW
+                        </Text>
+                        <Text style={[styles.assetItemValue]}>
+                            {
                                 holding_quote
-                                ? number.putComma(Decimal(holding_quote).toFixed(0, Decimal.ROUND_FLOOR))
-                                : '-'} 원</Text>
-                        </View>
-                        <View style={[styles.assetItemContainer]}>
-                            <Text style={[styles.assetItemTitle]}>총자산 평가액</Text>
-                            <Text style={[styles.assetItemValue]}>{
+                                    ? number.putComma(Decimal(holding_quote).toFixed(0, Decimal.ROUND_FLOOR))
+                                    : '-'
+                            }
+                        </Text>
+                    </View>
+                    <View style={styles.verticalBorder} />
+                    <View style={[styles.assetItemContainer]}>
+                        <Text style={[styles.assetItemTitle]}>
+                            총자산 평가액
+                        </Text>
+                        <Text style={[styles.assetItemValue]}>
+                            {
                                 total_evaluated_price_in_quote
                                 ? number.putComma(Decimal(total_evaluated_price_in_quote).toFixed(0, Decimal.ROUND_FLOOR))
-                                : '-' } 원
-                            </Text>
-                        </View>
+                                : '-'
+                            }
+                        </Text>
                     </View>
                 </View>
-                <View style={ styles.investInfoContainer }>
+                <View style={styles.investInfoContainer}>
                     <View style={[styles.investInfoSubContainer]}>
                         <View style={[styles.investInfoItemContainer]}>
-                            <Text style={[styles.investInfoTitle]}>총매수금액</Text>
-                            <Text style={[styles.investInfoValue]}>{
-                                total_token_buying_price
-                                ? number.putComma(Decimal(total_token_buying_price).toFixed(0))
-                                : '-'} 원
+                            <Text style={[styles.investInfoTitle]}>
+                                총매수금액
+                            </Text>
+                            <Text style={[styles.investInfoValue]}>
+                                {
+                                    total_token_buying_price
+                                    ? number.putComma(Decimal(total_token_buying_price).toFixed(0))
+                                    : '-'
+                                }
                             </Text>
                         </View>
                         <View style={[styles.investInfoItemContainer]}>
-                            <Text style={[styles.investInfoTitle]}>총평가금액</Text>
-                            <Text style={[styles.investInfoValue]}>{
-                                total_tokens_evaluated_price_in_quote
-                                ? number.putComma(Decimal(total_tokens_evaluated_price_in_quote).toFixed(0))
-                                : '-'} 원
+                            <Text style={[styles.investInfoTitle]}>
+                                총평가금액
+                            </Text>
+                            <Text style={[styles.investInfoValue]}>
+                                {
+                                    total_tokens_evaluated_price_in_quote
+                                    ? number.putComma(Decimal(total_tokens_evaluated_price_in_quote).toFixed(0))
+                                    : '-'
+                                }
                            </Text>
                         </View>
                     </View>
                     <View style={[styles.investInfoSubContainer]}>
                         <View style={[styles.investInfoItemContainer]}>
-                            <Text style={[styles.investInfoTitle]}>총평가손익</Text>
+                            <Text style={[styles.investInfoTitle]}>
+                                총평가손익
+                            </Text>
                             <Text style={[
-                                evaluatedRevenueRatio_decimal.greaterThan(0) ? styles.rise : 
-                                (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)                        
+                                evaluatedRevenueRatio_decimal.greaterThan(0)
+                                ? styles.rise
+                                : (
+                                    evaluatedRevenueRatio_decimal.lessThan(0)
+                                    ? styles.fall
+                                    : null
+                                )
                             ]}>
-                                { evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : '' }
-                                { evaluated_revenue ? number.putComma(Decimal(evaluated_revenue).toFixed(0)) : '-'} 원
+                                {evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : ''}
+                                {evaluated_revenue ? number.putComma(Decimal(evaluated_revenue).toFixed(0)) : '-'}
                             </Text>
                         </View>
                         <View style={[styles.investInfoItemContainer]}>
-                            <Text style={[styles.investInfoTitle]}>손익률</Text>
+                            <Text style={[styles.investInfoTitle]}>
+                                손익률
+                            </Text>
                             <Text style={[
-                                evaluatedRevenueRatio_decimal.greaterThan(0) ? styles.rise : 
-                                (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)
+                                evaluatedRevenueRatio_decimal.greaterThan(0)
+                                ? styles.rise
+                                : (
+                                    evaluatedRevenueRatio_decimal.lessThan(0)
+                                    ? styles.fall
+                                    : null
+                                )
                             ]}>
-                                { evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : '' }
-                                { evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).mul(100).toFixed(2)).toFixed()) : '-'} %
+                                {evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : ''}
+                                {evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).mul(100).toFixed(2)).toFixed()) : '- '}%
                             </Text>
                         </View>
                     </View>
                 </View>
             </View>
         )
-  }
+    }
 }
+
+const paddingSide = 13;
 
 const styles = StyleSheet.create({
     container: {
-        padding: 15,
         paddingTop: 18,
         paddingBottom: 18,
-        borderBottomColor: '#dedfe0',
-        borderBottomWidth: 1,
-        backgroundColor: 'white'
+        backgroundColor: commonStyle.color.emptyBackgroundColor
     },
     assetInfoContainer: {
-        marginBottom: 18,
+        marginBottom: 16,
+        padding: paddingSide,
+        paddingTop: 0,
+        paddingBottom: 0,
     },
     assetInfoTitle: {
-        marginBottom: 16,
-        fontWeight: '600',
-        fontSize: 17
+        fontWeight: '400',
+        fontSize: 15
     },
     assetInfoContentContainer: {
+        marginBottom: 16,
         flexDirection: 'row',
     },
     assetItemContainer: {
-        flex: 1
+        flex: 1,
+        paddingLeft: paddingSide,
+        paddingRight: paddingSide,
     },
     assetItemTitle: {
-        fontWeight: '500',
-        fontSize: 14,
-        color: '#747474',
-        marginBottom: 4,
+        fontWeight: '400',
+        fontSize: 13,
+        marginBottom: 2,
+        color: commonStyle.color.subTitleGreyColor,
     },
     assetItemValue: {
-        fontWeight: '600',
-        fontSize: 20,
+        fontWeight: '300',
+        fontSize: 21,
     },
-
+    verticalBorder: {
+        height: '100%',
+        borderWidth: 0.6,
+        borderColor: '#999999'
+    },
     // investment info
     investInfoContainer: {
-        marginTop: 10,
         flexDirection: 'row',
     },
     investInfoSubContainer: {
         flex: 1,
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        padding: paddingSide,
     },
     investInfoItemContainer: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 10,
     },
     investInfoTitle: {
         textAlign: 'left',
-        fontWeight: '500',
-        color: '#747474'
+        fontWeight: '300',
+        fontSize: 12,
+        color: commonStyle.color.subTitleGreyColor,
     },
     investInfoValue: {
         paddingRight: 14,
@@ -152,6 +194,6 @@ const styles = StyleSheet.create({
         color: commonStyle.color.coblicRed
     },
     fall: {
-        color: commonStyle.color.brandBlue
+        color: commonStyle.color.fall
     }
 })

@@ -47,7 +47,7 @@ export default class AccountListScreen extends Component {
         return (
             <View style={[styles.container]}>
                 <View style={[styles.totalEvaluatedPriceContainer]}>
-                    <Text style={[styles.title]}>총보유자산</Text>
+                    <Text style={[styles.title]}>총 보유자산</Text>
                     <View style={[styles['priceContainer']]}>
                         <Text style={[styles['price']]}>
                             {total_evaluated_price_in_quote ? number.putComma(Decimal(total_evaluated_price_in_quote).toFixed(0)) : '-'} KRW

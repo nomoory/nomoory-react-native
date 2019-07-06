@@ -24,26 +24,36 @@ export default class QuoteTab extends Component {
             sortedQuoteTabTypes.push(...quoteTabTypes.filter((tabType) => {
                 return !['KRW', 'BTC', 'ETH', 'USDT'].includes(tabType);
             }));
-            
-            return sortedQuoteTabTypes.map((quoteTabType, idx) => (
-                <TouchableOpacity 
-                    key={quoteTabType}
-                    style={[
-                        styles.tab, 
-                        quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
-                        && styles.selectedTab
-                    ]}
-                    onPress={this._onPressTab(quoteTabType)}
-                >
-                    <Text 
+            let selected = false;
+            let selectedOnLeft = false;
+
+            return sortedQuoteTabTypes.map((quoteTabType, idx) => {
+                selectedOnLeft = selected;
+                selected = quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
+                return (
+                    <TouchableOpacity 
+                        key={quoteTabType}
                         style={[
-                            styles.tabText, 
-                            quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
-                            && styles.selectedText]}
-                    >{quoteTabType}
-                    </Text>
-                </TouchableOpacity>
-            ));               
+                            styles.tab,
+                            idx !== sortedQuoteTabTypes.length - 1 ? styles.tabNotLast : {},
+                            selected
+                            && styles.selectedTab,
+                            selectedOnLeft
+                            && styles.selectedOnLeft,
+                        ]}
+                        onPress={this._onPressTab(quoteTabType)}
+                    >
+                        <Text 
+                            style={[
+                                styles.tabText, 
+                                quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
+                                && styles.selectedText]}
+                        >{quoteTabType}
+                        </Text>
+                    </TouchableOpacity>
+                    )
+                }
+            );               
         }
     }
 
@@ -61,16 +71,17 @@ export default class QuoteTab extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 8,
+        padding: 12,
     },
     tabs: {
         display: 'flex',
         flexDirection: 'row',
-        height: 26,
+        height: 30,
+        borderColor: '#7c7c7c',
     },
     tab: {
         height: '100%',
-        width: 50,
+        width: 56,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -78,9 +89,16 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: '#7c7c7c',
     },
+    tabNotLast: {
+        borderRightWidth: 0,
+    },
     selectedTab: {
         borderWidth: 1,
+        borderRightWidth: 1,
         borderColor: commonStyle.color.brandBlue,
+    },
+    selectedOnLeft: {
+        borderLeftWidth: 0,
     },
     tabText: {
         fontSize: 13,

@@ -19,7 +19,8 @@ class OrderStore {
         price: '0',
         order_type: 'LIMIT',
     };
-    @action clear() {
+    @action
+    clear() {
         this.values = {...this.values,
             ...{
                 side: 'BUY',
@@ -160,9 +161,15 @@ class OrderStore {
             state: true
         };
     }
-    @action setTradingPair(tradingPair) { this.values.trading_pair = tradingPair; }
-    @action setSide(side) { this.values.side = side; }
-    @action setVolumeByRate(rate) {
+
+    @action
+    setTradingPair(tradingPair) { this.values.trading_pair = tradingPair; }
+
+    @action
+    setSide(side) { this.values.side = side; }
+
+    @action
+    setVolumeByRate(rate) {
         try {
             let { side, price } = this.values;
             let maximumOrderableVolume = '0';
@@ -178,13 +185,15 @@ class OrderStore {
                 let liquid = account.liquid;
                 maximumOrderableVolume = Decimal(liquid).mul(rate).toFixed(8, Decimal.ROUND_DOWN);
             }
-            this.values.volume = Decimal(maximumOrderableVolume).toFixed();       
+
+            this.setVolume(maximumOrderableVolume);
         } catch (err) {
-            this.values.volume = this.values.volume
+
         }
     }
 
-    @action increasePriceByButton() {
+    @action
+    increasePriceByButton() {
         try {
             let { price } = this.values;
             let unit_price = this.unit_price;
@@ -211,7 +220,8 @@ class OrderStore {
         }
     };
 
-    @action decreasePriceByButton() {
+    @action
+    decreasePriceByButton() {
         try {
             let { price } = this.values;
             let unit_price = this.unit_price;
@@ -231,7 +241,8 @@ class OrderStore {
         } catch (e) { return; }
     };
 
-    @action submitOrder() {
+    @action
+    submitOrder() {
         if (this.isValidOrder.state === false) {
             modalStore.openPreset(
                 '거래불가',
@@ -247,32 +258,62 @@ class OrderStore {
         }
     }
 
-    @action setVolumeFromInput(volume) {
-        if (!volume) this.values.volume = volume;
+    @action
+    setVolumeFromInput(volume) {
+        this.setVolume(volume);
+    }
+
+    @action
+    setPriceFromInput(price) {
+        this.setPrice(price);    
+    }
+
+    @action
+    correctPriceForSubmit() {
+        this.values.price = number.getFixedPrice(this.values.price, this.quoteSymbol);
+    }
+
+    @action
+    correctVolumeForSubmit() {
+        this.values.volume = number.getFixedVolume(this.values.volume, this.baseSymbol);
+    }
+
+    @action
+    setPrice(price) {
         try {
-            Decimal(volume).toFixed();
-            this.values.volume = volume;
-        } catch (e) {
-            this.values.volume = this.values.volume;
+            if (price === '') this.values.price = price;
+            Decimal(price)
+            this.values.price = price;
+        } catch (err) {
         }
     }
 
-    @action setPriceFromInput(price) {
-        if (this._isValidPrice(price)) {
-            this.setPrice(price);
+    @action
+    setVolume(volume) {
+        try {
+            if (volume === '') this.values.volume = volume;
+            Decimal(volume)
+            this.values.volume = volume;
+        } catch (err) {
         }
     }
-    @action correctPriceForSubmit() {
-        this.values.price = number.getFixedPrice(this.values.price, this.quoteSymbol);
+
+    @action
+    makeVolumeClean() {
+        try {
+            this.values.volume = Decimal(this.values.volume).toFixed();
+        } catch (err) {
+
+        }
     }
-    @action correctVolumeForSubmit() {
-        this.values.volume = number.getFixedVolume(this.values.volume, this.baseSymbol);
-    }
-    @action setPrice(price) {
-        this.values.price = price;
-    }
-    @action setVolume(volume) {
-        this.values.volume = volume;
+
+    @action
+    makePriceClean() {
+        try {
+            this.values.price = Decimal(this.values.price).toFixed();
+        } catch (err) {
+            
+        }
     }
 
     @action
@@ -287,7 +328,8 @@ class OrderStore {
         this.setIsFeePaid(is_fee_paid);
     }
 
-    @action changeOrderSide(side) {
+    @action
+    changeOrderSide(side) {
         this.values.side = side;
     }
 
@@ -296,7 +338,8 @@ class OrderStore {
         this.values.is_fee_paid = is_fee_paid;
     }
 
-    @action registerOrder() {
+    @action
+    registerOrder() {
         this.isLoading = true;
         return agent.registerOrder({...this.values, unit_price: this.unit_price})
             .then(action((response) => {
@@ -309,30 +352,10 @@ class OrderStore {
             }));
     }
 
-    _isValidPrice(value) {
-        for (let [index, char] of Array.prototype.entries.apply(value)) {
-            const allow = '0123456789'.split('');
-            if (!(char in allow)) { // 숫자가 아니면 수용하지 않는다.
-                if (char === '.') { // . 는 수용, 두개 이상은 안됨
-                    if (index === 0) return false;
-                    let dotCount = 0;
-                    for (let char of value) {
-                        if (char === '.') {
-                            if (dotCount === 1) return false;
-                            dotCount += 1;
-                        }
-                    }
-                } else {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
 
     @observable orderFormSelectedTabType = 'BUY';
-    @action setOrderFormSelectedTabType(type) {
+    @action
+    setOrderFormSelectedTabType(type) {
         this.orderFormSelectedTabType = type;
     }
 

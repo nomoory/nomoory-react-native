@@ -111,7 +111,7 @@ export default class LoginScreen extends Component {
                         onPress={this._onPressLoginButton}>
                         {
                             this.props.authStore.isLoading ?
-                                <ActivityIndicator size="small" color={commonStyles.color.coblicPaleBlue} /> :
+                                <ActivityIndicator size="small" color={commonStyles.color.brandPaleBlue} /> :
                                 <Text style={[styles.loginButtonText]}>로그인</Text>
                         }
                     </TouchableOpacity>
@@ -176,13 +176,13 @@ const styles = StyleSheet.create({
         width,
         height,
         marginTop: 15,
-        backgroundColor: 'black', // #ffc107',
+        backgroundColor: 'white', // #ffc107',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius
     },
     loginButtonText: {
-        color: 'white',//color.brandBlue,
+        color: color.brandBlue,
         fontSize: 16,
         fontWeight: '700'
     },

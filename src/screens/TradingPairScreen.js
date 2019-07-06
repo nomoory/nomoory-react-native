@@ -3,6 +3,7 @@ import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import tabStyle from '../styles/tabStyle';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import * as Icon from '@expo/vector-icons';
 
 import {
     StyleSheet,
@@ -12,7 +13,6 @@ import {
     Dimensions,
     TouchableOpacity,
     Animated,
-    Picker,
 } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
@@ -27,7 +27,7 @@ import modalStore from '../stores/modalStore';
 import { withNavigation } from 'react-navigation';
 import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
 import TradingPairHeaderButtons from '../components/TradingPairHeaderButtons';
-import tradingPairStore from '../stores/tradingPairStore';
+import orderbookStore from '../stores/orderbookStore';
 
 const TAB_BODY = {
     OrderBox: <OrderBox />,
@@ -36,17 +36,28 @@ const TAB_BODY = {
 };
 
 @withNavigation
-@inject('tradingPairStore', 'modalStore')
+@inject('tradingPairStore', 'modalStore', 'orderbookStore')
 @observer
 export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseName = navigation.getParam('baseName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
-        tradingPairStore.loadTradingPairs();
+        orderbookStore.loadOrderbook(this.tradingPairName);
 
         return {
-            headerTitle: (
+            headerLeft: (
                 <View style={styles.headerContainer}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('Exchange');
+                        }}
+                    >
+                        <Icon.AntDesign
+                            name="left"
+                            size={30} color={commonStyle.color.headerTextColor}
+                        // style={styles.favoriteIcon}
+                        />
+                    </TouchableOpacity>
                     <Text
                         style={styles.headerText}
                         onPress={() => {
@@ -75,7 +86,6 @@ export default class TradingPairScreen extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             index: 0,
             routes: [
@@ -84,6 +94,9 @@ export default class TradingPairScreen extends Component {
                 { key: 'TradeHistory', title: '시세' },
             ],
         };
+
+        this.baseName = props.navigation.getParam('baseName', '토큰');
+        this.tradingPairName = props.navigation.getParam('tradingPairName', '');
     }
 
     @computed
@@ -225,13 +238,19 @@ export default class TradingPairScreen extends Component {
 
 const styles = StyleSheet.create({
     headerContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
-    headerRight: {
-
+    headerLeft: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     headerText: {
         fontSize: 16,
-        color: commonStyle.color.brandBlue
+        color: commonStyle.color.headerTextColor
     },
     headerImage: { width: 10, height: 10 },
     container: {

@@ -19,6 +19,7 @@ export default class ExchangeScreen extends Component {
             ...headerStyle.white,
         };
     };
+
     _openBTCKRWForDevelopTradingPairScreen = () => {
         this.props.tradingPairStore.setSelectedTradingPairName('TOKA-KRW');
         this.props.navigation.navigate('TradingPair', {

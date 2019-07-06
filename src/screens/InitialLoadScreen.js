@@ -64,7 +64,7 @@ export default class InitialLoadScreen extends Component {
                 <ActivityIndicator
                     style={[styles.loadingIndicator]}
                     size="large"
-                    color={commonStyle.color.coblicPaleBlue}
+                    color={commonStyle.color.brandPaleBlue}
                 />
             </View>
         )

@@ -3,30 +3,61 @@ import { StyleSheet, View, FlatList } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import OrderRow from './OrderRow';
 import commonStyle from '../../styles/commonStyle';
-import { computed } from 'mobx';
+import { computed, reaction } from 'mobx';
+import { rowHeight } from './OrderRow';
 
 @inject('orderbookStore', 'tradingPairStore')
 @observer
-export default class Orderbook extends Component {
+export default class Orderbook extends Component {    
+    constructor(props) {
+        super(props);
+        this.orderLengthReaction = reaction(
+            () => props.orderbookStore.ordersLength,
+            (ordersLength, prevState) => {
+                if (
+                    !prevState.prev
+                    && ordersLength !== 0
+                ) {
+                    this.flatListRef.scrollToIndex({
+                        animated: false, index: 8
+                    });
+                }
+            }
+        )
+    }
+
+    componentWillUnmount() {
+        this.orderLengthReaction();
+    }
+
     @computed
     get orders() {
         const { sellOrders, buyOrders } = this.props.orderbookStore;
-        return [ ...sellOrders, ...buyOrders ];
+        return [...sellOrders, ...buyOrders];
     }
+
+    getItemLayout = (data, index) => (
+        { length: rowHeight, offset: rowHeight * index, index }
+    )
+
     render() {
         const { close_price, open_price } = this.props.tradingPairStore.selectedTradingPair || {};
 
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={this.orders}
+                    ref={(ref) => { this.flatListRef = ref; }}
+                    getItemLayout={this.getItemLayout}
+                    data={this.orders.length ? this.orders : []}
+                    // initialScrollIndex={8}
                     initialNumToRender={30}
                     // onEndReachedThreshold={1}
                     // onEndReached={this.onEndReached}
                     // refreshing={this.state.refreshing}
                     // onRefresh={this.onRefresh}
                     enableEmptySections={true}
-                    renderItem={({item, index}) => {
+                    emptyView={() => null}
+                    renderItem={({ item, index }) => {
                         return (
                             <OrderRow
                                 key={`sell_${index}`}

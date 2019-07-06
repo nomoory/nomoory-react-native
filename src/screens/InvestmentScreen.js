@@ -8,10 +8,6 @@ import { withNavigation } from 'react-navigation';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 import AssetsAndEvaluationBox from '../components/AssetsAndEvaluationBox';
-import TradeHistoryBox from '../components/TradeHistoryBox';
-import UnmatchedOrderBox from '../components/UnmatchedOrderBox';
-// import DividendHistoryBox from '../components/DividenHistroyBox';
-// import MiningHistoryBox from '../components/MiningHistoryBox';
 import TransactionHistoryBox from '../components/TransactionHistoryBox';
 import OrderHistory from '../components/OrderHistory';
 
@@ -51,7 +47,7 @@ export default class InvestmentScreen extends Component {
         const inputRange = props.navigationState.routes.map((x, i) => i);
 
         return (
-            <View style={tabStyle.tabBar}>
+            <View style={customTabStyles.tabBar}>
                 {props.navigationState.routes.map((route, i) => {
                     const color = props.position.interpolate({
                         inputRange,
@@ -62,11 +58,14 @@ export default class InvestmentScreen extends Component {
                     return (
                         <TouchableOpacity
                             key={route.key}
-                            style={[tabStyle.tabItem]}
+                            style={[
+                                customTabStyles.tabItem,
+                                this.state.index === i ? customTabStyles.selectedTabItem : null
+                            ]}
                             onPress={(e) => {this._onIndexChange(i)}}>
                             <Animated.Text style={[
-                                tabStyle.tabText,,
-                                this.state.index === i ? tabStyle.selectedTabText : null
+                                customTabStyles.tabText,
+                                this.state.index === i ? customTabStyles.selectedTabText : null
                             ]}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
@@ -76,7 +75,6 @@ export default class InvestmentScreen extends Component {
     };
     
     _onIndexChange = (index) => {
-        this.props.transactionHistoryStore.clear();        
         this.setState({ index });
         try {
             this.props.transactionHistoryStore.changeSelectedOption(this.state.routes[index].key);
@@ -119,5 +117,29 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderBottomWidth: 0,
         height: 40
+    },
+})
+
+const customTabStyles = StyleSheet.create({
+    tabBar: {
+        flexDirection: 'row',
+        height: 34, 
+    },
+    tabItem: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomWidth: 1.5,
+        borderBottomColor: 'white',
+    },
+    selectedTabItem: {
+        borderBottomColor: commonStyle.color.brandBlue,
+    },
+    tabText: {
+        fontWeight: '300', 
+        fontSize: 13,
+    },
+    selectedTabText: {
+        color: commonStyle.color.brandBlue,
     },
 })

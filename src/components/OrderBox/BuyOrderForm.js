@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, TextInput, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { computed } from 'mobx';
+import { computed, reaction } from 'mobx';
 import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
 import TRANSLATIONS from '../../TRANSLATIONS';
@@ -22,12 +22,61 @@ const OPTIONS = [
 export default class BuyOrderForm extends Component {
     selectedIndex = -1;
 
+    constructor(props) {
+        super(props);
+        this.volumeReaction = reaction(
+            () => props.orderStore.values.volume,
+            volume => {
+                // 정수부 자리수가 3의 배수일때 ,가 추가되므로 현재 있던 위치에서 뒤로 한칸
+                if (
+                    this.volumeInputRef
+                    && volume
+                    && Decimal(volume.split('.')[0]).toFixed().length % 3 === 1
+                ) {
+                    const nextSelection = this.volumeInputRef._lastNativeSelection.start + 2 || 0;
+
+                    this.volumeInputRef.setNativeProps({
+                        selection: {
+                            start: nextSelection,
+                            end: nextSelection,
+                        }
+                    })
+                }            
+            }
+        );
+
+        this.priceReaction = reaction(
+            () => props.orderStore.values.price,
+            price => {
+                // 정수부 자리수가 3의 배수일때 ,가 추가되므로 현재 있던 위치에서 뒤로 한칸
+                if (
+                    this.priceInputRef
+                    && price
+                    && Decimal(price.split('.')[0]).toFixed().length % 3 === 1
+                ) {
+                    const nextSelection = this.priceInputRef._lastNativeSelection.start + 2 || 0;
+
+                    this.priceInputRef.setNativeProps({
+                        selection: {
+                            start: nextSelection,
+                            end: nextSelection,
+                        }
+                    })
+                }            
+            }
+        )
+    }
+    componentWillUnmount() {
+        if (this.volumeReaction) this.volumeReaction();
+        if (this.priceReaction) this.priceReaction();
+    }
+
     componentDidMount() {
         this.props.orderStore.setSide('BUY'); // BUY side임을 보장하기 위함
     }
-    
+
     @computed
-    get maxFeePercentage() { 
+    get maxFeePercentage() {
         return number.getRateAsFiexdPercentage(this.props.orderStore.maxFeeRate, 2);
     }
 
@@ -61,17 +110,16 @@ export default class BuyOrderForm extends Component {
                 title: '주문 실패',
                 content: TRANSLATIONS[this.props.orderStore.isValidOrder.message_code],
             })
-        } else { 
+        } else {
             try {
-                console.log('success')
                 this.props.modalStore.openModal({
                     title: '주문 확인',
                     content: () => <Text style={{
-                            textAlign: 'center', 
-                            fontSize: 16,
-                            height: 160,
-                        }}>
-                    {`
+                        textAlign: 'center',
+                        fontSize: 16,
+                        height: 160,
+                    }}>
+                        {`
 거래자산 : ${baseSymbol}/${quoteSymbol}
 구매가격 : ${number.putComma(price)} ${quoteSymbol}
 구매수량 : ${number.putComma(volume)} ${baseSymbol}\n
@@ -83,17 +131,16 @@ export default class BuyOrderForm extends Component {
                             onPress: () => {
                                 this.props.modalStore.closeModal()
                             }
-                        },{
+                        }, {
                             title: '확인',
                             onPress: () => {
                                 this.props.orderStore.registerOrder();
                                 this.props.modalStore.closeModal();
                             }
-                        }, 
+                        },
                     ]
                 })
             } catch (err) {
-                console.log('fail')
                 this.props.modalStore.openModal({
                     title: '주문 실패',
                     content: '입력 값들을 확인해주세요.',
@@ -101,17 +148,17 @@ export default class BuyOrderForm extends Component {
             }
         }
     }
-    _onPressIncreasePrice = (e) => { 
+    _onPressIncreasePrice = (e) => {
         this._resetSelection();
-        this.props.orderStore.increasePriceByButton(); 
+        this.props.orderStore.increasePriceByButton();
     }
-    _onPressDecreasePrice = (e) => { 
+    _onPressDecreasePrice = (e) => {
         this._resetSelection();
-        this.props.orderStore.decreasePriceByButton(); 
+        this.props.orderStore.decreasePriceByButton();
     }
     _onPressSetVolumeByRate = (rate) => {
         if (this.props.userStore.isLoggedIn) {
-            this.props.orderStore.setVolumeByRate(rate); 
+            this.props.orderStore.setVolumeByRate(rate);
         }
     }
     _onPressInitPrice = (e) => {
@@ -138,7 +185,7 @@ export default class BuyOrderForm extends Component {
             minimumOrderAmount
         } = this.props.orderStore || {};
         const { price, volume } = values || {};
-        const targetAccount = this.props.accountStore.getAccountByAssetSymbol(quoteSymbol)  || {}
+        const targetAccount = this.props.accountStore.getAccountByAssetSymbol(quoteSymbol) || {}
         const orderFormStyle = this.props.orderFormStyle;
         const selectedText = OPTIONS[this.selectedIndex] || '가능';
         return (
@@ -148,12 +195,12 @@ export default class BuyOrderForm extends Component {
                     <View style={orderFormStyle.liquidContentContainer}>
                         <Text style={orderFormStyle.liquidContentText}>
                             {
-                                targetAccount.liquid ? 
-                                number.putComma(number.getFixedPrice(targetAccount.liquid, quoteSymbol)) 
-                                : '-' 
+                                targetAccount.liquid ?
+                                    number.putComma(number.getFixedPrice(targetAccount.liquid, quoteSymbol))
+                                    : '-'
                             }
                         </Text>
-                        <Text style={orderFormStyle.liquidContentUnitText}> 
+                        <Text style={orderFormStyle.liquidContentUnitText}>
                             {quoteSymbol}
                         </Text>
                     </View>
@@ -162,19 +209,24 @@ export default class BuyOrderForm extends Component {
                     style={[orderFormStyle.volumeRow]}
                 >
                     <View style={[orderFormStyle.volumeInputContainer]}>
-                        <TextInput style={orderFormStyle.textInput}
+                        <TextInput
+                            style={orderFormStyle.textInput}
+                            ref={(ref) => { this.volumeInputRef = ref; }}
                             onChangeText={this._onChangeVolume}
                             keyboardType={'numeric'}
                             value={number.putComma(volume)}
+                            onBlur={() => {
+                                this.props.orderStore.makeVolumeClean();
+                            }}
                         />
                         <View style={orderFormStyle.inputTitleContainer}>
                             <Text style={orderFormStyle.inputTitle}>{`수량`}</Text>
                         </View>
                     </View>
                     <View>
-                        <ModalDropdown 
+                        <ModalDropdown
                             ref={(ref) => { this.dropdown = ref; }}
-                            dropdownStyle= {
+                            dropdownStyle={
                                 orderFormStyle.dropdownStyle
                             }
                             // defaultValue="가능"
@@ -193,17 +245,17 @@ export default class BuyOrderForm extends Component {
                                 );
                             }}
                             adjustFrame={(style) => {
-                                let adjustedStyle = {...style};
+                                let adjustedStyle = { ...style };
                                 adjustedStyle.top = adjustedStyle.top - 24;
                                 return adjustedStyle;
                             }}
-                            onSelect={(index, value)=>{
+                            onSelect={(index, value) => {
                                 this.selectedIndex = index;
                                 const rate = value === '최대' ? 1 : +value.split('%')[0] / 100;
                                 this._onPressSetVolumeByRate(rate);
                             }}
                         >
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 style={orderFormStyle.volumeButton}
                                 // style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} 
                                 onPress={() => { this.dropdown.show() }}>
@@ -214,10 +266,15 @@ export default class BuyOrderForm extends Component {
                 </View>
                 <View style={[orderFormStyle.priceInputContiner]}>
                     <View style={[orderFormStyle.inputContainer]}>
-                        <TextInput style={orderFormStyle.textInput}
+                        <TextInput
+                            style={orderFormStyle.textInput}
+                            ref={(ref) => { this.priceInputRef = ref; }}
                             onChangeText={this._onChangePrice}
                             keyboardType={'numeric'}
                             value={number.putComma(price)}
+                            onBlur={() => {
+                                this.props.orderStore.makePriceClean();
+                            }}
                         />
                         <View style={orderFormStyle.inputTitleContainer}>
                             <Text style={orderFormStyle.inputTitle}>{`가격`}</Text>
@@ -239,53 +296,53 @@ export default class BuyOrderForm extends Component {
                     <Text style={[styles.liquidTitle, orderFormStyle.infoTitle]}>총금액</Text>
                     <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{
                         amount
-                        ?
-                        ( 
-                            quoteSymbol === 'KRW'
-                            ? number.putComma(Decimal(amount).toFixed(0))
-                            : number.putComma(Decimal(amount).toFixed())
-                        )
-                        :
-                        '-'
+                            ?
+                            (
+                                quoteSymbol === 'KRW'
+                                    ? number.putComma(Decimal(amount).toFixed(0))
+                                    : number.putComma(Decimal(amount).toFixed())
+                            )
+                            :
+                            '-'
                     } {quoteSymbol}</Text>
                 </View>
                 {
                     this.props.userStore.isLoggedIn ?
-                    <View style={[orderFormStyle.buttons]}>
-                        <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.initButton]} onPress={this._onPressInitPrice}>
-                            <Text style={[orderFormStyle.buttonText]}>초기화</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.redButton]} onPress={this._onPressOrder}>
-                            <Text style={[orderFormStyle.buttonText]}>매수</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={[orderFormStyle.buttons]}>
+                            <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.initButton]} onPress={this._onPressInitPrice}>
+                                <Text style={[orderFormStyle.buttonText]}>초기화</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[orderFormStyle.button, orderFormStyle.redButton]} onPress={this._onPressOrder}>
+                                <Text style={[orderFormStyle.buttonText]}>매수</Text>
+                            </TouchableOpacity>
+                        </View>
                         :
-                    <View style={[orderFormStyle.buttons]}>
-                        <TouchableOpacity 
-                            style={[
-                                orderFormStyle.button,
-                                orderFormStyle.blueButton
-                            ]}
-                            onPress={this._onPressLogin}
-                        >
-                            <Text style={[orderFormStyle.buttonText]}>로그인</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={[orderFormStyle.buttons]}>
+                            <TouchableOpacity
+                                style={[
+                                    orderFormStyle.button,
+                                    orderFormStyle.blueButton
+                                ]}
+                                onPress={this._onPressLogin}
+                            >
+                                <Text style={[orderFormStyle.buttonText]}>로그인</Text>
+                            </TouchableOpacity>
+                        </View>
                 }
-                <View style={orderFormStyle.minorInfoRow}> 
+                <View style={orderFormStyle.minorInfoRow}>
                     <Text style={orderFormStyle.minorInfoRowText}
                     >최소주문금액
                     </Text>
                     <Text style={orderFormStyle.minorInfoRowText}>
-                        {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
+                        {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-'} {quoteSymbol}
                     </Text>
                 </View>
-                <View style={orderFormStyle.minorInfoRow}> 
-                    <Text style={[orderFormStyle.minorInfoRowText]}>수수료 
+                <View style={orderFormStyle.minorInfoRow}>
+                    <Text style={[orderFormStyle.minorInfoRowText]}>수수료
                     </Text>
-                    <Text style={[orderFormStyle.minorInfoRowText]}>{ this.maxFeePercentage ? number.putComma(Decimal(this.maxFeePercentage).toFixed()) : '-' } %
+                    <Text style={[orderFormStyle.minorInfoRowText]}>{this.maxFeePercentage ? number.putComma(Decimal(this.maxFeePercentage).toFixed()) : '-'} %
                     </Text>
-                    
+
                 </View>
             </View>
         );
@@ -309,6 +366,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     minimumOrderAmountContent: {
-        fontSize: 12        
+        fontSize: 12
     }
 });

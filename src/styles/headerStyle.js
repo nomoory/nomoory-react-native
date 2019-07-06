@@ -20,6 +20,7 @@ export default {
         headerTitleStyle: {
             fontSize: 17,
             fontWeight: '400',
+            color: commonStyle.color.headerTextColor,
         },
     },
     blue: {

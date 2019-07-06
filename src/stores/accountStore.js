@@ -233,7 +233,8 @@ class AccountStore {
 
     @action loadAccounts() {
         this.isLoading = true;
-        this.errors = null;
+        
+        this.accountsRegistry.clear();
         return agent.loadAccounts()
             .then(action((response) => {
                 this.accountsRegistry.clear();

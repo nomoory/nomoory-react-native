@@ -7,12 +7,14 @@ export default class ScrollLoading extends Component {
         super(props);
         this.loadingRef = React.createRef();
     }
+
     componentDidUpdate() {
         if (this.loadingRef.current) {
             // this.loadingRef.parentNode.style.position = 'relative';
             this.loadingRef.current.parentNode.style.position = 'relative';
         }
     }
+
     componentWillUnmount() {
         try {
             this.loadingRef.current.parentNode.style.position = 'initial';
@@ -41,7 +43,7 @@ export default class ScrollLoading extends Component {
                     }
                     {
                         this.props.isLoading &&
-                        <ActivityIndicator size="large" color={commonStyle.color.coblicPaleBlue}/>
+                        <ActivityIndicator size="large" color={commonStyle.color.brandPaleBlue}/>
                     }
                 </View>
 
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     notificationText: {
-        color: commonStyle.color.coblicGrey,
+        color: commonStyle.color.brandGrey,
         fontSize: 15
     }
 });
