@@ -158,7 +158,7 @@ class SocketStore {
     async _loadDataByChannel(channel) {
         switch (channel) {
             case CHANNEL_NAMES.ORDERBOOK:
-                await orderbookStore.loadOrderbook();
+                // await orderbookStore.loadOrderbook();
                 break;
             case CHANNEL_NAMES.TICKER:
                 tradingPairStore.loadTradingPairs();

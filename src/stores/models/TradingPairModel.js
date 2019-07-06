@@ -61,20 +61,11 @@ class TradingPairModel extends Model {
     }
 
     @computed
-    get translatedAssetNameDisplay() {
-        const {
-            base_korean_name,
-            base_english_name,
-        } = this;
-        if (i18next.language === 'ko') {
-            return base_korean_name;
-        }
-        return base_english_name;
-    }
-
-    @computed
     get isFavorite() {
-        return commonStore.favoriteTradingPairNames.includes(this.name);
+        if (commonStore.favoriteTradingPairNames.includes(this.name)) {
+            return true;
+        }
+        return false;
     }
 }
 

@@ -49,11 +49,6 @@ export default class TradingPairBox extends Component {
                                 // style={styles.favoriteIcon}
                             />
                         }
-                        <Text 
-                            style={styles.favoriteText}
-                        >
-                            관심
-                        </Text>
                     </TouchableOpacity>
 
                 </View>

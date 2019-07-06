@@ -18,7 +18,6 @@ export default class TransactionHistory extends Component {
     selectedTabType = TAB_TYPES.PLACED_ORDER;
 
     _onPressTab = (tabType) => action((e) => {
-        this.props.placedOrderHistoryStore.loadPersonalOrders(this.props.tradingPairStore.selectedTradingPairName);
         this.selectedTabType = tabType;
     })
 
@@ -47,8 +46,20 @@ export default class TransactionHistory extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.tabBody}>
-                    {isPlacedOrderTab ? <PlacedOrder /> : null}
-                    {isCompletedOrderTab ? <CompletedOrder /> : null}
+                    {
+                        isPlacedOrderTab
+                        ? 
+                        <PlacedOrder 
+                            targetTradingPairName={this.props.tradingPairStore.selectedTradingPairName}
+                        /> 
+                        : null}
+                    {
+                        isCompletedOrderTab
+                        ? 
+                        <CompletedOrder
+                            targetTradingPairName={this.props.tradingPairStore.selectedTradingPairName}
+                        />
+                        : null}
                 </View>
             </View>
         );

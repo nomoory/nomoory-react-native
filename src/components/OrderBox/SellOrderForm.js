@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import commonStyle from '../../styles/commonStyle';
 import { StyleSheet, View, TouchableOpacity, TextInput, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { computed } from 'mobx';
+import { computed, reaction } from 'mobx';
 import number from '../../utils/number';
 import Decimal from '../../utils/decimal';
 import { withNavigation } from 'react-navigation';
@@ -21,6 +21,58 @@ const OPTIONS = [
 @observer
 export default class SellOrderForm extends Component {
     selectedIndex = -1;
+
+
+    constructor(props) {
+        super(props);
+        this.volumeReaction = reaction(
+            () => props.orderStore.values.volume,
+            volume => {
+                // 정수부 자리수가 3의 배수일때 ,가 추가되므로 현재 있던 위치에서 뒤로 한칸
+                if (
+                    this.volumeInputRef
+                    && volume
+                    && Decimal(volume.split('.')[0]).toFixed().length % 3 === 1
+                ) {
+                    const nextSelection = this.volumeInputRef._lastNativeSelection.start + 2 || 0;
+
+                    this.volumeInputRef.setNativeProps({
+                        selection: {
+                            start: nextSelection,
+                            end: nextSelection,
+                        }
+                    })
+                }            
+            }
+        );
+
+        this.priceReaction = reaction(
+            () => props.orderStore.values.price,
+            price => {
+                // 정수부 자리수가 3의 배수일때 ,가 추가되므로 현재 있던 위치에서 뒤로 한칸
+                if (
+                    this.priceInputRef
+                    && price
+                    && Decimal(price.split('.')[0]).toFixed().length % 3 === 1
+                ) {
+                    const nextSelection = this.priceInputRef._lastNativeSelection.start + 2 || 0;
+
+                    this.priceInputRef.setNativeProps({
+                        selection: {
+                            start: nextSelection,
+                            end: nextSelection,
+                        }
+                    })
+                }            
+            }
+        )
+    }
+
+    componentWillUnmount() {
+        if (this.volumeReaction) this.volumeReaction();
+        if (this.priceReaction) this.priceReaction();
+    }
+
 
     componentDidMount() {
         this.props.orderStore.setSide('SELL'); // SELL side임을 보장하기 위함
@@ -164,13 +216,20 @@ export default class SellOrderForm extends Component {
                     style={[orderFormStyle.volumeRow]}
                 >
                     <View style={[orderFormStyle.volumeInputContainer]}>
-                        <TextInput style={orderFormStyle.textInput}
+                        <TextInput 
+                            style={orderFormStyle.textInput}
+                            ref={(ref) => { this.volumeInputRef = ref; }}
                             onChangeText={this._onChangeVolume}
                             keyboardType={'numeric'}
                             value={number.putComma(volume)}
+                            onBlur={() => {
+                                this.props.orderStore.makeVolumeClean();
+                            }}
                         />
                         <View style={orderFormStyle.inputTitleContainer}>
-                            <Text style={orderFormStyle.inputTitle}>{`수량`}</Text>
+                            <Text style={orderFormStyle.inputTitle}>
+                                {`수량`}
+                            </Text>
                         </View>
                     </View>
                     <View>
@@ -217,10 +276,15 @@ export default class SellOrderForm extends Component {
                 </View>
                 <View style={[orderFormStyle.priceInputContiner]}>
                     <View style={[orderFormStyle.inputContainer]}>
-                        <TextInput style={orderFormStyle.textInput}
+                        <TextInput
+                            style={orderFormStyle.textInput}
+                            ref={(ref) => { this.priceInputRef = ref; }}
                             onChangeText={this._onChangePrice}
                             keyboardType={'numeric'}
                             value={number.putComma(price)}
+                            onBlur={() => {
+                                this.props.orderStore.makePriceClean();
+                            }}
                         />
                         <View style={orderFormStyle.inputTitleContainer}>
                             <Text style={orderFormStyle.inputTitle}>{`가격`}</Text>

@@ -85,34 +85,72 @@ export default class TransactionHistoryBox extends Component {
                     return (
                         <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
                             <View style={[styles.column, styles.firstColumn]}>
-                                <View style={[styles.columnItem, commonStyles[transaction_type], ]}>
-                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{base_symbol + ' '}</Text>
-                                    <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>{ TRANSLATIONS[transaction_type] }</Text>
+                                <View style={[
+                                    styles.columnItem,
+                                    commonStyles[transaction_type], 
+                                ]}>
+                                    <Text style={[
+                                        styles.tupleColumnText,
+                                        styles.dateText
+                                    ]}>
+                                        {base_symbol + ' '}
+                                    </Text>
+                                    <Text style={[
+                                        styles.tupleColumnText,
+                                        commonStyles[transaction_type]
+                                    ]}>{ TRANSLATIONS[transaction_type] }
+                                    </Text>
                                 </View>
                                 <View style={[styles.columnItem, styles.created]}> 
-                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''}</Text>
-                                    <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
+                                    <Text style={[styles.tupleColumnText, styles.dateText]}>
+                                        {date ? date + ' ' : ''}
+                                    </Text>
+                                    <Text style={[styles.tupleColumnText, styles.timeText]}>
+                                        {time ? time : ''}
+                                    </Text> 
                                 </View>
                             </View>
                             <View style={[styles.column]}>
-                                <View style={[styles.columnItem, styles.price, styles.textRight]}>
-                                    <Text style={[styles.tupleColumnText, styles.priceText]}>
+                                <View style={[
+                                    styles.columnItem,
+                                    styles.price,
+                                    styles.textRight
+                                ]}>
+                                    <Text style={[
+                                        styles.tupleColumnText,
+                                        styles.priceText
+                                    ]}>
                                         {price ? number.putComma(number.getFixedPrice(price, quote_symbol)) : '-' } {quote_symbol}
                                     </Text>     
                                 </View>
-                                <View style={[styles.columnItem, styles.volume, styles.textRight]}>
-                                    <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                <View style={[
+                                    styles.columnItem,
+                                    styles.volume,
+                                    styles.textRight
+                                ]}>
+                                    <Text style={[
+                                        styles.tupleColumnText,
+                                        styles.volumeText
+                                    ]}>
                                         {volume ? number.putComma(number.getFixedPrice(volume, base_symbol)) : '-' } {base_symbol}
                                     </Text>
                                 </View>
                             </View>
                             <View style={[styles.column]}>
-                                <View style={[styles.columnItem, styles.fee, styles.textRight]}>
+                                <View style={[
+                                    styles.columnItem,
+                                    styles.fee,
+                                    styles.textRight
+                                ]}>
                                     <Text style={[styles.tupleColumnText, styles.feeText]}>
                                         { fee ? number.putComma(number.getFixedPrice(fee, transaction_type === 'SELL' ? quote_symbol : base_symbol)) : '-' } { transaction_type === 'SELL' ? quote_symbol : base_symbol }
                                     </Text>
                                 </View>
-                                <View style={[styles.columnItem, styles.amount, styles.textRight]}>
+                                <View style={[
+                                    styles.columnItem,
+                                    styles.amount,
+                                    styles.textRight
+                                ]}>
                                     <Text style={[styles.tupleColumnText, styles.amountText]}>
                                         { amount ? number.putComma(number.getFixedPrice(amount, quote_symbol)) : '-' } {quote_symbol}
                                     </Text>

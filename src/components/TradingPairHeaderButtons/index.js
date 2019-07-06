@@ -17,7 +17,8 @@ export default class TradingPairHeaderButtons extends Component {
                     }}
                 >
                     {
-                        this.props.tradingPairStore.selectedTradingPair.isFavorite
+                        this.props.tradingPairStore.selectedTradingPair
+                        && this.props.tradingPairStore.selectedTradingPair.isFavorite
                         ? <Icon.FontAwesome
                             name="star"
                             size={21} color={commonStyle.color.brandBlue}

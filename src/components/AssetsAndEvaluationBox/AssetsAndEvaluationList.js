@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, ScrollView } from 'react-native';
+import { Text, StyleSheet, View, ScrollView, FlatList } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import commonStyle from '../../styles/commonStyle';
 
@@ -9,27 +9,42 @@ import constants from '../../global/constants';
 @inject('accountStore')
 @observer
 class AssetsAndEvaluationList extends Component {
+    componentDidMount() {
+        this.props.accountStore.loadAccounts()
+    }
+    
+    _onEndReached = () => {
+
+    }
+
+    _renderEmptyView = () => {
+        <Text style={[styles.noAssetText]}>
+            현재 보유한 자산이 없습니다.
+        </Text>
+    }
+
     render() {
         const { portfolio } = this.props.accountStore.portfolio || {};
-        const accountList = portfolio.map(
-            portfolio => (
-                <AssetsAndEvaluationRow
-                    key={ portfolio.uuid }
-                    portfolio={ portfolio }
-                />
-            )
-        );
         return (
-            <View style={ styles.container }>
-                <ScrollView>
-                    {   
-                        accountList.length > 0 ?
-                        accountList :
-                        <Text style={[styles.noAssetText]}>
-                            현재 보유한 자산이 없습니다.
-                        </Text>
-                    }
-                </ScrollView>
+            <View style={ styles.container }>               
+                <FlatList
+                    data={portfolio.length ? portfolio : []}
+                    // initialScrollIndex={8}
+                    onEndReachedThreshold={1}
+                    onEndReached={this._onEndReached}
+                    // refreshing={this.state.refreshing}
+                    // onRefresh={this.onRefresh}
+                    enableEmptySections={true}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <AssetsAndEvaluationRow
+                                key={ item.uuid }
+                                portfolio={ item }
+                            />
+                        );
+                    }}
+                    emptyView={this._renderEmptyView}
+                />
             </View>
         )
     }
@@ -38,7 +53,6 @@ class AssetsAndEvaluationList extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8',
     },
     header: {
         flexDirection: 'row',
@@ -55,7 +69,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         fontWeight: '500',
-        color: commonStyle.color.coblicGrey,
+        color: commonStyle.color.brandGrey,
     }
 })
 

@@ -6,10 +6,26 @@ import number from '../../../utils/number';
 import momentHelper from '../../../utils/momentHelper';
 import Decimal from '../../../utils/decimal';
 import ScrollLoading from '../../ScrollLoading';
+import { reaction } from 'mobx';
 
 @inject('placedOrderHistoryStore', 'tradingPairStore')
 @observer
 export default class PlacedOrder extends Component {
+    componentDidMount() {
+        this.props.placedOrderHistoryStore.loadPersonalOrders(this.props.targetTradingPairName);
+        
+        this.loadTradingPairReaction = reaction(
+            () => this.props.targetTradingPairName,
+            targetTradingPairName => {
+                this.props.placedOrderHistoryStore.loadPersonalOrders(targetTradingPairName);
+            }
+        )
+    }
+
+    componentWillUnmount() {
+        if (this.loadTradingPairReaction) this.loadTradingPairReaction();
+    }
+
     _onPressDeleteOrder = (order_uuid) => () => {
         this.props.placedOrderHistoryStore.deletePlacedOrder(order_uuid);
     }

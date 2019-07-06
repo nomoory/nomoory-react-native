@@ -1,5 +1,4 @@
 import { observable, action, computed, reaction } from 'mobx';
-import orderbookStore from './orderbookStore';
 import orderStore from './orderStore';
 import Hangul from 'hangul-js';
 import agent from '../utils/agent';
@@ -14,7 +13,6 @@ class TradingPairStore {
         const selectedTradingPairNameReaction = reaction(
             () => this.selectedTradingPairName,
             async (selectedTradingPairName) => {
-                await orderbookStore.loadOrderbook(selectedTradingPairName);
                 orderStore.setTradingPair(selectedTradingPairName);
             }
         );

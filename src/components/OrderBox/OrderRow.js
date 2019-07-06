@@ -6,6 +6,8 @@ import number from '../../utils/number';
 import commonStyle from '../../styles/commonStyle';
 import { computed } from 'mobx';
 
+export const rowHeight = 36;
+
 @inject('orderStore', 'orderbookStore', 'tradingPairStore')
 @observer
 export default class OrderRow extends Component {
@@ -111,7 +113,7 @@ export default class OrderRow extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: 32,
+        height: rowHeight,
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',

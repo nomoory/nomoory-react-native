@@ -40,8 +40,8 @@ class TradingPairRow extends Component {
             isFirstLoad: false
         })
     }
+
     componentWillUnmount() {
-        this.setState({value: 0})
         clearTimeout(turnBackTimeout);
     }
 
@@ -249,15 +249,15 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     textSizeBig: {
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: '200'
     },
     textSizeNormal: {
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: '200'
     },
     textSizeSmall: {
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: '200'
     },
     paddingTop: {

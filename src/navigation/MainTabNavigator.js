@@ -7,7 +7,6 @@ import {
 // https://expo.github.io/vector-icons/
 import * as Icon from '@expo/vector-icons'
 import ExchangeScreen from '../screens/ExchangeScreen';
-import TradingPairScreen from '../screens/TradingPairScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
 import AccountListScreen from '../screens/AccountListScreen';
 import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScreen';
@@ -19,14 +18,13 @@ import commonStyle from '../styles/commonStyle';
 const ExchangeStack = createStackNavigator(
     {
         Exchange: ExchangeScreen,
-        TradingPair: TradingPairScreen,
     },{
         defaultNavigationOptions: {
             headerTitleAllowFontScaling: false,
-            headerBackAllowFontScaling: false,    
+            headerBackAllowFontScaling: false,
             headerTitleStyle: {
                 flex: 1,
-                textAlign: "center", 
+                textAlign: "center",
             },
         }
     }

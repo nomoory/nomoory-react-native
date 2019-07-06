@@ -6,14 +6,28 @@ import tradingPairStore from './tradingPairStore';
 
 const ORDER_LENGTH_OF_EACH_SIDE = 15;
 class OrderbookStore {
-    @observable isLoading = false;
-    @observable errors = null;
+    @observable
+    isLoading = false;
 
-    @observable buyOrdersRegistry = [];
-    @observable sellOrdersRegistry = [];
-    @observable baseSymbolOfSelectedTradingPair = null;
+    @observable
+    errors = null;
 
-    @computed get sellOrders() {
+    @observable
+    buyOrdersRegistry = [];
+
+    @observable
+    sellOrdersRegistry = [];
+
+    @observable
+    baseSymbolOfSelectedTradingPair = null;
+
+    @computed
+    get ordersLength() {
+        return this.buyOrdersRegistry.length + this.sellOrdersRegistry.length;
+    }
+
+    @computed
+    get sellOrders() {
         const tempSellOrders = [];
         let count = 0;
         this.sellOrdersRegistry.forEach((sellOrder, index) => {
@@ -25,11 +39,11 @@ class OrderbookStore {
         while (count++ < 15)  {
             tempSellOrders.unshift(this._reformatOrderForDisplay(null, 'SELL'));
         }
-
         return tempSellOrders;
     };
 
-    @computed get buyOrders() {
+    @computed
+    get buyOrders() {
         const tempBuyOrders = [];
         let count = 0;
         this.buyOrdersRegistry.forEach((buyOrder, index) => {
@@ -58,7 +72,8 @@ class OrderbookStore {
         };
     };
 
-    @computed get buyOrdersSum_display() {
+    @computed
+    get buyOrdersSum_display() {
         let volume_sum = Decimal(0);
         this.buyOrders.forEach((buyOrder) => {
             if (buyOrder && buyOrder.volume) {
@@ -70,7 +85,8 @@ class OrderbookStore {
         return number.putComma(volume_sum.toFixed(3));
     };
 
-    @computed get sellOrdersSum_display() {
+    @computed
+    get sellOrdersSum_display() {
         let volume_sum = Decimal(0);
         this.sellOrders.forEach((sellOrder) => {
             if (sellOrder && sellOrder.volume) {
@@ -82,7 +98,8 @@ class OrderbookStore {
         return number.putComma(volume_sum.toFixed(3))
     };
 
-    @computed get maxOrderVolume() {
+    @computed
+    get maxOrderVolume() {
         let maxOrderVolume = 0;
         this.sellOrders.forEach(sellOrder => {
             if (!sellOrder) return;
@@ -99,6 +116,7 @@ class OrderbookStore {
     }
 
     @action clearOrderbook() {
+        console.log('clearOrderbook')
         this.buyOrdersRegistry = [];
         this.sellOrdersRegistry = [];
     }
@@ -111,7 +129,9 @@ class OrderbookStore {
     @action loadOrderbook(selectedTradingPairName) {
         this.isLoading = true;
         this.clearOrderbook();
-        return agent.loadOrderbookByTradingPairName(selectedTradingPairName || tradingPairStore.selectedTradingPairName)
+        const tradingPairName = selectedTradingPairName || tradingPairStore.selectedTradingPairName;
+        console.log(`load orderbook ${tradingPairName}`)
+        return agent.loadOrderbookByTradingPairName(tradingPairName)
         .then(action((response) => {
             this.clearOrderbook();
             this.buyOrdersRegistry = response.data.buys;
