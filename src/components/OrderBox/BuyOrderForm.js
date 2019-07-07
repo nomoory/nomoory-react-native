@@ -30,7 +30,8 @@ export default class BuyOrderForm extends Component {
                 // 정수부 자리수가 3의 배수일때 ,가 추가되므로 현재 있던 위치에서 뒤로 한칸
                 if (
                     this.volumeInputRef
-                    && volume
+                    && volume && this.volume
+                    && this.volume.length < volume.length
                     && Decimal(volume.split('.')[0]).toFixed().length % 3 === 1
                 ) {
                     const nextSelection = this.volumeInputRef._lastNativeSelection.start + 2 || 0;
@@ -41,7 +42,8 @@ export default class BuyOrderForm extends Component {
                             end: nextSelection,
                         }
                     })
-                }            
+                }
+                this.volume = volume; 
             }
         );
 
@@ -51,7 +53,8 @@ export default class BuyOrderForm extends Component {
                 // 정수부 자리수가 3의 배수일때 ,가 추가되므로 현재 있던 위치에서 뒤로 한칸
                 if (
                     this.priceInputRef
-                    && price
+                    && price && this.price
+                    && this.price.length < price.length
                     && Decimal(price.split('.')[0]).toFixed().length % 3 === 1
                 ) {
                     const nextSelection = this.priceInputRef._lastNativeSelection.start + 2 || 0;
@@ -62,7 +65,8 @@ export default class BuyOrderForm extends Component {
                             end: nextSelection,
                         }
                     })
-                }            
+                }     
+                this.price = price;       
             }
         )
     }

@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import TotalAssetsEvaluation from './TotalAssetsEvaluation';
 import AssetsAndEvaluationList from './AssetsAndEvaluationList';
 import { observer } from 'mobx-react';
+import commonStyle from '../../styles/commonStyle';
 
 @observer
 export default class AssetsAndEvaluationBox extends Component {
@@ -19,7 +20,6 @@ export default class AssetsAndEvaluationBox extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        // backgroundColor: commonStyle.color.borderColor
     },
-
 })

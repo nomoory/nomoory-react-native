@@ -10,7 +10,6 @@ export const QUOTE_SYMBOL = 'KRW';
 
 class AccountStore {
     @observable isLoading = false;
-    @observable errors = null;
 
     /*
      * 보유 Assets (balance를 포함함)
@@ -21,7 +20,8 @@ class AccountStore {
     @observable totalAccountsCount = 0;
     @observable searchKeyword = '';
     @observable selectedAccountSymbol = '';
-    @computed get selectedAccount() {
+    @computed
+    get selectedAccount() {
         return this.getAccountByAssetSymbol(this.selectedAccountSymbol);
     }
 
@@ -36,15 +36,18 @@ class AccountStore {
         }
     }
 
-    @action clearCurrency() {
+    @action
+    clearCurrency() {
         this.selectedAccountSymbol = '';
     }
 
-    @action updateSearchKeyword(keyword) {
+    @action
+    updateSearchKeyword(keyword) {
         this.searchKeyword = keyword.toLowerCase();
     }
 
-    @computed get accounts() {
+    @computed
+    get accounts() {
         let accounts = [];
         const searcher = new Hangul.Searcher(this.searchKeyword);
         this.accountsRegistry.forEach((account) => {
@@ -55,6 +58,16 @@ class AccountStore {
         });
         accounts = this._sort(accounts);
         accounts = this._putKRWInFront(accounts);
+        return accounts;
+    };
+
+    @computed
+    get allAccounts() {
+        let accounts = [];
+        this.accountsRegistry.forEach((account) => {
+            account = this.getAccountByAssetSymbol(account.asset_symbol);
+            accounts.push(account);
+        });
         return accounts;
     };
 
@@ -81,7 +94,8 @@ class AccountStore {
         return accounts;
     }
 
-    @computed get portfolio() {
+    @computed
+    get portfolio() {
         let portfolio = [];
         let totalBought = Decimal(0);
         let totalEvaluation = Decimal(0);
@@ -131,7 +145,8 @@ class AccountStore {
         }
     };
 
-    @computed get totalAssetsEvaluation() {
+    @computed
+    get totalAssetsEvaluation() {
         try {
             let total_evaluated_price_in_quote = Decimal(0); // 자산 평가액(base_symbol)
             let holding_quote_decimal = Decimal(0) // 보유 base_symbol
@@ -140,7 +155,7 @@ class AccountStore {
             let evaluated_revenue = Decimal(0);
             let evaluated_revenue_ratio = Decimal(0);
         
-            this.accounts.forEach((account) => {
+            this.allAccounts.forEach((account) => {
                 let { balance } = account || {};
                 if (balance) {
                     if (account.asset_symbol !== QUOTE_SYMBOL) {
@@ -207,7 +222,8 @@ class AccountStore {
         return account;
     }
 
-    @action setAccount(account) {
+    @action
+    setAccount(account) {
         this.accountsRegistry.set(account.asset_symbol, {...this.accountsRegistry.get(account.asset_symbol), ...account});
     }
 
@@ -231,9 +247,10 @@ class AccountStore {
         return searcher.search(account.asset_english_name.toLowerCase()) >= 0 ? true : false;
     }
 
-    @action loadAccounts() {
+    @action
+    loadAccounts() {
         this.isLoading = true;
-        
+
         this.accountsRegistry.clear();
         return agent.loadAccounts()
             .then(action((response) => {
@@ -247,16 +264,15 @@ class AccountStore {
                 this.isLoadedOnce = true;
             }))
             .catch(action((err) => {
-                this.errors = err.response && err.response.body && err.response.body.errors;
                 this.isLoading = false;
                 this.isLoadedOnce = true;
                 throw err;
             }));
     }
 
-    @action createAndGetWarmWalletAddress(targetTokenSymbol) {
+    @action
+    createAndGetWarmWalletAddress(targetTokenSymbol) {
         this.isLoading = true;
-        this.errors = undefined;
 
         let account = this.getAccountByAssetSymbol(targetTokenSymbol);
         return agent.createAndGetWarmWalletAddress(account.uuid)
@@ -265,7 +281,6 @@ class AccountStore {
                 this.isLoading = false;
             }))
             .catch(action((err) => {
-                this.errors = err.response && err.response.body && err.response.body.errors;
                 this.isLoading = false;
                 throw err;
             }));

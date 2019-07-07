@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import commonStyle from '../../styles/commonStyle'
+import commonStyle from '../../styles/commonStyle';
 
 const searchUiColor = commonStyle.color.fontTextColor;
-@inject('tradingPairStore')
+
+@inject('accountStore')
 @observer
-class TradingPareSearchBar extends Component {
+export default class AccountSearchBar extends Component {
     _onChangeSearchBar = (searchKeyword) => {
-        this.props.tradingPairStore.setSearchKeyword(searchKeyword);
+        this.props.accountStore.updateSearchKeyword(searchKeyword);
     }
 
     render() {
         return (
             <View style={[styles.container]}>
-                <Image style={[styles.searchImage]}
+                <Image
+                    style={[styles.searchImage]}
                     source={require('../../../assets/images/exchange/icon_search.png')}
                 />
-                 <TextInput style={[styles.textInput]}
+                 <TextInput
+                    style={[styles.textInput]}
                     placeholder="코인명/심볼검색"
                     placeholderTextColor={searchUiColor}
                     onChangeText={this._onChangeSearchBar} 
@@ -26,7 +29,6 @@ class TradingPareSearchBar extends Component {
         );
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -50,4 +52,3 @@ const styles = StyleSheet.create({
         flex: 1,
     }
 })
-export default TradingPareSearchBar;

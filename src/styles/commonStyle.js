@@ -14,8 +14,9 @@ export const color = {
     mainThemeColor: '#0062df',
     headerTextColor: '#093687',
     fontTextColor: '#093687',
-    emptyBackgroundColor: '#f6f6f6',
+    emptyBackgroundColor: '#EDEFF4',
     subTitleGreyColor: '#333',
+    borderColor: '#dadae0',
 };
 
 export const font = {
@@ -55,7 +56,7 @@ const commonStyle = {
 /*
  * 위 font의 size에 있는 항목들을 style 화 시킴
  * ex) font.size.yourFontSize = 20;
- * => style= {[commonStyles.yourFontSizeText]} 로 사용 가능
+ * => style= {[commonStyle.yourFontSizeText]} 로 사용 가능
  */
 Object.keys(font.size).forEach((sizeName) => {
     let size = font.size[sizeName];

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import commonStyles, { font }from '../../styles/commonStyle';
+import commonStyle from '../../styles/commonStyle';
 import { StyleSheet, View, Text, ListView } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
-import Decimal from '../../utils/decimal';
 import { reaction, computed } from 'mobx';
 import ScrollLoading from '../ScrollLoading';
 
@@ -80,6 +79,7 @@ export default class DailyTradeHistory extends Component {
                         close_price
                     } = dailyTrade;
                     let [date, time] = momentHelper.getLocaleDatetime(candle_start_date_time).split(' ');
+                    console.log({dailyTrade})
                     signed_change_rate = parseFloat(number.getFixed(signed_change_rate, 2));
                     let sign = '';
 
@@ -98,7 +98,10 @@ export default class DailyTradeHistory extends Component {
                                 styles.columnItem,
                                 styles.price
                             ]}>
-                                <Text style={[styles.tupleColumnText, styles.priceText]}>{date}
+                                <Text style={[
+                                    styles.tupleColumnText,
+                                    styles.priceText
+                                ]}>{date}
                                 </Text>     
                             </View>
                             <View style={[
@@ -109,11 +112,22 @@ export default class DailyTradeHistory extends Component {
                                 <Text style={[
                                     styles.tupleColumnText,
                                     styles.priceText
-                                ]}>{close_price ? number.putComma(number.getFixed(close_price)): '-'}
+                                ]}>{
+                                    close_price
+                                    ? number.putComma(number.getFixed(close_price))
+                                    : '-'
+                                }
                                 </Text>     
                             </View>
-                            <View style={[styles.column, styles.columnItem, styles.volume ]}>
-                                <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                            <View style={[
+                                styles.column,
+                                styles.columnItem,
+                                styles.volume
+                            ]}>
+                                <Text style={[
+                                    styles.tupleColumnText, 
+                                    styles.volumeText
+                                ]}>
                                     {
                                         `${sign === 'RED' ? '+' : ''} ${formatedSignedChangeRate ? formatedSignedChangeRate + '%' : '-'}`
                                     }
@@ -167,9 +181,9 @@ const styles = StyleSheet.create({
 
         borderStyle: 'solid',
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
         borderTopWidth: 1,
-        borderTopColor: '#dedfe0',
+        borderTopColor: commonStyle.color.borderColor,
         
     },
     headColumnText: {
@@ -184,7 +198,7 @@ const styles = StyleSheet.create({
     columnItem: {
         borderStyle: 'solid',
         borderWidth: 0.5,
-        borderColor: '#dedfe0',
+        borderColor: commonStyle.color.borderColor,
 
         flex: 1,
         justifyContent: 'center',
@@ -197,7 +211,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderStyle: 'solid',
         borderRightWidth: 1,
-        borderRightColor: '#dedfe0',
+        borderRightColor: commonStyle.color.borderColor,
     },
     odd: {
         backgroundColor: '#f7f8fa',

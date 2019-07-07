@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, ScrollView, View } from 'react-native';
+import { Text, StyleSheet, FlatList, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import AccountItem from './AccountItem';
 import Decimal from '../../utils/decimal';
@@ -9,35 +9,51 @@ import { withNavigation } from 'react-navigation';
 @inject('accountStore')
 @observer
 export default class AccountList extends Component {
-    _renderAccountList() {
-        const { accounts } = this.props.accountStore;
+    _onEndReached = () => {
 
-        return accounts.map((account, index) => {
+    }
+
+    _filterAccounts = (accounts) => {
+        if (!accounts) return [];
+        if (accounts.length ===  0) return [];
+
+        return accounts.filter((account, index) => {
             if (
                 this.props.showPossesionOnly
                 && Decimal(account.balance || 0).equals(0)
             ) {
-                return null;
+                return false;
             }
-            if (
-                this.props.showDepositableOnly && 
-                !account.is_depositable
-            ) {
-                return null;
-            }
-            return ( <AccountItem key={index} account={account} /> );
+            return true;
         });
     }
-
+    
     render() {
+        const { accounts } = this.props.accountStore;
         return (
             <View style={[styles.container]}>
                 <View>
-                    <ScrollView style={[styles.scrollViewContainer]}>
-                        <View style={[styles.itemsContainer]}>
-                            {this._renderAccountList()}
-                        </View>
-                    </ScrollView>
+                    <FlatList 
+                        style={[
+                            styles.scrollViewContainer,
+                            styles.itemsContainer
+                        ]}
+                        data={this._filterAccounts(accounts)}
+                        // initialScrollIndex={8}
+                        onEndReachedThreshold={1}
+                        onEndReached={this._onEndReached}
+                        // refreshing={this.state.refreshing}
+                        // onRefresh={this.onRefresh}
+                        enableEmptySections={true}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <AccountItem
+                                    account={item}
+                                />
+                            );
+                        }}
+                        // emptyView={this._renderEmptyView}
+                    />
                 </View>
             </View>
         );

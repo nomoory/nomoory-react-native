@@ -44,7 +44,8 @@ class CommonModal extends Component {
                             <View style={[styles.contentContainer]}>
                                     {
                                         typeof content === 'string' ?
-                                        <Text style={[styles.contentText]}>{content}</Text> :
+                                        <Text style={[styles.contentText]}>{content}</Text> 
+                                        :
                                         null
                                     }
                                     {
@@ -103,7 +104,6 @@ const styles = StyleSheet.create({
     },
     container: {
         width: 300,
-        borderRadius: 6,
         backgroundColor: 'white',
     },
     headerContainer: {
@@ -126,15 +126,13 @@ const styles = StyleSheet.create({
         minHeight: 40,
     },
     contentContainer: {
-        marginBottom: 5,
         paddingLeft: 30,
         paddingRight: 30,
-        marginBottom: 15,
-
+        paddingBottom: 15,
     },
     contentText: {
         textAlign: 'center',
-        fontSize: font.size.modalContent,
+        // fontSize: font.size.modalContent,
     },
     buttons: {
         height: 48,

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 0.8,
         borderTopColor: '#9e9f90',
         borderBottomWidth: 0.8,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     column: {
         flexDirection: 'row',

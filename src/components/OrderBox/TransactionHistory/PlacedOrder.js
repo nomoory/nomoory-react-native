@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyles, { font }from '../../../styles/commonStyle';
+import commonStyle from '../../../styles/commonStyle';
 import { StyleSheet, View, Text, TouchableOpacity, ListView } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../../utils/number';
@@ -58,7 +58,7 @@ export default class PlacedOrder extends Component {
                         <View style={[styles.tuple]}>
                             <View style={styles.orderInfo}>
                                 <View style={[styles.row]}>
-                                    <Text style={[styles.orderType, commonStyles[side]]}>
+                                    <Text style={[styles.orderType, commonStyle[side]]}>
                                         { side === 'SELL' ? '매도' : '매수' }
                                     </Text>
                                     <View style={[styles.created]}> 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         paddingTop: 5,
         paddingBottom: 5,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     row: {
         flexDirection: 'row',
