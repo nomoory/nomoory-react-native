@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
 
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     name: {
         width: 100,

@@ -98,7 +98,7 @@ export default class AssetsAndEvaluationRow extends Component {
                                 </Text>
                                 <Text style={styles.unitText}> KRW</Text>
                             </View>
-                            <Text style={[styles.bottomItemTitle]}>현재가치</Text>
+                            <Text style={[styles.bottomItemTitle]}>평가금액</Text>
                         </View>
                         <View style={styles.bottomItemContainer}>
                             <View style={styles.flexRow}>
@@ -129,17 +129,17 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         paddingBottom: 0,
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     
     upperContainer: {
-        paddingTop: 8,
-        paddingBottom: 8,
+        paddingTop: 10,
+        paddingBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
 
         borderBottomWidth: 0.8,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
 
     },
     upperLeftContainer: {
@@ -169,13 +169,12 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     bottomContainer: {
-        padding: 15,
-        paddingTop: 12,
-        paddingBottom: 7,
+        paddingTop: 10,
+        paddingBottom: 10,
         flexDirection: 'row',
 
         borderBottomWidth: 0.5,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     bottomSubContainer: {
         flex: 1,
@@ -198,6 +197,8 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     flexRow: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        paddingTop: 4,
+        paddingBottom: 4,
     }
 })

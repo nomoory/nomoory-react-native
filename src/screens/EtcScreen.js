@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import AnnouncementBox from '../components/AnnouncementBox';
 import commonStyle from '../styles/commonStyle';
+import * as Icon from '@expo/vector-icons';
 
 @withNavigation
 @inject('userStore', 'authStore', 'modalStore', 'announcementStore')
@@ -12,7 +13,7 @@ import commonStyle from '../styles/commonStyle';
 export default class EtcScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: '더보기',
+            title: '내정보',
             // headerLeft: (
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
@@ -25,9 +26,9 @@ export default class EtcScreen extends Component {
         this.props.announcementStore.loadAnnouncementList();
     }
 
-    _showMoreImage() {
+    _showMoreImage(width = 10) {
         return <Image
-            style={{ width: 10, resizeMode: 'contain' }}
+            style={{ width, resizeMode: 'contain' }}
             source={
                 require('../../assets/images/depositWithdraw/btn_arrow_small.png')
             }
@@ -77,26 +78,36 @@ export default class EtcScreen extends Component {
                 { 
                     this.props.userStore.isLoggedIn
                     ? (
-                        <View style={[
-                            styles.userInfo, styles.listContainer
-                        ]}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.userInfo,
-                                    styles.row,
-                                ]}
-                            >
+                        <View 
+                            style={[
+                                styles.userInfo,
+                            ]}
+                        >
+                            <View style={[styles.emailContainer]}>
                                 <Text style={styles.emailText}>{email} 님, 환영합니다!</Text>
-                            </TouchableOpacity>
+                            </View>           
+                            <View style={[styles.divider]} />
                             <TouchableOpacity
-                                style={[styles.row, styles.securityLevel]}
+                                style={[styles.securityLevel]}
                                 onPress={this._onPressSecurityLevel}
                             >
-                                <Text 
-                                    style={styles.securityLevelText}>
-                                보안등급 {this.props.userStore.verificationProgress || '-'}/5 단계
-                                </Text>
-                                { this._showMoreImage() }
+                                <Icon.MaterialCommunityIcons
+                                    name="security"
+                                    size={40} 
+                                    color={commonStyle.color.brandBlue}
+                                    // style={styles.favoriteIcon}
+                                />
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                    <Text
+                                        style={styles.securityLevelText}
+                                    >보안등급 {this.props.userStore.verificationProgress || '-'}/5 단계
+                                    </Text>
+                                    {/* <Icon.AntDesign
+                                        name="right"
+                                        size={14} 
+                                        // style={styles.favoriteIcon}
+                                    /> */}
+                                </View>
                             </TouchableOpacity>
                         </View>
                     ) : null
@@ -110,14 +121,7 @@ export default class EtcScreen extends Component {
                         >
                         <Text style={[styles.rowText]}>고객센터</Text>
                         { this._showMoreImage() }
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.row]}
-                        onPress={this._onPressWhitePaper}
-                        >
-                        <Text style={[styles.rowText]}>백서</Text>
-                        { this._showMoreImage() }
-                    </TouchableOpacity>                    
+                    </TouchableOpacity>             
                 </View>
                 <View style={styles.listContainer}>
                     {
@@ -145,21 +149,30 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     securityLevel: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
+        paddingTop: 15,
+    },
+    divider: {
+        borderTopWidth: 1,
+        borderTopColor: '#ddd',
     },
     securityLevelText: {
-        marginRight: 10,
+        textDecorationLine: 'underline',
     },
     listContainer: {
         backgroundColor: 'white',
         marginBottom: 15,
     },
+    emailContainer: {
+        paddingBottom: 15,
+    },
     emailText: {
         fontWeight: '600',
     },
     userInfo: {
-        backgroundColor: '#f7f8fa'
+        backgroundColor: '#f7f8fa',
+        padding: 15,
     },
     row: {
         flexDirection: 'row',
@@ -167,21 +180,24 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderWidth: 0.5,
         borderColor: '#f7f8fa',
-        height: 36,
+        height: 44,
         paddingLeft: 10,
         paddingRight: 10,
     },
     rowText: {
         fontWeight: '600',
+        fontSize: 14,
     },
     scrollContainer: {
         flex: 1,
         backgroundColor: '#f7f8fa'
     },
     loginText: {
-        color: commonStyle.color.coblicYellow,
+        fontWeight: '500',
+        color: commonStyle.color.brandBlue,
     },
     logoutText: {
+        fontWeight: '500',
         color: commonStyle.color.brandBlue,
     },
 

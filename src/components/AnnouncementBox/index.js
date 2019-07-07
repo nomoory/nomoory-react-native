@@ -3,6 +3,7 @@ import { Text, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import momentHelper from '../../utils/momentHelper';
+import commonStyle from '../../styles/commonStyle';
 
 @withNavigation
 @inject('announcementStore')
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         justifyContent: 'space-between',
         borderWidth: 0.5,
-        borderColor: '#dedfe0',
+        borderColor: commonStyle.color.borderColor,
         height: 40,
         fontSize: 18,
     },
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     row: {
         justifyContent: 'center',
         borderWidth: 0.5,
-        borderColor: '#dedfe0',
+        borderColor: commonStyle.color.borderColor,
         height: 40,
         paddingLeft: 10,
     },

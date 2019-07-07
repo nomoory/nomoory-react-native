@@ -4,7 +4,7 @@ import { Text, StyleSheet, View, TextInput, Image, TouchableOpacity, ActivityInd
 import { inject, observer } from 'mobx-react';
 import { Linking } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import commonStyles, { color } from '../styles/commonStyle';
+import commonStyle, { color } from '../styles/commonStyle';
 import backIconSrc from '../../assets/images/login/back_icon.png';
 import { Input } from 'react-native-elements';
 
@@ -197,7 +197,7 @@ export default class SignupScreen extends Component {
                         onPress={this._onPressSignupButton}>
                         {
                             this.props.signupStore.isLoading ?
-                            <ActivityIndicator size="small" color={commonStyles.color.brandPaleBlue}/> :
+                            <ActivityIndicator size="small" color={commonStyle.color.brandPaleBlue}/> :
                             <Text style={[styles.signupButtonText]}>회원가입</Text>
                         }
                     </TouchableOpacity>

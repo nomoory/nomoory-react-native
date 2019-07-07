@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyles from '../../styles/commonStyle';
+import commonStyle from '../../styles/commonStyle';
 import { StyleSheet, View, ListView, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
@@ -87,7 +87,7 @@ export default class TransactionHistoryBox extends Component {
                             <View style={[styles.column, styles.firstColumn]}>
                                 <View style={[
                                     styles.columnItem,
-                                    commonStyles[transaction_type], 
+                                    commonStyle[transaction_type], 
                                 ]}>
                                     <Text style={[
                                         styles.tupleColumnText,
@@ -97,7 +97,7 @@ export default class TransactionHistoryBox extends Component {
                                     </Text>
                                     <Text style={[
                                         styles.tupleColumnText,
-                                        commonStyles[transaction_type]
+                                        commonStyle[transaction_type]
                                     ]}>{ TRANSLATIONS[transaction_type] }
                                     </Text>
                                 </View>
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
 
         borderStyle: 'solid',
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',     
+        borderBottomColor: commonStyle.color.borderColor,     
     },
     headColumnText: {
         color: '#333333',
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     columnItem: {
         borderStyle: 'solid',
         borderWidth: 0.5,
-        borderColor: '#dedfe0',
+        borderColor: commonStyle.color.borderColor,
 
         flex: 1,
         justifyContent: 'center',
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderStyle: 'solid',
         borderRightWidth: 1,
-        borderRightColor: '#dedfe0',
+        borderRightColor: commonStyle.color.borderColor,
     },
     odd: {
         backgroundColor: '#f7f8fa',

@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     },
     verticalBorder: {
         height: '100%',
-        borderWidth: 0.6,
-        borderColor: '#999999'
+        borderRightWidth: 1.2,
+        borderRightColor: commonStyle.color.borderColor,
     },
     // investment info
     investInfoContainer: {

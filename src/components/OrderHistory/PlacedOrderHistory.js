@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyles, { font }from '../../styles/commonStyle';
+import commonStyle from '../../styles/commonStyle';
 import { StyleSheet, View, Text, TouchableOpacity, ListView } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
@@ -82,9 +82,9 @@ export default class PlacedOrderHistory extends Component {
                             // index % 2 === 0 ? styles['even'] : styles['odd'] 
                         ]}>
                             <View style={[styles.column]}>
-                                <View style={[styles.columnItem, commonStyles[side]]}>
+                                <View style={[styles.columnItem, commonStyle[side]]}>
                                     <Text style={[styles.tupleColumnText ]}>{ base_symbol } </Text>
-                                    <Text style={[styles.tupleColumnText, commonStyles[side]]}>
+                                    <Text style={[styles.tupleColumnText, commonStyle[side]]}>
                                         { side === 'SELL' ? '매도' : '매수' }
                                     </Text>
                                 </View>
@@ -163,9 +163,9 @@ const styles = StyleSheet.create({
 
         borderStyle: 'solid',
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
         borderTopWidth: 1,
-        borderTopColor: '#dedfe0',
+        borderTopColor: commonStyle.color.borderColor,
         
     },
     headColumnText: {
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     columnItem: {
         borderStyle: 'solid',
         borderWidth: 0.5,
-        borderColor: '#dedfe0',
+        borderColor: commonStyle.color.borderColor,
 
         flex: 1,
         justifyContent: 'center',
@@ -193,9 +193,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderStyle: 'solid',
         borderRightWidth: 1,
-        borderRightColor: '#dedfe0',
+        borderRightColor: commonStyle.color.borderColor,
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     odd: {
         backgroundColor: '#f7f8fa',

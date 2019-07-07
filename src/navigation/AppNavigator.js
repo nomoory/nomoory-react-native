@@ -9,7 +9,9 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import OtpVerificationScreen from '../screens/OtpVerificationScreen';
 import MainTabNavigator from './MainTabNavigator';
+
 import TradingPairScreen from '../screens/TradingPairScreen';
+import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScreen';
 
 const AuthStack = createStackNavigator(
     {
@@ -22,6 +24,7 @@ const AuthStack = createStackNavigator(
 const TradingPairStack = createStackNavigator(
     {
         TradingPair: TradingPairScreen,
+        AccountDepositWithdraw:  AccountDepositWithdrawScreen,
     }
 );
 

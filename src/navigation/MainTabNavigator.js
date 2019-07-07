@@ -9,7 +9,6 @@ import * as Icon from '@expo/vector-icons'
 import ExchangeScreen from '../screens/ExchangeScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
 import AccountListScreen from '../screens/AccountListScreen';
-import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScreen';
 import EtcScreen from '../screens/EtcScreen';
 import AnnouncementListScreen from '../screens/AnnouncementListScreen';
 import AnnouncementDetailScreen from '../screens/AnnouncementDetailScreen';
@@ -103,7 +102,6 @@ InvestmentStack.navigationOptions = {
 const DepositWithdrawStack = createStackNavigator(
     {
         Accounts: AccountListScreen, 
-        AccountDepositWithdraw:  AccountDepositWithdrawScreen
     }, {
         defaultNavigationOptions: {
             headerTitleAllowFontScaling: false,
@@ -159,7 +157,7 @@ const EtcStack = createStackNavigator(
 );
 
 EtcStack.navigationOptions = {
-    tabBarLabel: '더 보기',
+    tabBarLabel: '내정보',
     tabBarIcon: ({ tintColor, focused }) => {
         if (focused) {
             return (
