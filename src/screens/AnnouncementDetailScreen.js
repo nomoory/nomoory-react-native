@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, ScrollView} from 'react-native';
 import { inject, observer } from 'mobx-react';
 import headerStyle from '../styles/headerStyle';
 import momentHelper from '../utils/momentHelper';
+import commonStyle from '../styles/commonStyle';
+import * as Icon from '@expo/vector-icons';
 
 let uuid = null;
+let from = null;
 
 @inject('tradingPairStore', 'announcementStore', 'modalStore')
 @observer
@@ -14,14 +17,31 @@ export default class AnnouncementDetailScreen extends Component {
     };
     
     static navigationOptions = ({ navigation }) => {
+        from = navigation.getParam('from', 'Etc');
         uuid = navigation.getParam('uuid', '');
         return {
-            title: '공지사항',
-            // headerLeft: (
-            //   <Button onPress={ () => navigation.goback() }
-            //   title={ "cancelButtonName" }></Button>
-            // ),
-            ...headerStyle.blue,
+            headerLeft: (
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate(from);
+                        }}
+                    >
+                        <Icon.AntDesign
+                            name="left"
+                            size={30} color={commonStyle.color.headerTextColor}
+                        // style={styles.favoriteIcon}
+                        />
+                    </TouchableOpacity>
+                    <Text
+                        style={styles.headerText}
+                        maxFontSizeMultiplier={20}
+                        allowFontScaling={false}
+                    >공지사항
+                    </Text>
+                </View>
+            ),
+            ...headerStyle.white,
         };
     };
 
@@ -51,23 +71,20 @@ export default class AnnouncementDetailScreen extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                        <Text style={styles.titleText}>
-                            {title}
-                        </Text>
+                    <Text style={styles.titleText}>
+                        {title}
+                    </Text>
                     <View style={styles.date}>
-                        <Text style={styles.dateTitleText}>
-                            발행일
-                        </Text>
-                        <Text style={styles.dateContentText}>
+                        <Text style={styles.dateText}>
                             {momentHelper.getLocaleDatetime(created)}
                         </Text>
                     </View>
                 </View>
-                <View style={styles.content}>
+                <ScrollView style={styles.body}>
                     <Text style={styles.contentText}>
                         {content}
                     </Text>
-                </View>
+                </ScrollView>
             </View>
         )
     }
@@ -75,6 +92,55 @@ export default class AnnouncementDetailScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+    },
+
+    headerContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    headerLeft: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    headerText: {
+        fontSize: 16,
+        marginLeft: 5,
+        color: commonStyle.color.headerTextColor
+    },
+
+    header: {
+        justifyContent: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: commonStyle.color.borderColor,
+        height: 70,
+        paddingLeft: 10,
+    },
+    titleText: {
+        marginBottom: 4,
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    date: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    dateText: {
+        color: 'grey',
+        fontSize: 13,
+    },
+    body: {
+        flex: 1,
+    },
+    contentText: {
+        margin: 20,
+        marginLeft: 10,
+        marginRight: 10,
+        lineHeight: 20,
     }
 });

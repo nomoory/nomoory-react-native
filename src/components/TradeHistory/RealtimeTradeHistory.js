@@ -5,6 +5,7 @@ import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
 import Decimal from '../../utils/decimal';
 import { computed } from 'mobx';
+import commonStyle from '../../styles/commonStyle';
 
 @inject('realtimeTradeHistoryStore', 'tradingPairStore')
 @observer
@@ -252,9 +253,9 @@ const styles = StyleSheet.create({
 
         borderStyle: 'solid',
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
         borderTopWidth: 1,
-        borderTopColor: '#dedfe0',
+        borderTopColor: commonStyle.color.borderColor,
         
     },
     headColumnText: {
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
     columnItem: {
         borderStyle: 'solid',
         borderWidth: 0.5,
-        borderColor: '#dedfe0',
+        borderColor: commonStyle.color.borderColor,
 
         flex: 1,
         justifyContent: 'center',
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderStyle: 'solid',
         borderRightWidth: 1,
-        borderRightColor: '#dedfe0',
+        borderRightColor: commonStyle.color.borderColor,
     },
     odd: {
         backgroundColor: '#f7f8fa',

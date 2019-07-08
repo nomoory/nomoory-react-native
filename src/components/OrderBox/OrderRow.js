@@ -6,6 +6,8 @@ import number from '../../utils/number';
 import commonStyle from '../../styles/commonStyle';
 import { computed } from 'mobx';
 
+export const rowHeight = 40;
+
 @inject('orderStore', 'orderbookStore', 'tradingPairStore')
 @observer
 export default class OrderRow extends Component {
@@ -33,11 +35,13 @@ export default class OrderRow extends Component {
         const isSellOrder = side === 'SELL';
         const orderRowStyle = isSellOrder ? styles.sellOrderRow : styles.buyOrderRow;
 
-        if (!order) {
+        if (
+            !order.key
+        ) {
             return (
                 <View
                     style={[
-                        styles.container, orderRowStyle, styles[this.props.side], 
+                        styles.container, orderRowStyle, styles[side], 
                     ]}
                 >
                     <TouchableOpacity style={[styles.price]} />
@@ -58,7 +62,7 @@ export default class OrderRow extends Component {
         const openPrice = this.props.openPrice;
         const isLessThanOpenPrice = openPrice && order.price && Decimal(order.price).lessThan(openPrice);
         const isBiggerThanOpenPrice = openPrice && order.price && Decimal(order.price).greaterThan(openPrice);
-    
+
         return (
             <View
                 style={[
@@ -109,13 +113,13 @@ export default class OrderRow extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: 32,
+        height: rowHeight,
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
 
         borderStyle: 'solid',
-        borderWidth: 1,
+        borderWidth: 0.7,
         borderColor: 'white',
     },
     sellOrderRow: {
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
         borderStyle: 'solid',
-        borderRightWidth: 1,
+        borderRightWidth: 1.4,
         borderRightColor: 'white',
     },
     priceText: {
@@ -170,7 +174,7 @@ const styles = StyleSheet.create({
         borderWidth: 1.2
     },
     blueText: {
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     },
     redText: {
         color: commonStyle.color.coblicRed

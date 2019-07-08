@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyles from '../../styles/commonStyle';
+import commonStyle from '../../styles/commonStyle';
 import { StyleSheet, View, ListView, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number from '../../utils/number';
@@ -85,34 +85,72 @@ export default class TransactionHistoryBox extends Component {
                     return (
                         <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
                             <View style={[styles.column, styles.firstColumn]}>
-                                <View style={[styles.columnItem, commonStyles[transaction_type], ]}>
-                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{base_symbol + ' '}</Text>
-                                    <Text style={[styles.tupleColumnText, commonStyles[transaction_type]]}>{ TRANSLATIONS[transaction_type] }</Text>
+                                <View style={[
+                                    styles.columnItem,
+                                    commonStyle[transaction_type], 
+                                ]}>
+                                    <Text style={[
+                                        styles.tupleColumnText,
+                                        styles.dateText
+                                    ]}>
+                                        {base_symbol + ' '}
+                                    </Text>
+                                    <Text style={[
+                                        styles.tupleColumnText,
+                                        commonStyle[transaction_type]
+                                    ]}>{ TRANSLATIONS[transaction_type] }
+                                    </Text>
                                 </View>
                                 <View style={[styles.columnItem, styles.created]}> 
-                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date + ' ' : ''}</Text>
-                                    <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text> 
+                                    <Text style={[styles.tupleColumnText, styles.dateText]}>
+                                        {date ? date + ' ' : ''}
+                                    </Text>
+                                    <Text style={[styles.tupleColumnText, styles.timeText]}>
+                                        {time ? time : ''}
+                                    </Text> 
                                 </View>
                             </View>
                             <View style={[styles.column]}>
-                                <View style={[styles.columnItem, styles.price, styles.textRight]}>
-                                    <Text style={[styles.tupleColumnText, styles.priceText]}>
+                                <View style={[
+                                    styles.columnItem,
+                                    styles.price,
+                                    styles.textRight
+                                ]}>
+                                    <Text style={[
+                                        styles.tupleColumnText,
+                                        styles.priceText
+                                    ]}>
                                         {price ? number.putComma(number.getFixedPrice(price, quote_symbol)) : '-' } {quote_symbol}
                                     </Text>     
                                 </View>
-                                <View style={[styles.columnItem, styles.volume, styles.textRight]}>
-                                    <Text style={[styles.tupleColumnText, styles.volumeText]}>
+                                <View style={[
+                                    styles.columnItem,
+                                    styles.volume,
+                                    styles.textRight
+                                ]}>
+                                    <Text style={[
+                                        styles.tupleColumnText,
+                                        styles.volumeText
+                                    ]}>
                                         {volume ? number.putComma(number.getFixedPrice(volume, base_symbol)) : '-' } {base_symbol}
                                     </Text>
                                 </View>
                             </View>
                             <View style={[styles.column]}>
-                                <View style={[styles.columnItem, styles.fee, styles.textRight]}>
+                                <View style={[
+                                    styles.columnItem,
+                                    styles.fee,
+                                    styles.textRight
+                                ]}>
                                     <Text style={[styles.tupleColumnText, styles.feeText]}>
                                         { fee ? number.putComma(number.getFixedPrice(fee, transaction_type === 'SELL' ? quote_symbol : base_symbol)) : '-' } { transaction_type === 'SELL' ? quote_symbol : base_symbol }
                                     </Text>
                                 </View>
-                                <View style={[styles.columnItem, styles.amount, styles.textRight]}>
+                                <View style={[
+                                    styles.columnItem,
+                                    styles.amount,
+                                    styles.textRight
+                                ]}>
                                     <Text style={[styles.tupleColumnText, styles.amountText]}>
                                         { amount ? number.putComma(number.getFixedPrice(amount, quote_symbol)) : '-' } {quote_symbol}
                                     </Text>
@@ -158,7 +196,7 @@ const styles = StyleSheet.create({
 
         borderStyle: 'solid',
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',     
+        borderBottomColor: commonStyle.color.borderColor,     
     },
     headColumnText: {
         color: '#333333',
@@ -175,7 +213,7 @@ const styles = StyleSheet.create({
     columnItem: {
         borderStyle: 'solid',
         borderWidth: 0.5,
-        borderColor: '#dedfe0',
+        borderColor: commonStyle.color.borderColor,
 
         flex: 1,
         justifyContent: 'center',
@@ -188,7 +226,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderStyle: 'solid',
         borderRightWidth: 1,
-        borderRightColor: '#dedfe0',
+        borderRightColor: commonStyle.color.borderColor,
     },
     odd: {
         backgroundColor: '#f7f8fa',

@@ -71,11 +71,14 @@ const styles = StyleSheet.create({
     container: {
         flexDirection:'row',
         justifyContent: 'space-around',
-        borderBottomWidth: 0.5,
-        borderBottomColor: '#bebfc0',
-
+        alignItems: 'center',
+        backgroundColor: commonStyle.color.emptyBackgroundColor,
+        height: 60,
     },
     column: {
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'space-around',
         flex: 1,
         flexDirection:'column',
         padding: 10,
@@ -97,7 +100,7 @@ const styles = StyleSheet.create({
         color: commonStyle.color.coblicRed
     },
     fall: {
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     }
 });
 

@@ -4,9 +4,10 @@ import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import number from '../utils/number';
 import Decimal from '../utils/decimal';
-import commonStyle, { color, font } from '../styles/commonStyle';
+import commonStyle, { color } from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import AccountList from '../components/AccountList';
+import AccountSearchBar from '../components/AccountSearchBar';
 import { withNavigation } from 'react-navigation';
 
 @withNavigation
@@ -15,7 +16,7 @@ import { withNavigation } from 'react-navigation';
 export default class AccountListScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: '입금',
+            title: '입출금',
             // headerLeft: (
             //   <Button onPress={ () => navigation.goback() }
             //   title={ "cancelButtonName" }></Button>
@@ -23,6 +24,7 @@ export default class AccountListScreen extends Component {
             ...headerStyle.white
         };
     };
+
     componentDidMount() {
         if (!this.props.userStore.isLoggedIn) {
             this.props.navigation.navigate('Login', {
@@ -32,13 +34,19 @@ export default class AccountListScreen extends Component {
     }
     
 
-    @observable showPossesionOnly = false;
-    @action _handleChangeFilterCheckBox = (e) => {  
+    @observable
+    showPossesionOnly = false;
+
+    @action
+    _handleChangeFilterCheckBox = (e) => {  
         this.showPossesionOnly = !this.showPossesionOnly;    
     }
 
-    @observable showDepositableOnly = false;
-    @action _handleToggleDepositableFilterCheckBox = (e) => {  
+    @observable
+    showDepositableOnly = false;
+
+    @action
+    _handleToggleDepositableFilterCheckBox = (e) => {  
         this.showDepositableOnly = !this.showDepositableOnly;    
     }
 
@@ -46,13 +54,16 @@ export default class AccountListScreen extends Component {
         let { total_evaluated_price_in_quote } = this.props.accountStore.totalAssetsEvaluation || {};
         return (
             <View style={[styles.container]}>
+                <AccountSearchBar />
                 <View style={[styles.totalEvaluatedPriceContainer]}>
-                    <Text style={[styles.title]}>총보유자산</Text>
-                    <View style={[styles['priceContainer']]}>
-                        <Text style={[styles['price']]}>
-                            {total_evaluated_price_in_quote ? number.putComma(Decimal(total_evaluated_price_in_quote).toFixed(0)) : '-'} KRW
-                        </Text>
-                    </View>
+                    <Text style={[styles.title]}>총 보유자산</Text>
+                    <Text style={[styles['price']]}>
+                        {
+                            total_evaluated_price_in_quote
+                            ? number.putComma(Decimal(total_evaluated_price_in_quote).toFixed(0)) 
+                            : '-'
+                        } KRW
+                    </Text>
                 </View>
                 <View style={[styles.searchContainer]}>
                     <View style={[styles['searchbarContainer']]}> 
@@ -60,20 +71,6 @@ export default class AccountListScreen extends Component {
                             searchBarType={SEARCHBAR_TYPES.ACCOUNT}
                         /> */}
                     </View>
-                    <TouchableOpacity style={[ styles['checkboxContainer'] ]}
-                        onPress={this._handleToggleDepositableFilterCheckBox}
-                    >
-                        <View style={[
-                            styles.checkBox,
-                            this.showDepositableOnly && styles.checked
-                        ]}>
-                            <Image
-                                style={{ height: 6, resizeMode: 'contain' }}
-                                source={require('../../assets/images/depositWithdraw/ic_check_small.png')}
-                            />
-                        </View>
-                        <Text style={[styles.checkboxText]}>입금가능만</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity style={[ styles['checkboxContainer'] ]}
                         onPress={this._handleChangeFilterCheckBox}
                     >
@@ -91,7 +88,10 @@ export default class AccountListScreen extends Component {
                 </View>
 
                 <View style={[styles['accountListContainer']]}>
-                    <AccountList showPossesionOnly={this.showPossesionOnly} showDepositableOnly={this.showDepositableOnly}/>
+                    <AccountList 
+                        showPossesionOnly={this.showPossesionOnly}
+                        showDepositableOnly={this.showDepositableOnly}
+                    />
                 </View>
             </View>
         );
@@ -113,14 +113,14 @@ const styles = StyleSheet.create({
         padding,
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#f7f8fa',
+        backgroundColor: commonStyle.color.emptyBackgroundColor,
     },
     priceContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     title: {
         fontWeight: '500',
-        fontSize: 16,
+        fontSize: 14,
         color: '#333333',
     },
     price: {
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0'
+        borderBottomColor: commonStyle.color.borderColor
     },
     searchbarContainer: {
     },
@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     checked: {
-        backgroundColor: color.coblicBlue,
-        borderColor: color.coblicBlue,
+        backgroundColor: color.brandBlue,
+        borderColor: color.brandBlue,
     },
     accountListContainer: {
         flex: 1,

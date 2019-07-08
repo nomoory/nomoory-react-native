@@ -34,7 +34,8 @@ class TransactionHistoryStore {
         isFirstLoad: true
     }
 
-    @action async changeSelectedOption(selectedOption) {
+    @action
+    async changeSelectedOption(selectedOption) {
         this.loadMoreValues.selectedOption = selectedOption;
         await this.load();
     }
@@ -43,7 +44,8 @@ class TransactionHistoryStore {
     @observable tradeHistoryRegistry = observable.array();
     @observable selectedTradeHistoryRegistry = observable.array();
 
-    @computed get transactionHistory() {
+    @computed
+    get transactionHistory() {
         let transactionHistory = [];
         this.registry.forEach((transaction) => {
             transactionHistory.push(transaction);
@@ -51,7 +53,8 @@ class TransactionHistoryStore {
         return transactionHistory;
     }
 
-    @computed get tradeHistory() {
+    @computed
+    get tradeHistory() {
         let tradeHistories = [];
         this.tradeHistoryRegistry.forEach((trade) => {
             tradeHistories.push(trade);
@@ -59,7 +62,8 @@ class TransactionHistoryStore {
         return tradeHistories;
     }
 
-    @computed get selectedTradeHistory() {
+    @computed
+    get selectedTradeHistory() {
         let tradeHistories = [];
         this.selectedTradeHistoryRegistry.forEach((trade) => {
             tradeHistories.push(trade);
@@ -68,18 +72,26 @@ class TransactionHistoryStore {
     }
 
 
-    @action clearRegistry() {
+    @action
+    clearRegistry() {
+        this.clearLoadMoreValues();
         this.registry.clear();
     }
-    @action clearTradeHistoryRegistry() {
+
+    @action
+    clearTradeHistoryRegistry() {
+        this.clearLoadMoreValues();
         this.tradeHistoryRegistry.clear();
     }
 
-    @action clearSelectedTradeHistoryRegistry() {
+    @action
+    clearSelectedTradeHistoryRegistry() {
+        this.clearLoadMoreValues();
         this.tradeHistoryRegistry.clear();
     }
 
-    @action clearLoadMoreValues() {
+    @action
+    clearLoadMoreValues() {
         this.loadMoreValues = {
             isLoading: false,
             selectedOption: this.options[0].value,
@@ -87,12 +99,9 @@ class TransactionHistoryStore {
             isFirstLoad: true
         };
     }
-    @action clear() {
-        this.clearRegistry();
-        this.clearLoadMoreValues();
-    }
 
-    @computed get isLoadable() {
+    @computed
+    get isLoadable() {
         let {
             isFirstLoad,
             nextUrl,
@@ -130,7 +139,8 @@ class TransactionHistoryStore {
         }
     }
 
-    @action listenScrollEvent = (event) => {
+    @action
+    listenScrollEvent = (event) => {
         let { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
         if (
             scrollHeight - (clientHeight + scrollTop) < 100 && 
@@ -139,13 +149,16 @@ class TransactionHistoryStore {
         }
     }
 
-    @action load() {
+    @action
+    load() {
         this.loadMoreValues.isLoading = true;
         let selectedOption = this.loadMoreValues.selectedOption;
         
+        this.clearRegistry();
         return agent.loadTransactionHistory(selectedOption)
         .then(action((response) => {
             let { results, next, previous } = response.data;
+            this.clearRegistry();
             this.registry.replace(results);
             this.loadMoreValues = { ...this.loadMoreValues,
                 isFirstLoad: false,
@@ -160,7 +173,8 @@ class TransactionHistoryStore {
         }));
     }
 
-    @action loadNext() {
+    @action
+    loadNext() {
         if(this.loadMoreValues.nextUrl) {
             this.loadMoreValues.isLoading = true;
             return agent.get(this.loadMoreValues.nextUrl)
@@ -182,7 +196,8 @@ class TransactionHistoryStore {
         }
     }
 
-    @computed get isTradeHistoryLoadable() {
+    @computed
+    get isTradeHistoryLoadable() {
         let {
             isFirstLoad,
             nextUrl,
@@ -220,13 +235,16 @@ class TransactionHistoryStore {
         }
     }
 
-    @action loadTradeHistory() {
+    @action
+    loadTradeHistory() {
         this.loadMoreValuesTradeHistory.isLoading = true;
         let selectedOption = 'TRADE';
-        
+
+        this.clearTradeHistoryRegistry();
         return agent.loadTransactionHistory(selectedOption)
         .then(action((response) => {
             let { results, next, previous } = response.data;
+            this.clearTradeHistoryRegistry();
             this.tradeHistoryRegistry.replace(results);
             this.loadMoreValuesTradeHistory = { ...this.loadMoreValuesTradeHistory,
                 isFirstLoad: false,
@@ -242,7 +260,8 @@ class TransactionHistoryStore {
         }));
     }
 
-    @action loadNextTradeHistory() {
+    @action
+    loadNextTradeHistory() {
         if(this.loadMoreValuesTradeHistory.nextUrl) {
             this.loadMoreValuesTradeHistory.isLoading = true;
             return agent.get(this.loadMoreValuesTradeHistory.nextUrl)
@@ -265,14 +284,17 @@ class TransactionHistoryStore {
         }
     }
 
-    @action loadSelectedTradeHistory() {
+    @action
+    loadSelectedTradeHistory(selectedTradingPairName) {
         this.loadMoreValuesTradeHistory.isLoading = true;
         let selectedOption = 'TRADE';
-        let tradingPairName = tradingPairStore.selectedTradingPairName;
-        
+        let tradingPairName = selectedTradingPairName ||tradingPairStore.selectedTradingPairName;
+
+        this.clearSelectedTradeHistoryRegistry();
         return agent.loadTransactionHistory(selectedOption, tradingPairName)
         .then(action((response) => {
             let { results, next, previous } = response.data;
+            this.clearSelectedTradeHistoryRegistry();
             this.selectedTradeHistoryRegistry.replace(results);
             this.loadMoreValuesTradeHistory = { ...this.loadMoreValuesTradeHistory,
                 isFirstLoad: false,
@@ -288,7 +310,8 @@ class TransactionHistoryStore {
         }));
     }
 
-    @action loadNextSelectedTradeHistory() {
+    @action
+    loadNextSelectedTradeHistory() {
         if(this.loadMoreValuesTradeHistory.nextUrl) {
             this.loadMoreValuesTradeHistory.isLoading = true;
             return agent.get(this.loadMoreValuesTradeHistory.nextUrl)

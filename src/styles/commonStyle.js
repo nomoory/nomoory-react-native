@@ -1,17 +1,23 @@
 import { StyleSheet } from 'react-native';
 
+
 export const color = {
-    coblicBlue: '#093687',
-    coblicPaleBlue: '#81a6ef',
+    brandBlue: '#004fb4',// '#0062df', // '#093687',
+    brandPaleBlue: '#81a6ef',
     coblicRed: '#d60000',
-    coblicGrey: '#999',
+    brandGrey: '#999',
     coblicPaleGrey: '#dedfe0',
     coblicYellow: '#ffc107',
     coblicSellButtonBackground: '#115dcb',
     coblicBuyButtonBackground: '#d80e35',
     white: '#ffffff',
     main: '#0052f3',
-    mainThemeColor: "rgb(20, 40, 120)",
+    mainThemeColor: '#0062df',
+    headerTextColor: '#004fb4', // '#093687',
+    fontTextColor: '#004fb4',
+    emptyBackgroundColor: '#EDEFF4',
+    subTitleGreyColor: '#333',
+    borderColor: '#dadae0',
 };
 
 export const font = {
@@ -26,7 +32,7 @@ export const font = {
 }
 
 const commonStyle = {
-    coblicBlueButton: {
+    brandBlueButton: {
         color: '#0051c7'
     },
     coblicRedButton: {
@@ -51,7 +57,7 @@ const commonStyle = {
 /*
  * 위 font의 size에 있는 항목들을 style 화 시킴
  * ex) font.size.yourFontSize = 20;
- * => style= {[commonStyles.yourFontSizeText]} 로 사용 가능
+ * => style= {[commonStyle.yourFontSizeText]} 로 사용 가능
  */
 Object.keys(font.size).forEach((sizeName) => {
     let size = font.size[sizeName];

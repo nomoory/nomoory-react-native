@@ -10,7 +10,6 @@ import tradingPairStore from '../stores/tradingPairStore'
 export default class ExchangeScreen extends Component {
     static navigationOptions = ({ navigation, navigationOptions }) => {        
         tradingPairStore.loadTradingPairs();
-        console.log('loadTradingPairs')
         return {
             title: '거래소',
             // headerLeft: (
@@ -20,6 +19,7 @@ export default class ExchangeScreen extends Component {
             ...headerStyle.white,
         };
     };
+
     _openBTCKRWForDevelopTradingPairScreen = () => {
         this.props.tradingPairStore.setSelectedTradingPairName('TOKA-KRW');
         this.props.navigation.navigate('TradingPair', {

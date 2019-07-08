@@ -68,7 +68,8 @@ class PlacedOrderHistoryStore {
         }));
     }
 
-    @action loadPersonalOrders(tradingPairName) {
+    @action
+    loadPersonalOrders(tradingPairName) {
         if (tradingPairName) {
             this.loadPersonalPlacedOrders(tradingPairName);
         }
@@ -93,6 +94,7 @@ class PlacedOrderHistoryStore {
 
     @action loadPersonalPlacedOrders(tradingPairName) {
         this.loadValues.isLoading = true;
+        this.placedOrdersRegistry.clear();
         return agent.loadPersonalPlacedOrders(tradingPairName)
         .then(action((response) => {
             let { results, next, previous } = response.data;

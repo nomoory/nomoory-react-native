@@ -92,6 +92,6 @@ const styles = StyleSheet.create({
 
     },
     selectedText: {
-        color: commonStyle.color.coblicBlue,
+        color: commonStyle.color.brandBlue,
     }
 });

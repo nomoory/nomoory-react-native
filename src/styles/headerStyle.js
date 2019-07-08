@@ -1,19 +1,14 @@
 import commonStyle from './commonStyle';
+
+const commonHeaderStyle = {
+    elevation: 0, 
+    height: 38,
+}
 export default {
-    blue: {
-        headerStyle: {
-            backgroundColor: commonStyle.color.coblicBlue,
-            height: 38,
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-            fontWeight: '400',
-        },    
-    },
     white: {
         headerStyle: {
+            ...commonHeaderStyle,
             backgroundColor: commonStyle.color.white,
-            height: 38,
             borderBottomWidth: 0,
             shadowOpacity: 0,
             shadowOffset: {
@@ -23,7 +18,21 @@ export default {
         },
         headerTintColor: commonStyle.color.mainThemeColor,
         headerTitleStyle: {
+            fontSize: 17,
             fontWeight: '400',
+            color: commonStyle.color.headerTextColor,
         },
-    }
+    },
+    blue: {
+        headerStyle: {
+            ...commonHeaderStyle,
+            height: 38,
+            backgroundColor: commonStyle.color.brandBlue,
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontSize: 17,
+            fontWeight: '400',
+        },    
+    },
 }

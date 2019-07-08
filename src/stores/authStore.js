@@ -1,8 +1,7 @@
 import { observable, action, reaction } from 'mobx';
 import userStore from './userStore';
 import agent from '../utils/agent';
-import { AsyncStorage } from "react-native"
-import { SecureStore } from 'expo';
+import * as SecureStore from 'expo-secure-store';
 
 /* 정책
  * 로그인시 > temporary_otp_token 및 email 발급 > otpVerificationValues에 저장

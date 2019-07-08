@@ -1,5 +1,4 @@
 import { computed } from 'mobx';
-import i18next from 'i18next';
 import {
     putComma,
     getRateAsPercentage,
@@ -8,6 +7,7 @@ import {
 } from '../../utils/number';
 import Model from './Model';
 import commonStore from '../commonStore';
+import TRANSLATION from '../../TRANSLATIONS';
 
 class TradingPairModel extends Model {
     @computed
@@ -44,7 +44,7 @@ class TradingPairModel extends Model {
     get accTradeVolume24hDisplay() {
         try {
             const { number, type } = getNumberAndPowerOfTenFromNumber(this.acc_trade_volume_24h) || {};
-            return `${getFixedValueWithComma(number)} ${i18next.t(type)}` || '-';
+            return `${getFixedValueWithComma(number)} ${TRANSLATION[type]}` || '-';
         } catch (err) {
             return '-';
         }
@@ -54,27 +54,18 @@ class TradingPairModel extends Model {
     get accTradeValue24hDisplay() {
         try {
             const { number, type } = getNumberAndPowerOfTenFromNumber(this.acc_trade_value_24h) || {};
-            return `${getFixedValueWithComma(number)} ${i18next.t(type)}` || '-';
+            return `${getFixedValueWithComma(number)} ${TRANSLATION[type]}` || '-';
         } catch (err) {
             return '-';
         }
     }
 
     @computed
-    get translatedAssetNameDisplay() {
-        const {
-            base_korean_name,
-            base_english_name,
-        } = this;
-        if (i18next.language === 'ko') {
-            return base_korean_name;
-        }
-        return base_english_name;
-    }
-
-    @computed
     get isFavorite() {
-        return commonStore.favoriteTradingPairNames.includes(this.name);
+        if (commonStore.favoriteTradingPairNames.includes(this.name)) {
+            return true;
+        }
+        return false;
     }
 }
 

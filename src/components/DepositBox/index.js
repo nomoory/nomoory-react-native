@@ -36,18 +36,19 @@ export default class DepositBox extends Component {
                     onPress={ this.props.accountStore.isLoading ? () => {} : this._handleIssueAddress}>
                     {
                         this.props.accountStore.isLoading ?
-                        <ActivityIndicator size="small" color={commonStyle.color.coblicPaleBlue}/> :
+                        <ActivityIndicator size="small" color={commonStyle.color.brandPaleBlue}/> :
                         <Image
-                            style={{ width: 46, height: 46 }}                                
+                            style={{ width: 38, height: 38 }}                                
                             source={require('../../../assets/images/depositWithdraw/ic_plus_big.png')}
                         />
                     }
                 </TouchableOpacity>
-                <View style={[styles.issueAddressDescription]}>
-                    <Text style={[styles.issueAddressDescriptionText]}>
-                    {`버튼을 클릭하시면,\n회원님 고유의 ${asset_korean_name}(${asset_symbol}) 입금주소가 발급됩니다.`}
-                    </Text>
-                </View>
+                <Text style={[styles.issueAddressDescriptionText]}>
+                    {`버튼을 클릭하시면,`}
+                </Text>
+                <Text style={[styles.issueAddressDescriptionText]}>
+                    {`회원님 고유의 ${asset_korean_name}(${asset_symbol}) 입금주소가 발급됩니다.`}
+                </Text>
             </View>
         );
     }
@@ -95,14 +96,6 @@ export default class DepositBox extends Component {
             asset_tx_required_confirmations
         } = account || {};
 
-        // if (['KRW', 'TOKA'].includes(account.asset_symbol)) {
-        //     // 현재 입금을 지원하지 않는 asset입니다.
-        //     return (
-        //         <View style={styles.container}>
-        //         </View>
-        //     );
-        // } 
-
         return (
             <View style={styles.container}>
                 <View style={[styles.descriptionContainer]}>
@@ -116,7 +109,6 @@ export default class DepositBox extends Component {
                             {`나의 ${asset_korean_name} 입금주소`}
                         </Text>
                     </View>
-
                     { /* 입금 오픈시 */
                         wallet_address ?
                         this._renderCopyAddress(wallet_address.address) :
@@ -150,19 +142,18 @@ export default class DepositBox extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         flexDirection: 'column',
     },
     descriptionContainer: {
         padding: 15,
-        // paddingTop: 12,
-        // paddingBottom: 12,
-        
+        paddingTop: 20,
+        paddingBottom: 20,
+
         justifyContent: 'center',
         alignItems: 'center',
 
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     descriptionText: {
         fontSize: 16,
@@ -171,11 +162,13 @@ const styles = StyleSheet.create({
     },
     addressContainer: {
         padding: 15,
+        paddingTop: 20,
+        paddingBottom: 20,
         flexDirection: 'column',
         alignItems: 'center',    
 
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     addressHeaderContainer: {
         width: '100%'
@@ -198,19 +191,17 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 8,
-        backgroundColor: commonStyle.color.coblicBlue,
+        backgroundColor: commonStyle.color.brandBlue,
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    issueAddressDescription: {
-        marginTop: 20,
-        width: '100%'
+        alignItems: 'center',
+        marginBottom: 20,
     },
     issueAddressDescriptionText: {
         textAlign: 'center'
     },
     noticeContainer: {
-        marginTop: 6,
+        paddingTop: 20,
+        paddingBottom: 20,
         paddingLeft: 15,
         paddingRight: 15,
     },
@@ -259,7 +250,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 4,
-        backgroundColor: commonStyle.color.coblicBlue,
+        backgroundColor: commonStyle.color.brandBlue,
     },
     copyAddressButtonText: {
         fontWeight: '600',

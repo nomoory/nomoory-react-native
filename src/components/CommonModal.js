@@ -37,14 +37,27 @@ class CommonModal extends Component {
                     >
                         <View style={[styles.headerContainer]}>
                             <Text style={[styles.headerText, styles[type + 'HeaderText']]}>{title}</Text>
-                        </View>                    
-                        <ScrollView style={[styles.contentScrollableContainer]}>
+                        </View>
+                        <ScrollView
+                            style={[styles.contentScrollableContainer]}
+                        >
                             <View style={[styles.contentContainer]}>
-                                {
-                                    typeof content === 'string' ?
-                                    <Text style={[styles.contentText]}>{content}</Text> :
-                                    content
-                                }
+                                    {
+                                        typeof content === 'string' ?
+                                        <Text style={[styles.contentText]}>{content}</Text> 
+                                        :
+                                        null
+                                    }
+                                    {
+                                        typeof content === 'function' ?
+                                        content() :
+                                        null
+                                    }
+                                    {
+                                        typeof content !== 'function' && typeof content !== 'string' ?
+                                        {content} :
+                                        null
+                                    }
                             </View>
                         </ScrollView>
                         <View style={styles.buttons}>
@@ -91,7 +104,6 @@ const styles = StyleSheet.create({
     },
     container: {
         width: 300,
-        borderRadius: 6,
         backgroundColor: 'white',
     },
     headerContainer: {
@@ -107,24 +119,21 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: font.size.modalHeader,
         fontWeight: font.weight.bold,
-        color: color.coblicBlue
+        color: color.brandBlue
     },
     contentScrollableContainer: {
-        marginBottom: 5,
-        paddingTop: 5,
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingBottom: 5,
-        marginBottom: 15,
+        maxHeight: 400,
         minHeight: 40,
-        maxHeight: 350,
     },
     contentContainer: {
-
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingBottom: 15,
     },
     contentText: {
         textAlign: 'center',
-        fontSize: font.size.modalContent,
+        lineHeight: 20,
+        // fontSize: font.size.modalContent,
     },
     buttons: {
         height: 48,
@@ -142,7 +151,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: font.size.default,
         fontWeight: '600',
-        color: color.coblicBlue
+        color: color.brandBlue
 
     },
     borderOnRight: {

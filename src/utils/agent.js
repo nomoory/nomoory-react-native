@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
 import errorHelper from '../utils/errorHelper';
-import { SecureStore } from 'expo';
+import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import authStore from '../stores/authStore';
 import { computed } from 'mobx';
@@ -310,6 +310,13 @@ class Agent {
     // event dashboard 
     loadEvnentDashboard() {
         return this.get(`/event_dashboard/`);
+    }
+
+    updateUserPushToken({token, user}) {
+        const payload = {};
+        if (token) payload.token = token;
+        if (user) payload.user = user;
+        return this.post(`/users/push-token`, payload);
     }
 
     /* Base REST API method */

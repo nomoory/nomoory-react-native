@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import * as Icon from '@expo/vector-icons'
 import { Text, StyleSheet, View, TextInput, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { Linking } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import commonStyles, { color } from '../styles/commonStyle';
+import commonStyle, { color } from '../styles/commonStyle';
 import backIconSrc from '../../assets/images/login/back_icon.png';
+import { Input } from 'react-native-elements';
 
 let from = 'Exchagne';
 
@@ -29,10 +31,10 @@ export default class LoginScreen extends Component {
                 } else {
                     this.props.navigation.navigate(from);
                 }
-            }).catch((err) => {});
+            }).catch((err) => { });
     }
     _onPressResetPassword = (e) => { Linking.openURL(Expo.Constants.manifest.extra.RESETPASSWORD_LINK); }
-    _onPressSignup = (e) => { 
+    _onPressSignup = (e) => {
         this.props.navigation.navigate('Signup');
         // Linking.openURL(Expo.Constants.manifest.extra.SIGNUP_LINK); 
     }
@@ -41,7 +43,7 @@ export default class LoginScreen extends Component {
     render() {
         let { loginValues } = this.props.authStore || {};
         let { email, password } = loginValues || {};
-        
+
         if (this.props.userStore.isLoggedIn) {
             this.props.navigation.navigate('Exchange');
         }
@@ -59,39 +61,69 @@ export default class LoginScreen extends Component {
                     />
                 </View>
                 <View style={[styles.inputContainer]}>
-                    <TextInput 
-                        style={[styles.emailInput, styles.input]}
-                        onChangeText={this._onChangeEmail}
-                        placeholder={`이메일`}
+                    <Input
+                        containerStyle={styles.input}
+                        leftIconContainerStyle={{
+                            marginLeft: 4,
+                            marginRight: 8,
+                        }}
+                        inputStyle={{ color: 'white'}}
+                        placeholder='EMAIL'
                         value={email}
-                        autoCapitalize="none"
+                        leftIcon={
+                            <Icon.MaterialCommunityIcons
+                                name="email-outline"
+                                size={24}
+                                color="white"
+                            />
+                        }
+                        onChangeText={this._onChangeEmail}
                     />
-                    <TextInput
+                    <Input
+                        containerStyle={styles.input}
+                        leftIconContainerStyle={{
+                            marginLeft: 4,
+                            marginRight: 8,
+                        }}
+                        inputStyle={{ color: 'white'}}
+                        secureTextEntry={true}
+                        placeholder='PASSWORD'
+                        value={password}
+                        leftIcon={
+                            <Icon.MaterialCommunityIcons
+                                name="key"
+                                size={24}
+                                color="white"
+                            />
+                        }
+                        onChangeText={this._onChangePassword}
+                    />
+                    {/* <TextInput
                         style={[styles.passwordInput, styles.input]}
                         secureTextEntry={true}
-                        onChangeText={this._onChangePassword} 
+                        onChangeText={this._onChangePassword}
                         placeholder={`비밀번호`}
                         value={password}
                         autoCapitalize="none"
-                    />
-                    <TouchableOpacity 
+                    /> */}
+                    <TouchableOpacity
                         style={[styles.loginButton]}
                         onPress={this._onPressLoginButton}>
                         {
                             this.props.authStore.isLoading ?
-                            <ActivityIndicator size="small" color={commonStyles.color.coblicPaleBlue}/> :
-                            <Text style={[styles.loginButtonText]}>로그인</Text>
+                                <ActivityIndicator size="small" color={commonStyle.color.brandPaleBlue} /> :
+                                <Text style={[styles.loginButtonText]}>로그인</Text>
                         }
                     </TouchableOpacity>
                     <Text style={[styles.forgotPasswordText]}
                         onPress={this._onPressResetPassword}>비밀번호를 잊어버리셨나요?</Text>
                 </View>
-                <TouchableOpacity 
+
+                <TouchableOpacity
                     style={[styles.signupButton]}
                     onPress={this._onPressSignup}>
                     <Text style={[styles.signupButtonText]}>회원가입</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={styles.closeButton}
                     onPress={this._onPressCloseLoginScreen}
                 >
@@ -105,7 +137,7 @@ export default class LoginScreen extends Component {
     }
 }
 
-const width = 270;
+const width = 300;
 const height = 45;
 const marginTop = 16;
 const borderRadius = 0;
@@ -113,51 +145,45 @@ const borderRadius = 0;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: color.coblicBlue,
+        backgroundColor: color.brandBlue,
         height: '100%',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        paddingTop: 100,
+        paddingBottom: 100,
     },
-    logoContainer: { 
+    logoContainer: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         width: 360,
         height: 100,
+        marginTop: 20,
         marginBottom: 20,
     },
     inputContainer: {
-        width: '100%',
+        width,
         flexDirection: 'column',
         alignItems: 'center',
         marginBottom: 30,
     },
     input: {
-        width,
-        height,
-        backgroundColor: 'white',
-        padding: 10,
-        paddingLeft: 18,
-        marginTop,
-        fontSize: 16,
-        color: '#333333',
-        borderRadius
-
+        marginBottom: 20,
     },
     loginButton: {
         width,
         height,
-        marginTop: 26, 
-        backgroundColor: '#F7B03E', // #ffc107',
+        marginTop: 15,
+        backgroundColor: 'white', // #ffc107',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius
     },
     loginButtonText: {
-        color: 'white',//color.coblicBlue,
-        fontSize: 19,
+        color: color.brandBlue,
+        fontSize: 16,
         fontWeight: '700'
     },
     forgotPasswordText: {
@@ -168,7 +194,6 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
     },
     signupButton: {
-        marginBottom: 40,
         width,
         height,
         justifyContent: 'center',
@@ -177,12 +202,12 @@ const styles = StyleSheet.create({
         borderColor: 'white',
     },
     signupButtonText: {
-        color: 'white'        
+        color: 'white'
     },
     closeButton: {
         position: 'absolute',
-        top: 6,
-        left: 6,
+        top: 10,
+        left: 10,
         alignItems: 'center',
         justifyContent: 'center'
     },

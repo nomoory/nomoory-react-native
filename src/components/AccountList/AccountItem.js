@@ -5,38 +5,36 @@ import Decimal from '../../utils/decimal.js';
 import number from '../../utils/number';
 import images from './images';
 import { withNavigation } from 'react-navigation';
-import commonStyle from '../../styles/commonStyle.js';
+import commonStyle from '../../styles/commonStyle';
 
 @withNavigation
 @inject('accountStore', 'modalStore')
 @observer
 export default class AccountItem extends Component {
-    _onPressBalanceItemrRow = (currency) => (e) => {
+    _onPressBalanceItemrRow = (account = {}) => (e) => {
         if (                    
-            // !account.is_depositable || 
-            !['BTC', 'BCH', 'ETH'].includes(currency)
-        ) { /* show 입금 불가 modal */ 
-
+            account.is_depositable === false
+        ) { /* show 입금 불가 modal */
             this.props.modalStore.openModal({
                 type: 'preset',
-                title: currency === 'KRW' ? '입금 미지원' : '입금 불가',
-                content: currency === 'KRW' ? `현재 앱을 통한 원화의 입금은 지원하지 않습니다.` : `현재 ${currency}에 대한 입금은 지원하지 않습니다.`
+                title: account.asset_symbol === 'KRW' ? '입금 미지원' : '입금 불가',
+                content: account.asset_symbol === 'KRW' ? `현재 앱을 통한 원화의 입금은 지원하지 않습니다.` : `현재 ${account.asset_symbol}에 대한 입금은 지원하지 않습니다.`
             });
-        
         } else {
-            this.props.accountStore.setSelectedAccountSymbol(currency);
-            this._openDepositWithdrawScreen(currency);    
+            this._openDepositWithdrawScreen(account.asset_symbol);    
         }
     }
 
     _openDepositWithdrawScreen = (currency) => {
+        this.props.accountStore.setSelectedAccountSymbol(account.asset_symbol);
         this.props.navigation.navigate('AccountDepositWithdraw', {
             currency: currency,
         });
     }
+
     render() {
         const { account, accountStore } = this.props;
-        let { asset_symbol, asset_korean_name, balance, evaluated_in_base_currency } = account || {}
+        let { asset_symbol, asset_korean_name, balance, evaluated_in_base_currency, is_depositable } = account || {}
         let { total_evaluated_price_in_quote } = accountStore.totalAssetsEvaluation || {};
         let balanceWeight = '0';
         if (total_evaluated_price_in_quote && total_evaluated_price_in_quote !== '0') {
@@ -45,7 +43,7 @@ export default class AccountItem extends Component {
 
         return (
             <TouchableOpacity style={[styles.container]}
-                onPress={this._onPressBalanceItemrRow(asset_symbol)}
+                onPress={this._onPressBalanceItemrRow(account)}
             >
                 <View style={[styles.left]}>
                     <Image
@@ -80,7 +78,7 @@ export default class AccountItem extends Component {
                     </View>
                     <View style={[styles.emptyColumn]}>
                         { 
-                            ['BTC', 'BCH', 'ETH'].includes(asset_symbol) ?
+                            is_depositable === true ?
                             <Image
                                 style={{ width: 15, resizeMode: 'contain' }}
                                 source={images.buttons.account}
@@ -103,10 +101,8 @@ const styles = StyleSheet.create({
         height: 60,
 
         borderStyle: 'solid',
-        // borderTopWidth: 0.5,
-        // borderTopColor: '#dedfe0',
         borderBottomWidth: 1,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     left: {
         flexDirection: 'row',

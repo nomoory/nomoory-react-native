@@ -8,7 +8,7 @@ import Decimal from '../../utils/decimal';
 
 @inject('accountStore')
 @observer
-export default class MiningHistoryBox extends Component {
+export default class DepositWithdrawInfoHeader extends Component {
     render() {
         let { selectedAccount, selectedAccountSymbol } = this.props.accountStore || {};
         let { 
@@ -41,17 +41,17 @@ export default class MiningHistoryBox extends Component {
 
                 <View style={[styles.withdrawableContainer]}>
                     <View style={[styles.titleAndValueContainer]}>
-                        <Text style={[styles.title, styles.grey]}>거래대기</Text>
+                        <Text style={[styles.title]}>거래대기</Text>
                         <View style={[styles.amountContainer]}>
-                            <Text style={[styles.numberText, styles.grey]}>{pending_order_amount || pending_order ? `${number.putComma(number.getFixedVolume(pending_order_amount || pending_order, selectedAccountSymbol))}` : '-'}</Text>
-                            <Text style={[styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
+                            <Text style={[styles.numberText]}>{pending_order_amount || pending_order ? `${number.putComma(number.getFixedVolume(pending_order_amount || pending_order, selectedAccountSymbol))}` : '-'}</Text>
+                            <Text style={[styles.unitText ]}>{selectedAccountSymbol}</Text>
                         </View>
                     </View>
                     <View style={[styles.titleAndValueContainer]}>
-                        <Text style={[styles.title, styles.grey]}>출금대기</Text>
+                        <Text style={[styles.title]}>출금대기</Text>
                         <View style={[styles.amountContainer]}>
-                            <Text style={[styles.numberText, styles.grey]}>{pending_withdrawal ? `${number.putComma(number.getFixedVolume(pending_withdrawal, selectedAccountSymbol))}` : '-'}</Text>
-                            <Text style={[styles.unitText, styles.grey ]}>{selectedAccountSymbol}</Text>
+                            <Text style={[styles.numberText]}>{pending_withdrawal ? `${number.putComma(number.getFixedVolume(pending_withdrawal, selectedAccountSymbol))}` : '-'}</Text>
+                            <Text style={[styles.unitText ]}>{selectedAccountSymbol}</Text>
                         </View>
                     </View>
                     <View style={[styles.titleAndValueContainer]}>
@@ -67,10 +67,13 @@ export default class MiningHistoryBox extends Component {
     }
 }
 
-const padding = 15;
+const paddingTopAndBottom = 24;
+const paddingSide = 15;
 const styles = StyleSheet.create({
     container: {
-        padding,
+        padding: paddingSide,
+        paddingTop: paddingTopAndBottom,
+        paddingBottom: paddingTopAndBottom,
         flexDirection: 'column',
         backgroundColor: '#f7f8fa'
     },
@@ -80,12 +83,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     assetBalanceText: {
-        fontSize: 16,
+        fontSize: 14,
         color: '#333333',
         fontWeight: '500'
     },
     balanceText: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: '700'
     },
     evaluatedBalanceText: {
@@ -102,7 +105,9 @@ const styles = StyleSheet.create({
     },
     titleAndValueContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        paddingTop: 2,
+        paddingBottom: 2,
     },
     title:{
         marginTop: 3,
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
     numberText: {
         marginRight: 6,
     },
-    grey: {
-        color: '#a2abb6'
+    unitText: {
+        fontWeight: '500',
     }
 })

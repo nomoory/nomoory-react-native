@@ -15,6 +15,7 @@ import placedOrderHistoryStore from './placedOrderHistoryStore';
 import dailyTradeHistoryStore from './dailyTradeHistoryStore';
 import signupStore from './signupStore';
 import announcementStore from './announcementStore';
+import commonStore from './commonStore';
 
 const stores = {
     accountStore,
@@ -34,6 +35,7 @@ const stores = {
     dailyTradeHistoryStore,
     signupStore,
     announcementStore,
+    commonStore,
 };
 
 export default stores;

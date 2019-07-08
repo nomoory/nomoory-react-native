@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import commonStyles from '../../../styles/commonStyle';
+import commonStyle from '../../../styles/commonStyle';
 import { StyleSheet, View, Text, ListView } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number, { Decimal } from '../../../utils/number';
@@ -10,17 +10,14 @@ import ScrollLoading from '../../ScrollLoading';
 @inject('transactionHistoryStore', 'tradingPairStore')
 @observer
 export default class CompletedOrder extends Component {
-    constructor(props) {
-        super(props);
+    componentDidMount() {
         reaction(
-            () => this.props.tradingPairStore.selectedTradingPairName,
-            (selectedTradingPairName) => {
-                this.props.transactionHistoryStore.clearSelectedTradeHistoryRegistry();
-                this.props.transactionHistoryStore.loadSelectedTradeHistory();
+            () => this.props.targetTradingPairName,
+            (targetTradingPairName) => {
+                this.props.transactionHistoryStore.loadSelectedTradeHistory(targetTradingPairName);
             }
         );
-        this.props.transactionHistoryStore.clearSelectedTradeHistoryRegistry();
-        this.props.transactionHistoryStore.loadSelectedTradeHistory();
+        this.props.transactionHistoryStore.loadSelectedTradeHistory(this.props.targetTradingPairName);
 
     }
 
@@ -51,7 +48,7 @@ export default class CompletedOrder extends Component {
                     return (
                         <View style={[styles.tuple]}>
                             <View style={[styles.row]}>
-                                <Text style={[styles.orderType, commonStyles[transaction_type]]}>
+                                <Text style={[styles.orderType, commonStyle[transaction_type]]}>
                                     { transaction_type === 'SELL' ? '매도' : '매수' }
                                 </Text>
                                 <View style={[styles.created]}> 
@@ -116,7 +113,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         paddingTop: 5,
         paddingBottom: 5,
-        borderBottomColor: '#dedfe0',
+        borderBottomColor: commonStyle.color.borderColor,
     },
     row: {
         flexDirection: 'row',

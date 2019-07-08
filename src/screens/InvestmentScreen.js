@@ -8,10 +8,6 @@ import { withNavigation } from 'react-navigation';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 import AssetsAndEvaluationBox from '../components/AssetsAndEvaluationBox';
-import TradeHistoryBox from '../components/TradeHistoryBox';
-import UnmatchedOrderBox from '../components/UnmatchedOrderBox';
-// import DividendHistoryBox from '../components/DividenHistroyBox';
-// import MiningHistoryBox from '../components/MiningHistoryBox';
 import TransactionHistoryBox from '../components/TransactionHistoryBox';
 import OrderHistory from '../components/OrderHistory';
 
@@ -32,7 +28,7 @@ export default class InvestmentScreen extends Component {
         this.state = {
             index: 0,
             routes: [
-                { key: 'AssetsAndEvaluationBox', title: '보유자산' },
+                { key: 'AssetsAndEvaluationBox', title: '보유코인' },
                 { key: 'ALL_TRANSACTIONS', title: '모든내역' },
                 { key: 'ORDER_HISTORY', title: '주문내역' },
             ],
@@ -51,22 +47,25 @@ export default class InvestmentScreen extends Component {
         const inputRange = props.navigationState.routes.map((x, i) => i);
 
         return (
-            <View style={tabStyle.tabBar}>
+            <View style={customTabStyles.tabBar}>
                 {props.navigationState.routes.map((route, i) => {
                     const color = props.position.interpolate({
                         inputRange,
                         outputRange: inputRange.map(
-                            inputIndex => (inputIndex === i ? commonStyle.color.coblicBlue : '#222')
+                            inputIndex => (inputIndex === i ? commonStyle.color.brandBlue : '#222')
                         ),
                     });
                     return (
                         <TouchableOpacity
                             key={route.key}
-                            style={[tabStyle.tabItem]}
+                            style={[
+                                customTabStyles.tabItem,
+                                this.state.index === i ? customTabStyles.selectedTabItem : null
+                            ]}
                             onPress={(e) => {this._onIndexChange(i)}}>
                             <Animated.Text style={[
-                                tabStyle.tabText,,
-                                this.state.index === i ? tabStyle.selectedTabText : null
+                                customTabStyles.tabText,
+                                this.state.index === i ? customTabStyles.selectedTabText : null
                             ]}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
@@ -76,7 +75,6 @@ export default class InvestmentScreen extends Component {
     };
     
     _onIndexChange = (index) => {
-        this.props.transactionHistoryStore.clear();        
         this.setState({ index });
         try {
             this.props.transactionHistoryStore.changeSelectedOption(this.state.routes[index].key);
@@ -95,7 +93,10 @@ export default class InvestmentScreen extends Component {
                     })}
                     onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}
-                    initialLayout={{ width: Dimensions.get('window').width }}
+                    initialLayout={{ 
+                        width: Dimensions.get('window').width,
+                        height: Dimensions.get('window').height,
+                    }}
                 />
             </View>
         )
@@ -110,11 +111,36 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     activeTextStyle: {
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     },
     tabStyle: {
         backgroundColor: 'white',
         borderBottomWidth: 0,
         height: 40
+    },
+})
+
+const customTabStyles = StyleSheet.create({
+    tabBar: {
+        flexDirection: 'row',
+        height: 34, 
+    },
+    tabItem: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomWidth: 1.5,
+        borderBottomColor: commonStyle.color.coblicPaleGrey,
+    },
+    selectedTabItem: {
+        borderBottomColor: commonStyle.color.brandBlue,
+    },
+    tabText: {
+        fontWeight: '300', 
+        fontSize: 14,
+    },
+    selectedTabText: {
+        fontWeight: '500', 
+        color: commonStyle.color.brandBlue,
     },
 })

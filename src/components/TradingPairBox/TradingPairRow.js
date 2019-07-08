@@ -3,28 +3,107 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableOpacity
+    TouchableOpacity,
+    Animated,
 } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
-import number, { getNumberAndPowerOfTenFromNumber, Decimal } from '../../utils/number';
+import number, {
+    getNumberAndPowerOfTenFromNumber,
+    Decimal
+} from '../../utils/number';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import commonStyle from '../../styles/commonStyle';
-import { computed } from 'mobx';
+import { computed, action } from 'mobx';
 
+let turnBackTimeout = null;
 @withNavigation
 @inject('tradingPairStore')
 @observer
 class TradingPairRow extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isFirstLoad: true,
+            prevClosePrice: props.tradingPair ? props.tradingPair.close_price : 0,
+            value: new Animated.Value(0),
+        };
+    }
+
+    componentDidMount() {
+        this.color = this.state.value.interpolate({
+            inputRange: [-1, 0, 1],
+            outputRange: ['#d60000', '#ffffff', '#0051c7'],
+        });
+        this.setState({
+            isFirstLoad: false
+        })
+    }
+
+    componentWillUnmount() {
+        clearTimeout(turnBackTimeout);
+    }
+
+    // 현재가 변동시 깜빡이는 UI Test용, feature 개발이 완료되면 지워도됩니다. _ 준혁
+    // _changeClosePriceState = action(() => {
+    //     this.props.tradingPair.close_price =
+    //         Math.random() > 0.5
+    //             ?
+    //             Decimal(this.props.tradingPair.close_price).add(1000).toFixed()
+    //             :
+    //             Decimal(this.props.tradingPair.close_price).minus(1000).toFixed()
+    //         ;
+    //     // console.log(this.props.tradingPair.close_price)
+    // })
+
+    static getDerivedStateFromProps(props, state) {
+        const prevClosePrice = state.prevClosePrice;
+        const nextClosePrice = props.tradingPair.close_price;
+        if (prevClosePrice && prevClosePrice !== nextClosePrice) {
+            try {
+                if (Decimal(nextClosePrice).lessThan(prevClosePrice)) { // 하락 = 파랑
+                    Animated.timing(
+                        state.value, {
+                            toValue: 1,
+                            duration: 0,
+                            delay: 0
+                        }).start()
+                }
+                if (Decimal(nextClosePrice).greaterThan(prevClosePrice)) { // 상승 = 빨강       
+                    Animated.timing(
+                        state.value, {
+                            toValue: -1,
+                            duration: 0,
+                            delay: 0
+                        }).start()
+                }
+            } catch (err) {
+    
+            }
+            state.prevClosePrice = nextClosePrice;
+            clearTimeout(turnBackTimeout);
+            turnBackTimeout = setTimeout(() => {
+                Animated.timing(
+                    state.value, {
+                        toValue: 0,
+                        duration: 1500,
+                        delay: 0
+                    }).start()
+            }, 0);
+        }
+        return true;
+    }
+
     _onPressTradingPairRow = (e) => {
-        this.props.tradingPairStore.setSelectedTradingPairName(this.props.tradingPair.name);
         let tradingPair = this.props.tradingPair;
+        this.props.tradingPairStore.setSelectedTradingPairName(tradingPair.name);
         this._openTradingPairScreen(tradingPair);
     }
 
     _openTradingPairScreen = (tradingPair) => {
         this.props.navigation.navigate('TradingPair', {
-            baseName: 
+            baseName:
                 this.props.tradingPairStore.languageForTokenName === 'ko' ? tradingPair.base_korean_name : tradingPair.base_english_name,
             tradingPairName: tradingPair.name
         });
@@ -38,9 +117,9 @@ class TradingPairRow extends Component {
     }
 
     render() {
-        const { 
-            close_price, signed_change_rate, acc_trade_value_24h, 
-            base_korean_name, base_english_name, name, 
+        const {
+            close_price, signed_change_rate, acc_trade_value_24h,
+            base_korean_name, base_english_name, name,
             open_price
         } = this.props.tradingPair || {};
         const isKorean = this.props.tradingPairStore.languageForTokenName === 'ko';
@@ -62,9 +141,13 @@ class TradingPairRow extends Component {
                 style={[styles.container]}
                 onPress={this._onPressTradingPairRow}
             >
-                <View style={[styles.name, styles.paddingTop]}>
-                    <Text 
+                <View style={[
+                    styles.name,
+                    styles.paddingTop
+                ]}>
+                    <Text
                         style={[
+                            styles.nameText,
                             styles.textSizeBig,
                             isKorean && 6 < tokenName.length && styles.textSizeNormal,
                             isKorean && 8 < tokenName.length && styles.textSizeSmall,
@@ -76,12 +159,32 @@ class TradingPairRow extends Component {
                     >
                         {tokenName}
                     </Text>
-                    <Text style={[styles.textSizeNormal]}>{name}</Text>
+                    <Text style={[
+                        styles.textSizeSmall
+                    ]}>{name}
+                    </Text>
                 </View>
-                <View style={[ styles.closePrice, styles.column, styles.paddingTop ]}>
-                    <Text style={[textStyle, styles.textSizeNormal]}
-                    >{close_price ? number.putComma(Decimal(close_price ||0 ).toFixed()) : '-'}</Text>
-                </View>
+                <Animated.View style={[
+                    styles.closePrice,
+                    styles.column,
+                    styles.paddingTop,
+                    this.state.isFirstLoad 
+                    ? 
+                    {}
+                    :
+                    {
+                        borderStyle: 'solid',
+                        borderWidth: 0.8,
+                        borderColor: this.color,
+                    }
+                ]}>
+                    <Text style={[
+                        textStyle, 
+                        styles.textSizeNormal
+                    ]}
+                    >{close_price ? number.putComma(Decimal(close_price || 0).toFixed()) : '-'}
+                    </Text>
+                </Animated.View>
                 <View style={[styles.signedChangeRate, styles.paddingTop]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
                     >{this.changeRate}%</Text>
@@ -90,7 +193,7 @@ class TradingPairRow extends Component {
                     </Text>
                 </View>
                 <View style={[styles.accTradeValue, styles.column, styles.paddingTop]}>
-                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed()) : '-'}{TRANSLATIONS[result.type]}</Text>
+                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed(), 0) : '-'}{TRANSLATIONS[result.type]}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -101,13 +204,12 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         height: 48,
-        paddingTop: 3,
-        paddingBottom: 3,
+        paddingTop: 4,
+        paddingBottom: 4,
         flexDirection: 'row',
 
-        borderStyle: 'solid',
-        borderWidth: 0.6,
-        borderColor: '#e9eaea',
+        borderBottomWidth: 1,
+        borderBottomColor: commonStyle.color.borderColor,
     },
     name: {
         width: 100,
@@ -116,6 +218,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'flex-start',
+    },
+    nameText: {
+        paddingLeft: 1,
     },
     accTradeValue: {
         paddingRight: 10,
@@ -131,7 +236,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     blueText: {
-        color: commonStyle.color.coblicBlue
+        color: commonStyle.color.brandBlue
     },
     redText: {
         color: commonStyle.color.coblicRed
@@ -144,16 +249,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     textSizeBig: {
-        fontSize: 13,
-        fontWeight:'200'
+        fontSize: 14,
+        fontWeight: '200'
     },
     textSizeNormal: {
-        fontSize: 12,
-        fontWeight:'200'
+        fontSize: 13,
+        fontWeight: '200'
     },
     textSizeSmall: {
-        fontSize: 11,
-        fontWeight:'200'
+        fontSize: 12,
+        fontWeight: '200'
     },
     paddingTop: {
         paddingTop: 2

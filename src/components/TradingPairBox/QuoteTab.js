@@ -1,38 +1,59 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { observer, inject } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 import commonStyle from '../../styles/commonStyle';
 
 @inject('tradingPairStore')
 @observer
-export default class QutoeTab extends Component {
+export default class QuoteTab extends Component {
     _onPressTab = (tabType) => action((e) => {
         this.props.tradingPairStore.changeSelectedQuoteTabType(tabType);
     })
 
     _renderTabButtons = () => {
-        let quoteTabTypes = Object.keys(this.props.tradingPairStore.quoteTabTypes);
+        let sortedQuoteTabTypes = [];
+        let quoteTabTypeOrigin = this.props.tradingPairStore.quoteTabTypes;
+        let quoteTabTypes = Object.keys(quoteTabTypeOrigin);
         if (quoteTabTypes.length) {
-            quoteTabTypes = quoteTabTypes.sort((a, b) => { if (a === 'KRW') return -1; })
-            return quoteTabTypes.map((quoteTabType, idx) => (
-                <TouchableOpacity 
-                    style={[
-                        styles.tab, 
-                        quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
-                        && styles.selectedTab
-                    ]}
-                    onPress={this._onPressTab(quoteTabType)}
-                >
-                    <Text 
+            if (quoteTabTypes.includes('KRW')) sortedQuoteTabTypes.push('KRW');
+            if (quoteTabTypes.includes('BTC')) sortedQuoteTabTypes.push('BTC');
+            if (quoteTabTypes.includes('ETH')) sortedQuoteTabTypes.push('ETH');
+            if (quoteTabTypes.includes('USDT')) sortedQuoteTabTypes.push('USDT');
+
+            sortedQuoteTabTypes.push(...quoteTabTypes.filter((tabType) => {
+                return !['KRW', 'BTC', 'ETH', 'USDT'].includes(tabType);
+            }));
+            let selected = false;
+            let selectedOnLeft = false;
+
+            return sortedQuoteTabTypes.map((quoteTabType, idx) => {
+                selectedOnLeft = selected;
+                selected = quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
+                return (
+                    <TouchableOpacity 
+                        key={quoteTabType}
                         style={[
-                            styles.tabText, 
-                            quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
-                            && styles.selectedText]}
-                    >{quoteTabType}
-                    </Text>
-                </TouchableOpacity>
-            ));               
+                            styles.tab,
+                            idx !== sortedQuoteTabTypes.length - 1 ? styles.tabNotLast : {},
+                            selected
+                            && styles.selectedTab,
+                            selectedOnLeft
+                            && styles.selectedOnLeft,
+                        ]}
+                        onPress={this._onPressTab(quoteTabType)}
+                    >
+                        <Text 
+                            style={[
+                                styles.tabText, 
+                                quoteTabType === this.props.tradingPairStore.selectedQuoteTabType
+                                && styles.selectedText]}
+                        >{quoteTabType}
+                        </Text>
+                    </TouchableOpacity>
+                    )
+                }
+            );               
         }
     }
 
@@ -50,16 +71,17 @@ export default class QutoeTab extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 8,
+        padding: 12,
     },
     tabs: {
         display: 'flex',
         flexDirection: 'row',
-        height: 26,
+        height: 30,
+        borderColor: '#7c7c7c',
     },
     tab: {
         height: '100%',
-        width: 50,
+        width: 56,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -67,16 +89,23 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: '#7c7c7c',
     },
+    tabNotLast: {
+        borderRightWidth: 0,
+    },
     selectedTab: {
         borderWidth: 1,
-        borderColor: commonStyle.color.coblicBlue,
+        borderRightWidth: 1,
+        borderColor: commonStyle.color.brandBlue,
+    },
+    selectedOnLeft: {
+        borderLeftWidth: 0,
     },
     tabText: {
         fontSize: 13,
         color: '#7c7c7c',
     },
     selectedText: {
-        color: commonStyle.color.coblicBlue,
+        color: commonStyle.color.brandBlue,
     },
     tabBody: {
         paddingTop: 15,

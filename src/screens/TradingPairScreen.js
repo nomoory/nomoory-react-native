@@ -3,7 +3,7 @@ import commonStyle from '../styles/commonStyle';
 import headerStyle from '../styles/headerStyle';
 import tabStyle from '../styles/tabStyle';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
+import * as Icon from '@expo/vector-icons';
 
 import {
     StyleSheet,
@@ -13,7 +13,6 @@ import {
     Dimensions,
     TouchableOpacity,
     Animated,
-    Picker,
 } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
@@ -26,42 +25,59 @@ import riseIcon from '../../assets/images/exchange/ic_up_s.png';
 import fallIcon from '../../assets/images/exchange/ic_down_s.png';
 import modalStore from '../stores/modalStore';
 import { withNavigation } from 'react-navigation';
+import TradingPairSelectionModal from '../components/TradingPairSelectionModal';
+import TradingPairHeaderButtons from '../components/TradingPairHeaderButtons';
+import orderbookStore from '../stores/orderbookStore';
 
 const TAB_BODY = {
-    OrderBox: () => <OrderBox />,
-    ChartBox: () => <ChartBox />,
-    TradeHistory: () => <TradeHistory />
+    OrderBox: <OrderBox />,
+    ChartBox: <ChartBox />,
+    TradeHistory: <TradeHistory />
 };
 
 @withNavigation
-@inject('tradingPairStore', 'modalStore')
+@inject('tradingPairStore', 'modalStore', 'orderbookStore')
 @observer
 export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseName = navigation.getParam('baseName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
-        
+        orderbookStore.loadOrderbook(this.tradingPairName);
+
         return {
-            headerTitle: (
+            headerLeft: (
                 <View style={styles.headerContainer}>
-                    <Text 
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('Exchange');
+                        }}
+                    >
+                        <Icon.AntDesign
+                            name="left"
+                            size={30} color={commonStyle.color.headerTextColor}
+                        // style={styles.favoriteIcon}
+                        />
+                    </TouchableOpacity>
+                    <Text
                         style={styles.headerText}
                         onPress={() => {
                             modalStore.openCustomModal({
-                                modal: 
-                                <TradingPairSelectionModal />,
+                                modal: <TradingPairSelectionModal />,
                             })
                         }}
                         maxFontSizeMultiplier={20}
                         allowFontScaling={false}
                     >
-                        {`${baseName} (${this.tradingPairName.split('-').join('/')}) `}
+                        {`${this.baseName} (${this.tradingPairName.split('-').join('/')}) `}
                         <Image
                             style={styles.headerImage}
                             source={fallIcon}
-                        /> 
+                        />
                     </Text>
                 </View>
+            ),
+            headerRight: (
+                <TradingPairHeaderButtons />
             ),
             tabBarVisible: false,
             ...headerStyle.white,
@@ -70,7 +86,6 @@ export default class TradingPairScreen extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             index: 0,
             routes: [
@@ -79,6 +94,9 @@ export default class TradingPairScreen extends Component {
                 { key: 'TradeHistory', title: '시세' },
             ],
         };
+
+        this.baseName = props.navigation.getParam('baseName', '토큰');
+        this.tradingPairName = props.navigation.getParam('tradingPairName', '');
     }
 
     @computed
@@ -105,7 +123,7 @@ export default class TradingPairScreen extends Component {
                     const color = props.position.interpolate({
                         inputRange,
                         outputRange: inputRange.map(
-                            inputIndex => (inputIndex === i ? commonStyle.color.coblicBlue : '#222')
+                            inputIndex => (inputIndex === i ? commonStyle.color.brandBlue : '#222')
                         ),
                     });
                     return (
@@ -117,12 +135,12 @@ export default class TradingPairScreen extends Component {
                                 // ? tabStyle.selectedTabItem
                                 // : null
                             ]}
-                            onPress={(e) => {this._onIndexChange(i)}}
+                            onPress={(e) => { this._onIndexChange(i) }}
                         >
-                            <Animated.Text style={[ 
+                            <Animated.Text style={[
                                 // { color },
                                 tabStyle.tabText,
-                                this.state.index === i  ? tabStyle.selectedTabText : null
+                                this.state.index === i ? tabStyle.selectedTabText : null
                             ]}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
@@ -130,7 +148,7 @@ export default class TradingPairScreen extends Component {
             </View>
         );
     };
-        
+
     _onIndexChange = (index) => {
         this.setState({ index });
     }
@@ -140,8 +158,6 @@ export default class TradingPairScreen extends Component {
             close_price,
             change, // 'RISE' | 'FALL'
         } = this.props.tradingPairStore.selectedTradingPair || {};
-        console.log(this.state.routes[this.state.index].key);
-        console.log('asdfklasjdfkljsadkljaskldjaskld')
         return (
             <View style={styles.container}>
                 <View style={styles.tradingPairSummaryContainer}>
@@ -153,17 +169,17 @@ export default class TradingPairScreen extends Component {
                         <Text style={[styles.rateText, commonStyle[change]]}>
                             {this.changeRate}%
                         </Text>
-                        <View style={{ 
-                            marginLeft: 13, 
-                            flexDirection:'row',
+                        <View style={{
+                            marginLeft: 10,
+                            flexDirection: 'row',
                             alignItems: 'center'
                         }}>
                             {(change === 'FALL' || change === 'RISE') ?
                                 <Image
-                                    style={{ 
-                                        marginRight: 3,
-                                        width: 10, 
-                                        height: 6,
+                                    style={{
+                                        marginRight: 1,
+                                        width: 13,
+                                        height: 13,
                                     }}
                                     source={change === 'FALL' ? fallIcon : riseIcon}
                                 /> : null
@@ -174,26 +190,31 @@ export default class TradingPairScreen extends Component {
                         </View>
                     </View>
                 </View>
-                {/* <TabView
+                <TabView
                     navigationState={this.state}
                     renderScene={SceneMap({
                         OrderBox,
-                        ChartBox: () => <ChartBox />,
+                        ChartBox,
                         TradeHistory,
                     })}
                     onIndexChange={this._onIndexChange}
                     renderTabBar={this._renderTabBar}
-                    initialLayout={{ width: Dimensions.get('window').width }}
-                /> */}
-                <View style={styles.tabs}>
+                    initialLayout={{
+                        width: Dimensions.get('window').width,
+                        height: Dimensions.get('window').height,
+                    }}
+                />
+                {/* <View style={styles.tabs}>
                     { this.state.routes.map((tab, index) => {
                         return (
-                            <TouchableOpacity style={[
-                                styles.tab,
-                                index === this.state.index ? 
-                                styles.selectedTab :
-                                null
-                            ]}
+                            <TouchableOpacity 
+                                key={tab.title}
+                                style={[
+                                    styles.tab,
+                                    index === this.state.index ? 
+                                    styles.selectedTab :
+                                    null
+                                ]}
                                 onPress={() => { this.setState({index})}}
                             >
                                 <Text style={[
@@ -207,8 +228,8 @@ export default class TradingPairScreen extends Component {
                     })}
                 </View>
                 <View style={styles.tabBody}>
-                    {TAB_BODY[this.state.routes[this.state.index].key]()}
-                </View>
+                    {TAB_BODY[this.state.routes[this.state.index].key]}
+                </View> */}
             </View>
         )
     }
@@ -217,13 +238,19 @@ export default class TradingPairScreen extends Component {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        // display: 'flex',
-        // flexDirection: 'row',
-        // alignItems:'center'
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    headerLeft: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     headerText: {
-        fontSize: 16, 
-        color: commonStyle.color.coblicBlue
+        fontSize: 16,
+        color: commonStyle.color.headerTextColor
     },
     headerImage: { width: 10, height: 10 },
     container: {
@@ -232,15 +259,14 @@ const styles = StyleSheet.create({
     tradingPairSummaryContainer: {
         display: 'flex',
         flexDirection: 'column',
-        height: 60,
         width: '100%',
-        padding: 10,
-        paddingLeft: 14,
+        padding: 8,
+        paddingLeft: 20,
         backgroundColor: 'white',
         justifyContent: 'space-between',
     },
     closePriceText: {
-        fontSize: 18,
+        fontSize: 21,
         fontWeight: '400',
         color: '#000000',
     },
@@ -254,20 +280,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        color: '#777777',
-        fontSize: 12,
+        color: '#333333',
+        fontSize: 11,
     },
     rateText: {
-        marginLeft: 13,
-        fontSize: 12,
+        marginLeft: 7,
+        fontSize: 13,
         fontWeight: '300',
     },
     subText: {
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: '300',
     },
-
-
     tabs: {
         width: '100%',
         height: 30,
@@ -279,10 +303,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: commonStyle.color.coblicBlue,
+        backgroundColor: commonStyle.color.brandBlue,
     },
     tabText: {
-        fontWeight: '400', 
+        fontWeight: '400',
         fontSize: 13,
         color: 'white',
     },
@@ -293,6 +317,12 @@ const styles = StyleSheet.create({
     },
     tabBody: {
         flex: 1,
+    },
+    favoriteIcon: {
+        backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: 'red',
+        color: 'blue',
+        fontSize: 14,
     }
-
 })

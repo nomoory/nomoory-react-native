@@ -1,5 +1,4 @@
-import React from 'react';
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 import tradingPairStore from './tradingPairStore';
 import accountStore from './accountStore';
@@ -10,18 +9,25 @@ import agent from '../utils/agent';
 import number from '../utils/number';
 
 class OrderStore {
-    @observable isLoading = false;
-    @observable errors = undefined;
+    @observable
+    isLoading = false;
 
-    @observable values = {
+    @observable
+    values = {
         trading_pair: 'BTC-KRW',
         side: 'BUY',
         volume: '0',
         price: '0',
         order_type: 'LIMIT',
     };
-    @action clear() {
-        this.values = {...this.values,
+
+    @observable
+    amount = Decimal(this.values.volume).mul(this.values.price).toFixed();
+
+    @action
+    clear() {
+        this.values = {
+            ...this.values,
             ...{
                 side: 'BUY',
                 volume: '0',
@@ -30,39 +36,45 @@ class OrderStore {
             }
         };
     }
-    @computed get unit_price() { return number.getUnitPrice(this.values.price, this.quoteSymbol, this.baseSymbol) }
-    @computed get isBuy() { return this.values.side === 'BUY'; }
-    @computed get isSell() { return this.values.side === 'SELL'; }
-    @computed get amount() {
-        try {
-            let { price, volume } = this.values || {};
-            return Decimal(price).mul(volume).toFixed();    
-        } catch(e) {
-            return '';
-        }
+
+    @computed
+    get unit_price() {
+        return number.getUnitPrice(this.values.price, this.quoteSymbol, this.baseSymbol);
     }
-    @computed get baseSymbol() {
+
+    @computed
+    get isBuy() { return this.values.side === 'BUY'; }
+
+    @computed
+    get isSell() { return this.values.side === 'SELL'; }
+
+    @computed
+    get baseSymbol() {
         let tradingPairName = this.values.trading_pair || tradingPairStore.selectedTradingPairName;
         return tradingPairName ? tradingPairName.split('-')[0] : '';
     }
 
-    @computed get quoteSymbol() {
+    @computed
+    get quoteSymbol() {
         let tradingPairName = this.values.trading_pair || tradingPairStore.selectedTradingPairName;
         return tradingPairName ? tradingPairName.split('-')[1] : '';
     } 
 
-    @computed get minimumOrderAmount() {
+    @computed
+    get minimumOrderAmount() {
         let tradingPair = tradingPairStore.selectedTradingPair || { minimum_order_amount: 1000 };
         return tradingPair.minimum_order_amount;
     }
 
-    @computed get maxFeeRate() { 
+    @computed
+    get maxFeeRate() { 
         let orderFee = orderFeeStore.orderFee || {};
         let feeRate = number.maximum(orderFee.taker_fee_rate || '0' , orderFee.maker_fee_rate || '0');
         return feeRate;
     }
 
-    @computed get maxFee() {
+    @computed
+    get maxFee() {
         try {
             if (this.isBuy) { return Decimal(Decimal(this.maxFeeRate || 0).mul(this.values.volume || 0).toFixed(8, Decimal.ROUND_UP )).toFixed(); }
             if (this.isSell) { return Decimal(this.maxFeeRate || 0).mul(this.amount || 0).toFixed(2, Decimal.ROUND_UP); }
@@ -71,11 +83,13 @@ class OrderStore {
         }
     }
 
-    @computed get totalPrice() {
+    @computed
+    get totalPrice() {
         return Decimal(this.amount || 0).add(this.maxFee || 0).toFixed();
     }
 
-    @computed get totalGain() {
+    @computed
+    get totalGain() {
         try {
             if (this.isBuy) { return Decimal(this.values.volume).minus(this.maxFee).toFixed(); }
             if (this.isSell) { return Decimal(this.amount || 0).minus(this.maxFee || 0).toFixed(); }
@@ -84,7 +98,8 @@ class OrderStore {
         }
     }
 
-    @computed get isValidOrder() {
+    @computed
+    get isValidOrder() {
         let quoteAccount = accountStore.getAccountByAssetSymbol(this.quoteSymbol);
         let baseAccount = accountStore.getAccountByAssetSymbol(this.baseSymbol);
         let liquid_decimal = Decimal(quoteAccount ? quoteAccount.liquid || 0 : 0 );
@@ -161,9 +176,15 @@ class OrderStore {
             state: true
         };
     }
-    @action setTradingPair(tradingPair) { this.values.trading_pair = tradingPair; }
-    @action setSide(side) { this.values.side = side; }
-    @action setVolumeByRate(rate) {
+
+    @action
+    setTradingPair(tradingPair) { this.values.trading_pair = tradingPair; }
+
+    @action
+    setSide(side) { this.values.side = side; }
+
+    @action
+    setVolumeByRate(rate) {
         try {
             let { side, price } = this.values;
             let maximumOrderableVolume = '0';
@@ -179,13 +200,15 @@ class OrderStore {
                 let liquid = account.liquid;
                 maximumOrderableVolume = Decimal(liquid).mul(rate).toFixed(8, Decimal.ROUND_DOWN);
             }
-            this.values.volume = Decimal(maximumOrderableVolume).toFixed();       
+
+            this.setVolume(maximumOrderableVolume);
         } catch (err) {
-            this.values.volume = this.values.volume
+
         }
     }
 
-    @action increasePriceByButton() {
+    @action
+    increasePriceByButton() {
         try {
             let { price } = this.values;
             let unit_price = this.unit_price;
@@ -212,7 +235,8 @@ class OrderStore {
         }
     };
 
-    @action decreasePriceByButton() {
+    @action
+    decreasePriceByButton() {
         try {
             let { price } = this.values;
             let unit_price = this.unit_price;
@@ -232,7 +256,8 @@ class OrderStore {
         } catch (e) { return; }
     };
 
-    @action submitOrder() {
+    @action
+    submitOrder() {
         if (this.isValidOrder.state === false) {
             modalStore.openPreset(
                 '거래불가',
@@ -248,33 +273,96 @@ class OrderStore {
         }
     }
 
-    @action setVolumeFromInput(volume) {
-        if (!volume) this.values.volume = volume;
+    @action
+    setVolumeFromInput(volume) {
+        this.setVolume(volume);
+    }
+
+    @action
+    setPriceFromInput(price) {
+        this.setPrice(price);    
+    }
+
+    @action
+    correctPriceForSubmit() {
+        this.values.price = number.getFixedPrice(this.values.price, this.quoteSymbol);
+    }
+
+    @action
+    correctVolumeForSubmit() {
+        this.values.volume = number.getFixedVolume(this.values.volume, this.baseSymbol);
+    }
+
+    @action
+    setPrice(price) {
         try {
-            Decimal(volume).toFixed();
-            this.values.volume = volume;
-        } catch (e) {
-            this.values.volume = this.values.volume;
+            if (price === '') this.values.price = price;
+            Decimal(price)
+            this.values.price = price;
+            this.amount = Decimal(price).mul(this.values.volume).toFixed();
+        } catch (err) {
         }
     }
 
-    @action setPriceFromInput(price) {
-        if (this._isValidPrice(price)) {
-            this.setPrice(price);
+    @action
+    setVolume(volume) {
+        try {
+            if (volume === '') {
+                this.values.volume = volume;
+                this.amount = '';
+            }
+            Decimal(volume)
+            this.values.volume = volume;
+            this.amount = Decimal(volume).mul(this.values.price).toFixed();
+        } catch (err) {
         }
     }
-    @action correctPriceForSubmit() {
-        this.values.price = number.getFixedPrice(this.values.price, this.quoteSymbol);
+
+    @action
+    setAmount(amount) {
+        try {
+            if (amount === '') {
+                this.amount = '';
+                this.values.volume = '';
+            }
+            Decimal(amount)
+            this.amount = amount;
+            if (!Decimal(this.values.price).equals(0)) {
+                this.values.volume = Decimal(Decimal(amount).div(this.values.price).toFixed(8, Decimal.ROUND_DOWN)).toFixed();
+            } else {
+                this.values.volume = '';
+            }
+        } catch (err) {
+        }
     }
-    @action correctVolumeForSubmit() {
-        this.values.volume = number.getFixedVolume(this.values.volume, this.baseSymbol);
+
+    @action
+    makeVolumeClean() {
+        try {
+            this.values.volume = Decimal(this.values.volume).toFixed();
+        } catch (err) {
+
+        }
     }
-    @action setPrice(price) {
-        this.values.price = price;
+
+    @action
+    makePriceClean() {
+        try {
+            this.values.price = Decimal(this.values.price).toFixed();
+        } catch (err) {
+            
+        }
     }
-    @action setVolume(volume) {
-        this.values.volume = volume;
+
+    @action
+    makeAmountClean() {
+        try {
+            this.setAmount(Decimal(this.amount).toFixed());
+        } catch (err) {
+            
+        }
     }
+
 
     @action
     setOrderValueByTradingPair(tradingPair) {
@@ -288,7 +376,8 @@ class OrderStore {
         this.setIsFeePaid(is_fee_paid);
     }
 
-    @action changeOrderSide(side) {
+    @action
+    changeOrderSide(side) {
         this.values.side = side;
     }
 
@@ -297,7 +386,8 @@ class OrderStore {
         this.values.is_fee_paid = is_fee_paid;
     }
 
-    @action registerOrder() {
+    @action
+    registerOrder() {
         this.isLoading = true;
         return agent.registerOrder({...this.values, unit_price: this.unit_price})
             .then(action((response) => {
@@ -310,30 +400,11 @@ class OrderStore {
             }));
     }
 
-    _isValidPrice(value) {
-        for (let [index, char] of Array.prototype.entries.apply(value)) {
-            const allow = '0123456789'.split('');
-            if (!(char in allow)) { // 숫자가 아니면 수용하지 않는다.
-                if (char === '.') { // . 는 수용, 두개 이상은 안됨
-                    if (index === 0) return false;
-                    let dotCount = 0;
-                    for (let char of value) {
-                        if (char === '.') {
-                            if (dotCount === 1) return false;
-                            dotCount += 1;
-                        }
-                    }
-                } else {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
-
-    @observable orderFormSelectedTabType = 'BUY';
-    @action setOrderFormSelectedTabType(type) {
+    @observable
+    orderFormSelectedTabType = 'BUY';
+    @action
+    setOrderFormSelectedTabType(type) {
         this.orderFormSelectedTabType = type;
     }
 

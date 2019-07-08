@@ -4,27 +4,27 @@ import {
     createBottomTabNavigator
 } from 'react-navigation';
 
-import { Icon } from 'expo';
+// https://expo.github.io/vector-icons/
+import * as Icon from '@expo/vector-icons'
 import ExchangeScreen from '../screens/ExchangeScreen';
-import TradingPairScreen from '../screens/TradingPairScreen';
+import ChatScreen from '../screens/ChatScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
 import AccountListScreen from '../screens/AccountListScreen';
-import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScreen';
 import EtcScreen from '../screens/EtcScreen';
-import AnnouncementListScreen from '../screens/AnnouncementListScreen';
-import AnnouncementDetailScreen from '../screens/AnnouncementDetailScreen';
+import commonStyle from '../styles/commonStyle';
+
+const iconSize = 22;
 
 const ExchangeStack = createStackNavigator(
     {
         Exchange: ExchangeScreen,
-        TradingPair: TradingPairScreen,
     },{
         defaultNavigationOptions: {
             headerTitleAllowFontScaling: false,
-            headerBackAllowFontScaling: false,    
+            headerBackAllowFontScaling: false,
             headerTitleStyle: {
                 flex: 1,
-                textAlign: "center", 
+                textAlign: "center",
             },
         }
     }
@@ -32,29 +32,88 @@ const ExchangeStack = createStackNavigator(
 
 ExchangeStack.navigationOptions = {
     tabBarLabel: '거래소',
-    tabBarIcon: ({ tintColor, focused }) => (
-        <Icon.Ionicons
-            focused={focused}
-            name="ios-trending-up"
-            color={tintColor}
-            size={24}
-        />
-    ),
-    headerLayoutPreset: 'center'
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.MaterialCommunityIcons
+                    focused={focused}
+                    name="home"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.MaterialCommunityIcons
+                    focused={focused}
+                    name="home-outline"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        }
 
+    },
+    headerLayoutPreset: 'center'
 };
 
 ExchangeStack.headerMode = 'none';
 
-const InvestmentStack = createStackNavigator(
+
+const ChatStack = createStackNavigator(
     {
-        Investment: InvestmentScreen
+        Chat: ChatScreen,
     },{
         defaultNavigationOptions: {
             headerTitleAllowFontScaling: false,
-            headerBackAllowFontScaling: false,    
+            headerBackAllowFontScaling: false,
+            headerTitleStyle: {
+                flex: 1,
+                textAlign: "center",
+            },
         }
     }
+);
+
+ChatStack.navigationOptions = {
+    tabBarLabel: '채팅',
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.MaterialIcons
+                    focused={focused}
+                    name="chat-bubble"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.MaterialIcons
+                    focused={focused}
+                    name="chat-bubble-outline"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        }
+
+    },
+    headerLayoutPreset: 'center'
+};
+
+ChatStack.headerMode = 'none';
+
+const InvestmentStack = createStackNavigator(
+    {
+        Investment: InvestmentScreen
+    },
+    // {
+    //     defaultNavigationOptions: {
+    //         headerTitleAllowFontScaling: false,
+    //         headerBackAllowFontScaling: false,    
+    //     }
+    // }
 );
 
 InvestmentStack.navigationOptions = {
@@ -62,20 +121,32 @@ InvestmentStack.navigationOptions = {
         visible: false,
     },
     tabBarLabel: '투자내역',
-    tabBarIcon: ({ tintColor, focused }) => (
-        <Icon.Ionicons
-            focused={focused}
-            name="ios-clipboard"
-            color={tintColor}
-            size={24}
-        />
-    )
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.MaterialCommunityIcons
+                    focused={focused}
+                    name="file-document-box"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.MaterialCommunityIcons
+                    focused={focused}
+                    name="file-document-box-outline"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        }
+    },
 };
 
 const DepositWithdrawStack = createStackNavigator(
     {
         Accounts: AccountListScreen, 
-        AccountDepositWithdraw:  AccountDepositWithdrawScreen
     }, {
         defaultNavigationOptions: {
             headerTitleAllowFontScaling: false,
@@ -88,22 +159,34 @@ DepositWithdrawStack.navigationOptions = {
     header: {
         visible: false,
     },
-    tabBarLabel: '입금', // '입출금',
-    tabBarIcon: ({ tintColor, focused }) => (
-        <Icon.Ionicons
-            focused={focused}
-            name="ios-swap"
-            color={tintColor}
-            size={24}
-        />
-    )
+    tabBarLabel: '입출금',
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.Ionicons
+                    focused={focused}
+                    name="md-swap"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.Ionicons
+                    focused={focused}
+                    name="ios-swap"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        }
+    },
+
 };
 
 const EtcStack = createStackNavigator(
     {
         EtcMain: EtcScreen,
-        AnnouncementList: AnnouncementListScreen,
-        AnnouncementDetail: AnnouncementDetailScreen,
     }, {
         headerTitleStyle: {
             flex: 1,
@@ -117,33 +200,47 @@ const EtcStack = createStackNavigator(
 );
 
 EtcStack.navigationOptions = {
-    tabBarLabel: '더 보기',
-    tabBarIcon: ({ tintColor, focused }) => (
-        <Icon.Ionicons
-            focused={focused}
-            name="ios-menu"
-            color={tintColor}
-            size={24} 
-        />
-    ),
+    tabBarLabel: '내정보',
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.MaterialIcons
+                    focused={focused}
+                    name="person"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.MaterialIcons
+                    focused={focused}
+                    name="person-outline"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        }
+    },
 
 };
 
 export default createBottomTabNavigator(
     {
         Exchange: ExchangeStack,
+        Chat: ChatStack,
         Investment: InvestmentStack,
         DepositWithdraw: DepositWithdrawStack,
         Etc: EtcStack
     },
     {
-        initialRouteName: 'Exchange',
+        initialRouteName: 'Investment',
         tabBarOptions: {
-            activeTintColor: 'black',
-            inactiveTintColor: 'grey',
+            activeTintColor: 'white',
+            inactiveTintColor: 'white',
             allowFontScaling: false,
             style: {
-                backgroundColor: 'white',
+                backgroundColor: commonStyle.color.brandBlue,
                 borderTopWidth: 0,
                 shadowOffset: { width: 5, height: 3 },
                 shadowColor: 'black',
@@ -153,13 +250,9 @@ export default createBottomTabNavigator(
         },
 
         /* Default header */
-        navigationOptions: {
-            headerTitleAllowFontScaling: false,
-            headerBackAllowFontScaling: false,
-        },
         defaultNavigationOptions: {
             headerStyle: {
-                // backgroundColor: commonStyle.color.coblicBlue,
+                backgroundColor: '#aa11aa',
             },
             headerTintColor: '#fff',
             headerTitleStyle: {

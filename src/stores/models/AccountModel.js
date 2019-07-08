@@ -1,7 +1,6 @@
 import React from 'react';
 import { observable, action, computed } from 'mobx';
 import { Decimal } from '../../utils/number';
-import i18next from 'i18next';
 import Model from './Model';
 import { QUOTE_SYMBOL } from '../accountStore';
 import tradingPairStore from '../tradingPairStore';
@@ -181,7 +180,7 @@ class AccountModel extends Model {
                         <div>입출금내역에서 처리상태를 확인하세요.</div>
                     </div>
                 ),
-                buttons: [{ name: i18next.t('button/confirm') }],
+                buttons: [{ name: '확인' }],
             });
             this.isLoading = false;
         })).catch(action((err) => {

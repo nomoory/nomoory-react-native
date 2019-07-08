@@ -73,15 +73,15 @@ export default class OrderForm extends Component {
     }
 }
 
-
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        minWidth: 220,
+        maxWidth: 220,
         height: '100%',
         backgroundColor: 'white'
     },
     buttons: {
-        height: 30,
+        height: 36,
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         color: commonStyle.color.coblicRed,
     },
     selectedSellText: {
-        color: commonStyle.color.coblicBlue,
+        color: commonStyle.color.brandBlue,
     },
     selectedHistoryText: {
 
@@ -163,7 +163,7 @@ const orderFormStyle = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 8,
         width: '100%',
-        height: 36,
+        height: 30,
     },
     inputContainer: {
         flex: 1,
@@ -171,8 +171,9 @@ const orderFormStyle = StyleSheet.create({
     },
     textInput: {
         paddingRight: 6,
+        paddingLeft: 34,
         textAlign: 'right',
-        height: 36,
+        height: '100%',
         backgroundColor: '#ffffff',
         borderColor: '#a2abb6',
         borderWidth: 0.5,
@@ -180,7 +181,7 @@ const orderFormStyle = StyleSheet.create({
     },
     inputTitleContainer: {
         left: 8,
-        top: 11,
+        top: 8,
         position: 'absolute',
     },
     inputTitle: {
@@ -208,45 +209,50 @@ const orderFormStyle = StyleSheet.create({
         alignItems: 'center',
         borderColor: '#d8dbde',
         backgroundColor: '#d8dbde',
-        marginLeft: 3,
-        width: 36,
-        height: 36,
+        marginLeft: 2,
+        width: 30,
+        height: 30,
     },
     plusButton: {
         //borderLeftWidth: 1.5,
         borderLeftWidth: 1,
         borderLeftColor: '#d8dbde',
     },
-
-    volumeInputContainer: {
-        marginTop: marginBetween,
-        height: 36,
-    },
-
-    // set volume buttons
-    setVolumeButtons: {
-        marginTop: marginBetween,
-        flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: 'white',
-        width: '100%',
-        height: 36,
-        alignItems: 'center'
-    },
-    setVolumeButton: {
-        flex: 1,
+    volumeButton: {
+        width: 62,
+        height: 30,
+        backgroundColor: '#d8dbde',
+        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%',
-        borderWidth: 1,
-        borderColor: 'white',
-        backgroundColor: '#d8dbde',
     },
-    setVolumeButtonNotInFirst: {
-        borderLeftWidth: 1.5,
-        borderLeftColor: '#d8dbde',
+    volumeInputContainer: {
+        flex: 1,
+        height: '100%',
+        marginRight: 4,
+    },
+    volumeRow: {
+        marginTop: marginBetween,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 0,
+        height: 30,
+    },
+    // set volume buttons
+    setVolumeButton: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        height: 30,
+        width: 62,
     },
     setVolumeButtonText: {
+        fontSize: 12,
+    },
+    dropdownStyle: {
+        height: 123,
     },
 
     // infos
@@ -258,6 +264,15 @@ const orderFormStyle = StyleSheet.create({
     maxFeePercentageContent: {
         color: '#747474',
         fontSize: 11,
+    },
+
+    amountContainer: {
+        marginTop: 10,
+        marginBottom: 10,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 36,
     },
     infoContainer: {
         marginTop: 10,
@@ -293,18 +308,18 @@ const orderFormStyle = StyleSheet.create({
 
     // button
     button: {
-        height: 34,
+        height: 30,
         justifyContent: 'center',
         alignItems: 'center',
     },
     blueButton: {
         backgroundColor: commonStyle.color.coblicSellButtonBackground,
-        height: 34,
+        height: 30,
         flex: 1,
     },
     redButton: {
         backgroundColor: commonStyle.color.coblicBuyButtonBackground,
-        height: 34,
+        height: 30,
         flex: 1,
     },
     initButton: {

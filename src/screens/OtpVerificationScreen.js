@@ -99,7 +99,7 @@ const borderRadius = 6;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: color.coblicBlue,
+        backgroundColor: color.brandBlue,
         height: '100%',
     
         flexDirection: 'column',
