@@ -130,16 +130,17 @@ const customTabStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: 1.5,
-        borderBottomColor: 'white',
+        borderBottomColor: commonStyle.color.coblicPaleGrey,
     },
     selectedTabItem: {
         borderBottomColor: commonStyle.color.brandBlue,
     },
     tabText: {
         fontWeight: '300', 
-        fontSize: 13,
+        fontSize: 14,
     },
     selectedTabText: {
+        fontWeight: '500', 
         color: commonStyle.color.brandBlue,
     },
 })

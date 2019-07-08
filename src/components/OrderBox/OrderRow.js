@@ -6,7 +6,7 @@ import number from '../../utils/number';
 import commonStyle from '../../styles/commonStyle';
 import { computed } from 'mobx';
 
-export const rowHeight = 36;
+export const rowHeight = 40;
 
 @inject('orderStore', 'orderbookStore', 'tradingPairStore')
 @observer

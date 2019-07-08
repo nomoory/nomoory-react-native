@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
 
+
 export const color = {
-    brandBlue: '#0062df', // '#093687',
+    brandBlue: '#004fb4',// '#0062df', // '#093687',
     brandPaleBlue: '#81a6ef',
     coblicRed: '#d60000',
     brandGrey: '#999',
@@ -12,8 +13,8 @@ export const color = {
     white: '#ffffff',
     main: '#0052f3',
     mainThemeColor: '#0062df',
-    headerTextColor: '#093687',
-    fontTextColor: '#093687',
+    headerTextColor: '#004fb4', // '#093687',
+    fontTextColor: '#004fb4',
     emptyBackgroundColor: '#EDEFF4',
     subTitleGreyColor: '#333',
     borderColor: '#dadae0',

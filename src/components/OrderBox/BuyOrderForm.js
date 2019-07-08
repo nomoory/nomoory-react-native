@@ -69,10 +69,34 @@ export default class BuyOrderForm extends Component {
                 this.price = price;       
             }
         )
+
+        this.amountReaction = reaction(
+            () => props.orderStore.values.amount,
+            amount => {
+                // 정수부 자리수가 3의 배수일때 ,가 추가되므로 현재 있던 위치에서 뒤로 한칸
+                if (
+                    this.amountInputRef
+                    && amount && this.amount
+                    && this.amount.length < amount.length
+                    && Decimal(amount.split('.')[0]).toFixed().length % 3 === 1
+                ) {
+                    const nextSelection = this.amountInputRef._lastNativeSelection.start + 2 || 0;
+
+                    this.amountInputRef.setNativeProps({
+                        selection: {
+                            start: nextSelection,
+                            end: nextSelection,
+                        }
+                    })
+                }     
+                this.amount = amount;
+            }
+        )
     }
     componentWillUnmount() {
         if (this.volumeReaction) this.volumeReaction();
         if (this.priceReaction) this.priceReaction();
+        if (this.amountReaction) this.amountReaction();
     }
 
     componentDidMount() {
@@ -92,6 +116,11 @@ export default class BuyOrderForm extends Component {
     _onChangeVolume = (text = '') => {
         this._resetSelection();
         this.props.orderStore.setVolumeFromInput(text.split(',').join(''));
+    }
+
+    _onChangeAmount = (text = '') => {
+        this._resetSelection();
+        this.props.orderStore.setAmount(text.split(',').join(''));
     }
 
     _resetSelection = () => {
@@ -283,9 +312,6 @@ export default class BuyOrderForm extends Component {
                         <View style={orderFormStyle.inputTitleContainer}>
                             <Text style={orderFormStyle.inputTitle}>{`가격`}</Text>
                         </View>
-                        {/* <View style={orderFormStyle.inputUnitContainer}>
-                            <Text style={orderFormStyle.inputUnit}>{`${quoteSymbol}`}</Text>
-                        </View> */}
                     </View>
                     <View style={[orderFormStyle.setPriceButtons]}>
                         <TouchableOpacity style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} onPress={this._onPressDecreasePrice}>
@@ -296,19 +322,22 @@ export default class BuyOrderForm extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={[styles.fee, orderFormStyle.infoContainer]}>
-                    <Text style={[styles.liquidTitle, orderFormStyle.infoTitle]}>총금액</Text>
-                    <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{
-                        amount
-                            ?
-                            (
-                                quoteSymbol === 'KRW'
-                                    ? number.putComma(Decimal(amount).toFixed(0))
-                                    : number.putComma(Decimal(amount).toFixed())
-                            )
-                            :
-                            '-'
-                    } {quoteSymbol}</Text>
+                <View style={[orderFormStyle.amountContainer]}>
+                    <View style={[orderFormStyle.inputContainer]}>
+                        <TextInput
+                            style={orderFormStyle.textInput}
+                            ref={(ref) => { this.amountInputRef = ref; }}
+                            onChangeText={this._onChangeAmount}
+                            keyboardType={'numeric'}
+                            value={number.putComma(amount)}
+                            onBlur={() => {
+                                this.props.orderStore.makeAmountClean();
+                            }}
+                        />
+                        <View style={orderFormStyle.inputTitleContainer}>
+                            <Text style={orderFormStyle.inputTitle}>총금액</Text>
+                        </View>
+                    </View>
                 </View>
                 {
                     this.props.userStore.isLoggedIn ?

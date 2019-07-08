@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
         backgroundColor: 'white',
-        padding: 15,
         paddingTop: 0,
         paddingBottom: 0,
         borderBottomWidth: 1,
@@ -133,14 +132,15 @@ const styles = StyleSheet.create({
     },
     
     upperContainer: {
+        padding: 15,
         paddingTop: 10,
         paddingBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
 
-        borderBottomWidth: 0.8,
-        borderBottomColor: commonStyle.color.borderColor,
-
+        backgroundColor: commonStyle.color.emptyBackgroundColor,
+        // borderBottomWidth: 0.8,
+        // borderBottomColor: commonStyle.color.borderColor,
     },
     upperLeftContainer: {
         flex: 1,
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     bottomContainer: {
+        padding: 15,
         paddingTop: 10,
         paddingBottom: 10,
         flexDirection: 'row',

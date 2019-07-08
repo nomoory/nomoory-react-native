@@ -6,13 +6,14 @@ import { inject, observer } from 'mobx-react';
 @observer
 export default class ChartBox extends Component {
     render() {
+        const { selectedTradingPair } = this.props.tradingPairStore || {};
         return (
             <View style={styles.container}>
                 <WebView
                     ref={(view) => this.webView = view}
                     originWhitelist={['*']}
                     source={{
-                        uri: `${Expo.Constants.manifest.extra.REACT_WEB_API_ENDPOINT}/chart-view/${this.props.tradingPairStore.selectedTradingPair.name}`,
+                        uri: `${Expo.Constants.manifest.extra.REACT_WEB_API_ENDPOINT}/chart-view/${selectedTradingPair ? selectedTradingPair.name : ''}`,
                     }}
 
                     javaScriptEnabledAndroid={true}

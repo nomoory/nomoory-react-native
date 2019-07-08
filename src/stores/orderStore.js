@@ -9,19 +9,25 @@ import agent from '../utils/agent';
 import number from '../utils/number';
 
 class OrderStore {
-    @observable isLoading = false;
-    @observable errors = undefined;
+    @observable
+    isLoading = false;
 
-    @observable values = {
+    @observable
+    values = {
         trading_pair: 'BTC-KRW',
         side: 'BUY',
         volume: '0',
         price: '0',
         order_type: 'LIMIT',
     };
+
+    @observable
+    amount = Decimal(this.values.volume).mul(this.values.price).toFixed();
+
     @action
     clear() {
-        this.values = {...this.values,
+        this.values = {
+            ...this.values,
             ...{
                 side: 'BUY',
                 volume: '0',
@@ -30,39 +36,45 @@ class OrderStore {
             }
         };
     }
-    @computed get unit_price() { return number.getUnitPrice(this.values.price, this.quoteSymbol, this.baseSymbol) }
-    @computed get isBuy() { return this.values.side === 'BUY'; }
-    @computed get isSell() { return this.values.side === 'SELL'; }
-    @computed get amount() {
-        try {
-            let { price, volume } = this.values || {};
-            return Decimal(price).mul(volume).toFixed();    
-        } catch(e) {
-            return '';
-        }
+
+    @computed
+    get unit_price() {
+        return number.getUnitPrice(this.values.price, this.quoteSymbol, this.baseSymbol);
     }
-    @computed get baseSymbol() {
+
+    @computed
+    get isBuy() { return this.values.side === 'BUY'; }
+
+    @computed
+    get isSell() { return this.values.side === 'SELL'; }
+
+    @computed
+    get baseSymbol() {
         let tradingPairName = this.values.trading_pair || tradingPairStore.selectedTradingPairName;
         return tradingPairName ? tradingPairName.split('-')[0] : '';
     }
 
-    @computed get quoteSymbol() {
+    @computed
+    get quoteSymbol() {
         let tradingPairName = this.values.trading_pair || tradingPairStore.selectedTradingPairName;
         return tradingPairName ? tradingPairName.split('-')[1] : '';
     } 
 
-    @computed get minimumOrderAmount() {
+    @computed
+    get minimumOrderAmount() {
         let tradingPair = tradingPairStore.selectedTradingPair || { minimum_order_amount: 1000 };
         return tradingPair.minimum_order_amount;
     }
 
-    @computed get maxFeeRate() { 
+    @computed
+    get maxFeeRate() { 
         let orderFee = orderFeeStore.orderFee || {};
         let feeRate = number.maximum(orderFee.taker_fee_rate || '0' , orderFee.maker_fee_rate || '0');
         return feeRate;
     }
 
-    @computed get maxFee() {
+    @computed
+    get maxFee() {
         try {
             if (this.isBuy) { return Decimal(Decimal(this.maxFeeRate || 0).mul(this.values.volume || 0).toFixed(8, Decimal.ROUND_UP )).toFixed(); }
             if (this.isSell) { return Decimal(this.maxFeeRate || 0).mul(this.amount || 0).toFixed(2, Decimal.ROUND_UP); }
@@ -71,11 +83,13 @@ class OrderStore {
         }
     }
 
-    @computed get totalPrice() {
+    @computed
+    get totalPrice() {
         return Decimal(this.amount || 0).add(this.maxFee || 0).toFixed();
     }
 
-    @computed get totalGain() {
+    @computed
+    get totalGain() {
         try {
             if (this.isBuy) { return Decimal(this.values.volume).minus(this.maxFee).toFixed(); }
             if (this.isSell) { return Decimal(this.amount || 0).minus(this.maxFee || 0).toFixed(); }
@@ -84,7 +98,8 @@ class OrderStore {
         }
     }
 
-    @computed get isValidOrder() {
+    @computed
+    get isValidOrder() {
         let quoteAccount = accountStore.getAccountByAssetSymbol(this.quoteSymbol);
         let baseAccount = accountStore.getAccountByAssetSymbol(this.baseSymbol);
         let liquid_decimal = Decimal(quoteAccount ? quoteAccount.liquid || 0 : 0 );
@@ -284,6 +299,7 @@ class OrderStore {
             if (price === '') this.values.price = price;
             Decimal(price)
             this.values.price = price;
+            this.amount = Decimal(price).mul(this.values.volume).toFixed();
         } catch (err) {
         }
     }
@@ -291,9 +307,31 @@ class OrderStore {
     @action
     setVolume(volume) {
         try {
-            if (volume === '') this.values.volume = volume;
+            if (volume === '') {
+                this.values.volume = volume;
+                this.amount = '';
+            }
             Decimal(volume)
             this.values.volume = volume;
+            this.amount = Decimal(volume).mul(this.values.price).toFixed();
+        } catch (err) {
+        }
+    }
+
+    @action
+    setAmount(amount) {
+        try {
+            if (amount === '') {
+                this.amount = '';
+                this.values.volume = '';
+            }
+            Decimal(amount)
+            this.amount = amount;
+            if (!Decimal(this.values.price).equals(0)) {
+                this.values.volume = Decimal(Decimal(amount).div(this.values.price).toFixed(8, Decimal.ROUND_DOWN)).toFixed();
+            } else {
+                this.values.volume = '';
+            }
         } catch (err) {
         }
     }
@@ -315,6 +353,16 @@ class OrderStore {
             
         }
     }
+
+    @action
+    makeAmountClean() {
+        try {
+            this.setAmount(Decimal(this.amount).toFixed());
+        } catch (err) {
+            
+        }
+    }
+
 
     @action
     setOrderValueByTradingPair(tradingPair) {
@@ -353,7 +401,8 @@ class OrderStore {
     }
 
 
-    @observable orderFormSelectedTabType = 'BUY';
+    @observable
+    orderFormSelectedTabType = 'BUY';
     @action
     setOrderFormSelectedTabType(type) {
         this.orderFormSelectedTabType = type;

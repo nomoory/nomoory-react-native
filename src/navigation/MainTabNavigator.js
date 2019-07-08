@@ -7,12 +7,13 @@ import {
 // https://expo.github.io/vector-icons/
 import * as Icon from '@expo/vector-icons'
 import ExchangeScreen from '../screens/ExchangeScreen';
+import ChatScreen from '../screens/ChatScreen';
 import InvestmentScreen from '../screens/InvestmentScreen';
 import AccountListScreen from '../screens/AccountListScreen';
 import EtcScreen from '../screens/EtcScreen';
-import AnnouncementListScreen from '../screens/AnnouncementListScreen';
-import AnnouncementDetailScreen from '../screens/AnnouncementDetailScreen';
 import commonStyle from '../styles/commonStyle';
+
+const iconSize = 22;
 
 const ExchangeStack = createStackNavigator(
     {
@@ -38,7 +39,7 @@ ExchangeStack.navigationOptions = {
                     focused={focused}
                     name="home"
                     color={tintColor}
-                    size={24} 
+                    size={iconSize} 
                 /> 
             );
         } else {
@@ -47,17 +48,61 @@ ExchangeStack.navigationOptions = {
                     focused={focused}
                     name="home-outline"
                     color={tintColor}
-                    size={24} 
+                    size={iconSize} 
                 /> 
             );
         }
 
     },
     headerLayoutPreset: 'center'
-
 };
 
 ExchangeStack.headerMode = 'none';
+
+
+const ChatStack = createStackNavigator(
+    {
+        Chat: ChatScreen,
+    },{
+        defaultNavigationOptions: {
+            headerTitleAllowFontScaling: false,
+            headerBackAllowFontScaling: false,
+            headerTitleStyle: {
+                flex: 1,
+                textAlign: "center",
+            },
+        }
+    }
+);
+
+ChatStack.navigationOptions = {
+    tabBarLabel: '채팅',
+    tabBarIcon: ({ tintColor, focused }) => {
+        if (focused) {
+            return (
+                <Icon.MaterialIcons
+                    focused={focused}
+                    name="chat-bubble"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        } else {
+            return (
+                <Icon.MaterialIcons
+                    focused={focused}
+                    name="chat-bubble-outline"
+                    color={tintColor}
+                    size={iconSize} 
+                /> 
+            );
+        }
+
+    },
+    headerLayoutPreset: 'center'
+};
+
+ChatStack.headerMode = 'none';
 
 const InvestmentStack = createStackNavigator(
     {
@@ -83,7 +128,7 @@ InvestmentStack.navigationOptions = {
                     focused={focused}
                     name="file-document-box"
                     color={tintColor}
-                    size={24} 
+                    size={iconSize} 
                 /> 
             );
         } else {
@@ -92,7 +137,7 @@ InvestmentStack.navigationOptions = {
                     focused={focused}
                     name="file-document-box-outline"
                     color={tintColor}
-                    size={24} 
+                    size={iconSize} 
                 /> 
             );
         }
@@ -122,7 +167,7 @@ DepositWithdrawStack.navigationOptions = {
                     focused={focused}
                     name="md-swap"
                     color={tintColor}
-                    size={24} 
+                    size={iconSize} 
                 /> 
             );
         } else {
@@ -131,7 +176,7 @@ DepositWithdrawStack.navigationOptions = {
                     focused={focused}
                     name="ios-swap"
                     color={tintColor}
-                    size={24} 
+                    size={iconSize} 
                 /> 
             );
         }
@@ -142,8 +187,6 @@ DepositWithdrawStack.navigationOptions = {
 const EtcStack = createStackNavigator(
     {
         EtcMain: EtcScreen,
-        AnnouncementList: AnnouncementListScreen,
-        AnnouncementDetail: AnnouncementDetailScreen,
     }, {
         headerTitleStyle: {
             flex: 1,
@@ -165,7 +208,7 @@ EtcStack.navigationOptions = {
                     focused={focused}
                     name="person"
                     color={tintColor}
-                    size={24} 
+                    size={iconSize} 
                 /> 
             );
         } else {
@@ -174,7 +217,7 @@ EtcStack.navigationOptions = {
                     focused={focused}
                     name="person-outline"
                     color={tintColor}
-                    size={24} 
+                    size={iconSize} 
                 /> 
             );
         }
@@ -185,6 +228,7 @@ EtcStack.navigationOptions = {
 export default createBottomTabNavigator(
     {
         Exchange: ExchangeStack,
+        Chat: ChatStack,
         Investment: InvestmentStack,
         DepositWithdraw: DepositWithdrawStack,
         Etc: EtcStack
