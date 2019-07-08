@@ -70,13 +70,36 @@ export default class SellOrderForm extends Component {
                 this.price = price;
             }
         )
+
+        this.amountReaction = reaction(
+            () => props.orderStore.values.amount,
+            amount => {
+                // 정수부 자리수가 3의 배수일때 ,가 추가되므로 현재 있던 위치에서 뒤로 한칸
+                if (
+                    this.amountInputRef
+                    && amount && this.amount
+                    && this.amount.length < amount.length
+                    && Decimal(amount.split('.')[0]).toFixed().length % 3 === 1
+                ) {
+                    const nextSelection = this.amountInputRef._lastNativeSelection.start + 2 || 0;
+
+                    this.amountInputRef.setNativeProps({
+                        selection: {
+                            start: nextSelection,
+                            end: nextSelection,
+                        }
+                    })
+                }     
+                this.amount = amount;
+            }
+        )
     }
 
     componentWillUnmount() {
         if (this.volumeReaction) this.volumeReaction();
         if (this.priceReaction) this.priceReaction();
+        if (this.amountReaction) this.amountReaction();
     }
-
 
     componentDidMount() {
         this.props.orderStore.setSide('SELL'); // SELL side임을 보장하기 위함
@@ -95,6 +118,11 @@ export default class SellOrderForm extends Component {
     _onChangeVolume = (text = '') => {
         this._resetSelection();
         this.props.orderStore.setVolumeFromInput(text.split(',').join(''));
+    }
+
+    _onChangeAmount = (text = '') => {
+        this._resetSelection();
+        this.props.orderStore.setAmount(text.split(',').join(''));
     }
 
     _resetSelection = () => {
@@ -306,19 +334,22 @@ export default class SellOrderForm extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={[styles.amountContainer, orderFormStyle.infoContainer]}>
-                    <Text style={[styles.liquidTitle, orderFormStyle.infoTitle]}>매도금액</Text>
-                    <Text style={[styles.liquidContent, orderFormStyle.infoContent]}>{
-                        amount
-                        ?
-                        (
-                            quoteSymbol === 'KRW'
-                            ? number.putComma(Decimal(amount).toFixed(0))
-                            : number.putComma(Decimal(amount).toFixed())
-                        )
-                        :
-                        '-'
-                    } {quoteSymbol}</Text>
+                <View style={[orderFormStyle.amountContainer]}>
+                    <View style={[orderFormStyle.inputContainer]}>
+                        <TextInput
+                            style={orderFormStyle.textInput}
+                            ref={(ref) => { this.amountInputRef = ref; }}
+                            onChangeText={this._onChangeAmount}
+                            keyboardType={'numeric'}
+                            value={number.putComma(amount)}
+                            onBlur={() => {
+                                this.props.orderStore.makeAmountClean();
+                            }}
+                        />
+                        <View style={orderFormStyle.inputTitleContainer}>
+                            <Text style={orderFormStyle.inputTitle}>매도금액</Text>
+                        </View>
+                    </View>
                 </View>
                 {
                     this.props.userStore.isLoggedIn ? 

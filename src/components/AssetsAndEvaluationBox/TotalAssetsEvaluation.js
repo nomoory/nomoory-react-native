@@ -128,21 +128,20 @@ const paddingSide = 13;
 const styles = StyleSheet.create({
     container: {
         paddingTop: 18,
-        paddingBottom: 18,
-        backgroundColor: commonStyle.color.emptyBackgroundColor
+        paddingBottom: 16,
     },
     assetInfoContainer: {
-        marginBottom: 16,
+        marginBottom: 14,
         padding: paddingSide,
         paddingTop: 0,
         paddingBottom: 0,
     },
     assetInfoTitle: {
-        fontWeight: '400',
+        fontWeight: '500',
         fontSize: 15
     },
     assetInfoContentContainer: {
-        marginBottom: 16,
+        marginBottom: 10,
         flexDirection: 'row',
     },
     assetItemContainer: {
@@ -182,7 +181,7 @@ const styles = StyleSheet.create({
     },
     investInfoTitle: {
         textAlign: 'left',
-        fontWeight: '300',
+        fontWeight: '400',
         fontSize: 12,
         color: commonStyle.color.subTitleGreyColor,
     },

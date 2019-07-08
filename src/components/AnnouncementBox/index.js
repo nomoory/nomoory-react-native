@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, Image, FlatList } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import momentHelper from '../../utils/momentHelper';
@@ -12,6 +12,7 @@ export default class AnnouncementBox extends Component {
     _onPressAnnouncementById = (uuid) => () => {
         this.props.navigation.navigate('AnnouncementDetail', {
             uuid,
+            from: 'Etc',
         });
     }
 
@@ -21,35 +22,47 @@ export default class AnnouncementBox extends Component {
     }
 
     _renderAnnounceList() {
-        const { latestAnnouncements } = this.props.announcementStore;
-        return latestAnnouncements.map((announcement, index) => {
-            const {
-                uuid,
-                korean_title,
-                english_title,
-                created,
-                modified,
-            } = announcement;
+        const latestAnnouncements = this.props.announcementStore.latestAnnouncements || [];
+        return (
+            <FlatList 
+                style={[
+                    // styles.scrollViewContainer,
+                    // styles.itemsContainer
+                ]}
+                data={latestAnnouncements.length ? latestAnnouncements : []}
+                // refreshing={this.state.refreshing}
+                // onRefresh={this.onRefresh}
+                enableEmptySections={true}
+                renderItem={({ item, index }) => {
+                    const {
+                        uuid,
+                        korean_title,
+                        english_title,
+                        created,
+                        modified,
+                    } = item || {};
+                            
+                    const title = korean_title;
 
-            let isKorean = true;
-            const title = isKorean ? korean_title : english_title;
-            return (
-                <TouchableOpacity
-                    key={uuid}
-                    style={styles.row}
-                    onPress={this._onPressAnnouncementById(uuid)}
-                >
-                    <View style={styles.column}>
-                        <Text  style={styles.titleText}>{title}</Text>
-                    </View>
-                    <View style={styles.column}>
-                        {/* <Text  style={styles.created}>{momentHelper.getLocaleDatetime(created)}</Text> */}
-                        <Text
-                            style={styles.dateText}>{momentHelper.getLocaleDatetime(modified)}</Text>
-                    </View>
-                </TouchableOpacity>
-            )
-        });
+                    return (
+                        <TouchableOpacity
+                            style={styles.announcementRrow}
+                            onPress={this._onPressAnnouncementById(uuid)}
+                        >
+                            <View style={styles.column}>
+                                <Text  style={styles.titleText}>{title}</Text>
+                            </View>
+                            <View style={styles.column}>
+                                {/* <Text  style={styles.created}>{momentHelper.getLocaleDatetime(created)}</Text> */}
+                                <Text
+                                    style={styles.dateText}>{momentHelper.getLocaleDatetime(modified)}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    );
+                }}
+                // emptyView={this._renderEmptyView}
+            />
+        )
     }
 
     render() {
@@ -100,8 +113,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderWidth: 0.5,
         borderColor: commonStyle.color.borderColor,
+        height: 46,
+        paddingLeft: 10,
+    },
+    announcementRrow: {
+        justifyContent: 'center',
+        borderWidth: 0.5,
+        borderColor: commonStyle.color.borderColor,
         height: 40,
         paddingLeft: 10,
+    },
+    titleText: {
+        fontSize: 13,
     },
     dateText: {
         color: 'grey',

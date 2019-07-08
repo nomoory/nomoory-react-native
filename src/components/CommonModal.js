@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     },
     contentText: {
         textAlign: 'center',
+        lineHeight: 20,
         // fontSize: font.size.modalContent,
     },
     buttons: {

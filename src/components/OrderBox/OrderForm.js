@@ -218,7 +218,6 @@ const orderFormStyle = StyleSheet.create({
         borderLeftWidth: 1,
         borderLeftColor: '#d8dbde',
     },
-
     volumeButton: {
         width: 62,
         height: 30,
@@ -265,6 +264,15 @@ const orderFormStyle = StyleSheet.create({
     maxFeePercentageContent: {
         color: '#747474',
         fontSize: 11,
+    },
+
+    amountContainer: {
+        marginTop: 10,
+        marginBottom: 10,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 36,
     },
     infoContainer: {
         marginTop: 10,
