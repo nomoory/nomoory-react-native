@@ -52,16 +52,6 @@ class SignupStore {
             };
         }
 
-        if (
-            process.env.RAZZLE_NO_RECAPTCHA !== 'ON'
-            && !this.values.recaptchaToken
-        ) {
-            return {
-                message_code: 'verify_human',
-                state: false,
-            };
-        }
-
         return {
             message_code: 'request_signup',
             state: true,

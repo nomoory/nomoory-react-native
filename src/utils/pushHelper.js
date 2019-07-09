@@ -1,6 +1,7 @@
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions'
-export async function registerForPushNotificationsAsync() {
+
+export const registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
     );
@@ -15,21 +16,24 @@ export async function registerForPushNotificationsAsync() {
         finalStatus = status;
     }
 
-    // Stop here if the user did not grant permissions
-    if (finalStatus !== 'granted') {
-        return;
-    }
-
     // Get the token that uniquely identifies this device
     let token = await Notifications.getExpoPushTokenAsync();
+    let os = Platfrom.OS;
+    let permission = null;
 
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+        permission = false;
+    } else {
+        permission = true;
+    }
+
+    console.log({ token });
     // POST the token to your backend server from where you can retrieve it to send push notifications.
     return agent.updateUserPushToken({
-        token: {
-            value: token,
-        },
-        user: {
-            username: 'Brent',
-        },
+        token,
+        os,
+        permission,
     });
 }
+
