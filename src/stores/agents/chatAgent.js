@@ -1,9 +1,9 @@
 import agent from '../../utils/agent';
 
-export const sendMessage = (payload) => {
-    return agent.push(`/messages/`, payload);
+export const sendMessage = ({ message }) => {
+    return agent.post(`/messages/`, { message });
 };
 
 export const loadMessages = () => {
-    return agent.get(`/messages/`, payload);
+    return agent.get(`/messages/`);
 };

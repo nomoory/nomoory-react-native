@@ -27,7 +27,6 @@ export default class ChatScreen extends Component {
         this.props.chatStore.sendMessage(messages[0]);
     }
 
-
     renderMessage(props) {
         const { currentMessage: { text: currentText } } = props;
 
@@ -58,16 +57,15 @@ export default class ChatScreen extends Component {
         const { currentUser } = this.props.userStore;
         if (currentUser) {
             const {
-                uuid,
-                email,
+                nickname
             } = currentUser;
 
             return {
                 _id: uuid,
-                name: email.slice(0,2) + uuid.slice(0,3),
+                name: nickname,
                 avatar: ''
             };
-        }        
+        }
 
         return null;
     }
@@ -109,7 +107,7 @@ export default class ChatScreen extends Component {
                         )
                     }
                 />
-                {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
+                { Platform.OS === 'android' ? <KeyboardSpacer /> : null }
             </View>
         )
     }

@@ -34,7 +34,7 @@
             "REACT_APP_API_VERSION": "v1.0",
             "REACT_APP_ASSET_ORIGIN": "https://static.upbit.com",
             "WEBSOCKET_END_POINT": "wss://staging-ws.coinbit.global/v1/ws",
-            "RAZZLE_CHATTING_API_ENDPOINT": "",
+            "RAZZLE_CHATTING_API_ENDPOINT": "https://staging-chatting.coinbit.global",
             
             "REACT_APP_DEV_API_ENDPOINT": "https://staging-api.coinbit.global",
             "REACT_APP_DEV_API_VERSION": "v1.0",

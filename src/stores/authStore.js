@@ -37,7 +37,7 @@ class AuthStore {
     @observable
     loginValues = {
         email: '',
-        password: ''
+        password: '',
     }
 
     @action
