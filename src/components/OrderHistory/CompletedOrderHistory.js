@@ -141,9 +141,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#f7f8fa",
 
         borderStyle: 'solid',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
         borderBottomColor: commonStyle.color.borderColor,
-        borderTopWidth: 1,
+        borderTopWidth: 0.5,
         borderTopColor: commonStyle.color.borderColor,
         
     },

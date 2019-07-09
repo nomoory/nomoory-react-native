@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Platform } from 'react-native';
+import { StyleSheet, View, Platform, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import headerStyle from '../styles/headerStyle';
 import { GiftedChat } from 'react-native-gifted-chat';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Message from '../components/Chat/Message';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import commonStyle from '../styles/commonStyle';
+import { computed } from 'mobx';
 
-@inject('tradingPairStore')
+@inject('chatStore', 'userStore', )
 @observer
 export default class ChatScreen extends Component {
     static navigationOptions = ({ navigation, navigationOptions }) => {
@@ -19,31 +22,9 @@ export default class ChatScreen extends Component {
             ...headerStyle.white,
         };
     };
-    state = {
-        messages: [],
-    }
-
-    componentWillMount() {
-        this.setState({
-            messages: [
-                {
-                    _id: 1,
-                    text: 'Hello Coinbit!',
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'https://placeimg.com/140/140/any',
-                    },
-                },
-            ],
-        })
-    }
 
     onSend(messages = []) {
-        this.setState(previousState => ({
-            messages: GiftedChat.append(previousState.messages, messages),
-        }))
+        this.props.chatStore.sendMessage(messages[0]);
     }
 
 
@@ -65,23 +46,68 @@ export default class ChatScreen extends Component {
         }
 
         return (
-            <Message {...props} messageTextStyle={messageTextStyle} />
+            <Message 
+                {...props} 
+                messageTextStyle={messageTextStyle}
+            />
         );
+    }
+
+    @computed
+    get user() {
+        const { currentUser } = this.props.userStore;
+        if (currentUser) {
+            const {
+                uuid,
+                email,
+            } = currentUser;
+
+            return {
+                _id: uuid,
+                name: email.slice(0,2) + uuid.slice(0,3),
+                avatar: ''
+            };
+        }        
+
+        return null;
     }
 
 
     render() {
+        const { isLoggedIn } = this.props.userStore;
         return (
             <View style={styles.container}>
                 <GiftedChat
-                    messages={this.state.messages}
+                    messages={this.props.chatStore.formedMessage}
                     onSend={messages => this.onSend(messages)}
-                    user={{
-                        _id: 3,
-                        name: '손준혁',
-                        avatar: 'https://placeimg.com/140/140/any',
-                    }}
+                    user={this.user}
                     renderMessage={this.renderMessage}
+                    renderInputToolbar={
+                        isLoggedIn
+                        ? null
+                        : () => (
+                            <TouchableOpacity 
+                                style={{
+                                    display: 'flex',
+                                    width: '100%',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Login');
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        fontSize: 15,
+                                        marginLeft: 8,
+                                        fontWeight: '500',
+                                        color: commonStyle.color.brandGrey,
+                                    }}
+                                >로그인 후 이용 가능합니다.</Text>
+                            </TouchableOpacity>
+                        )
+                    }
                 />
                 {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
             </View>

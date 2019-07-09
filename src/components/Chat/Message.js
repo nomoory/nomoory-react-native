@@ -9,6 +9,7 @@ import {
 
 import { Avatar, Day, utils } from 'react-native-gifted-chat';
 import Bubble from './Bubble';
+import commonStyle from '../../styles/commonStyle';
 
 const { isSameUser, isSameDay } = utils;
 
@@ -63,16 +64,19 @@ export default class Message extends React.Component {
     }
 
     render() {
-        const marginBottom = isSameUser(this.props.currentMessage, this.props.nextMessage) ? 2 : 10;
-
+        const marginBottom = 0;// isSameUser(this.props.currentMessage, this.props.nextMessage) ? 2 : 10;
+        // console.log({cur: this.props.currentMessage.index});
         return (
             <View>
-                {this.renderDay()}
+                {/* {this.renderDay()} */}
                 <View
                     style={[
                         styles.container,
                         { marginBottom },
                         this.props.containerStyle,
+                        this.props.currentMessage.index % 2 
+                        ? { backgroundColor: '#e7f1ff' }
+                        : {}
                     ]}
                 >
                     {/* {this.renderAvatar()} */}

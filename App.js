@@ -17,12 +17,17 @@ import AppNavigator from './src/navigation/AppNavigator';
 import CommonModal from './src/components/CommonModal';
 import CustomModal from './src/components/CustomModal';
 
-// import { enableLogging } from 'mobx-logger';
 import { reaction } from 'mobx';
 
+// SEE event source for chat
+// https://www.npmjs.com/package/react-native-event-source
+import RNEventSource from 'react-native-event-source';
+
+// push notification
 import NavigationService from './src/utils/NavigationService';
 import { registerForPushNotificationsAsync } from './src/utils/pushHelper';
 
+// import { enableLogging } from 'mobx-logger';
 // enableLogging({
 //     predicate: () => __DEV__ && Boolean(window.navigator.userAgent),
 //     action: __DEV__ && Boolean(window.navigator.userAgent),
@@ -35,12 +40,12 @@ YellowBox.ignoreWarnings(['Remote debugger']);
 
 export default class App extends React.Component {
     state = {
-      appState: AppState.currentState,
+        appState: AppState.currentState,
     };
 
     constructor(props) {
         super(props);
-        
+
         // 필수로 load하고 subscribe 해야 할 데이터 처리
         stores.socketStore.loadAndSubscribeOnInit();
         // 유저에 따라 load하고 subscribe 해야 할 데이터 처리
@@ -72,11 +77,42 @@ export default class App extends React.Component {
 
     componentDidMount() {
         AppState.addEventListener('change', this._handleAppStateChange);
-        this._enrollPushNitification();
+        this._enrollChatConnection();
     }
 
     componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
+        this._closeAllChatConnection();
+    }
+
+    _enrollChatConnection() {
+        const options = {}; //{ headers: { Authorization: 'Bearer ...' } };
+        this.eventSource = new RNEventSource(`${Expo.Constants.manifest.extra.REACT_APP_DEV_API_ENDPOINT}/stream`, options);
+
+        this.eventSource.addEventListener('onopen', (event) => {
+            const { type, data } = event;
+            // 이전 채팅 데이터 불러옴
+            stores.chatStore.loadMessages();
+          });
+
+        this.eventSource.addEventListener('message', (event) => {
+            const { type, data } = event;
+
+            // 이미 있는 채팅에 새로 받은 메시지 추가
+            const newMessages = [];
+            stores.chatStore.appendMessage(newMessages);
+          });
+
+        this.eventSource.addEventListener('onerror', (event) => {
+            const { type, data } = event;
+            // 일단 사용하지 않음
+            console.log('error on chatting');
+            console.log({ type, data });
+          });
+    }
+    _closeAllChatConnection() {
+        this.eventSource.removeAllListeners();
+        this.eventSource.close();
     }
 
     _enrollPushNitification = () => {
@@ -86,8 +122,8 @@ export default class App extends React.Component {
 
     _handleNotification = (notification) => {
         console.log("notification: ");
-        console.log({notification});
-        switch(notification.oigin) {
+        console.log({ notification });
+        switch (notification.oigin) {
             case 'received': { // app is open and foegrounded
                 console.log('received');
                 break;
@@ -134,7 +170,7 @@ export default class App extends React.Component {
             <Provider
                 {...stores}
             >
-                <View   
+                <View
                     style={styles.container}
                 >
                     {typeof Platform && Platform.OS === 'ios' && <StatusBar barStyle="default" />}
