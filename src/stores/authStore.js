@@ -28,34 +28,46 @@ class AuthStore {
     }
 
     /* Login */
-    @observable isLoading = false;
-    @observable errors = null;
+    @observable
+    isLoading = false;
+
     @observable
     accessToken = '';
 
-    @observable loginValues = {
+    @observable
+    loginValues = {
         email: '',
         password: ''
     }
 
-    @action setEmailForLogin(email) { this.loginValues.email = email; }
-    @action setPasswordForLogin(password) { this.loginValues.password = password; }
-    @action clearLoginValues() {
+    @action
+    setEmailForLogin(email) {
+        this.loginValues.email = email;
+    }
+
+    @action
+    setPasswordForLogin(password) {
+        this.loginValues.password = password;
+    }
+
+    @action
+    clearLoginValues() {
         this.loginValues = {
             email: '',
             password: ''
         };
     }
-    @action clearPassword() {
+    @action
+    clearPassword() {
         this.loginValues.password = '';
     }
     clearUser() {
         userStore.clear();
     }
 
-    @action login() {
+    @action
+    login() {
         this.isLoading = true;
-        this.errors = null;
 
         return agent.login(this.loginValues)
         .then(action((res) => {
@@ -78,52 +90,60 @@ class AuthStore {
             return user;
         }))
         .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
             this.isLoading = false;
             throw err;
         }));
     }
 
     /* OTP Verification For Login */
-    @action async hasAccessToken() {
+    @action
+    async hasAccessToken() {
         let hasAccessToken = await SecureStore.getItemAsync('access_token') ? true : false;
         return hasAccessToken;
     }
 
-    @action async setAccessTokenOnStore(accessToken) { 
+    @action
+    async setAccessTokenOnStore(accessToken) { 
         this.accessToken = accessToken;
     }
 
-    @action async setUserUuidOnStore(userUuid) { 
+    @action
+    async setUserUuidOnStore(userUuid) { 
         this.userUuid = userUuid;
     }
 
-    @action async setAccessToken(accessToken) { 
+    @action
+    async setAccessToken(accessToken) { 
         this.accessToken = accessToken;
         await SecureStore.setItemAsync('access_token', accessToken);
     }
 
-    @action async setUserUuid(userUuid) { 
+    @action
+    async setUserUuid(userUuid) { 
         this.userUuid = userUuid;
         await SecureStore.setItemAsync('user_uuid', userUuid);
     }
 
-    @action async destroyAccessToken() { 
+    @action
+    async destroyAccessToken() { 
         SecureStore.deleteItemAsync('access_token'); 
         SecureStore.deleteItemAsync('user_uuid');
     }
 
-    @observable otpVerificationValues = {
+    @observable
+    otpVerificationValues = {
         needOtpVerificationToLogin: false,
         temporaryOtpToken: '',
         temporaryEmail: '',
         otp_code: ''
     }
 
-    @action setOtpCode(code) {
+    @action
+    setOtpCode(code) {
         this.otpVerificationValues.otp_code = code;
     }
-    @action clearVerifyOtpValue() {
+    @action
+    clearVerifyOtpValue() {
         this.otpVerificationValues = {
             needOtpVerificationToLogin: false,
             temporaryOtpToken: '',
@@ -132,7 +152,8 @@ class AuthStore {
         };
     }
 
-    @action verifyOTPLogin() {
+    @action
+    verifyOTPLogin() {
         this.isLoading = true;
         this.errors = undefined;
 
@@ -153,14 +174,14 @@ class AuthStore {
             this.isLoading = false;
         }))
         .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
             this.isLoading = false;
             throw err;
         }));
     }
 
     /* Signup */
-    @observable signupValues = {
+    @observable
+    signupValues = {
         email: '',
         password: '',
         passwordConfirmation: '',
@@ -169,13 +190,19 @@ class AuthStore {
         agreesToMarketing: false,
     }
 
-    @action setEmailForSignup(email) { this.signupValues.email = email; }
-    @action setPasswordForSignup(password) { this.signupValues.password = password; }
-    @action setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
-    @action setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
-    @action setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
+    @action
+    setEmailForSignup(email) { this.signupValues.email = email; }
+    @action
+    setPasswordForSignup(password) { this.signupValues.password = password; }
+    @action
+    setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
+    @action
+    setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
+    @action
+    setPasswordConfirmationForSignup(passwordConfirmation) { this.signupValues.password_confirmation = passwordConfirmation; }
 
-    @action clearSignupValues() {
+    @action
+    clearSignupValues() {
         this.signupValues = {
             email: '',
             password: '',
@@ -185,13 +212,14 @@ class AuthStore {
             agreesToMarketing: false,
         };
     }
-    @action toggleCheckboxStatus(name) {
+    @action
+    toggleCheckboxStatus(name) {
         this.signupValues[name] = !this.signupValues[name];
     }
 
-    @action signup() {
+    @action
+    signup() {
         this.isLoading = true;
-        this.errors = null;
 
         return agent.signup(this.signupValues)
         .then(action((response) => {
@@ -204,14 +232,13 @@ class AuthStore {
             this.isLoading = false;
         }))
         .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
             throw err;
         }));
     }
 
     /* Logout */
-    @action logout() {
-        this.errors = null;
+    @action
+    logout() {
         this.clearUser();
         this.clearPassword();
         this.destroyAccessToken();
@@ -221,7 +248,6 @@ class AuthStore {
         .then((res) => {
         })
         .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
             // client 단에서 로그인 정보를 없애면 로그아웃과 동일하므로 에러를 따로 띄우지 않음
             // throw err;
         }));
