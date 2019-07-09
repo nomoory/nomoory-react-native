@@ -1,7 +1,7 @@
 import './init';
 import React from 'react';
 import {
-  Notifications,
+    Notifications,
 } from 'expo';
 import {
     StyleSheet,
@@ -50,6 +50,7 @@ export default class App extends React.Component {
                 if (isLoggedIn) {
                     stores.socketStore.authenticateOnUserChange();
                     stores.socketStore.loadAndSubscribeOnLogin();
+                    this._enrollPushNitification();
                 } else {
                     stores.socketStore.unsubscribeOnLogout();
                 }

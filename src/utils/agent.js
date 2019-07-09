@@ -312,11 +312,12 @@ class Agent {
         return this.get(`/event_dashboard/`);
     }
 
-    updateUserPushToken({token, user}) {
+    updateUserPushToken({token, permission, os}) {
         const payload = {};
         if (token) payload.token = token;
-        if (user) payload.user = user;
-        return this.post(`/users/push-token`, payload);
+        if (permission) payload.permission = permission;
+        if (os) payload.os = os;
+        return this.post(`/tokens/push_notification/`, payload);
     }
 
     /* Base REST API method */
