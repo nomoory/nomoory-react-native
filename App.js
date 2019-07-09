@@ -87,28 +87,30 @@ export default class App extends React.Component {
 
     _enrollChatConnection() {
         const options = {}; //{ headers: { Authorization: 'Bearer ...' } };
-        this.eventSource = new RNEventSource(`${Expo.Constants.manifest.extra.REACT_APP_DEV_API_ENDPOINT}/stream`, options);
+        this.eventSource = new RNEventSource(
+            `${Expo.Constants.manifest.extra.RAZZLE_CHATTING_API_ENDPOINT}/stream/`
+            // , options
+        );
 
         this.eventSource.addEventListener('onopen', (event) => {
-            const { type, data } = event;
+            // const { type, data } = event;
             // 이전 채팅 데이터 불러옴
             stores.chatStore.loadMessages();
-          });
+        });
 
         this.eventSource.addEventListener('message', (event) => {
-            const { type, data } = event;
-
+            // const { type, data } = event;
             // 이미 있는 채팅에 새로 받은 메시지 추가
             const newMessages = [];
             stores.chatStore.appendMessage(newMessages);
-          });
+        });
 
         this.eventSource.addEventListener('onerror', (event) => {
             const { type, data } = event;
             // 일단 사용하지 않음
             console.log('error on chatting');
             console.log({ type, data });
-          });
+        });
     }
     _closeAllChatConnection() {
         this.eventSource.removeAllListeners();
