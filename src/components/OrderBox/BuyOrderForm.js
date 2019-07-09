@@ -142,7 +142,7 @@ export default class BuyOrderForm extends Component {
             this.props.modalStore.openModal({
                 title: '주문 실패',
                 content: TRANSLATIONS[this.props.orderStore.isValidOrder.message_code],
-            })
+            });
         } else {
             try {
                 this.props.modalStore.openModal({
