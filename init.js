@@ -1,6 +1,6 @@
-import { Text, TextInput } from 'react-native';
-if (Text.defaultProps == null) Text.defaultProps = {};
-Text.defaultProps.allowFontScaling = false;
+import { Text, TextInput, WebView } from 'react-native';
+
+Text.defaultProps = { ...(Text.defaultProps || {}), allowFontScaling: false };
 TextInput.defaultProps = { ...(TextInput.defaultProps || {}), allowFontScaling: false };
 
 
