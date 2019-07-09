@@ -58,9 +58,10 @@ export default class Bubble extends React.Component {
                     textStyle={{
                         left: {
                             ...styles.standardFont, 
-                            ...styles.messageText, 
-                            ...messageTextProps.textStyle,
-                            ...messageTextStyle
+                            ...styles.messageText,
+                            ...{ maxWidth: 200, flexWrap: 'wrap' },
+                            // ...messageTextProps.textStyle,
+                            // ...messageTextStyle
                         },
                     }}
                 />
@@ -164,11 +165,19 @@ export default class Bubble extends React.Component {
                             this.props.wrapperStyle,
                         ]}
                     >
-                        <View>
-                            {this.renderCustomView()}
-                            {messageHeader}
+                        <View style={{width: '100%'}}>
+                            {/* {this.renderCustomView()} */}
+                            {/* {messageHeader} */}
+
+                            <View style={styles.headerView}>
+                                <View style={styles.headerInsideView}>
+                                    {this.renderUsername()}
+                                    {this.renderMessageText()}
+                                </View>
+                                {this.renderTime()}
+                                {/* {this.renderTicks()} */}
+                            </View>
                             {/* {this.renderMessageImage()} */}
-                            {this.renderMessageText()}
                         </View>                    
                     </View>
                 </TouchableOpacity>
@@ -217,6 +226,12 @@ const styles = StyleSheet.create({
     headerView: {
         // Try to align it better with the avatar on Android.
         marginTop: Platform.OS === 'android' ? -2 : 0,
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    headerInsideView: {
         flexDirection: 'row',
         alignItems: 'baseline',
     },
