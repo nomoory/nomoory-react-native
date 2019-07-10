@@ -13,7 +13,7 @@
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "splash": {
-            "backgroundColor": "#0062df"
+            "backgroundColor": "#004fb4"
         },
         "updates": {
             "fallbackToCacheTimeout": 0
@@ -26,16 +26,17 @@
         },
         "android": {
             "permissions": [],
-            "package": "com.coinbitapptest10.android.exchange",
+            "package": "com.coinbit.test.global.android.exchange",
             "versionCode": 17
         },
         "extra": {
             "REACT_APP_API_ENDPOINT": "https://staging-api.coinbit.global",
             "REACT_APP_API_VERSION": "v1.0",
-            "REACT_APP_ASSET_ORIGIN": "https://static.upbit.com",
+            "REACT_APP_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",
+            "LOGO_ASSET_ORIGIN": "https://static.upbit.com",
             "WEBSOCKET_END_POINT": "wss://staging-ws.coinbit.global/v1/ws",
             "RAZZLE_CHATTING_API_ENDPOINT": "https://staging-chatting.coinbit.global",
-            
+
             "REACT_APP_DEV_API_ENDPOINT": "https://staging-api.coinbit.global",
             "REACT_APP_DEV_API_VERSION": "v1.0",
             "REACT_APP_DEV_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",

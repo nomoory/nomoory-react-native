@@ -3,80 +3,67 @@ import {
     action,
     computed,
 } from 'mobx';
-import chatAgent from './agents/chatAgent';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { sendMessage, loadMessages } from './agents/chatAgent';
 
 class ChatStore {
     @observable
     isLoading = false;
 
     @observable
-    messages = [
-        // {
-        //     index: 1,
-        //     uuid: 1,
-        //     text: 'Hello Coinbit!',
-        //     created_at: new Date(),
-        //     user: {
-        //         uuid: 'asdsad',
-        //         email: 'tests',
-        //         name: 'React Native',
-        //         // avatar: 'https://placeimg.com/140/140/any',
-        //     },
-        // },
-    ];
+    messages = [];
 
     @computed
     get formedMessage() {
-        // return this.messages.map((message, index) => ({
-        //     ...message,
-        //     index: this.messages.length - index,
-        // }));
-
-        return this.messages.map((message, index) => ({
-            index: this.messages.length - index,
-            _id: message.uuid,
-            text: message.content,
-            createdAt: message.created,
-            user: {
-                _id: message.nickname,
-                name: message.nickname,
-            },
-        }));
+        return this.messages.map((message, index) => {
+            
+            return {
+                index: this.messages.length - index,
+                _id: message.uuid,
+                text: message.content,
+                createdAt: message.created,
+                user: {
+                    _id: message.nickname,
+                    name: message.nickname,
+                },
+            };
+        }); 
     }
 
     @action
     appendMessage(messages = []) {
-        this.messages = GiftedChat.append(this.messages, messages);
+        this.messages = [...messages, ...this.messages];
     }
 
     @action
-    sendMessage(message) {
+    sendMessage({text}) {
         this.isLoading = true;
-        console.log('send message');
-        return chatAgent.sendMessage({content: message})
+        console.log('[Chat Store] send message');
+        return sendMessage({content: text})
             .then(action((response) => {
-                console.log('sended message');
+                console.log('[Chat Store] sended message');
                 this.isLoading = false;
             })).catch(action((error) => {
                 this.isLoading = false;
+                console.log('[Chat Store] error sendMessage');
+                console.log(error);
                 throw error;
             }));
     }
 
-    @action
+    @action.bound
     loadMessages() {
         this.isLoading = true;
-        console.log('load messages');
+        console.log('[Chat Store] load messages');
 
-        return chatAgent.loadMessages()
+        return loadMessages()
             .then(action((response) => {
                 const message = response.data;
-                console.log('loaded messages');
-                console.log({ message });
+                console.log('[Chat Store] loaded messages');
                 this.appendMessage(message);
                 this.isLoading = false;
             })).catch(action((error) => {
+                console.log('[Chat Store] error on load messages');
+                console.log(error);
                 this.isLoading = false;
                 throw error;
             }));

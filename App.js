@@ -9,7 +9,6 @@ import {
     StatusBar,
     Platform,
     AppState,
-    YellowBox
 } from 'react-native';
 import { Provider } from 'mobx-react';
 import stores from './src/stores';
@@ -36,7 +35,6 @@ import { registerForPushNotificationsAsync } from './src/utils/pushHelper';
 //     compute: __DEV__ && Boolean(window.navigator.userAgent)
 // });
 
-YellowBox.ignoreWarnings(['Remote debugger']);
 
 export default class App extends React.Component {
     state = {
@@ -45,7 +43,6 @@ export default class App extends React.Component {
 
     constructor(props) {
         super(props);
-
         // 필수로 load하고 subscribe 해야 할 데이터 처리
         stores.socketStore.loadAndSubscribeOnInit();
         // 유저에 따라 load하고 subscribe 해야 할 데이터 처리
@@ -87,31 +84,33 @@ export default class App extends React.Component {
 
     _enrollChatConnection() {
         const options = {}; //{ headers: { Authorization: 'Bearer ...' } };
+
+        if (this.eventSource) {
+            this.eventSource.removeAllListeners();
+            this.eventSource.close();
+        }
+
         this.eventSource = new RNEventSource(
-            `${Expo.Constants.manifest.extra.RAZZLE_CHATTING_API_ENDPOINT}/stream/`
+            `${Expo.Constants.manifest.extra.RAZZLE_CHATTING_API_ENDPOINT}/stream`
             // , options
         );
 
-        this.eventSource.addEventListener('onopen', (event) => {
-            // const { type, data } = event;
-            // 이전 채팅 데이터 불러옴
-            stores.chatStore.loadMessages();
-        });
+        stores.chatStore.loadMessages();
 
         this.eventSource.addEventListener('message', (event) => {
-            // const { type, data } = event;
+            const { type, data } = event;
             // 이미 있는 채팅에 새로 받은 메시지 추가
-            const newMessages = [];
+            const newMessages = [JSON.parse(data)];
             stores.chatStore.appendMessage(newMessages);
         });
 
-        this.eventSource.addEventListener('onerror', (event) => {
+        this.eventSource.addEventListener('error', (event) => {
             const { type, data } = event;
-            // 일단 사용하지 않음
-            console.log('error on chatting');
-            console.log({ type, data });
+            // 에러 발생시 연결을 끊고 다시 리스너 등록합니다.
+            this._enrollChatConnection();
         });
     }
+
     _closeAllChatConnection() {
         this.eventSource.removeAllListeners();
         this.eventSource.close();

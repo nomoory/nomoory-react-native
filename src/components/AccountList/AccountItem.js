@@ -48,7 +48,7 @@ export default class AccountItem extends Component {
                 <View style={[styles.left]}>
                     <Image
                         style={{ width: 28, height: 28 }}
-                        source={{ uri: `${Expo.Constants.manifest.extra.REACT_APP_ASSET_ORIGIN}/logos/${asset_symbol}.png` }}
+                        source={{ uri: `${Expo.Constants.manifest.extra.LOGO_ASSET_ORIGIN}/logos/${asset_symbol}.png` }}
                     />
                     <View style={[styles.coinNameAndSymbol]}>
                         <Text style={[styles.coinName]}>{asset_korean_name}</Text>

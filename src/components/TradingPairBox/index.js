@@ -17,12 +17,6 @@ export default class TradingPairBox extends Component {
     }
 
     render() {
-        const checkBackgroundStyle = 
-            this.props.tradingPairStore.favoriteOnly
-            ? styles.checked
-            : styles.unchecked;
-
-        console.log(`${Expo.Constants.manifest.extra.REACT_APP_ASSET_ORIGIN}/commons/check-small.png` )
         return (
             <View style={styles.container}>
                 <TradingPairSearchBar />

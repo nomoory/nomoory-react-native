@@ -57,7 +57,8 @@ export default class ChatScreen extends Component {
         const { currentUser } = this.props.userStore;
         if (currentUser) {
             const {
-                nickname
+                nickname,
+                uuid
             } = currentUser;
 
             return {

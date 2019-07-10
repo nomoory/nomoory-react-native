@@ -377,6 +377,7 @@ class Agent {
 
         return requestConfig;
     }
+
     async _getRequestConfigForFilePost() {
         let requestConfig = null;
         let accessToken = await SecureStore.getItemAsync('access_token');
