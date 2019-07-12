@@ -3,37 +3,51 @@ import tradingPairStore from './tradingPairStore';
 import agent from '../utils/agent';
 
 class RealtimeTradeHistoryStore {
-    @observable errors = undefined;
-    @observable LoadValues = {
+    @observable
+    errors = undefined;
+
+    @observable
+    LoadValues = {
         isFirstLoad: true,
         isLoading: false,
         nextUrl: null
     }
-    @observable realtimeTradeRegistry = [];
 
-    @computed get realtimeTrades() { 
+    @observable
+    realtimeTradeRegistry = [];
+
+    @computed
+    get realtimeTrades() { 
         return this.realtimeTradeRegistry; // .sort((prev, next) => (new Date(next.created) - new Date(prev.created)));
     };
 
-    @computed get lastRealtimeTrade() {
+    @computed
+    get lastRealtimeTrade() {
         return this.realtimeTradeRegistry[0] || {};
     };
-
-    @action clearRegistry() {
+    
+    @action
+    clearRegistry() {
         this.realtimeTradeRegistry = [];
     }
-    @action clearLoadValues() {
+    
+    @action
+    clearLoadValues() {
         this.LoadValues = {
             isFirstLoad: true,
             isLoading: false,
             nextUrl: null
         };
     }
-    @action clear() {
+    
+    @action
+    clear() {
         this.clearRegistry();
         this.clearLoadValues();
     }
-    @action setRealTimeTrades(trades) {
+    
+    @action
+    setRealTimeTrades(trades) {
         if (trades.length > 20){
             this.realtimeTradeRegistry = trades.slice(0, 20);
         } else {
@@ -45,7 +59,9 @@ class RealtimeTradeHistoryStore {
         }
     }
 
-    @action listenScrollEvent = (event) => {
+
+    @action
+    listenScrollEvent = (event) => {
         // let { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
         // if (
         //     scrollHeight - (clientHeight + scrollTop) < 100 && 
@@ -55,7 +71,8 @@ class RealtimeTradeHistoryStore {
         // }
     }
 
-    @action load() {
+    @action
+    load() {
         this.LoadValues.isLoading = true;
         return agent.loadRealtimeTrades(tradingPairStore.selectedTradingPairName)
         .then(action((response) => {
@@ -78,7 +95,8 @@ class RealtimeTradeHistoryStore {
         }));
     }
 
-    @action loadNextRealtimeTrades() {
+    @action
+    loadNextRealtimeTrades() {
         if (this.LoadValues.nextUrl) {
             this.LoadValues.isLoading = true;
             return agent.get(this.LoadValues.nextUrl)
@@ -104,7 +122,8 @@ class RealtimeTradeHistoryStore {
         }
     }
 
-    @computed get isLoadable() {
+    @computed
+    get isLoadable() {
         let {
             isFirstLoad,
             nextUrl,
@@ -141,7 +160,6 @@ class RealtimeTradeHistoryStore {
             };
         }
     }
-
 }
 
 export default new RealtimeTradeHistoryStore();

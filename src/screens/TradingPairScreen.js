@@ -48,6 +48,7 @@ export default class TradingPairScreen extends Component {
             headerLeft: (
                 <View style={styles.headerContainer}>
                     <TouchableOpacity
+                        style={styles.goBackButton}
                         onPress={() => {
                             navigation.navigate('Exchange');
                         }}
@@ -55,7 +56,6 @@ export default class TradingPairScreen extends Component {
                         <Icon.AntDesign
                             name="left"
                             size={30} color={commonStyle.color.headerTextColor}
-                        // style={styles.favoriteIcon}
                         />
                     </TouchableOpacity>
                     <Text
@@ -80,6 +80,7 @@ export default class TradingPairScreen extends Component {
                 <TradingPairHeaderButtons />
             ),
             tabBarVisible: false,
+            headerMode: 'screen',
             ...headerStyle.white,
         };
     };
@@ -94,9 +95,6 @@ export default class TradingPairScreen extends Component {
                 { key: 'TradeHistory', title: '시세' },
             ],
         };
-
-        this.baseName = props.navigation.getParam('baseName', '토큰');
-        this.tradingPairName = props.navigation.getParam('tradingPairName', '');
     }
 
     @computed
@@ -249,8 +247,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerText: {
-        fontSize: 16,
-        color: commonStyle.color.headerTextColor
+        fontSize: 18,
+        color: commonStyle.color.headerTextColor,
+    },
+    goBackButton: {
+        display: 'flex',
+        width: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     headerImage: { width: 10, height: 10 },
     container: {

@@ -1,6 +1,6 @@
 {
     "expo": {
-        "name": "coinbit-app",
+        "name": "코인빗(모의투자)",
         "description": "코인빗",
         "slug": "coinbit-app",
         "privacy": "public",

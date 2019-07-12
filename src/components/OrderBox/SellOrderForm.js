@@ -8,6 +8,7 @@ import Decimal from '../../utils/decimal';
 import { withNavigation } from 'react-navigation';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import ModalDropdown from 'react-native-modal-dropdown';
+import MiniRealtimeTradeHistory from '../MiniRealtimeTradeHistory';
 
 const OPTIONS = [
     '최대',
@@ -368,20 +369,22 @@ export default class SellOrderForm extends Component {
                         </TouchableOpacity>
                     </View>
                 }
-                <View style={orderFormStyle.minorInfoRow}> 
-                    <Text style={orderFormStyle.minorInfoRowText}>최소주문금액
-                    </Text>
-                    <Text style={orderFormStyle.minorInfoRowText}>
-                        {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
-                    </Text>
-                </View>
-                <View style={orderFormStyle.minorInfoRow}> 
-                    <Text style={[orderFormStyle.minorInfoRowText]}>수수료 
-                    </Text>
-                    <Text style={[orderFormStyle.minorInfoRowText]}>{ this.maxFeePercentage ? number.putComma(Decimal(this.maxFeePercentage).toFixed()) : '-' } %
-                    </Text>
-                    
-                </View>
+                <View style={orderFormStyle.minorInfoRows}>
+                    <View style={orderFormStyle.minorInfoRow}> 
+                        <Text style={orderFormStyle.minorInfoRowText}>최소주문금액
+                        </Text>
+                        <Text style={orderFormStyle.minorInfoRowText}>
+                            {minimumOrderAmount ? number.putComma(Decimal(minimumOrderAmount).toFixed()) : '-' } {quoteSymbol}
+                        </Text>
+                    </View>
+                    <View style={orderFormStyle.minorInfoRow}> 
+                        <Text style={[orderFormStyle.minorInfoRowText]}>수수료 
+                        </Text>
+                        <Text style={[orderFormStyle.minorInfoRowText]}>{ this.maxFeePercentage ? number.putComma(Decimal(this.maxFeePercentage).toFixed()) : '-' } %
+                        </Text>
+                    </View>
+                </View>                
+                <MiniRealtimeTradeHistory />
             </View>
         );
     }

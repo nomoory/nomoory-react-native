@@ -19,7 +19,7 @@ export default class Orderbook extends Component {
                     && ordersLength !== 0
                 ) {
                     this.flatListRef.scrollToIndex({
-                        animated: false, index: 10
+                        animated: false, index: 9
                     });
                 }
             }

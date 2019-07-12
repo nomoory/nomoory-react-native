@@ -161,7 +161,7 @@ class SocketStore {
                 // await orderbookStore.loadOrderbook();
                 break;
             case CHANNEL_NAMES.TICKER:
-                tradingPairStore.loadTradingPairs();
+                // await tradingPairStore.loadTradingPairs();
                 break;
             case CHANNEL_NAMES.ORDER:
                 placedOrderHistoryStore.loadPersonalOrders();

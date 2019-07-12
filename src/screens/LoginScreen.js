@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as Icon from '@expo/vector-icons'
-import { Text, StyleSheet, View, TextInput, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { Linking } from 'react-native';
 import { withNavigation } from 'react-navigation';
@@ -54,9 +54,10 @@ export default class LoginScreen extends Component {
                     <Image
                         style={[
                             {
-                                resizeMode: 'cover'
-                            }]
-                        }
+                                width,
+                                resizeMode: 'contain'
+                            }
+                        ]}
                         source={require('../../assets/images/login/ic_navi_logo.png')}
                     />
                 </View>

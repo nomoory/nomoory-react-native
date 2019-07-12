@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ListView, FlatList } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import number from '../../utils/number';
+import number from '../../utils/number'; 
 import momentHelper from '../../utils/momentHelper';
 import Decimal from '../../utils/decimal';
 import { computed } from 'mobx';
@@ -9,7 +9,7 @@ import commonStyle from '../../styles/commonStyle';
 
 @inject('realtimeTradeHistoryStore', 'tradingPairStore')
 @observer
-export default class RealtimeTradeHistory extends Component {
+export default class MiniRealtimeTradeHistory extends Component {
     @computed
     get colorClassName_display() {
         const { price } = this.props.realtimeTradeHistoryStore;
@@ -60,17 +60,14 @@ export default class RealtimeTradeHistory extends Component {
     get realtimeTradeHistoryHead() {
         return (
             <View style={[styles.head]}>
-                <View style={[styles.column, styles.columnItem]}>
-                    <Text style={[styles.headColumnText]}>체결시간</Text>
+                <View style={[styles.column, styles.time]}>
+                    <Text style={[styles.headColumnText]}>실시간</Text>
                 </View>
-                <View style={[styles.column, styles.columnItem]}>
+                <View style={[styles.column]}>
                     <Text style={[styles.headColumnText]}>체결가격</Text>
                 </View>
-                <View style={[styles.column, styles.columnItem]}>
+                <View style={[styles.column]}>
                     <Text style={[styles.headColumnText]}>체결수량</Text>
-                </View>
-                <View style={[styles.column, styles.columnItem]}>
-                    <Text style={[styles.headColumnText]}>체결금액</Text>
                 </View>
             </View>
         );
@@ -93,9 +90,8 @@ export default class RealtimeTradeHistory extends Component {
                             created,
                             side,
                         } = item || {};
-                        let amount = Decimal(price || 0).mul(volume || 0).toFixed();
-                        let dateAndTime_string = momentHelper.getLocaleDatetime(created);
-                        let [date, time] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
+                        let time = momentHelper.getLocaleHourMinuteSecond(created);
+                        
 
                         return (
                             <View 
@@ -104,15 +100,14 @@ export default class RealtimeTradeHistory extends Component {
                             >
                                 <View style={[
                                     styles.column,
-                                    styles.columnItem,
-                                    styles.created]}
+                                    styles.created,
+                                    styles.time
+                                ]}
                                 >
-                                    <Text style={[styles.tupleColumnText, styles.dateText]}>{date ? date : ''} </Text>
                                     <Text style={[styles.tupleColumnText, styles.timeText]}>{time ? time : ''}</Text>
                                 </View>
                                 <View style={[
                                     styles.column,
-                                    styles.columnItem,
                                     styles.price
                                 ]}>
                                     <Text style={[
@@ -125,7 +120,6 @@ export default class RealtimeTradeHistory extends Component {
                                 </View>
                                 <View style={[
                                     styles.column,
-                                    styles.columnItem,
                                     styles.volume,
                                 ]}>
                                     <Text style={[
@@ -140,19 +134,6 @@ export default class RealtimeTradeHistory extends Component {
                                                     : Decimal(volume).toFixed()
                                             )
                                         }
-                                    </Text>
-                                </View>
-                                <View style={[
-                                    styles.column,
-                                    styles.columnItem,
-                                    styles.amount,
-                                ]}>
-                                    <Text style={[
-                                        styles.tupleColumnText,
-                                        styles.amountText,
-                                        styles[side],
-                                    ]}>
-                                        {number.putComma(Decimal(amount).toFixed(0))}
                                     </Text>
                                 </View>
                             </View>
@@ -184,18 +165,13 @@ const styles = StyleSheet.create({
 
     },
     headColumnText: {
-        color: '#333333',
-        fontSize: 14,
+        color: '#777777',
+        fontSize: 11,
     },
     column: {
         flex: 1,
         flexDirection: 'column',
-        width: '100%'
-    },
-    columnItem: {
         borderStyle: 'solid',
-        borderWidth: 0.5,
-        borderColor: commonStyle.color.borderColor,
 
         flex: 1,
         justifyContent: 'center',
@@ -214,13 +190,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#f7f8fa',
     },
     tupleColumnText: {
-        fontSize: 12
+        fontSize: 11
     },
     created: {
         flexDirection: 'row'
     },
-    dateText: {
-        color: '#333'
+    time: {
+        flex: 0.8,
     },
     timeText: {
         color: '#747474'

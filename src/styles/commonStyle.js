@@ -15,7 +15,7 @@ export const color = {
     mainThemeColor: '#0062df',
     headerTextColor: '#004fb4', // '#093687',
     fontTextColor: '#004fb4',
-    emptyBackgroundColor: '#EDEFF4',
+    emptyBackgroundColor: '#f7f8fa', //'#EDEFF4',
     subTitleGreyColor: '#333',
     borderColor: '#dadae0',
 };

@@ -10,9 +10,6 @@ class OrderbookStore {
     isLoading = false;
 
     @observable
-    errors = null;
-
-    @observable
     buyOrdersRegistry = [];
 
     @observable
@@ -115,31 +112,35 @@ class OrderbookStore {
         return maxOrderVolume;
     }
 
-    @action clearOrderbook() {
+    @action
+    clearOrderbook() {
         console.log('clearOrderbook')
         this.buyOrdersRegistry = [];
         this.sellOrdersRegistry = [];
     }
 
-    @action setOrderbook(message) {
+    @action
+    setOrderbook(message) {
         this.buyOrdersRegistry = message.buys;
         this.sellOrdersRegistry = message.sells;
     }
 
-    @action loadOrderbook(selectedTradingPairName) {
+    @action
+    loadOrderbook(selectedTradingPairName) {
         this.isLoading = true;
         this.clearOrderbook();
         const tradingPairName = selectedTradingPairName || tradingPairStore.selectedTradingPairName;
-        console.log(`load orderbook ${tradingPairName}`)
+        console.log(`[Orderbook Store] load orderbook ${tradingPairName}`)
+
         return agent.loadOrderbookByTradingPairName(tradingPairName)
         .then(action((response) => {
             this.clearOrderbook();
+            console.log(`[Orderbook Store] loaded orderbook ${tradingPairName}`)
             this.buyOrdersRegistry = response.data.buys;
             this.sellOrdersRegistry = response.data.sells;
             this.isLoading = false;
         }))
         .catch(action((err) => {
-            this.errors = err.response && err.response.body && err.response.body.errors;
             this.isLoading = false;
             throw err;
         }));

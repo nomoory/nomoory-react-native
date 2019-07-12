@@ -121,7 +121,7 @@ class Agent {
     }
 
     //TransactionHistory
-    async loadTransactionHistory(transaction_type, trading_pair_name) {
+    loadTransactionHistory(transaction_type, trading_pair_name) {
         let userUuid = this.userUuid;
         let url = `users/${userUuid}/transaction_histories/?transaction_type=${transaction_type}`;
         if (trading_pair_name) url += `&trading_pair_name=${trading_pair_name}`;
@@ -129,18 +129,18 @@ class Agent {
     }
 
     // Accounts
-    async loadAccounts() {
+    loadAccounts() {
         let userUuid = this.userUuid;
         return this.get(`users/${userUuid}/accounts/`);
     }
 
     // Personal Trades
-    async loadPersonalTrades(selectedTradingPairName) {
+    loadPersonalTrades(selectedTradingPairName) {
         let userUuid = this.userUuid;
         return this.get(`users/${userUuid}/trades/?trading_pair_name=${selectedTradingPairName}`);
     }
 
-    async loadPersonalPlacedOrders(tradingPairName) {
+    loadPersonalPlacedOrders(tradingPairName) {
         let userUuid = this.userUuid;
         if (!tradingPairName) {
             return this.get(`users/${userUuid}/orders/?order_status=PLACED&order_status=PENDING&order_status=PARTIALLY_FILLED`);
@@ -328,27 +328,27 @@ class Agent {
             .get(url, { params, ...config })
             .catch(this._handleError);
     }
-    async put(url, body) {
+    put(url, body) {
         // console.log('request put | ', url);
         return this.axios
             .put(url, body, this.requestConfig)
             .catch(this._handleError);
     }
-    async patch(url, body) {
+    patch(url, body) {
         // console.log('request patch | ', url);
 
         return this.axios
             .patch(url, body, this.requestConfig)
             .catch(this._handleError);
     }
-    async post(url, body) {
+    post(url, body) {
         // console.log('request post | ', url);
 
         return this.axios
             .post(url, body, this.requestConfig)
             .catch(this._handleError);
     }
-    async delete(url) {
+    delete(url) {
         // console.log('request delete | ', url);
 
         return this.axios

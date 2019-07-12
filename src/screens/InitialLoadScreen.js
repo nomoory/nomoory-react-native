@@ -27,7 +27,6 @@ export default class InitialLoadScreen extends Component {
                 this.props.authStore.destroyAccessToken();
             }
         }
-        console.log('init')
         this._moveToExchangeScreen();
     }
 
@@ -52,15 +51,13 @@ export default class InitialLoadScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={[styles.logoContainer]}>
-                    <Image
-                        style={{
-                            width: '100%',
-                            resizeMode: 'contain'
-                        }}
-                        source={require('../../assets/splash_icon.png')}
-                    />
-                </View>
+                <Image
+                    style={{
+                        width: '80%',
+                        resizeMode: 'contain'
+                    }}
+                    source={require('../../assets/splash_icon.png')}
+                />
                 <ActivityIndicator
                     style={[styles.loadingIndicator]}
                     size="large"

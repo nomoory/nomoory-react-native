@@ -16,6 +16,7 @@ export default class AnnouncementListScreen extends Component {
             headerLeft: (
                 <View style={styles.headerContainer}>
                     <TouchableOpacity
+                        style={styles.goBackButton}
                         onPress={() => {
                             navigation.navigate('Etc');
                         }}
@@ -23,7 +24,6 @@ export default class AnnouncementListScreen extends Component {
                         <Icon.AntDesign
                             name="left"
                             size={30} color={commonStyle.color.headerTextColor}
-                        // style={styles.favoriteIcon}
                         />
                     </TouchableOpacity>
                     <Text
@@ -59,10 +59,6 @@ export default class AnnouncementListScreen extends Component {
         return (
             <View style={styles.container}>
                 <FlatList 
-                    style={[
-                        // styles.scrollViewContainer,
-                        // styles.itemsContainer
-                    ]}
                     data={announcements.length ? announcements : []}
                     // refreshing={this.state.refreshing}
                     // onRefresh={this.onRefresh}
@@ -82,7 +78,10 @@ export default class AnnouncementListScreen extends Component {
 
                         return (
                             <TouchableOpacity
-                                style={styles.announcementRrow}
+                                style={[
+                                    styles.announcementRow, 
+                                    index === 0 && styles.firstAnnouncementRow,
+                                ]}
                                 onPress={this._onPressAnnouncement(uuid)}
                             >
                                 <Text style={styles.titleText}>
@@ -106,14 +105,20 @@ export default class AnnouncementListScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: commonStyle.color.emptyBackgroundColor,
     },
-    announcementRrow: {
+    announcementRow: {
+        backgroundColor: commonStyle.color.white,
         justifyContent: 'center',
         borderBottomWidth: 1,
         borderBottomColor: commonStyle.color.borderColor,
         height: 70,
         paddingLeft: 10,
+    },
+    firstAnnouncementRow: {
+        borderTopWidth: 1,
+        borderTopColor: commonStyle.color.borderColor,
     },
     titleText: {
         fontWeight: '500',
@@ -139,5 +144,11 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 16,
         color: commonStyle.color.headerTextColor
+    },
+    goBackButton: {
+        display: 'flex',
+        width: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

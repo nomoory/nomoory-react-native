@@ -18,9 +18,13 @@ class MomentHelper {
             return '';
         }
     }
-    
+
     getLocaleHourMinute = (_datetime) => {
         return this.moment(_datetime).tz(this.timezone).format("HH:mm")
+    }
+
+    getLocaleHourMinuteSecond = (_datetime) => {
+        return this.moment(_datetime).tz(this.timezone).format("HH:mm.ss")
     }
 
     getLocaleDateWithYear = (_datetime) => {

@@ -6325,6 +6325,11 @@ react-native-webview@^5.12.1:
     xmldoc "^0.4.0"
     yargs "^9.0.0"
 
+react-navigation-animated-switch@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-navigation-animated-switch/-/react-navigation-animated-switch-0.2.1.tgz#231271b0d2ce8348c556b7f115b5be6345516d02"
+  integrity sha512-IFkoJ+MmKa5vn2raUPzQNlDnbcOOHBTdS2n9fjuywu4t5KWLDdmR2fDCLwMrDj7SC9Wks3oRrS8sonVEp7Mtqg==
+
 react-navigation-drawer@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-1.2.1.tgz#7bd5efeee7d2f611d3ebb0933e0c8e8eb7cafe52"
@@ -6346,6 +6351,11 @@ react-navigation-tabs@~1.1.4:
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
     react-native-tab-view "^1.4.1"
+
+react-navigation-transitions@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/react-navigation-transitions/-/react-navigation-transitions-1.0.11.tgz#8112c69ca0190ff6d2e2771a4d0d3a8f318c9677"
+  integrity sha512-1P4QHIWnMRTesarR7Di0EV/o8+OxBbbKNe8C7lSztiXTdTP9EnwYZGBLUKiHKn+Js7E48vQ2d3cB3lpb8YDmDg==
 
 react-navigation@^3.11.0:
   version "3.11.0"

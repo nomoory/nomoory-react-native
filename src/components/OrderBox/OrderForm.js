@@ -6,6 +6,7 @@ import BuyOrderForm from './BuyOrderForm';
 import SellOrderForm from './SellOrderForm';
 import TransactionHistory from './TransactionHistory';
 import commonStyle from '../../styles/commonStyle';
+import MiniRealtimeTradeHistory from '../MiniRealtimeTradeHistory';
 
 const TAB_TYPES = {
     BUY: 'BUY',
@@ -130,6 +131,10 @@ const styles = StyleSheet.create({
 const marginBetween = 6;
 
 const orderFormStyle = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingBottom: 6,
+    },
     // liquid
     liquidContainer: {
         display: 'flex',
@@ -293,6 +298,9 @@ const orderFormStyle = StyleSheet.create({
     infoContent: {
         fontSize: 12,
         color: 'black',
+    },
+    minorInfoRows: {
+        marginBottom: 20,
     },
     minorInfoRow: {
         flexDirection: 'row',

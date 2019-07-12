@@ -23,6 +23,7 @@ export default class AnnouncementDetailScreen extends Component {
             headerLeft: (
                 <View style={styles.headerContainer}>
                     <TouchableOpacity
+                        style={styles.goBackButton}
                         onPress={() => {
                             navigation.navigate(from);
                         }}
@@ -110,10 +111,14 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 16,
-        marginLeft: 5,
         color: commonStyle.color.headerTextColor
     },
-
+    goBackButton: {
+        display: 'flex',
+        width: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     header: {
         justifyContent: 'center',
         borderBottomWidth: 1,

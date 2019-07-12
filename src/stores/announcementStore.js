@@ -51,9 +51,10 @@ class AnnouncementStore {
     @action
     loadAnnouncementById(id) {
         this.loadValues.isLoading = true;
-        this.announcement = null;        
+        this.announcement = null;
         return agent.loadAnnouncementById(id)
             .then(action((response) => {
+                this.announcement = null;
                 this.announcement = new AnnouncementModel(response.data);
                 this.loadValues.isLoading = false;
             }))
@@ -66,9 +67,11 @@ class AnnouncementStore {
     @action
     loadAnnouncementList() {
         this.loadValues.isLoading = true;
+        this.announcementRegistry.clear();
         return agent.loadAnnouncementList()
             .then(action((response) => {
                 let { results, next, previous } = response.data;
+                this.announcementRegistry.clear();
                 results.forEach((announcement) => {
                     this.announcementRegistry.set(
                         announcement.uuid,

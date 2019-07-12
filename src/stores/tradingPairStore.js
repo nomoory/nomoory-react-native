@@ -43,9 +43,6 @@ class TradingPairStore {
     ];
 
     @observable
-    selectedTradingPairTab = 'KRW';
-
-    @observable
     tradingPairsRegistry = observable.map();
 
     @observable
@@ -86,7 +83,6 @@ class TradingPairStore {
         });
 
         tradingPairArray = this._filterByQuoteType(tradingPairArray);
-        // tradingPairs = this._tab(tradingPairs);
         // tradingPairs = this._filter(tradingPairs);
         tradingPairArray = this._filterByFavorite(tradingPairArray);
         tradingPairArray = this._search(this.searchKeyword, tradingPairArray);
@@ -97,9 +93,21 @@ class TradingPairStore {
 
     @computed
     get allTradingPairs() {
-        let tradingPairArray = [];
+        const tradingPairArray = [];
         this.tradingPairsRegistry.forEach((tradingPair, key) => {
             tradingPairArray.push(tradingPair);
+        });
+        return tradingPairArray;
+    }
+
+    @computed
+    get selecetedQuoteTradingPairs() {
+        const tradingPairArray = [];
+        const quote = (this.selectedTradingPairName && this.selectedTradingPairName.split('-')[1]) 
+            || 'ALL';
+        this.tradingPairsRegistry.forEach((tradingPair, key) => {
+            if (quote === 'ALL') tradingPairArray.push(tradingPair);
+            if (tradingPair.quote_symbol === quote) tradingPairArray.push(tradingPair);
         });
         return tradingPairArray;
     }
@@ -146,10 +154,7 @@ class TradingPairStore {
             Object.assign(tradingPair, tickerData);
         };
     }
-    @action
-    setSelectedTradingPairTab(baseSymbol) {
-        this.selectedTradingPairTab = baseSymbol;
-    }
+    
     @action
     toggleLanguageForTokenName() {
         this.languageForTokenName = 
@@ -181,12 +186,7 @@ class TradingPairStore {
         this.favoriteOnly = !this.favoriteOnly;
     }
 
-    _tab = (tradingPairs) => {
-        tradingPairs = tradingPairs.filter((tradingPair) => 
-            tradingPair.base_symbol === this.selectedTradingPairTab
-        );
-        return tradingPairs;
-    }
+
     _filter = (tradingPairs) => {
         if(this.filters.interest) { 
             tradingPairs = tradingPairs.filter((tradingPair) => 
@@ -294,11 +294,6 @@ class TradingPairStore {
 
     _quoteEnglishNameContainsSearchKeyword(searcher, tradingPair) {
         return searcher.search(tradingPair.base_english_name && tradingPair.base_english_name.toLowerCase()) >= 0 ? true : false;
-    }
-
-    _hasClickedBaseSymbolInTradingPair(baseSymbol) {
-        // 현재 유저가 누른 TradingPairTab(base_symbol)의 Base Symbol에 해당하는 TradingPair인지를 확인한다.
-        return this.selectedTradingPairTab === baseSymbol ? true : false;
     }
 
     @action

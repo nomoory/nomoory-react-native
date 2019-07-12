@@ -39,7 +39,7 @@ export default class TradingPairBox extends Component {
                             />
                             : <Icon.FontAwesome
                                 name="star-o"
-                                size={18} color={commonStyle.color.brandBlue}                        
+                                size={18} color={commonStyle.color.brandBlue}
                                 // style={styles.favoriteIcon}
                             />
                         }
