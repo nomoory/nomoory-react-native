@@ -27,7 +27,7 @@ class AccountStatus extends Component {
                                 total_token_buying_price
                                 ? number.putComma(Decimal(total_token_buying_price).toFixed(0))
                                 : '-'
-                            } 원
+                            }
                         </Text>
                     </View>
                     <View style={[styles.row]}>
@@ -36,7 +36,7 @@ class AccountStatus extends Component {
                                 total_evaluated_price_in_quote
                                 ? number.putComma(Decimal(total_evaluated_price_in_quote).toFixed(0, Decimal.ROUND_FLOOR))
                                 : '-' 
-                            } 원
+                            }
                         </Text>
                     </View>
                 </View>
@@ -48,7 +48,7 @@ class AccountStatus extends Component {
                             (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)
                         ]}>
                             { evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : '' }
-                            { evaluated_revenue ? number.putComma(Decimal(evaluated_revenue).toFixed(0)) : '-'} 원
+                            { evaluated_revenue ? number.putComma(Decimal(evaluated_revenue).toFixed(0)) : '-'}
                         </Text>
                     </View>
                     <View style={[styles.row]}>
@@ -58,7 +58,7 @@ class AccountStatus extends Component {
                             (evaluatedRevenueRatio_decimal.lessThan(0) ? styles.fall : null)
                         ]}>
                            { evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : '' }
-                            { evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).mul(100).toFixed(2)).toFixed()) : '-'} %
+                            { evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).mul(100).toFixed(2)).toFixed()) : '-'}%
                         </Text>
                     </View>
                 </View>
@@ -89,11 +89,11 @@ const styles = StyleSheet.create({
     },
     label: {
         color: 'rgb(90, 90, 90)',
-        fontSize: 11,
+        fontSize: 13,
         fontWeight: '200',
     },
     numberCommon: {
-        fontSize: 11,
+        fontSize: 13,
         fontWeight: '200',
     },
     rise: {

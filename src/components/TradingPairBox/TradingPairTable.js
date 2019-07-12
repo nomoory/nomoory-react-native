@@ -15,11 +15,11 @@ class TradingPairTable extends Component {
         this.dynamicColumnStyles = StyleSheet.create({
             [0]: { 
                 flex: 1,
-                justifyContent: 'flex-start',
+                justifyContent: 'center',
                 paddingLeft: 10,
             },
             [1]: { 
-                flex: 1,        
+                flex: 1.4,        
                 justifyContent: 'flex-end'
             },
             [2]: { 

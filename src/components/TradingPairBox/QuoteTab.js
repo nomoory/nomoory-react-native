@@ -76,12 +76,12 @@ const styles = StyleSheet.create({
     tabs: {
         display: 'flex',
         flexDirection: 'row',
-        height: 30,
+        height: 34,
         borderColor: '#7c7c7c',
     },
     tab: {
         height: '100%',
-        width: 56,
+        width: 60,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         borderLeftWidth: 0,
     },
     tabText: {
-        fontSize: 13,
+        fontSize: 16,
         color: '#7c7c7c',
     },
     selectedText: {

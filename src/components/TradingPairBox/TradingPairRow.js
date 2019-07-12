@@ -188,9 +188,9 @@ class TradingPairRow extends Component {
                 <View style={[styles.signedChangeRate, styles.paddingTop]}>
                     <Text style={[textStyle, styles.textSizeNormal]}
                     >{this.changeRate}%</Text>
-                    <Text style={[textStyle, styles.textSizeSmall]}
+                    {/* <Text style={[textStyle, styles.textSizeSmall]}
                     >{number.putComma(Decimal(close_price || 0).minus(open_price || 0).abs().toFixed())}
-                    </Text>
+                    </Text> */}
                 </View>
                 <View style={[styles.accTradeValue, styles.column, styles.paddingTop]}>
                     <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed(), 0) : '-'}{TRANSLATIONS[result.type]}</Text>
@@ -203,7 +203,7 @@ class TradingPairRow extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        height: 48,
+        height: 56,
         paddingTop: 4,
         paddingBottom: 4,
         flexDirection: 'row',
@@ -249,15 +249,15 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     textSizeBig: {
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: '200'
     },
     textSizeNormal: {
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: '200'
     },
     textSizeSmall: {
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: '200'
     },
     paddingTop: {

@@ -6,7 +6,7 @@ import number from '../../utils/number';
 import commonStyle from '../../styles/commonStyle';
 import { computed } from 'mobx';
 
-export const rowHeight = 40;
+export const rowHeight = 42;
 
 @inject('orderStore', 'orderbookStore', 'tradingPairStore')
 @observer
@@ -139,11 +139,11 @@ const styles = StyleSheet.create({
         borderRightColor: 'white',
     },
     priceText: {
-        fontSize: 12,
+        fontSize: 14,
         marginRight: 4,     
     },
     dayBeforeRateText: {
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: '200',
         marginRight: 4,
     },

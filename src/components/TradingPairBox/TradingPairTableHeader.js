@@ -34,7 +34,7 @@ class TradingPairTableHeader extends Component {
                     <Text style={styles.headerFont}>
                         {displayNameOfLanguageForTokenName}
                     </Text>
-                    <Image style={{ width: 14, height: 13 }}
+                    <Image style={{ width: 15, height: 14 }}
                         source={require('../../../assets/images/exchange/ic_change_s.png')} 
                     />
                 </TouchableOpacity>
@@ -57,7 +57,7 @@ class TradingPairTableHeader extends Component {
                                     {this._renderDisplayNameByName(sort.name) + ' '}
                                 </Text>
                                 <Image
-                                    style={{ width: 12, height: 13 }} 
+                                    style={{ width: 15, height: 13 }} 
                                     source={source}
                                 /> 
                             </TouchableOpacity>
@@ -71,7 +71,7 @@ class TradingPairTableHeader extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: 32,
+        height: 33,
         flexDirection: 'row',
         alignItems: 'center',
 
@@ -86,11 +86,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerFont: {
-        fontSize: 13,
-        color: '#333333',
-    },
-    close_price: {
-        flex: 1.5,
+        fontSize: 14,
+        color: '#888',
     },
 })
 export default TradingPairTableHeader;

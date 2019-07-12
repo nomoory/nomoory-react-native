@@ -1,13 +1,15 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import agent from '../utils/agent';
 import accountStore from './accountStore';
 // import Sentry from '../utils/Sentry';
 
 class UserStore {
-    @observable isLoading;
+    @observable
+    isLoading;
 
     // Verification 부분
-    @computed get isTokenTradable() {
+    @computed
+    get isTokenTradable() {
         try {
             let {
                 is_email_verified,
@@ -18,7 +20,8 @@ class UserStore {
             return false;
         }
     }
-    @computed get isKrwTradable() {
+    @computed
+    get isKrwTradable() {
         try {
             let {
                 is_phone_verified,
@@ -29,7 +32,9 @@ class UserStore {
             return false;
         }
     }
-    @computed get isWithdrawalLimitUpgraded() {
+
+    @computed
+    get isWithdrawalLimitUpgraded() {
         try {
             let {
                 id_photo_verification_status, // ('NONE', 'PENDING', 'DENIED', 'VERIFIED')
@@ -65,7 +70,8 @@ class UserStore {
         }
     }
     
-    @computed get needEmailVerification() {
+    @computed
+    get needEmailVerification() {
         try {
             let { is_email_verified } = this.currentUser.verification;
             return !is_email_verified;
@@ -74,7 +80,8 @@ class UserStore {
         }
     }
 
-    @action async loadUser(userUuid) {
+    @action
+    async loadUser(userUuid) {
         this.isLoading = true;
         if (userUuid) {
             return agent.loadUser(userUuid)
@@ -89,45 +96,59 @@ class UserStore {
                     throw err;
                 }));
         }
-    
     }
 
     // currentUser
-    @observable currentUser = null;
-    @computed get isLoggedIn() { return !!this.currentUser; }
-    @action saveUser(newUser) {
+    @observable
+    currentUser = null;
+
+    @computed
+    get isLoggedIn() { 
+        return !!this.currentUser; 
+    }
+
+    @action
+    saveUser(newUser) {
         accountStore.loadAccounts();
         this.currentUser = newUser;
         // TODO react native 용으로 Sentry 적용 후 재 적용합니다.
         // Sentry.setUser(newUser);
     }
-    @action clear() {
+    @action
+    clear() {
         this.currentUser = null;
         // TODO react native 용으로 Sentry 적용 후 재 적용합니다.
         // Sentry.setUser(newUser);
     }
 
-    @action forgetUser() { this.currentUser = null; }
+    @action
+    forgetUser() { this.currentUser = null; }
 
     // verification
-    @action setEmailVerified() {
+    @action
+    setEmailVerified() {
         this.currentUser.verification.is_email_verified = true;
     }
-    @action setOtpVerified() {
+    @action
+    setOtpVerified() {
         this.currentUser.verification.is_otp_verified = true;
     }
-    @action setBankAccountVerified() {
+    @action
+    setBankAccountVerified() {
         this.currentUser.verification.is_bank_account_verified = true;
     }
-    @action setIdPhotoVerificationStatus(status) {
+    @action
+    setIdPhotoVerificationStatus(status) {
         this.currentUser.verification.id_photo_verification_status = status;
     }
-    @action setKycVerificationStatus(status) {
+    @action
+    setKycVerificationStatus(status) {
         this.currentUser.verification.kyc_verification_status = status;
     }
 
     // profile referral code
-    @action setRefererReferralCode(referer_referral_code) {
+    @action
+    setRefererReferralCode(referer_referral_code) {
         this.currentUser.profile.referer_referral_code = referer_referral_code;
     }
     
