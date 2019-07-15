@@ -200,6 +200,7 @@ export default class TradingPairScreen extends Component {
                         width: Dimensions.get('window').width,
                         height: Dimensions.get('window').height,
                     }}
+                    swipeEnabled={false}
                 />
                 {/* <View style={styles.tabs}>
                     { this.state.routes.map((tab, index) => {
