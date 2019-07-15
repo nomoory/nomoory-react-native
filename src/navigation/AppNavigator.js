@@ -4,8 +4,6 @@ import {
     createSwitchNavigator,
     createAppContainer,
 } from 'react-navigation';
-import { Transition } from 'react-native-reanimated';
-import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 
 import InitialLoadScreen from '../screens/InitialLoadScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -17,7 +15,6 @@ import TradingPairScreen from '../screens/TradingPairScreen';
 import AccountDepositWithdrawScreen from '../screens/AccountDepositWithdrawScreen';
 import AnnouncementListScreen from '../screens/AnnouncementListScreen';
 import AnnouncementDetailScreen from '../screens/AnnouncementDetailScreen';
-
 
 import { fromLeft, fromRight, zoomIn, zoomOut } from 'react-navigation-transitions'
 
@@ -39,31 +36,6 @@ const handleCustomTransition = ({ scenes }) => {
     //     return fromRight();
     // }
     return fromRight();
-}
-
-
-const transitionConfig = () => {
-    return {
-        transitionSpec: {
-            duration: 750,
-            easing: Easing.out(Easing.poly(4)),
-            timing: Animated.timing,
-            useNativeDriver: true,
-        },
-        screenInterpolator: sceneProps => {
-            const { layout, position, scene } = sceneProps
-
-            const thisSceneIndex = scene.index
-            const width = layout.initWidth
-
-            const translateX = position.interpolate({
-                inputRange: [thisSceneIndex - 1, thisSceneIndex],
-                outputRange: [width, 0],
-            })
-
-            return { transform: [{ translateX }] }
-        },
-    }
 }
 
 const AuthStack = createStackNavigator(

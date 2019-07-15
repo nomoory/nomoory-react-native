@@ -130,7 +130,7 @@ export default class MiniRealtimeTradeHistory extends Component {
                                         {
                                             number.putComma(
                                                 Decimal(volume).greaterThan(10)
-                                                    ? Decimal(Decimal(volume).toFixed(3)).toFixed()
+                                                    ? Decimal(Decimal(volume).toFixed(2)).toFixed()
                                                     : Decimal(volume).toFixed()
                                             )
                                         }
@@ -155,17 +155,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 35,
         flexDirection: 'row',
-        backgroundColor: "#f7f8fa",
+        backgroundColor: commonStyle.color.borderColor,
 
         borderStyle: 'solid',
-        borderBottomWidth: 0.5,
-        borderBottomColor: commonStyle.color.borderColor,
-        borderTopWidth: 0.5,
-        borderTopColor: commonStyle.color.borderColor,
 
     },
     headColumnText: {
-        color: '#777777',
         fontSize: 11,
     },
     column: {

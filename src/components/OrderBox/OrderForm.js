@@ -207,13 +207,13 @@ const orderFormStyle = StyleSheet.create({
     setPriceButtons: {
         flexDirection: 'row',
         // borderWidth: 1,
-        // borderColor: '#d8dbde',
+        // borderColor: commonStyle.color.borderColor,
     },
     priceButton: {
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: '#d8dbde',
-        backgroundColor: '#d8dbde',
+        borderColor: commonStyle.color.borderColor,
+        backgroundColor: commonStyle.color.borderColor,
         marginLeft: 2,
         width: 30,
         height: 30,
@@ -221,12 +221,12 @@ const orderFormStyle = StyleSheet.create({
     plusButton: {
         //borderLeftWidth: 1.5,
         borderLeftWidth: 1,
-        borderLeftColor: '#d8dbde',
+        borderLeftColor: commonStyle.color.borderColor,
     },
     volumeButton: {
         width: 62,
         height: 30,
-        backgroundColor: '#d8dbde',
+        backgroundColor: commonStyle.color.borderColor,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

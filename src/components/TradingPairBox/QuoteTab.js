@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         height: 34,
-        borderColor: '#7c7c7c',
+        borderColor: '#6c6c6c',
     },
     tab: {
         height: '100%',
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderStyle: 'solid',
         borderWidth: 0.5,
-        borderColor: '#7c7c7c',
+        borderColor: '#6c6c6c',
     },
     tabNotLast: {
         borderRightWidth: 0,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     },
     tabText: {
         fontSize: 16,
-        color: '#7c7c7c',
+        color: '#6c6c6c',
     },
     selectedText: {
         color: commonStyle.color.brandBlue,

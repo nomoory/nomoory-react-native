@@ -14,7 +14,7 @@ import number, {
 } from '../../utils/number';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import commonStyle from '../../styles/commonStyle';
-import { computed, action } from 'mobx';
+import { computed } from 'mobx';
 
 let turnBackTimeout = null;
 @withNavigation
@@ -160,6 +160,7 @@ class TradingPairRow extends Component {
                         {tokenName}
                     </Text>
                     <Text style={[
+                        styles.greyFont,
                         styles.textSizeSmall
                     ]}>{name}
                     </Text>
@@ -180,20 +181,20 @@ class TradingPairRow extends Component {
                 ]}>
                     <Text style={[
                         textStyle, 
-                        styles.textSizeNormal
+                        styles.textSizeBig
                     ]}
                     >{close_price ? number.putComma(Decimal(close_price || 0).toFixed()) : '-'}
                     </Text>
                 </Animated.View>
                 <View style={[styles.signedChangeRate, styles.paddingTop]}>
-                    <Text style={[textStyle, styles.textSizeNormal]}
+                    <Text style={[textStyle, styles.textSizeBig]}
                     >{this.changeRate}%</Text>
                     {/* <Text style={[textStyle, styles.textSizeSmall]}
                     >{number.putComma(Decimal(close_price || 0).minus(open_price || 0).abs().toFixed())}
                     </Text> */}
                 </View>
                 <View style={[styles.accTradeValue, styles.column, styles.paddingTop]}>
-                    <Text style={[styles.textSizeNormal]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed(), 0) : '-'}{TRANSLATIONS[result.type]}</Text>
+                    <Text style={[styles.textSizeBig]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed(), 0) : '-'}{TRANSLATIONS[result.type]}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -203,9 +204,9 @@ class TradingPairRow extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        height: 56,
-        paddingTop: 4,
-        paddingBottom: 4,
+        height: 58,
+        paddingTop: 10,
+        paddingBottom: 10,
         flexDirection: 'row',
 
         borderBottomWidth: 1,
@@ -249,11 +250,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     textSizeBig: {
-        fontSize: 15,
+        fontSize: 16,
         fontWeight: '200'
     },
     textSizeNormal: {
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: '200'
     },
     textSizeSmall: {
@@ -261,7 +262,10 @@ const styles = StyleSheet.create({
         fontWeight: '200'
     },
     paddingTop: {
-        paddingTop: 2
+        // paddingTop: 2,
+    },
+    greyFont: {
+        color: '#666',
     }
 })
 export default TradingPairRow;

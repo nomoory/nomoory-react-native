@@ -86,7 +86,7 @@ export default class SignupScreen extends Component {
                         style={[
                             {
                                 width,
-                                resizeMode: 'cover',
+                                resizeMode: 'contain',
                             }
                         ]}
                         source={require('../../assets/images/login/ic_navi_logo.png')}
