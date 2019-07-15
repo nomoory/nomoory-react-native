@@ -9,31 +9,31 @@ import { rowHeight } from './OrderRow';
 @inject('orderbookStore', 'tradingPairStore')
 @observer
 export default class Orderbook extends Component {    
-    constructor(props) {
-        super(props);
-        this.orderLengthReaction = reaction(
-            () => props.orderbookStore.ordersLength,
-            (ordersLength, prevState) => {
-                if (
-                    !prevState.prev
-                    && ordersLength !== 0
-                ) {
-                    this.flatListRef.scrollToIndex({
-                        animated: false, index: 9
-                    });
-                }
-            }
-        )
+    componentDidMount() {
+        setTimeout(() => {
+            this.flatListRef.scrollToIndex({
+                animated: false,
+                index: 9,
+            });
+        }, 0);
     }
 
     componentWillUnmount() {
-        this.orderLengthReaction();
+        if (this.orderLengthReaction) {
+            this.orderLengthReaction();
+        }
     }
 
     @computed
     get orders() {
-        const { sellOrders, buyOrders } = this.props.orderbookStore;
-        return [...sellOrders, ...buyOrders];
+        if (this.props.orderbookStore.selectedOrderbook) {
+            const sellOrders = this.props.orderbookStore.selectedOrderbook.sellOrders || {};
+
+            const buyOrders = this.props.orderbookStore.selectedOrderbook.buyOrders || {};
+            return [...sellOrders, ...buyOrders];
+        } else {
+            return [];
+        }
     }
 
     getItemLayout = (data, index) => (
@@ -42,7 +42,7 @@ export default class Orderbook extends Component {
 
     render() {
         const { close_price, open_price } = this.props.tradingPairStore.selectedTradingPair || {};
-
+    
         return (
             <View style={styles.container}>
                 <FlatList

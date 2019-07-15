@@ -59,6 +59,18 @@ export default class App extends React.Component {
             }
         );
 
+        // 로드된 trading pair List를 바탕으로 따라 load하고 subscribe 해야 할 데이터 처리
+        const subscribe_reaction_on_tradingpair_loaded= reaction(
+            () => stores.tradingPairStore.tradingPairLoaded,
+            (tradingPairLoaded) => {
+                if (tradingPairLoaded) {
+                    stores.socketStore.addListenersForAllOrderbookChannels();
+                    console.log('[TEST] subscribe_reaction_on_tradingpair_loaded')
+                    stores.socketStore.loadAndSubscribeOrderbooksAfterTradingPairLoaded();
+                }
+            }
+        );
+
         // 선택된 trading pair에 따라 load하고 subscribe 해야 할 데이터 처리
         const subscribe_reaction_on_tradingpair_change = reaction(
             () => stores.tradingPairStore.selectedTradingPairName,

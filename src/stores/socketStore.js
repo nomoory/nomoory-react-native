@@ -23,8 +23,10 @@ const CHANNEL_NAMES = {
     SUMMARY: 'SUMMARY',
 
     // depends on selected trading pair
-    ORDERBOOK: 'ORDERBOOK',
     TRADE: 'TRADE',
+
+    // load all after load trading pair list
+    ORDERBOOK: 'ORDERBOOK',
 
     // depends on user
     ORDER: 'ORDER',
@@ -42,6 +44,7 @@ class SocketStore {
     constructor() {
         try {
             this.delibird = new Delibird(WEBSOCKET_END_POINT);
+            this.delibird.setMaxListeners(100);
             this.delibird.connect();
             this.addListenersForAllChannels();
     
@@ -77,15 +80,31 @@ class SocketStore {
         }
     }
 
+    async loadAndSubscribeOrderbooksAfterTradingPairLoaded() {
+        console.log(`%loadAndSubscribeOrderbooksAfterTradingPairLoaded`, "color: blue; font-size:15px;");
+        try {
+            const targetChannel = CHANNEL_NAMES.ORDERBOOK;
+            for (let tradingPair of tradingPairStore.allTradingPairs) {
+                let targetOrderbookChannel = targetChannel + '_' + tradingPair.name;
+                console.log(`%Load: ${targetOrderbookChannel}`, "color: blue; font-size:15px;");
+                await this._loadDataByChannel(targetOrderbookChannel);
+                this.delibird.subscribe(targetOrderbookChannel);
+                console.log(`%cSubscribe: ${targetOrderbookChannel}`, "color: blue; font-size:15px;");
+            }
+        } catch (err) {
+            console.log('fail to load and subscribe channel related to the trading pair.')
+        }
+    }
 
     async loadAndSubscribeOnTradingPairChange() {
         console.log(`%cLoadAndSubscribeOnTradingPairChange`, "color: blue; font-size:15px;");
         try {
-            const targetChannels = [ CHANNEL_NAMES.ORDERBOOK, CHANNEL_NAMES.TRADE ]
+            const targetChannels = [ CHANNEL_NAMES.TRADE ]
             if (tradingPairStore.selectedTradingPairName) {
                 for (let targetChannel of targetChannels) {
                     let specificTargetChannel = targetChannel + '_' + tradingPairStore.selectedTradingPairName;
-                    await this._loadDataByChannel(targetChannel);
+
+                    await this._loadDataByChannel(targetChannel, tradingPairStore.selectedTradingPairName);
                     let subscribedList = this.delibird.subscribedList();
                     for (let subscribed of subscribedList) {
                         if (typeof subscribed === 'string' && (-1 < subscribed.indexOf(targetChannel.split('_')[0])) ) {
@@ -156,9 +175,10 @@ class SocketStore {
     }
     
     async _loadDataByChannel(channel) {
-        switch (channel) {
+        const [ baseChannel, specific ] = channel.split('_');
+        switch (baseChannel) {
             case CHANNEL_NAMES.ORDERBOOK:
-                // await orderbookStore.loadOrderbook();
+                orderbookStore.loadOrderbook(specific);
                 break;
             case CHANNEL_NAMES.TICKER:
                 // await tradingPairStore.loadTradingPairs();
@@ -178,12 +198,14 @@ class SocketStore {
     }
 
     _onReceiveMessage = (channel, data) => {
-        // console.log(data);
+        const [ baseChannel, specific ] = channel.split('_');
+        // console.log({channel, data})
 
-        switch (channel) {
+        switch (baseChannel) {
             case CHANNEL_NAMES.ORDERBOOK:
                 // console.log(`%cReceived: ORDERBOOK`);
-                orderbookStore.setOrderbook(data);
+                // console.log({channel, data})
+                orderbookStore.updateOrderbookByTradingPairName(specific, data);
                 break;
             case CHANNEL_NAMES.TICKER:
                 // console.log(`%cReceived: TICKER`);
@@ -249,25 +271,44 @@ class SocketStore {
             console.log({ description: 'fail to addListeners for all channels', err });
         }
     }
+
+    addListenersForAllOrderbookChannels() {
+        try {
+            for(let tradingPair of tradingPairStore.allTradingPairs) {
+                let channelName = `ORDERBOOK_${tradingPair.name}`;
+                this._addListenerByChannelName(channelName);
+            }
+        } catch (err) {
+            console.log({ description: 'fail to addListeners for all channels', err });
+        }
+    }
     
     _addListenerByChannelName(channelName) {
-        console.log('channel.' + channelName)
+        console.log('channel.' + channelName);
         let temp = (data) => {
-                this._onReceiveMessage(channelName, data)
+            this._onReceiveMessage(channelName, data);
         }
-        if (channelName == CHANNEL_NAMES.ORDERBOOK || channelName == CHANNEL_NAMES.TRADE) {
-            this.delibird.on('channel.' + `${channelName}_*`, temp)
+
+        if (
+            // channelName == CHANNEL_NAMES.ORDERBOOK ||
+            channelName === CHANNEL_NAMES.TRADE
+        ) {
+            this.delibird.on('channel.*', temp);
         } else {
             this.delibird.on('channel.' + channelName, temp)
         }
     }
 
-    @observable subscribingChannelInfoForTradingView = null;
-    @action setSubscribingChannelInfoForTradingView(subscribingChannelInfoForTradingView) {
+    @observable
+    subscribingChannelInfoForTradingView = null;
+    
+    @action
+    setSubscribingChannelInfoForTradingView(subscribingChannelInfoForTradingView) {
         this.subscribingChannelInfoForTradingView = subscribingChannelInfoForTradingView;
     }
     
-    @action _feedTradeToTradingView(trade) {
+    @action
+    _feedTradeToTradingView(trade) {
         // console.log('_feedTradeToTradingView');
         // console.log({trade, subscribingChannelInfoForTradingView: this.subscribingChannelInfoForTradingView});
         if (trade && this.subscribingChannelInfoForTradingView) {

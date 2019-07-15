@@ -17,6 +17,8 @@ class TradingPairStore {
             }
         );
     }
+    @observable
+    tradingPairLoaded = false;
     
     @observable
     isLoading = false;
@@ -115,6 +117,7 @@ class TradingPairStore {
     @action
     loadTradingPairs() {
         this.isLoading = true;
+        this.tradingPairLoaded = false;
         console.log('load trading pair');
         return agent.loadTradingPairs()
             .then(action((response) => {
@@ -131,6 +134,7 @@ class TradingPairStore {
             .catch(action((err) => {
             }))
             .then(action(() => {
+                this.tradingPairLoaded = true;
                 this.isLoading = false;
             }));
     }
