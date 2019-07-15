@@ -181,7 +181,9 @@ class TradingPairRow extends Component {
                 ]}>
                     <Text style={[
                         textStyle, 
-                        styles.textSizeBig
+                        typeof close_price === 'string' && close_price.length > 9 
+                        ? styles.textSizeNormal
+                        : styles.textSizeBig,
                     ]}
                     >{close_price ? number.putComma(Decimal(close_price || 0).toFixed()) : '-'}
                     </Text>
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
         borderBottomColor: commonStyle.color.borderColor,
     },
     name: {
-        width: 100,
+        width: 90,
         paddingLeft: 10,
         flex: 1,
         flexDirection: 'column',

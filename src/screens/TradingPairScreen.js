@@ -42,8 +42,7 @@ export default class TradingPairScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         this.baseName = navigation.getParam('baseName', '토큰');
         this.tradingPairName = navigation.getParam('tradingPairName', '');
-        orderbookStore.loadOrderbook(this.tradingPairName);
-
+        // orderbookStore.loadOrderbook(this.tradingPairName);
         return {
             headerLeft: (
                 <View style={styles.headerContainer}>

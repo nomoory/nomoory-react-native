@@ -49,7 +49,7 @@ export default class OrderRow extends Component {
                 </View>
             );
         }
-        const { maxOrderVolume } = this.props.orderbookStore;
+        const { maxOrderVolume } = this.props.orderbookStore.selectedOrderbook;
         const dynamicStyle = 
             StyleSheet.create({
                 volumnBar: {
