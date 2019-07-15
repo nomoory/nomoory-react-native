@@ -25,7 +25,6 @@ export default class TradingPairBox extends Component {
                     style={styles.filterContainer}
                 >
                     <QuoteTab />
-
                     <TouchableOpacity
                         style={styles.favoriteButton}
                         onPress={this._onPressFavoriteOnly}
@@ -34,12 +33,12 @@ export default class TradingPairBox extends Component {
                             this.props.tradingPairStore.favoriteOnly
                             ? <Icon.FontAwesome
                                 name="star"
-                                size={18} color={commonStyle.color.brandBlue}
+                                size={20} color={commonStyle.color.brandBlue}
                                 // style={styles.favoriteIcon}
                             />
                             : <Icon.FontAwesome
                                 name="star-o"
-                                size={18} color={commonStyle.color.brandBlue}
+                                size={20} color={commonStyle.color.brandBlue}
                                 // style={styles.favoriteIcon}
                             />
                         }
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingRight: 10,
+        paddingRight: 16,
     },
     favoriteButton: {
         display: 'flex',

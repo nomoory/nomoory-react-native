@@ -232,10 +232,12 @@ export const getNumberAndPowerOfTenFromNumber = (number_string) => {
     if (number_decimal.greaterThanOrEqualTo(TRILLION)) {
         result.number = number_decimal.div(TRILLION).toFixed(4);
         result.type = 'trillion';
-    } else if (number_decimal.greaterThanOrEqualTo(BILLION)) {
-        result.number = number_decimal.div(BILLION).toFixed(4);
-        result.type = 'billion';
-    } else if (number_decimal.greaterThanOrEqualTo(MILLION)) {
+    } 
+    // else if (number_decimal.greaterThanOrEqualTo(BILLION)) {
+    //     result.number = number_decimal.div(BILLION).toFixed(4);
+    //     result.type = 'billion';
+    // } 
+    else if (number_decimal.greaterThanOrEqualTo(MILLION)) {
         result.number = number_decimal.div(MILLION).toFixed(4);
         result.type = 'million';
     } else {

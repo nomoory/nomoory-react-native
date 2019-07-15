@@ -14,7 +14,6 @@ const navigate = function(routeName, params) {
         })
     );
 }
-
 // add other navigation functions that you need and export them
 
 export default {

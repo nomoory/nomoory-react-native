@@ -196,7 +196,13 @@ class TradingPairRow extends Component {
                     </Text> */}
                 </View>
                 <View style={[styles.accTradeValue, styles.column, styles.paddingTop]}>
-                    <Text style={[styles.textSizeBig]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed(), 0) : '-'}{TRANSLATIONS[result.type]}</Text>
+                    <Text style={[
+                        styles.textSizeNormal
+                    ]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed(), 
+                        Decimal(result.number).lessThan(10)
+                        ? 2
+                        : 0
+                    ) : '-'}{TRANSLATIONS[result.type]}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -206,7 +212,7 @@ class TradingPairRow extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        height: 58,
+        height: 53,
         paddingTop: 10,
         paddingBottom: 10,
         flexDirection: 'row',
@@ -252,22 +258,22 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     textSizeBig: {
-        fontSize: 16,
-        fontWeight: '200'
-    },
-    textSizeNormal: {
         fontSize: 15,
         fontWeight: '200'
     },
+    textSizeNormal: {
+        fontSize: 14,
+        fontWeight: '200'
+    },
     textSizeSmall: {
-        fontSize: 13,
+        fontSize: 12,
         fontWeight: '200'
     },
     paddingTop: {
         // paddingTop: 2,
     },
     greyFont: {
-        color: '#666',
+        color: '#999',
     }
 })
 export default TradingPairRow;

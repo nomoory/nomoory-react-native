@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Image, View, Text, TouchableOpacity, FlatList, BackHandler } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import NavigationService from '../../utils/NavigationService';
 import commonStyle from '../../styles/commonStyle';
@@ -7,6 +7,7 @@ import commonStyle from '../../styles/commonStyle';
 @inject('tradingPairStore', 'modalStore')
 @observer
 export default class TradingPairSelectionModal extends Component {
+
     _onPressTradingPairRow = (tradingPairName) => () => {
         this.props.tradingPairStore.setSelectedTradingPairName(tradingPairName);
         let tradingPair = this.props.tradingPairStore.selectedTradingPair;
@@ -15,14 +16,14 @@ export default class TradingPairSelectionModal extends Component {
 
     _openTradingPairScreen = (tradingPair) => {
         NavigationService.navigate('TradingPair', {
-            baseName: 
+            baseName:
                 this.props.tradingPairStore.languageForTokenName === 'ko' ? tradingPair.base_korean_name : tradingPair.base_english_name,
             tradingPairName: tradingPair.name
         });
         this.props.modalStore.closeCustomModal();
     }
     render() {
-        const { 
+        const {
             selecetedQuoteTradingPairs,
             selectedTradingPairName,
             selectedTradingPair,
@@ -33,11 +34,11 @@ export default class TradingPairSelectionModal extends Component {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text
-                        style={{fontSize: 16, fontWeight: '500'}}
+                        style={{ fontSize: 16, fontWeight: '500' }}
                     >거래소 ({selectedTradingPair.quote_symbol})</Text>
                 </View>
-                <FlatList 
-                    style={{margin: 10}}
+                <FlatList
+                    style={{ margin: 10 }}
                     data={(selecetedQuoteTradingPairs && selecetedQuoteTradingPairs.length > 0) ?
                         selecetedQuoteTradingPairs : []}
                     // refreshing={this.state.refreshing}
@@ -70,15 +71,15 @@ export default class TradingPairSelectionModal extends Component {
                                         name === selectedTradingPairName && styles.selectedText
                                     ]}
                                 >
-                                { `${
-                                    languageForTokenName === 'ko' ?
-                                    base_korean_name
-                                    : base_english_name
-                                } (${name.split('-').join('/')})` }</Text>
+                                    {`${
+                                        languageForTokenName === 'ko' ?
+                                            base_korean_name
+                                            : base_english_name
+                                        } (${name.split('-').join('/')})`}</Text>
                             </TouchableOpacity>
                         );
                     }}
-                    // emptyView={this._renderEmptyView}
+                // emptyView={this._renderEmptyView}
                 />
             </View>
         );

@@ -149,7 +149,7 @@ class TradingPairStore {
         this.searchKeyword = keyword;
     }
 
-    @action
+    @action.bound
     updateTickerInTradingPair(ticker) {
         const tickerData = ticker || {};
         if (this.tradingPairsRegistry.has(tickerData.trading_pair_name)) {

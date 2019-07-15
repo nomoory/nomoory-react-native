@@ -71,7 +71,9 @@ export default class QuoteTab extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 12,
+        padding: 10,
+        paddingTop: 9,
+        paddingBottom: 9,
     },
     tabs: {
         display: 'flex',
