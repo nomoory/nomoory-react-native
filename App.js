@@ -37,14 +37,6 @@ import { registerForPushNotificationsAsync } from './src/utils/pushHelper';
 //     compute: __DEV__ && Boolean(window.navigator.userAgent)
 // });
 
-NetInfo.addEventListener(state => {
-    alert(state.type);
-    alert(state.isConnected);
-    console.log("Connection type", state.type);
-    console.log("Is connected?", state.isConnected);
-    console.log("effectiveType?", state.effectiveType);
-    console.log({ state });
-});
 
 export default class App extends React.Component {
     state = {
@@ -58,11 +50,11 @@ export default class App extends React.Component {
         // 유저에 따라 load하고 subscribe 해야 할 데이터 처리
         const login_reaction = reaction(
             () => stores.userStore.isLoggedIn,
-            isLoggedIn => {
+            async (isLoggedIn) => {
                 if (isLoggedIn) {
                     stores.socketStore.authenticateOnUserChange();
                     stores.socketStore.loadAndSubscribeOnLogin();
-                    this._enrollPushNitification();
+                    await this._enrollPushNitification();
                 } else {
                     stores.socketStore.unsubscribeOnLogout();
                 }
@@ -97,6 +89,16 @@ export default class App extends React.Component {
     componentDidMount() {
         AppState.addEventListener('change', this._handleAppStateChange);
         this._enrollChatConnection();
+
+        NetInfo.addEventListener(state => {
+            alert(state.type);
+            alert(state.isConnected);
+            if (!state.isConnected || state.type === 'none') {
+                alert('네트워크 연결이 끊어졌습니다.');
+            } else {
+                this._reloadAndResubscribeOnBackToForeground();
+            }
+        });
     }
 
     componentWillUnmount() {
@@ -138,9 +140,9 @@ export default class App extends React.Component {
         this.eventSource.close();
     }
 
-    _enrollPushNitification = () => {
-        registerForPushNotificationsAsync();
-        this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    _enrollPushNitification = async () => {
+        await registerForPushNotificationsAsync();
+        // this._notificationSubscription = Notifications.addListener(this._handleNotification);
     }
 
     _handleNotification = (notification) => {
