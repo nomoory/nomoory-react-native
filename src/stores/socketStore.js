@@ -110,13 +110,14 @@ class SocketStore {
                             this.delibird.unSubscribe(subscribed);
                         }
                     }
-                    await this._loadDataByChannel(targetChannel, tradingPairStore.selectedTradingPairName);
+                    await this._loadDataByChannel(targetChannel);
                     // this.delibird.unSubscribe(targetChannel + '.*');
                     console.log(`%cUnsubscribe: All ${targetChannel} ${tradingPairStore.selectedTradingPairName}`, "color: blue; font-size:15px;");
                     this.delibird.subscribe(specificTargetChannel);
+                    // this.delibird.subscribe(specificTargetChannel);
                     console.log(`%cSubscribe: ${targetChannel} ${specificTargetChannel}`, "color: blue; font-size:15px;");
                 }
-            }    
+            }
         } catch (err) {
             console.log('fail to load and subscribe channel related to the trading pair.')
         }
@@ -199,7 +200,7 @@ class SocketStore {
 
     _onReceiveMessage = (channel, data) => {
         const [ baseChannel, specific ] = channel.split('_');
-        // console.log({channel, data})
+        // console.log({channel})
 
         switch (baseChannel) {
             case CHANNEL_NAMES.ORDERBOOK:
@@ -265,7 +266,9 @@ class SocketStore {
     addListenersForAllChannels() {
         try {
             for(let channelName in CHANNEL_NAMES) {
-                this._addListenerByChannelName(channelName);
+                if (channelName !== CHANNEL_NAMES.ORDERBOOK) {
+                    this._addListenerByChannelName(channelName);
+                }
             }    
         } catch (err) {
             console.log({ description: 'fail to addListeners for all channels', err });
@@ -282,7 +285,7 @@ class SocketStore {
             console.log({ description: 'fail to addListeners for all channels', err });
         }
     }
-    
+
     _addListenerByChannelName(channelName) {
         console.log('channel.' + channelName);
         let temp = (data) => {
@@ -293,7 +296,7 @@ class SocketStore {
             // channelName == CHANNEL_NAMES.ORDERBOOK ||
             channelName === CHANNEL_NAMES.TRADE
         ) {
-            this.delibird.on('channel.*', temp);
+            this.delibird.on('channel.' + `${channelName}_*`, temp);
         } else {
             this.delibird.on('channel.' + channelName, temp)
         }
