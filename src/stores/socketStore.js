@@ -44,7 +44,7 @@ class SocketStore {
     constructor() {
         try {
             this.delibird = new Delibird(WEBSOCKET_END_POINT);
-            this.delibird.setMaxListeners(100);
+            this.delibird.setMaxListeners(90);
             this.delibird.connect();
             this.addListenersForAllChannels();
     
@@ -104,17 +104,17 @@ class SocketStore {
                 for (let targetChannel of targetChannels) {
                     let specificTargetChannel = targetChannel + '_' + tradingPairStore.selectedTradingPairName;
 
-                    await this._loadDataByChannel(targetChannel, tradingPairStore.selectedTradingPairName);
                     let subscribedList = this.delibird.subscribedList();
-                    for (let subscribed of subscribedList) {
-                        if (typeof subscribed === 'string' && (-1 < subscribed.indexOf(targetChannel.split('_')[0])) ) {
+                    for (const subscribed of subscribedList) {
+                        if (typeof subscribed === 'string' && (subscribed.indexOf(targetChannel.split('_')[0]) > -1)) {
                             this.delibird.unSubscribe(subscribed);
                         }
                     }
+                    await this._loadDataByChannel(targetChannel, tradingPairStore.selectedTradingPairName);
                     // this.delibird.unSubscribe(targetChannel + '.*');
                     console.log(`%cUnsubscribe: All ${targetChannel} ${tradingPairStore.selectedTradingPairName}`, "color: blue; font-size:15px;");
                     this.delibird.subscribe(specificTargetChannel);
-                    console.log(`%cSubscribe: ${targetChannel} ${tradingPairStore.selectedTradingPairName}`, "color: blue; font-size:15px;");
+                    console.log(`%cSubscribe: ${targetChannel} ${specificTargetChannel}`, "color: blue; font-size:15px;");
                 }
             }    
         } catch (err) {
@@ -219,7 +219,7 @@ class SocketStore {
                 });
                 break;
             case CHANNEL_NAMES.TRADE:
-                // console.log(`%cReceived: TRADE`);
+                console.log(`%cReceived: TRADE`);
                 realtimeTradeHistoryStore.setRealTimeTrades([data]);
                 this._feedTradeToTradingView(data);
                 break;

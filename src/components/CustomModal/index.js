@@ -1,12 +1,30 @@
 import React, { Component } from 'react';
 import { color, font } from '../../styles/commonStyle';
-import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, View, BackHandler} from 'react-native';
 import Modal from "react-native-modal";
 import { inject, observer } from 'mobx-react';
 
 @inject('modalStore')
 @observer
-export default class CommonModal extends Component {
+export default class CustomModal extends Component {
+    constructor(props) {
+        super(props);
+        BackHandler.addEventListener('hardwareBackPress', this._handleBackPress)
+        console.log('custom construct')
+    }
+
+    componentWillUnmount() {
+        console.log('custom unmount')
+        BackHandler.removeEventListener('hardwareBackPress', this._handleBackPress)
+    }
+
+    _handleBackPress = () => {
+        console.log('custom closeModal')
+        if (this.props.modalStore.customModal.isVisible) {
+            this._closeModal();
+        }
+    }
+
     _closeModal = () => {
         this.props.modalStore.closeCustomModal();
         this.props.modalStore.customModal.onClose();

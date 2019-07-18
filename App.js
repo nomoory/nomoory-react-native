@@ -9,12 +9,14 @@ import {
     StatusBar,
     Platform,
     AppState,
+    NetInfo
 } from 'react-native';
 import { Provider } from 'mobx-react';
 import stores from './src/stores';
 import AppNavigator from './src/navigation/AppNavigator';
 import CommonModal from './src/components/CommonModal';
 import CustomModal from './src/components/CustomModal';
+// import NetInfo from "@react-native-community/netinfo";
 
 import { reaction } from 'mobx';
 
@@ -35,6 +37,14 @@ import { registerForPushNotificationsAsync } from './src/utils/pushHelper';
 //     compute: __DEV__ && Boolean(window.navigator.userAgent)
 // });
 
+NetInfo.addEventListener(state => {
+    alert(state.type);
+    alert(state.isConnected);
+    console.log("Connection type", state.type);
+    console.log("Is connected?", state.isConnected);
+    console.log("effectiveType?", state.effectiveType);
+    console.log({ state });
+});
 
 export default class App extends React.Component {
     state = {
@@ -60,7 +70,7 @@ export default class App extends React.Component {
         );
 
         // 로드된 trading pair List를 바탕으로 따라 load하고 subscribe 해야 할 데이터 처리
-        const subscribe_reaction_on_tradingpair_loaded= reaction(
+        const subscribe_reaction_on_tradingpair_loaded = reaction(
             () => stores.tradingPairStore.tradingPairLoaded,
             (tradingPairLoaded) => {
                 if (tradingPairLoaded) {
@@ -129,7 +139,7 @@ export default class App extends React.Component {
     }
 
     _enrollPushNitification = () => {
-        // registerForPushNotificationsAsync();
+        registerForPushNotificationsAsync();
         this._notificationSubscription = Notifications.addListener(this._handleNotification);
     }
 

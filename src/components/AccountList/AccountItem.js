@@ -34,7 +34,13 @@ export default class AccountItem extends Component {
 
     render() {
         const { account, accountStore } = this.props;
-        let { asset_symbol, asset_korean_name, balance, evaluated_in_base_currency, is_depositable } = account || {}
+        let { 
+            asset_symbol,
+            asset_korean_name,
+            balance,
+            evaluated_in_base_currency,
+            is_depositable,
+        } = account || {}
         let { total_evaluated_price_in_quote } = accountStore.totalAssetsEvaluation || {};
         let balanceWeight = '0';
         if (total_evaluated_price_in_quote && total_evaluated_price_in_quote !== '0') {
@@ -47,7 +53,8 @@ export default class AccountItem extends Component {
             >
                 <View style={[styles.left]}>
                     <Image
-                        style={{ width: 28, height: 28 }}
+                        style={{ width: 28,
+                            height: 28 }}
                         source={{ uri: `${Expo.Constants.manifest.extra.LOGO_ASSET_ORIGIN}/logos/${asset_symbol}.png` }}
                     />
                     <View style={[styles.coinNameAndSymbol]}>

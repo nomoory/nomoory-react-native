@@ -4,11 +4,14 @@ import { inject, observer } from 'mobx-react';
 import headerStyle from '../styles/headerStyle';
 import TradingPairBox from '../components/TradingPairBox';
 import tradingPairStore from '../stores/tradingPairStore'
+import { withNavigation } from 'react-navigation';
 
-@inject('tradingPairStore')
+@withNavigation
+@inject('tradingPairStore', 'modalStore')
 @observer
 export default class ExchangeScreen extends Component {
-    static navigationOptions = ({ navigation, navigationOptions }) => {        
+
+    static navigationOptions = ({ navigation, navigationOptions }) => {
         tradingPairStore.loadTradingPairs();
         return {
             title: '거래소',

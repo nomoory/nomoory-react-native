@@ -17,9 +17,9 @@ export default class QuoteTab extends Component {
         let quoteTabTypes = Object.keys(quoteTabTypeOrigin);
         if (quoteTabTypes.length) {
             if (quoteTabTypes.includes('KRW')) sortedQuoteTabTypes.push('KRW');
+            if (quoteTabTypes.includes('USDT')) sortedQuoteTabTypes.push('USDT');
             if (quoteTabTypes.includes('BTC')) sortedQuoteTabTypes.push('BTC');
             if (quoteTabTypes.includes('ETH')) sortedQuoteTabTypes.push('ETH');
-            if (quoteTabTypes.includes('USDT')) sortedQuoteTabTypes.push('USDT');
 
             sortedQuoteTabTypes.push(...quoteTabTypes.filter((tabType) => {
                 return !['KRW', 'BTC', 'ETH', 'USDT'].includes(tabType);

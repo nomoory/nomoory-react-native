@@ -11,10 +11,13 @@ import { rowHeight } from './OrderRow';
 export default class Orderbook extends Component {    
     componentDidMount() {
         setTimeout(() => {
-            this.flatListRef.scrollToIndex({
-                animated: false,
-                index: 9,
-            });
+            let index = 9;
+            if (index < this.orders.length) {
+                this.flatListRef.scrollToIndex({
+                    animated: false,
+                    index,
+                });        
+            }
         }, 0);
     }
 
