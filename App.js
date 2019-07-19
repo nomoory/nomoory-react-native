@@ -2,6 +2,7 @@ import './init';
 import React from 'react';
 import {
     Notifications,
+    // NetInfo,
 } from 'expo';
 import {
     StyleSheet,
@@ -17,7 +18,6 @@ import AppNavigator from './src/navigation/AppNavigator';
 import CommonModal from './src/components/CommonModal';
 import CustomModal from './src/components/CustomModal';
 // import NetInfo from "@react-native-community/netinfo";
-
 import { reaction } from 'mobx';
 
 // SEE event source for chat
@@ -36,7 +36,6 @@ import { registerForPushNotificationsAsync } from './src/utils/pushHelper';
 //     transaction: __DEV__ && Boolean(window.navigator.userAgent),
 //     compute: __DEV__ && Boolean(window.navigator.userAgent)
 // });
-
 
 export default class App extends React.Component {
     state = {
@@ -86,24 +85,42 @@ export default class App extends React.Component {
         );
     }
 
+
     componentDidMount() {
         AppState.addEventListener('change', this._handleAppStateChange);
         this._enrollChatConnection();
 
-        NetInfo.addEventListener(state => {
-            alert(state.type);
-            alert(state.isConnected);
-            if (!state.isConnected || state.type === 'none') {
-                alert('네트워크 연결이 끊어졌습니다.');
-            } else {
-                this._reloadAndResubscribeOnBackToForeground();
-            }
-        });
+        NetInfo.addEventListener('connectionChange', this._handleInternetConnection);
+    }
+
+    _handleInternetConnection = (state) => {
+        const {
+            effectiveType, // ex. 4g
+            type, // ex. cellular
+        } = state;
+
+        console.log(
+            'First change, type: ' +
+            state.type +
+            ', effectiveType: ' +
+            state.effectiveType,
+        );
+
+        if (['none', 'unknow'].includes(type) || !type) {
+            alert(`네트워크에 연결되어있지 않습니다.(${type})`);
+        } else {
+            this._reloadAndResubscribeOnBackToForeground();
+        }
     }
 
     componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
         this._closeAllChatConnection();
+
+        NetInfo.removeEventListener(
+            'connectionChange',
+            this._handleInternetConnection,
+        );
     }
 
     _enrollChatConnection() {
@@ -170,21 +187,22 @@ export default class App extends React.Component {
             nextAppState === 'active'
         ) {
             console.log('App has come to the foreground!');
-            this._reloadAndResubscribeOnBackToForeground();
+            NetInfo.getConnectionInfo().then(this._handleInternetConnection);
         }
         this.setState({ appState: nextAppState });
     };
 
-    _reloadAndResubscribeOnBackToForeground() {
-        stores.socketStore.loadAndSubscribeOnInit();
-
+    _reloadAndResubscribeOnBackToForeground = async () => {
+        await stores.socketStore.loadAndSubscribeOnInit();
+        stores.socketStore.loadAndSubscribeOrderbooksAfterTradingPairLoaded();
+        
         if (stores.userStore.isLoggedIn) {
             stores.socketStore.authenticateOnUserChange();
             stores.socketStore.loadAndSubscribeOnLogin();
         }
 
-        stores.socketStore.loadAndSubscribeOnTradingPairChange();
         if (stores.tradingPairStore.selectedTradingPairName) {
+            stores.socketStore.loadAndSubscribeOnTradingPairChange();
             stores.placedOrderHistoryStore.loadPersonalOrders(stores.tradingPairStore.selectedTradingPairName);
         }
         stores.orderStore.setOrderValueByTradingPair(stores.tradingPairStore.selectedTradingPair || {});
