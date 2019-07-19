@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
-    "@react-native-community/netinfo": "^4.1.1",
+    "@react-native-community/netinfo": "3",
     "axios": "^0.18.0",
     "buffer": "^5.2.1",
     "eventemitter2": "^5.0.1",
