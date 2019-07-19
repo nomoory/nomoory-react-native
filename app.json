@@ -41,12 +41,12 @@
             "REACT_APP_DEV_API_VERSION": "v1.0",
             "REACT_APP_DEV_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",
             "DEV_WEBSOCKET_END_POINT": "wss://staging-ws.coinbit.global/v1/ws",
-            "REACT_WEB_API_ENDPOINT": "http://staging.coinbit.global",
-            "ANNOUNCEMENT_LINK": "https://staging.coinbit.global/announcements",
+            "REACT_WEB_API_ENDPOINT": "http://test.coinbit.co.kr",
+            "ANNOUNCEMENT_LINK": "https://test.coinbit.co.kr/announcements",
             "CUSTOMER_CENTER_LINK": "https://coblic.zendesk.com/hc/ko",
             "WHITEPAPER_LINK": "https://bit.ly/Coblic_WhitePaper",
-            "RESETPASSWORD_LINK": "https://staging.coinbit.global/reset-password",
-            "SIGNUP_LINK": "https://staging.coinbit.global/signup",
+            "RESETPASSWORD_LINK": "https://test.coinbit.co.kr/reset-password",
+            "SIGNUP_LINK": "https://test.coinbit.co.kr/signup",
             "PUSH_ENDPOINT": ""
         }
     }
