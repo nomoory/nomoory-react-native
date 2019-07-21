@@ -18,7 +18,9 @@ export default class TotalAssetsEvaluation extends Component {
             evaluated_revenue_ratio,
             evaluated_revenue,
         } = accountStore.totalAssetsEvaluation || {};
-        const evaluatedRevenueRatio_decimal = Decimal(evaluated_revenue || '0');
+        const evaluatedRevenueRatio_decimal = Decimal(evaluated_revenue_ratio || '0');
+        const isRise = evaluatedRevenueRatio_decimal.greaterThan(0);
+        const isFall = evaluatedRevenueRatio_decimal.lessThan(0);
 
         return (
             <View style={styles.container}>
@@ -72,7 +74,9 @@ export default class TotalAssetsEvaluation extends Component {
                             <Text style={[styles.investInfoTitle]}>
                                 총평가금액
                             </Text>
-                            <Text style={[styles.investInfoValue]}>
+                            <Text style={[
+                                styles.investInfoValue
+                            ]}>
                                 {
                                     total_tokens_evaluated_price_in_quote
                                     ? number.putComma(Decimal(total_tokens_evaluated_price_in_quote).toFixed(0))
@@ -87,13 +91,8 @@ export default class TotalAssetsEvaluation extends Component {
                                 총평가손익
                             </Text>
                             <Text style={[
-                                evaluatedRevenueRatio_decimal.greaterThan(0)
-                                ? styles.rise
-                                : (
-                                    evaluatedRevenueRatio_decimal.lessThan(0)
-                                    ? styles.fall
-                                    : null
-                                )
+                                isRise ? commonStyle.RISE : null,
+                                isFall ? commonStyle.FALL : null,
                             ]}>
                                 {evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : ''}
                                 {evaluated_revenue ? number.putComma(Decimal(evaluated_revenue).toFixed(0)) : '-'}
@@ -104,13 +103,8 @@ export default class TotalAssetsEvaluation extends Component {
                                 손익률
                             </Text>
                             <Text style={[
-                                evaluatedRevenueRatio_decimal.greaterThan(0)
-                                ? styles.rise
-                                : (
-                                    evaluatedRevenueRatio_decimal.lessThan(0)
-                                    ? styles.fall
-                                    : null
-                                )
+                                isRise ? commonStyle.RISE : null,
+                                isFall ? commonStyle.FALL : null,
                             ]}>
                                 {evaluatedRevenueRatio_decimal.greaterThan(0) ? '+' : ''}
                                 {evaluated_revenue_ratio ? number.putComma(Decimal(Decimal(evaluated_revenue_ratio).mul(100).toFixed(2)).toFixed()) : '- '}%
@@ -129,6 +123,8 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 18,
         paddingBottom: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: commonStyle.color.borderColor,
     },
     assetInfoContainer: {
         marginBottom: 14,
@@ -193,6 +189,6 @@ const styles = StyleSheet.create({
         color: commonStyle.color.coblicRed
     },
     fall: {
-        color: commonStyle.color.fall
+        color: commonStyle.FALL.color
     }
 })
