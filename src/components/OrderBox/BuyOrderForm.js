@@ -125,8 +125,10 @@ export default class BuyOrderForm extends Component {
     }
 
     _resetSelection = () => {
-        this.selectedIndex = -1;
-        if (this.dropdown) this.dropdown.select(-1);
+        if (this.selectedIndex !== -1) {
+            this.selectedIndex = -1;
+            if (this.dropdown) this.dropdown.select(-1);    
+        }
     }
 
     _onPressOrder = (e) => {
