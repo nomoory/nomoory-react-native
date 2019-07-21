@@ -31,7 +31,6 @@ export const registerForPushNotificationsAsync = async () => {
         permission = true;
     }
 
-    alert({ token });
     // POST the token to your backend server from where you can retrieve it to send push notifications.
     return agent.updateUserPushToken({
         token,
