@@ -22,13 +22,9 @@ export default class AnnouncementBox extends Component {
     }
 
     _renderAnnounceList() {
-        const latestAnnouncements = this.props.announcementStore.latestAnnouncements || [];
+        const latestAnnouncements = this.props.announcementStore.latestAnnouncements;
         return (
             <FlatList 
-                style={[
-                    // styles.scrollViewContainer,
-                    // styles.itemsContainer
-                ]}
                 data={latestAnnouncements.length ? latestAnnouncements : []}
                 // refreshing={this.state.refreshing}
                 // onRefresh={this.onRefresh}
