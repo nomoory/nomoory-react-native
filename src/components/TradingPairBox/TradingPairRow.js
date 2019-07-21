@@ -37,25 +37,13 @@ class TradingPairRow extends Component {
             outputRange: ['#d60000', '#ffffff', '#0051c7'],
         });
         this.setState({
-            isFirstLoad: false
+            isFirstLoad: false,
         })
     }
 
     componentWillUnmount() {
         clearTimeout(turnBackTimeout);
     }
-
-    // 현재가 변동시 깜빡이는 UI Test용, feature 개발이 완료되면 지워도됩니다. _ 준혁
-    // _changeClosePriceState = action(() => {
-    //     this.props.tradingPair.close_price =
-    //         Math.random() > 0.5
-    //             ?
-    //             Decimal(this.props.tradingPair.close_price).add(1000).toFixed()
-    //             :
-    //             Decimal(this.props.tradingPair.close_price).minus(1000).toFixed()
-    //         ;
-    //     // console.log(this.props.tradingPair.close_price)
-    // })
 
     static getDerivedStateFromProps(props, state) {
         const prevClosePrice = state.prevClosePrice;
@@ -68,18 +56,29 @@ class TradingPairRow extends Component {
                             toValue: 1,
                             duration: 0,
                             delay: 0
-                        }).start()
-                }
-                if (Decimal(nextClosePrice).greaterThan(prevClosePrice)) { // 상승 = 빨강       
+                        }).start();
+                } else if (Decimal(nextClosePrice).greaterThan(prevClosePrice)) { // 상승 = 빨강       
                     Animated.timing(
                         state.value, {
                             toValue: -1,
                             duration: 0,
-                            delay: 0
-                        }).start()
+                            delay: 0,
+                        }).start();
+                } else {
+                    Animated.timing(
+                        state.value, {
+                            toValue: 0,
+                            duration: 0,
+                            delay: 0,
+                        }).start();
                 }
             } catch (err) {
-    
+                Animated.timing(
+                    state.value, {
+                        toValue: 0,
+                        duration: 0,
+                        delay: 0,
+                    }).start();
             }
             state.prevClosePrice = nextClosePrice;
             clearTimeout(turnBackTimeout);
