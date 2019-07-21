@@ -13,7 +13,8 @@ import commonStyle from '../../styles/commonStyle';
 export default class AccountItem extends Component {
     _onPressBalanceItemrRow = (account = {}) => (e) => {
         if (                    
-            account.is_depositable === false
+            !account.is_depositable ||
+            !account.is_withdrawable
         ) { /* show 입금 불가 modal */
             this.props.modalStore.openModal({
                 type: 'preset',
@@ -26,7 +27,7 @@ export default class AccountItem extends Component {
     }
 
     _openDepositWithdrawScreen = (currency) => {
-        this.props.accountStore.setSelectedAccountSymbol(account.asset_symbol);
+        this.props.accountStore.setSelectedAccountSymbol(currency);
         this.props.navigation.navigate('AccountDepositWithdraw', {
             currency: currency,
         });
@@ -44,7 +45,7 @@ export default class AccountItem extends Component {
         let { total_evaluated_price_in_quote } = accountStore.totalAssetsEvaluation || {};
         let balanceWeight = '0';
         if (total_evaluated_price_in_quote && total_evaluated_price_in_quote !== '0') {
-            balanceWeight = Decimal(evaluated_in_base_currency).div(total_evaluated_price_in_quote).mul(100).toFixed(1);
+            balanceWeight = Decimal(evaluated_in_base_currency || 0).div(total_evaluated_price_in_quote || 1).mul(100).toFixed(1);
         }
 
         return (
@@ -85,7 +86,7 @@ export default class AccountItem extends Component {
                     </View>
                     <View style={[styles.emptyColumn]}>
                         { 
-                            is_depositable === true ?
+                            is_depositable ?
                             <Image
                                 style={{ width: 15, resizeMode: 'contain' }}
                                 source={images.buttons.account}

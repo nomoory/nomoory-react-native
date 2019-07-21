@@ -173,15 +173,24 @@ class AccountStore {
             let evaluated_revenue_ratio = Decimal(0);
         
             this.allAccounts.forEach((account) => {
-                let { balance } = account || {};
+                let {
+                    balance,
+                    avg_fiat_buy_price,
+                    close_price,
+                    asset_symbol
+                } = account || {};
                 if (balance) {
-                    if (account.asset_symbol !== QUOTE_SYMBOL) {
+                    if (asset_symbol !== QUOTE_SYMBOL) {
                         let holdingToken_decimal = Decimal(balance);
-                        let buyingPriceOfToken = holdingToken_decimal.mul(account.avg_fiat_buy_price);
-                        total_token_buying_price = total_token_buying_price.add(buyingPriceOfToken);
+                        let buyingPriceOfToken = holdingToken_decimal
+                            .mul(avg_fiat_buy_price);
+                        total_token_buying_price = total_token_buying_price
+                            .add(buyingPriceOfToken);
         
-                        let evaluatedPriceOfToken = holdingToken_decimal.mul(account.close_price);
-                        total_tokens_evaluated_price_in_quote = total_tokens_evaluated_price_in_quote.add(evaluatedPriceOfToken);
+                        let evaluatedPriceOfToken = holdingToken_decimal
+                            .mul(close_price);
+                        total_tokens_evaluated_price_in_quote = total_tokens_evaluated_price_in_quote
+                            .add(evaluatedPriceOfToken);
                     } else {
                         holding_quote_decimal = holding_quote_decimal.add(balance);
                     }
@@ -191,15 +200,17 @@ class AccountStore {
             evaluated_revenue = total_tokens_evaluated_price_in_quote.minus(total_token_buying_price);
             total_evaluated_price_in_quote = total_tokens_evaluated_price_in_quote.add(holding_quote_decimal);
 
-            if (!total_token_buying_price.equals(0)) evaluated_revenue_ratio = total_tokens_evaluated_price_in_quote.div(total_token_buying_price);
+            if (!total_token_buying_price.equals(0)) {
+                evaluated_revenue_ratio = evaluated_revenue.div(total_token_buying_price);
+            }
             let result = {
                 total_evaluated_price_in_quote: total_evaluated_price_in_quote.toFixed(), // 총 평가액: 모든 토큰의 close_price 환산 평가 액 + 보유 base_symbol
                 holding_quote: holding_quote_decimal.toFixed(), // 보유 base_symbol
                 total_token_buying_price: total_token_buying_price.toFixed(), // 구매금액: 모든 토큰을 구매할 때 쓴 금액
                 total_tokens_evaluated_price_in_quote: total_tokens_evaluated_price_in_quote.toFixed(), // 모든 토큰의 close_price 환산 평가 액
-                evaluated_revenue: evaluated_revenue.toFixed(), // 총 평가 액 - 구매금액 = 수익
+                evaluated_revenue: evaluated_revenue.toFixed(), // 총 평가액 - 구매금액 = 수익
                 evaluated_revenue_ratio: evaluated_revenue_ratio.toFixed() // 수익률 = 수익 / 구매 금액
-            } 
+            };
             return result;
         } catch (err) {
             let result = {

@@ -39,9 +39,9 @@ class AccountModel extends Model {
                     }
                 }
             }
-            return null
+            return 1
         } catch (err) {
-            return null;
+            return 1;
         }
     }
 
