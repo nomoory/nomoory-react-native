@@ -36,7 +36,7 @@
             "LOGO_ASSET_ORIGIN": "https://static.upbit.com",
             "WEBSOCKET_END_POINT": "wss://staging-ws.coinbit.global/v1/ws",
             "RAZZLE_CHATTING_API_ENDPOINT": "https://staging-chatting.coinbit.global",
-
+            "REACT_APP_SENTRY_DSN_ENDPOINT": "https://26385eda1ed94a6da36a306512e8da86@sentry.io/1509735",
             "REACT_APP_DEV_API_ENDPOINT": "https://staging-api.coinbit.global",
             "REACT_APP_DEV_API_VERSION": "v1.0",
             "REACT_APP_DEV_ASSET_ORIGIN": "https://d39eeu3pq7rt6z.cloudfront.net",
@@ -48,6 +48,18 @@
             "RESETPASSWORD_LINK": "https://test.coinbit.co.kr/reset-password",
             "SIGNUP_LINK": "https://test.coinbit.co.kr/signup",
             "PUSH_ENDPOINT": ""
+        },
+        "hooks": {
+            "postPublish": [
+                {
+                    "file": "sentry-expo/upload-sourcemaps",
+                    "config": {
+                        "organization": "Coinbit",
+                        "project": "coinbit-app",
+                        "authToken": "cc0a688235ec406984f3186e23e7518b242c7f186f7a4c4196c273921a63aec1",
+                    }
+                }
+            ]
         }
     }
 }

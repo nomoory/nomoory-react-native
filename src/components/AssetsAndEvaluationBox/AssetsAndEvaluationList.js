@@ -6,10 +6,11 @@ import commonStyle from '../../styles/commonStyle';
 import AssetsAndEvaluationRow from './AssetsAndEvaluationRow';
 import constants from '../../global/constants';
 
-@inject('accountStore')
+@inject('userStore', 'accountStore')
 @observer
 class AssetsAndEvaluationList extends Component {
     componentDidMount() {
+        if (this.props.userStore.isLoggedIn)
         this.props.accountStore.loadAccounts()
     }
     
