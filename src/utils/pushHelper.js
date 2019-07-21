@@ -3,6 +3,7 @@ import * as Permissions from 'expo-permissions'
 import {
     Platform,
 } from 'react-native';
+import agent from '../utils/agent';
 
 export const registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
