@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import headerStyle from '../styles/headerStyle';
-import { Linking, Text, StyleSheet, View, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import AnnouncementBox from '../components/AnnouncementBox';
@@ -38,6 +38,7 @@ export default class EtcScreen extends Component {
     _onPressLogin = () => {
         this.props.navigation.navigate('Login');
     }
+
     _onPressLogout = () => {
         this.props.modalStore.openModal({
             type: 'preset',
@@ -70,9 +71,8 @@ export default class EtcScreen extends Component {
         // this.props.navigation.navigate('AnnouncementList');
     }
     render() {
-        const { verificationProgress, currentUser } = this.props.userStore
-        const { profile, email } = currentUser || {};
-        const { real_name_masked, real_name } = profile || {};
+        const { currentUser } = this.props.userStore
+        const { email } = currentUser || {};
         return (
             <ScrollView style={[styles.scrollContainer]}>
                 { 
