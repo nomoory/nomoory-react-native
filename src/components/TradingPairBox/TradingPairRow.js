@@ -6,11 +6,14 @@ import {
     TouchableOpacity,
     Animated,
 } from 'react-native';
-import { inject, observer } from 'mobx-react';
+import {
+    inject,
+    observer,
+} from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import number, {
     getNumberAndPowerOfTenFromNumber,
-    Decimal
+    Decimal,
 } from '../../utils/number';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import commonStyle from '../../styles/commonStyle';
@@ -126,15 +129,22 @@ class TradingPairRow extends Component {
         const {
             close_price, signed_change_rate, acc_trade_value_24h,
             base_korean_name, base_english_name, name,
-            open_price
+            open_price,
+            quote_symbol
         } = this.props.tradingPair || {};
+        const isKRW = quote_symbol === 'KRW';
         const isKorean = this.props.tradingPairStore.languageForTokenName === 'ko';
         const isEnglish = !isKorean;
         const tokenName = isKorean ?
             base_korean_name :
             base_english_name;
 
-        const result = getNumberAndPowerOfTenFromNumber(acc_trade_value_24h);
+        const exchangeTradingPair = this.props.tradingPairStore.getTradingPairByName(`${quote_symbol}-KRW`, true) || {};
+
+        const result = getNumberAndPowerOfTenFromNumber(
+            isKRW ? acc_trade_value_24h : Decimal(acc_trade_value_24h).mul(exchangeTradingPair.close_price || 1).toFixed()
+        );
+
         const isIncreased = close_price && open_price ? Decimal(close_price).lessThan(open_price) : false;
         const isDecreased = close_price && open_price ? Decimal(close_price).greaterThan(open_price) : false;
         let textStyle = null;
@@ -201,14 +211,49 @@ class TradingPairRow extends Component {
                     >{number.putComma(Decimal(close_price || 0).minus(open_price || 0).abs().toFixed())}
                     </Text> */}
                 </View>
-                <View style={[styles.accTradeValue, styles.column, styles.paddingTop]}>
-                    <Text style={[
-                        styles.textSizeNormal
-                    ]}>{result.number ? number.putComma(Decimal(result.number || 0).toFixed(), 
-                        Decimal(result.number).lessThan(10)
-                        ? 2
-                        : 0
-                    ) : '-'}{TRANSLATIONS[result.type]}</Text>
+                <View style={[
+                    styles.column,
+                    styles.accTradeValue,
+                    styles.paddingTop
+                ]}>
+                    {
+                        isKRW
+                        ? null 
+                        : (
+                            <Text style={[
+                                styles.textSizeSmall
+                            ]}>{
+                                result.number
+                                ? number.putComma(acc_trade_value_24h, 
+                                    Decimal(acc_trade_value_24h).lessThan(10)
+                                    ? 2
+                                    : 0
+                                )
+                                : '-'
+                            }
+                            </Text>
+                        )
+                    }
+                    <Text style={
+                        isKRW 
+                        ? [ styles.textSizeNormal ]
+                        : [ 
+                            styles.textSizeSmall,
+                            styles.greyFont,
+                        ]
+                    }>{
+                        (!isKRW && exchangeTradingPair.close_price && result.number) 
+                        ||
+                        (isKRW && result.number)
+                        ? number.putComma(
+                            Decimal(result.number || 0).toFixed(), 
+                            Decimal(result.number).lessThan(10)
+                            ? 2
+                            : 0
+                        ) 
+                        : '-'
+                    }{TRANSLATIONS[result.type]}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
@@ -238,6 +283,10 @@ const styles = StyleSheet.create({
         paddingLeft: 1,
     },
     accTradeValue: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
         paddingRight: 10,
     },
     closePrice: {
