@@ -101,17 +101,13 @@ export default class App extends React.Component {
             type, // ex. cellular
         } = state;
 
-        console.log(
-            'First change, type: ' +
-            state.type +
-            ', effectiveType: ' +
-            state.effectiveType,
-        );
-
         if (['none', 'unknow'].includes(type) || !type) {
-            alert(`네트워크에 연결되어있지 않습니다.(${type})`);
+            alert(`네트워크에 연결되어있지 않습니다. (${type})`);
         } else {
-            this._reloadAndResubscribeOnBackToForeground();
+            if (this.reloadSetTimeout) clearTimeout(this.reloadSetTimeout);
+            this.reloadSetTimeout = setTimeout(() => {
+                this._reloadAndResubscribeOnBackToForeground();
+            }, 0);
         }
     }
 
@@ -189,7 +185,7 @@ export default class App extends React.Component {
             nextAppState === 'active'
         ) {
             console.log('App has come to the foreground!');
-            NetInfo.getConnectionInfo().then(this._handleInternetConnection);
+            // NetInfo.getConnectionInfo().then(this._handleInternetConnection);
         }
         this.setState({ appState: nextAppState });
     };
