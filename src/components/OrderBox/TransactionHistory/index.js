@@ -11,7 +11,7 @@ const TAB_TYPES = {
     COMPLETD_ORDER: 'COMPLETD_ORDER',
 };
 
-@inject('placedOrderHistoryStore', 'tradingPairStore')
+@inject('tradingPairStore')
 @observer
 export default class TransactionHistory extends Component {
     @observable
