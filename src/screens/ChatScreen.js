@@ -68,7 +68,11 @@ export default class ChatScreen extends Component {
             };
         }
 
-        return null;
+        return {
+            _id: '',
+            name: '',
+            avatar: ''
+        };
     }
 
 
@@ -99,7 +103,7 @@ export default class ChatScreen extends Component {
                                 <Text
                                     style={{
                                         fontSize: 15,
-                                        marginLeft: 8,
+                                        padding: 8,
                                         fontWeight: '500',
                                         color: commonStyle.color.brandGrey,
                                     }}

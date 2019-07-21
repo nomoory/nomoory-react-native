@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'flex-start',
-        marginLeft: 8,
+        paddingLeft: 8,
+        marginLeft: 0,
         marginRight: 0,
     },
     slackAvatar: {
