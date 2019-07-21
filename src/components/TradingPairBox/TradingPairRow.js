@@ -16,7 +16,6 @@ import TRANSLATIONS from '../../TRANSLATIONS';
 import commonStyle from '../../styles/commonStyle';
 import { computed } from 'mobx';
 
-let turnBackTimeout = null;
 @withNavigation
 @inject('tradingPairStore')
 @observer
@@ -29,6 +28,7 @@ class TradingPairRow extends Component {
             prevClosePrice: props.tradingPair ? props.tradingPair.close_price : 0,
             value: new Animated.Value(0),
         };
+        this.turnBackTimeout = null;
     }
 
     componentDidMount() {
@@ -42,7 +42,9 @@ class TradingPairRow extends Component {
     }
 
     componentWillUnmount() {
-        clearTimeout(turnBackTimeout);
+        if (this.turnBackTimeout) {
+            clearTimeout(this.turnBackTimeout);
+        }
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -80,9 +82,14 @@ class TradingPairRow extends Component {
                         delay: 0,
                     }).start();
             }
+            
             state.prevClosePrice = nextClosePrice;
-            clearTimeout(turnBackTimeout);
-            turnBackTimeout = setTimeout(() => {
+
+            if (this.turnBackTimeout) {
+                clearTimeout(this.turnBackTimeout);
+            }
+
+            this.turnBackTimeout = setTimeout(() => {
                 Animated.timing(
                     state.value, {
                         toValue: 0,
