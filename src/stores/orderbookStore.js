@@ -33,11 +33,11 @@ class OrderbookStore {
     loadOrderbook(selectedTradingPairName) {
         this.isLoading = true;
         const tradingPairName = selectedTradingPairName || tradingPairStore.selectedTradingPairName;
-        console.log(`[Orderbook Store] load orderbook ${tradingPairName}`)
+        // console.log(`[Orderbook Store] load orderbook ${tradingPairName}`)
 
         return agent.loadOrderbookByTradingPairName(tradingPairName)
         .then(action((response) => {
-            console.log(`[Orderbook Store] loaded orderbook ${tradingPairName}`)
+            // console.log(`[Orderbook Store] loaded orderbook ${tradingPairName}`)
             this.orderbooks.set(tradingPairName, new OrderbookModel(response.data));
 
             this.isLoading = false;

@@ -44,7 +44,7 @@ export default class AccountItem extends Component {
         let { total_evaluated_price_in_quote } = accountStore.totalAssetsEvaluation || {};
         let balanceWeight = '0';
         if (total_evaluated_price_in_quote && total_evaluated_price_in_quote !== '0') {
-            balanceWeight = Decimal(Decimal(evaluated_in_base_currency).div(total_evaluated_price_in_quote).mul(100).toFixed(2)).toFixed();
+            balanceWeight = Decimal(evaluated_in_base_currency).div(total_evaluated_price_in_quote).mul(100).toFixed(1);
         }
 
         return (

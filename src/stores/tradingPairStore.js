@@ -58,7 +58,7 @@ class TradingPairStore {
 
     @computed 
     get selectedTradingPair() {
-        return this.getTradingPairByTradingPairName(this.selectedTradingPairName);
+        return this.getTradingPairByName(this.selectedTradingPairName);
     }
 
     @computed 
@@ -73,15 +73,38 @@ class TradingPairStore {
         this.tradingPairsRegistry.clear();
     }
 
-    getTradingPairByTradingPairName(tradingPairName) {
+    getTradingPairByName(tradingPairName) {
         return this.tradingPairsRegistry.get(tradingPairName) || null;
     }
+
+
+    getTradingPairByName(name, unvisibleAlso = false) {
+        const tradingPair = this.tradingPairsRegistry.get(name);
+        if (tradingPair) {
+            if (unvisibleAlso) {
+                return tradingPair;
+            }
+            if (
+                tradingPair.is_visible === undefined
+                || tradingPair.is_visible
+            ) {
+                return tradingPair;
+            }
+        }
+        return {};
+    }
+
 
     @computed
     get tradingPairs() {
         let tradingPairArray = [];
         this.tradingPairsRegistry.forEach((tradingPair, key) => {
-            tradingPairArray.push(tradingPair);
+            if (
+                tradingPair.is_visible === undefined
+                || tradingPair.is_visible
+            ) {
+                tradingPairArray.push(tradingPair);
+            }
         });
 
         tradingPairArray = this._filterByQuoteType(tradingPairArray);
@@ -100,6 +123,19 @@ class TradingPairStore {
             tradingPairArray.push(tradingPair);
         });
         return tradingPairArray;
+    }
+
+    @computed
+    get quotes() {
+        const quotes = {};
+        try {
+            this.tradingPairsRegistry.forEach((tradingPair) => {
+                quotes[tradingPair.quote_symbol] = true;
+            });
+            return [...Object.keys(quotes)];
+        } catch (err) {
+            return Object.keys(quotes);
+        }
     }
 
     @computed

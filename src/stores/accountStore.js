@@ -5,6 +5,7 @@ import tradingPairStore from './tradingPairStore';
 import whitelistedWithdrawalWalletAddressStore from './whitelistedWithdrawalWalletAddressStore';
 import Decimal from '../utils/decimal';
 import number from '../utils/number';
+import AccountModel from './models/AccountModel';
 
 export const QUOTE_SYMBOL = 'KRW';
 
@@ -57,7 +58,7 @@ class AccountStore {
             }
         });
         accounts = this._sort(accounts);
-        accounts = this._putKRWInFront(accounts);
+        accounts = this._putKrwUsdtBtcInFront(accounts);
         return accounts;
     };
 
@@ -71,27 +72,43 @@ class AccountStore {
         return accounts;
     };
 
-    _sort(accounts) {
-        accounts = accounts.sort((prev, next) => {
-            try {
-                return Decimal(prev.evaluated_in_base_currency).lessThan(next.evaluated_in_base_currency);
-            } catch (err) {
-                return true;
-            }
-        });
-        return accounts;
-    }
-    _putKRWInFront(accounts) {
-        let indexOfKRW = accounts.findIndex(account => {
-            return account.asset_symbol === 'KRW';
-        });
-        if (indexOfKRW) {
-            let splicedAccounts = accounts.splice(indexOfKRW, 1);
-            if (splicedAccounts[0]){
-                accounts.unshift(splicedAccounts[0]);
-            }
+    _sort = (accounts) => {
+        let sortedAccounts = null;
+        try {
+            sortedAccounts = accounts.sort((prev, next) => {
+                if (!next.evaluated_in_base_currency) return -1;
+                if (!prev.evaluated_in_base_currency) return 1;
+                return Decimal(next.evaluated_in_base_currency).minus(prev.evaluated_in_base_currency).toFixed();
+            });
+        } catch (err) {
+            return accounts;
         }
-        return accounts;
+
+        return sortedAccounts;
+    }
+
+    _putKrwUsdtBtcInFront = (accounts) => {
+        const rearrangedAccounts = [];
+        let KRWAccount = null;
+        let USDTAccount = null;
+        let BTCAccount = null;
+
+        accounts.forEach((account) => {
+            KRWAccount = KRWAccount || (account.asset_symbol === 'KRW' ? account : null);
+            USDTAccount = USDTAccount || (account.asset_symbol === 'USDT' ? account : null);
+            BTCAccount = BTCAccount || (account.asset_symbol === 'BTC' ? account : null);
+
+            if (
+                !['KRW', 'USDT', 'BTC'].includes(account.asset_symbol)
+            ) {
+                rearrangedAccounts.push(account);
+            }
+        });
+        if (BTCAccount) rearrangedAccounts.unshift(BTCAccount);
+        if (USDTAccount) rearrangedAccounts.unshift(USDTAccount);
+        if (KRWAccount) rearrangedAccounts.unshift(KRWAccount);
+
+        return rearrangedAccounts;
     }
 
     @computed
@@ -103,7 +120,7 @@ class AccountStore {
         let totalChangeRate = Decimal(0);
         this.accountsRegistry.forEach((account) => {
             const trading_pair_name = account.asset_symbol + '-' + QUOTE_SYMBOL;
-            let trading_pair = tradingPairStore.getTradingPairByTradingPairName(trading_pair_name) || {};
+            let trading_pair = tradingPairStore.getTradingPairByName(trading_pair_name) || {};
             if (
                 account.asset_symbol !== QUOTE_SYMBOL //원화가 아니고
                 && account.balance 
@@ -198,33 +215,12 @@ class AccountStore {
     }
 
     getAccountByAssetSymbol(assetSymbol) {
-        let account = this.accountsRegistry.get(assetSymbol);
-        if (!account) return null;
-        let balance = (account && account.balance) || '0';
-
-        let close_price = '1'; // 원화일 경우 close_price는 1원
-        let evaluated_in_base_currency = '';
-        if ( assetSymbol !== QUOTE_SYMBOL ) {
-            let tradingPairName = assetSymbol + '-' + QUOTE_SYMBOL;
-            let tradingPair = tradingPairStore.getTradingPairByTradingPairName(tradingPairName);
-            close_price = tradingPair ? (tradingPair.close_price || '0') : '0';
-            evaluated_in_base_currency = Decimal(close_price).mul(balance).toFixed();    
-        } else {
-            evaluated_in_base_currency = balance;
-        }
-
-        account = {
-            ...account,
-            // 해당 asset(ex. 비트코인, 이오스 등)의 close_price를 저장하여 후에 evaluation 시 사용합니다.
-            close_price: close_price,
-            evaluated_in_base_currency: evaluated_in_base_currency, // 평가금액
-        };
-        return account;
+        return this.accountsRegistry.get(assetSymbol);;
     }
 
     @action
     setAccount(account) {
-        this.accountsRegistry.set(account.asset_symbol, {...this.accountsRegistry.get(account.asset_symbol), ...account});
+        this.accountsRegistry.get(account.asset_symbol).update(account);
     }
 
     _hasSearchKeywordInAccount(searcher, account) {
@@ -257,7 +253,7 @@ class AccountStore {
                 this.accountsRegistry.clear();
                 let accounts = response.data;
                 accounts.forEach((account) => {
-                    this.accountsRegistry.set(account.asset_symbol, account);
+                    this.accountsRegistry.set(account.asset_symbol, new AccountModel(account));
                     this.totalAccountsCount = accounts.length;
                 });
                 this.isLoading = false;

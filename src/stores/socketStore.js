@@ -85,11 +85,16 @@ class SocketStore {
         try {
             const targetChannel = CHANNEL_NAMES.ORDERBOOK;
             for (let tradingPair of tradingPairStore.allTradingPairs) {
-                let targetOrderbookChannel = targetChannel + '_' + tradingPair.name;
-                console.log(`%Load: ${targetOrderbookChannel}`, "color: blue; font-size:15px;");
-                await this._loadDataByChannel(targetOrderbookChannel);
-                this.delibird.subscribe(targetOrderbookChannel);
-                console.log(`%cSubscribe: ${targetOrderbookChannel}`, "color: blue; font-size:15px;");
+                if (
+                    tradingPair.is_visible !== undefined
+                    && tradingPair.is_visible
+                ) {
+                    let targetOrderbookChannel = targetChannel + '_' + tradingPair.name;
+                    console.log(`%Load: ${targetOrderbookChannel}`, "color: blue; font-size:15px;");
+                    await this._loadDataByChannel(targetOrderbookChannel);
+                    this.delibird.subscribe(targetOrderbookChannel);
+                    console.log(`%cSubscribe: ${targetOrderbookChannel}`, "color: blue; font-size:15px;");    
+                }
             }
         } catch (err) {
             console.log('fail to load and subscribe channel related to the trading pair.')
@@ -179,7 +184,9 @@ class SocketStore {
         const [ baseChannel, specific ] = channel.split('_');
         switch (baseChannel) {
             case CHANNEL_NAMES.ORDERBOOK:
-                orderbookStore.loadOrderbook(specific);
+                if (tradingPairStore.getTradingPairByName(specific)) {
+                    orderbookStore.loadOrderbook(specific);
+                }
                 break;
             case CHANNEL_NAMES.TICKER:
                 // await tradingPairStore.loadTradingPairs();

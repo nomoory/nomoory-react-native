@@ -4,7 +4,7 @@ import { Decimal } from '../../utils/number';
 import Model from './Model';
 import { QUOTE_SYMBOL } from '../accountStore';
 import tradingPairStore from '../tradingPairStore';
-import agent from '../../agent';
+import agent from '../../utils/agent';
 import modalStore from '../modalStore';
 
 class AccountModel extends Model {
@@ -15,27 +15,46 @@ class AccountModel extends Model {
         otpCode: '',
     }
 
+
     @computed
     get close_price() {
         try {
-            if (this.asset_symbol !== QUOTE_SYMBOL) {
-                const tradingPair = this.getTradingPairByQuoteSymbol(QUOTE_SYMBOL);
-                if (tradingPair) {
-                    return tradingPair.close_price;
+            if (this.asset_symbol !== 'KRW') {
+                let exchangeTradingPair = this.getTradingPairByQuoteSymbol('KRW')
+                if (exchangeTradingPair.close_price) {
+                    return exchangeTradingPair.close_price;
                 }
-                return null;
+
+                for (let i = 0; i < tradingPairStore.quotes.length; i++) {
+                    let quote = tradingPairStore.quotes[i];
+                    if (quote !== 'KRW') {
+                        exchangeTradingPair = this.getTradingPairByQuoteSymbol(quote);
+                        const tradingPair = tradingPairStore.getTradingPairByName(`${quote}-${'KRW'}`);
+                        if (exchangeTradingPair.close_price
+                            && tradingPair.close_price
+                        ) {    
+                            return Decimal(tradingPair.close_price).mul(exchangeTradingPair.close_price).toFixed();
+                            
+                        }
+                    }
+                }
             }
-            return null;
+            return null
         } catch (err) {
             return null;
         }
     }
 
+
     @computed
     get evaluated_in_base_currency() {
+        let testValue = 987;
         try {
             if (this.asset_symbol !== QUOTE_SYMBOL) {
-                return Decimal(this.close_price).mul(this.balance || '0').toFixed();
+                return Decimal(this.close_price)
+                    .mul(testValue)
+                        // this.balance || '0')
+                    .toFixed();
             }
             return null;
         } catch (err) {
@@ -47,7 +66,7 @@ class AccountModel extends Model {
     get value_bought() {
         try {
             if (this.asset_symbol !== QUOTE_SYMBOL) {
-                return Decimal(this.avg_fiat_buy_price || 1).times(this.balance).toFixed();
+                return Decimal(this.avg_fiat_buy_price || 1)    .times(this.balance).toFixed();
             }
             return null;
         } catch (err) {
@@ -59,7 +78,8 @@ class AccountModel extends Model {
     get value_present() {
         try {
             if (this.asset_symbol !== QUOTE_SYMBOL) {
-                return Decimal(this.close_price).times(this.balance).toFixed();
+                return Decimal(this.close_price)
+                    .times(this.balance).toFixed();
             }
             return null;
         } catch (err) {
@@ -71,7 +91,9 @@ class AccountModel extends Model {
     get value_change() {
         try {
             if (this.asset_symbol !== QUOTE_SYMBOL) {
-                return Decimal(this.value_present).minus(this.value_bought).toFixed();
+                return Decimal(this.value_present)
+                    .minus(this.value_bought)
+                    .toFixed();
             }
             return null;
         } catch (err) {
@@ -85,7 +107,9 @@ class AccountModel extends Model {
             if (Decimal(this.value_bought).equals(0)) {
                 return null;
             }
-            return Decimal(this.value_change).dividedBy(this.value_bought).toFixed();
+            return Decimal(this.value_change)
+                .dividedBy(this.value_bought)
+                .toFixed();
         } catch (err) {
             return null;
         }
@@ -93,7 +117,7 @@ class AccountModel extends Model {
 
     getTradingPairByQuoteSymbol(quoteSymbol = QUOTE_SYMBOL) {
         const tradingPairName = `${this.asset_symbol}-${quoteSymbol}`;
-        const tradingPair = tradingPairStore.getTradingPairByName(tradingPairName) || null;
+        const tradingPair = tradingPairStore.getTradingPairByName(tradingPairName, true) || null;
         return tradingPair;
     }
 
