@@ -56,12 +56,13 @@ export default class PlacedOrder extends Component {
                 // refreshing={this.state.refreshing}
                 // onRefresh={this.onRefresh}
                 enableEmptySections={true}
-                renderItem={(item, mode, index) => {
+                renderItem={({item, mode, index}) => {
                     let { 
                         uuid, created, side, 
                         price, volume, volume_filled, volume_remaining, 
                         trading_pair_name
                     } = item || {};
+
                     let [ base_symbol, quote_symbol ] = trading_pair_name ? trading_pair_name.split('-') : [];
                     let dateAndTime_string = momentHelper.getLocaleDatetime(created);
                     let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
