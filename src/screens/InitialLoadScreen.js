@@ -6,13 +6,15 @@ import * as SecureStore from 'expo-secure-store';
 import { withNavigation } from 'react-navigation';
 
 @withNavigation
-@inject('userStore', 'authStore', 'orderFeeStore', 'tradingPairStore')
+@inject(
+    'userStore',
+    'authStore',
+    'orderFeeStore',
+    'tradingPairStore',
+    'commonStore',
+)
 @observer
 export default class InitialLoadScreen extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     async componentDidMount() {
         this.props.orderFeeStore.loadOrderFee();
 
