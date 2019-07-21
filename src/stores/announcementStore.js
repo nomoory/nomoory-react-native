@@ -67,7 +67,6 @@ class AnnouncementStore {
     @action
     loadAnnouncementList() {
         this.loadValues.isLoading = true;
-        this.announcementRegistry.clear();
         return agent.loadAnnouncementList()
             .then(action((response) => {
                 let { results, next, previous } = response.data;

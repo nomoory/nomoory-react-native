@@ -12,14 +12,15 @@ import { withNavigation } from 'react-navigation';
     'orderFeeStore',
     'tradingPairStore',
     'commonStore',
+    'announcementStore',
 )
 @observer
 export default class InitialLoadScreen extends Component {
     async componentDidMount() {
         this.props.orderFeeStore.loadOrderFee();
-
-        let accessToken = await SecureStore.getItemAsync('access_token');
-        let userUuid = await SecureStore.getItemAsync('user_uuid');
+        this.props.announcementStore.loadAnnouncementList();
+        const accessToken = await SecureStore.getItemAsync('access_token');
+        const userUuid = await SecureStore.getItemAsync('user_uuid');
         if (accessToken) {
             try {
                 this.props.authStore.setAccessTokenOnStore(accessToken);
