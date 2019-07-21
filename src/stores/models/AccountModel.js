@@ -48,12 +48,10 @@ class AccountModel extends Model {
 
     @computed
     get evaluated_in_base_currency() {
-        let testValue = 987;
         try {
             if (this.asset_symbol !== QUOTE_SYMBOL) {
                 return Decimal(this.close_price)
-                    .mul(testValue)
-                        // this.balance || '0')
+                    .mul(this.balance || '0')
                     .toFixed();
             }
             return null;
