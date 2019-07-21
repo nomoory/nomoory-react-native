@@ -44,32 +44,34 @@ export default class InvestmentScreen extends Component {
     }
 
     _renderTabBar = props => {
-        const inputRange = props.navigationState.routes.map((x, i) => i);
+        // const inputRange = props.navigationState.routes.map((x, i) => i);
 
         return (
             <View style={customTabStyles.tabBar}>
-                {props.navigationState.routes.map((route, i) => {
-                    const color = props.position.interpolate({
-                        inputRange,
-                        outputRange: inputRange.map(
-                            inputIndex => (inputIndex === i ? commonStyle.color.brandBlue : '#222')
-                        ),
-                    });
-                    return (
-                        <TouchableOpacity
-                            key={route.key}
-                            style={[
-                                customTabStyles.tabItem,
-                                this.state.index === i ? customTabStyles.selectedTabItem : null
-                            ]}
-                            onPress={(e) => { this._onIndexChange(i) }}>
-                            <Animated.Text style={[
-                                customTabStyles.tabText,
-                                this.state.index === i ? customTabStyles.selectedTabText : null
-                            ]}>{route.title}</Animated.Text>
-                        </TouchableOpacity>
-                    );
-                })}
+                {
+                    props.navigationState.routes.map((route, i) => {
+                        // const color = props.position.interpolate({
+                        //     inputRange,
+                        //     outputRange: inputRange.map(
+                        //         inputIndex => (inputIndex === i ? commonStyle.color.brandBlue : '#222')
+                        //     ),
+                        // });
+                        return (
+                            <TouchableOpacity
+                                key={route.key}
+                                style={[
+                                    customTabStyles.tabItem,
+                                    this.state.index === i ? customTabStyles.selectedTabItem : null
+                                ]}
+                                onPress={(e) => { this._onIndexChange(i) }}>
+                                <Animated.Text style={[
+                                    customTabStyles.tabText,
+                                    this.state.index === i ? customTabStyles.selectedTabText : null
+                                ]}>{route.title}</Animated.Text>
+                            </TouchableOpacity>
+                        );
+                    })
+                }
             </View>
         );
     };
@@ -100,11 +102,11 @@ export default class InvestmentScreen extends Component {
                     }}
 
                     onIndexChange={this._onIndexChange}
-                renderTabBar={this._renderTabBar}
-                initialLayout={{
-                    width: Dimensions.get('window').width,
-                    height: Dimensions.get('window').height,
-                }}
+                    renderTabBar={this._renderTabBar}
+                    initialLayout={{
+                        width: Dimensions.get('window').width,
+                        height: Dimensions.get('window').height,
+                    }}
                 />
             </View>
         );
