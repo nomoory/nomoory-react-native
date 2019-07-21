@@ -19,6 +19,7 @@ import CommonModal from './src/components/CommonModal';
 import CustomModal from './src/components/CustomModal';
 // import NetInfo from "@react-native-community/netinfo";
 import { reaction } from 'mobx';
+import Sentry from './src/utils/Sentry';
 
 // SEE event source for chat
 // https://www.npmjs.com/package/react-native-event-source
@@ -53,6 +54,7 @@ export default class App extends React.Component {
                 if (isLoggedIn) {
                     stores.socketStore.authenticateOnUserChange();
                     stores.socketStore.loadAndSubscribeOnLogin();
+                    Sentry.setUser(stores.userStore.currentUser);
                     await this._enrollPushNitification();
                 } else {
                     stores.socketStore.unsubscribeOnLogout();

@@ -1,5 +1,4 @@
 import { Text, TextInput, WebView } from 'react-native';
-import Sentry from './src/utils/Sentry';
 
 Text.defaultProps = { ...(Text.defaultProps || {}), allowFontScaling: false };
 TextInput.defaultProps = { ...(TextInput.defaultProps || {}), allowFontScaling: false };

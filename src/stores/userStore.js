@@ -1,7 +1,5 @@
 import { observable, action, computed } from 'mobx';
 import agent from '../utils/agent';
-import accountStore from './accountStore';
-import Sentry from '../utils/Sentry';
 
 class UserStore {
     @observable
@@ -110,13 +108,10 @@ class UserStore {
     @action
     saveUser(newUser) {
         this.currentUser = newUser;
-        // TODO react native 용으로 Sentry 적용 후 재 적용합니다.
-        Sentry.setUser(newUser);
     }
     @action
     clear() {
         this.currentUser = null;
-        // TODO react native 용으로 Sentry 적용 후 재 적용합니다.
     }
 
     @action

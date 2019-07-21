@@ -292,7 +292,9 @@ export default class BuyOrderForm extends Component {
                             <TouchableOpacity
                                 style={orderFormStyle.volumeButton}
                                 // style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} 
-                                onPress={() => { this.dropdown.show() }}>
+                                onPress={() => { 
+                                    this.dropdown.show();
+                                }}>
                                 <Text>{selectedText}</Text>
                             </TouchableOpacity>
                         </ModalDropdown>
@@ -315,10 +317,20 @@ export default class BuyOrderForm extends Component {
                         </View>
                     </View>
                     <View style={[orderFormStyle.setPriceButtons]}>
-                        <TouchableOpacity style={[orderFormStyle.minusButton, orderFormStyle.priceButton]} onPress={this._onPressDecreasePrice}>
+                        <TouchableOpacity 
+                            style={[
+                                orderFormStyle.minusButton,
+                                orderFormStyle.priceButton
+                            ]} 
+                            onPress={this._onPressDecreasePrice}>
                             <Text>-</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[orderFormStyle.plusButton, orderFormStyle.priceButton]} onPress={this._onPressIncreasePrice}>
+                        <TouchableOpacity
+                            style={[
+                                orderFormStyle.plusButton,
+                                orderFormStyle.priceButton
+                            ]}
+                            onPress={this._onPressIncreasePrice}>
                             <Text>+</Text>
                         </TouchableOpacity>
                     </View>

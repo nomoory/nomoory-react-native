@@ -12,13 +12,21 @@ class ExtendedSentry {
 
     setUser(user) {
         if (!user) return;
-        this.configureScope(scope => {
-            scope.setUser({
-                email: user.email,
-                id: user.uuid,
-                userInfo: user,
-            });
-        });
+        this.setUserContext({
+            id: user.uuid,
+            username: user && user.profile && user.profile.real_name,
+            email: user.email,
+            extra: user,
+        })
+
+        // this.configureScope(scope => {
+        //     console.log({scope, user});
+        //     scope.setUser({
+        //         email: user.email,
+        //         id: user.uuid,
+        //         userInfo: user,
+        //     });
+        // });
     }
 }
 
