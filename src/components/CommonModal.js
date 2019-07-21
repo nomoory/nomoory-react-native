@@ -9,11 +9,11 @@ import { inject, observer } from 'mobx-react';
 class CommonModal extends Component {
     constructor(props) {
         super(props);
-        BackHandler.addEventListener('hardwareBackPress', this._handleBackPress)
+        // BackHandler.addEventListener('hardwareBackPress', this._handleBackPress)
     }
 
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this._handleBackPress)
+        // BackHandler.removeEventListener('hardwareBackPress', this._handleBackPress)
     }
 
     _handleBackPress = () => {

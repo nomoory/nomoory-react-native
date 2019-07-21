@@ -9,20 +9,20 @@ import { inject, observer } from 'mobx-react';
 export default class CustomModal extends Component {
     constructor(props) {
         super(props);
-        BackHandler.addEventListener('hardwareBackPress', this._handleBackPress)
+        // BackHandler.addEventListener('hardwareBackPress', this._handleBackPress)
         console.log('custom construct')
     }
 
     componentWillUnmount() {
         console.log('custom unmount')
-        BackHandler.removeEventListener('hardwareBackPress', this._handleBackPress)
+        // BackHandler.removeEventListener('hardwareBackPress', this._handleBackPress)
     }
 
     _handleBackPress = () => {
         console.log('custom closeModal')
-        if (this.props.modalStore.customModal.isVisible) {
-            this._closeModal();
-        }
+        // if (this.props.modalStore.customModal.isVisible) {
+        //     this._closeModal();
+        // }
     }
 
     _closeModal = () => {
