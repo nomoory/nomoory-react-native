@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
 import commonStyle from '../../styles/commonStyle';
-import { StyleSheet, View, Text, TouchableOpacity, ListView } from 'react-native';
-import { inject, observer } from 'mobx-react';
+import {
+    StyleSheet,
+    View,
+    Text,
+    TouchableOpacity,
+    FlatList,
+} from 'react-native';
+import {
+    inject,
+    observer
+} from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
 import Decimal from '../../utils/decimal';
-import { reaction, computed } from 'mobx';
+import {
+    computed
+} from 'mobx';
 import ScrollLoading from '../ScrollLoading';
 
 @inject('placedOrderHistoryStore', 'tradingPairStore')
@@ -54,26 +65,28 @@ export default class PlacedOrderHistory extends Component {
     };
 
     _renderPlacedOrderHistoryBody() {
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const dataSource = ds.cloneWithRows(this.props.placedOrderHistoryStore.placedOrders);
         const isLoading = this.props.placedOrderHistoryStore.loadValues.isLoading;
         const isLoadable = this.props.placedOrderHistoryStore.isLoadable;
         const message_code = isLoadable.message_code;
         return (
-            <ListView style={[styles.container, styles.tuples]}
+            <FlatList 
+                style={[styles.container, styles.tuples]}
                 onEndReachedThreshold={30}
                 onEndReached={(e) => {
                     if (message_code === 'has_next_load') {
                         this.props.placedOrderHistoryStore.loadNextPersonalPlacedOrders();
                     }
                 }}
-                dataSource={dataSource}
-                renderRow={(placedOrder, mode, index) => {
+                            data={this.props.placedOrderHistoryStore.placedOrders || []}
+                // refreshing={this.state.refreshing}
+                // onRefresh={this.onRefresh}
+                enableEmptySections={true}
+                renderItem={({ item, index }) => {
                     let { 
                         uuid, created, side, 
                         price, volume, volume_filled, volume_remaining, 
                         trading_pair_name
-                    } = placedOrder || {};
+                    } = item || {};
                     let [ base_symbol, quote_symbol ] = trading_pair_name ? trading_pair_name.split('-') : [];
                     let dateAndTime_string = momentHelper.getLocaleDatetime(created);
                     let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
@@ -126,7 +139,7 @@ export default class PlacedOrderHistory extends Component {
                         </View>
                     );
                 }}
-                renderFooter={() => {
+                ListFooterComponent={() => {
                     return (
                         <ScrollLoading
                             isLoading={isLoading} 

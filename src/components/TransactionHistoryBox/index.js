@@ -1,33 +1,29 @@
 import React, { Component } from 'react';
 import commonStyle from '../../styles/commonStyle';
-import { StyleSheet, View, ListView, Text } from 'react-native';
-import { inject, observer } from 'mobx-react';
+import {
+    StyleSheet,
+    View,
+    Text,
+    FlatList,
+} from 'react-native';
+import {
+    inject,
+    observer,
+} from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
 import { computed } from 'mobx';
 import TRANSLATIONS from '../../TRANSLATIONS';
 import ScrollLoading from '../ScrollLoading';
 
-@inject('transactionHistoryStore', 'tradingPairStore')
+@inject(
+    'transactionHistoryStore',
+    'tradingPairStore',
+)
 @observer
 export default class TransactionHistoryBox extends Component {
-    componentDidMount() {
-        // this.reaciton = reaction(
-        //     () => this.props.tradingPairStore.selectedTradingPairName,
-        //     (selectedTradingPairName) => {
-        //         this.props.transactionHistoryStore.load(this.props.type);
-        //     }
-        // );
-        
-        /* 
-         *  mount시 내부에 필요한 데이터를 호출하는게 아닌, 외부 tab에 의해 호출합니다. 
-         *  TODO tab 형태가 변경되면 로드해오는 방식도 변경할 여지가 있습니다.
-         */
-        // this.props.transactionHistoryStore.clear();
-        // this.props.transactionHistoryStore.load(this.props.type || 'ALL_TRANSACTIONS');
-    }
-    
-    @computed get completedOrderHistoryHead() {
+    @computed
+    get completedOrderHistoryHead() {
         return (
             <View style={[styles.head]}>
                 <View style={[styles.column, styles.firstColumn]}>
@@ -45,49 +41,52 @@ export default class TransactionHistoryBox extends Component {
                     <View style={[styles.columnItem]}>
                         <Text style={[styles.headColumnText]}>수량</Text>
                     </View>
-                </View>          
-                <View style={[styles.column]}>    
+                </View>
+                <View style={[styles.column]}>
                     <View style={[styles.columnItem]}>
                         <Text style={[styles.headColumnText]}>수수료</Text>
                     </View>
                     <View style={[styles.columnItem]}>
                         <Text style={[styles.headColumnText]}>총금액</Text>
                     </View>
-                </View>                
+                </View>
             </View>
         );
     };
 
     _renderCompletedOrderHistoryBody() {
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.transactionHistory);
         const isLoading = this.props.transactionHistoryStore.loadMoreValues.isLoading;
         const isLoadable = this.props.transactionHistoryStore.isLoadable;
-        
+
         return (
-            <ListView style={[styles.container]}
+            <FlatList
+                style={[styles.container]}
                 onEndReachedThreshold={30}
                 onEndReached={(e) => {
                     if (this.props.transactionHistoryStore.isLoadable.message_code === 'has_next_load') {
                         this.props.transactionHistoryStore.loadNext();
                     }
                 }}
-                dataSource={dataSource}
-                renderRow={(transaction, mode, index) => {
-                    let { 
-                        uuid, 
+                data={this.props.transactionHistoryStore.transactionHistory || []}
+
+                // refreshing={this.state.refreshing}
+                // onRefresh={this.onRefresh}
+                enableEmptySections={true}
+                renderItem={({ item, index }) => {
+                    let {
+                        uuid,
                         amount, price, volume, fee,
-                        base_symbol, quote_symbol, 
-                        transaction_created, transaction_type 
-                    } = transaction;
+                        base_symbol, quote_symbol,
+                        transaction_created, transaction_type
+                    } = item;
                     let dateAndTime_string = momentHelper.getLocaleDatetime(transaction_created);
-                    let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
+                    let [date, time] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
                     return (
-                        <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd'] ]} key={uuid}>
+                        <View style={[styles.tuple, index % 2 === 0 ? styles['even'] : styles['odd']]} key={uuid}>
                             <View style={[styles.column, styles.firstColumn]}>
                                 <View style={[
                                     styles.columnItem,
-                                    commonStyle[transaction_type], 
+                                    commonStyle[transaction_type],
                                 ]}>
                                     <Text style={[
                                         styles.tupleColumnText,
@@ -98,16 +97,16 @@ export default class TransactionHistoryBox extends Component {
                                     <Text style={[
                                         styles.tupleColumnText,
                                         commonStyle[transaction_type]
-                                    ]}>{ TRANSLATIONS[transaction_type] }
+                                    ]}>{TRANSLATIONS[transaction_type]}
                                     </Text>
                                 </View>
-                                <View style={[styles.columnItem, styles.created]}> 
+                                <View style={[styles.columnItem, styles.created]}>
                                     <Text style={[styles.tupleColumnText, styles.dateText]}>
                                         {date ? date + ' ' : ''}
                                     </Text>
                                     <Text style={[styles.tupleColumnText, styles.timeText]}>
                                         {time ? time : ''}
-                                    </Text> 
+                                    </Text>
                                 </View>
                             </View>
                             <View style={[styles.column]}>
@@ -120,8 +119,8 @@ export default class TransactionHistoryBox extends Component {
                                         styles.tupleColumnText,
                                         styles.priceText
                                     ]}>
-                                        {price ? number.putComma(number.getFixedPrice(price, quote_symbol)) : '-' } {quote_symbol}
-                                    </Text>     
+                                        {price ? number.putComma(number.getFixedPrice(price, quote_symbol)) : '-'} {quote_symbol}
+                                    </Text>
                                 </View>
                                 <View style={[
                                     styles.columnItem,
@@ -132,7 +131,7 @@ export default class TransactionHistoryBox extends Component {
                                         styles.tupleColumnText,
                                         styles.volumeText
                                     ]}>
-                                        {volume ? number.putComma(number.getFixedPrice(volume, base_symbol)) : '-' } {base_symbol}
+                                        {volume ? number.putComma(number.getFixedPrice(volume, base_symbol)) : '-'} {base_symbol}
                                     </Text>
                                 </View>
                             </View>
@@ -143,7 +142,7 @@ export default class TransactionHistoryBox extends Component {
                                     styles.textRight
                                 ]}>
                                     <Text style={[styles.tupleColumnText, styles.feeText]}>
-                                        { fee ? number.putComma(number.getFixedPrice(fee, transaction_type === 'SELL' ? quote_symbol : base_symbol)) : '-' } { transaction_type === 'SELL' ? quote_symbol : base_symbol }
+                                        {fee ? number.putComma(number.getFixedPrice(fee, transaction_type === 'SELL' ? quote_symbol : base_symbol)) : '-'} {transaction_type === 'SELL' ? quote_symbol : base_symbol}
                                     </Text>
                                 </View>
                                 <View style={[
@@ -152,17 +151,17 @@ export default class TransactionHistoryBox extends Component {
                                     styles.textRight
                                 ]}>
                                     <Text style={[styles.tupleColumnText, styles.amountText]}>
-                                        { amount ? number.putComma(number.getFixedPrice(amount, quote_symbol)) : '-' } {quote_symbol}
+                                        {amount ? number.putComma(number.getFixedPrice(amount, quote_symbol)) : '-'} {quote_symbol}
                                     </Text>
                                 </View>
                             </View>
                         </View>
                     );
                 }}
-                renderFooter={() => {
+                ListFooterComponent={() => {
                     return (
                         <ScrollLoading
-                            isLoading={isLoading} 
+                            isLoading={isLoading}
                             isLoadable={isLoadable}
                         />
                     );
@@ -195,8 +194,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#f7f8fa",
 
         borderStyle: 'solid',
-        borderBottomWidth:0.5,
-        borderBottomColor: commonStyle.color.borderColor,     
+        borderBottomWidth: 0.5,
+        borderBottomColor: commonStyle.color.borderColor,
     },
     headColumnText: {
         color: '#333333',
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         width: '100%'
-    }, 
+    },
     columnItem: {
         borderStyle: 'solid',
         borderWidth: 0.5,
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row'
     },
-    tuple: {        
+    tuple: {
         width: '100%',
         height: 70,
         flexDirection: 'row',

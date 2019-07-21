@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ListView, FlatList } from 'react-native';
-import { inject, observer } from 'mobx-react';
+import {
+    StyleSheet,
+    View,
+    Text,
+    FlatList
+} from 'react-native';
+import {
+    inject,
+    observer
+} from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
 import Decimal from '../../utils/decimal';

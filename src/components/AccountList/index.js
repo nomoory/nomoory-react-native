@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, FlatList, View } from 'react-native';
-import { inject, observer } from 'mobx-react';
+import {
+    StyleSheet,
+    FlatList,
+    View 
+} from 'react-native';
+import {
+    inject,
+    observer 
+} from 'mobx-react';
 import AccountItem from './AccountItem';
 import Decimal from '../../utils/decimal';
 import { withNavigation } from 'react-navigation';
@@ -9,10 +16,6 @@ import { withNavigation } from 'react-navigation';
 @inject('accountStore')
 @observer
 export default class AccountList extends Component {
-    _onEndReached = () => {
-
-    }
-
     _filterAccounts = (accounts) => {
         if (!accounts) return [];
         if (accounts.length ===  0) return [];

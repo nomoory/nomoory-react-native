@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View, Text, TouchableOpacity, FlatList, BackHandler } from 'react-native';
-import { inject, observer } from 'mobx-react';
+import {
+    StyleSheet,
+    Image,
+    View,
+    Text,
+    TouchableOpacity,
+    FlatList,
+} from 'react-native';
+import {
+    inject,
+    observer,
+} from 'mobx-react';
 import NavigationService from '../../utils/NavigationService';
 import commonStyle from '../../styles/commonStyle';
 
-@inject('tradingPairStore', 'modalStore')
+@inject(
+    'tradingPairStore',
+    'modalStore',
+)
 @observer
 export default class TradingPairSelectionModal extends Component {
 

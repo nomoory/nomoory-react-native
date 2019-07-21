@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import commonStyle from '../../../styles/commonStyle';
-import { StyleSheet, View, Text, ListView } from 'react-native';
+import { 
+    StyleSheet,
+    View,
+    Text,
+    FlatList,
+} from 'react-native';
 import { inject, observer } from 'mobx-react';
 import number, { Decimal } from '../../../utils/number';
 import momentHelper from '../../../utils/momentHelper';
@@ -18,31 +23,34 @@ export default class CompletedOrder extends Component {
             }
         );
         this.props.transactionHistoryStore.loadSelectedTradeHistory(this.props.targetTradingPairName);
-
     }
 
     _renderCompoletedOrderHistoryBody() {
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const dataSource = ds.cloneWithRows(this.props.transactionHistoryStore.selectedTradeHistory);
         const isLoading = this.props.transactionHistoryStore.loadMoreValuesTradeHistory.isLoading;
         const message_code = this.props.transactionHistoryStore.isTradeHistoryLoadable.message_code;
         const isLoadable = this.props.transactionHistoryStore.isTradeHistoryLoadable;
         
         return (
-            <ListView style={[styles.container]}
+            <FlatList 
+                style={[styles.container]}
+                data={this.props.transactionHistoryStore.selectedTradeHistory || []}
+                // initialScrollIndex={8}
                 onEndReachedThreshold={30}
                 onEndReached={(e) => {
                     if (message_code === 'has_next_load') {
                         this.props.transactionHistoryStore.loadNextSelectedTradeHistory();
                     }
                 }}
-                dataSource={dataSource}
-                renderRow={(completedOrder, mode, index) => {
+
+                // refreshing={this.state.refreshing}
+                // onRefresh={this.onRefresh}
+                enableEmptySections={true}
+                renderItem={({ item, index }) => {
                     let { 
                         amount, price, volume, 
                         base_symbol, quote_symbol, 
                         transaction_created, transaction_type 
-                    } = completedOrder;
+                    } = item;
                     let dateAndTime_string = momentHelper.getLocaleDatetime(transaction_created);
                     let [ date, time ] = dateAndTime_string ? dateAndTime_string.split(' ') : [];
                     return (
@@ -78,7 +86,9 @@ export default class CompletedOrder extends Component {
                         </View>
                     );
                 }}
-                renderFooter={() => {
+                // emptyView={this._renderEmptyView}
+
+                ListFooterComponent={() => {
                     return (
                         <ScrollLoading
                             isLoading={isLoading} 

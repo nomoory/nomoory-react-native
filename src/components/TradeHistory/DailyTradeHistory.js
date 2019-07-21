@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
 import commonStyle from '../../styles/commonStyle';
-import { StyleSheet, View, Text, ListView } from 'react-native';
-import { inject, observer } from 'mobx-react';
+import {
+    StyleSheet,
+    View,
+    Text,
+    FlatList,
+} from 'react-native';
+import {
+    inject,
+    observer
+} from 'mobx-react';
 import number from '../../utils/number';
 import momentHelper from '../../utils/momentHelper';
-import { reaction, computed } from 'mobx';
+import {
+    reaction,
+    computed
+} from 'mobx';
 import ScrollLoading from '../ScrollLoading';
 
 @inject('dailyTradeHistoryStore', 'tradingPairStore')
@@ -56,28 +67,30 @@ export default class DailyTradeHistory extends Component {
     };
 
     _renderDailyTradeHistoryBody() {
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const dataSource = ds.cloneWithRows(this.props.dailyTradeHistoryStore.dailyTrades);
         const isLoading = this.props.dailyTradeHistoryStore.loadValues.isLoading;
         const isLoadable = this.props.dailyTradeHistoryStore.isLoadable;
         
         return (
-            <ListView style={[styles.container]}
+            <FlatList 
+                style={[styles.container]}
                 onEndReachedThreshold={30}
                 onEndReached={(e) => {
                     if (this.props.dailyTradeHistoryStore.loadValues.nextUrl) {
                         this.props.dailyTradeHistoryStore.loadNextDailyTrades();
                     }
                 }}
-                dataSource={dataSource}
-                renderRow={(dailyTrade, mode, index) => {
+                data={this.props.dailyTradeHistoryStore.dailyTrades || []}
+                // refreshing={this.state.refreshing}
+                // onRefresh={this.onRefresh}
+                enableEmptySections={true}
+                renderItem={({ item, index }) => {
                     let {
                         candle_start_date_time,
                         prev_close_price,
                         candle_acc_trade_volume,
                         signed_change_rate,
                         close_price
-                    } = dailyTrade;
+                    } = item;
                     let [date, time] = momentHelper.getLocaleDatetime(candle_start_date_time).split(' ');
                     console.log({dailyTrade})
                     signed_change_rate = parseFloat(number.getFixed(signed_change_rate, 2));
@@ -145,7 +158,7 @@ export default class DailyTradeHistory extends Component {
                         </View>
                     );
                 }}
-                renderFooter={() => {
+                ListFooterComponent={() => {
                     return (
                         <ScrollLoading
                             isLoading={isLoading} 
