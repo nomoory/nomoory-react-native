@@ -243,7 +243,6 @@ class AccountStore {
     loadAccounts() {
         this.isLoading = true;
 
-        this.accountsRegistry.clear();
         return agent.loadAccounts()
             .then(action((response) => {
                 this.accountsRegistry.clear();
