@@ -77,7 +77,7 @@ export default class PlacedOrderHistory extends Component {
                         this.props.placedOrderHistoryStore.loadNextPersonalPlacedOrders();
                     }
                 }}
-                            data={this.props.placedOrderHistoryStore.placedOrders || []}
+                data={this.props.placedOrderHistoryStore.placedOrders || []}
                 // refreshing={this.state.refreshing}
                 // onRefresh={this.onRefresh}
                 enableEmptySections={true}
@@ -109,24 +109,24 @@ export default class PlacedOrderHistory extends Component {
                             <View style={[styles.column]}>
                                 <View style={[styles.columnItem, styles.price]}>
                                     <Text style={[styles.tupleColumnText, styles.priceText]}>
-                                        {number.putComma(Decimal(Decimal(price).toFixed()).toFixed())} {quote_symbol}
+                                        {number.putComma(Decimal(Decimal(price || 0).toFixed()).toFixed())} {quote_symbol}
                                     </Text>
                                 </View>
                                 <View style={[styles.columnItem, styles.volume]}>
                                     <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                        {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+                                        {number.putComma(Decimal(volume || 0).toFixed())} {base_symbol}
                                     </Text>
                                 </View>               
                             </View>
                             <View style={[styles.column]}>
                                 <View style={[styles.columnItem, styles.filled ]}>
                                     <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                        {number.putComma(Decimal(volume_filled).toFixed())} {base_symbol}
+                                        {number.putComma(Decimal(volume_filled || 0).toFixed())} {base_symbol}
                                     </Text>
                                 </View>
                                 <View style={[styles.columnItem, styles.remaining]}>
                                     <Text style={[styles.tupleColumnText, styles.volumeText]}>
-                                        {number.putComma(Decimal(volume_remaining).toFixed())} {base_symbol}
+                                        {number.putComma(Decimal(volume_remaining || 0).toFixed())} {base_symbol}
                                     </Text>
                                 </View>        
                             </View>

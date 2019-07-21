@@ -80,20 +80,20 @@ export default class PlacedOrder extends Component {
                                 <View style={[styles.row]}>
                                     <Text style={[styles.title]}>주문가격</Text>
                                     <Text style={[styles.content]}>
-                                        {number.putComma(Decimal(Decimal(price).toFixed()).toFixed())} {quote_symbol}
+                                        {number.putComma(Decimal(Decimal(price || 0).toFixed()).toFixed())} {quote_symbol}
                                     </Text>
                                 </View>
                                 <View style={[styles.row]}>
                                     <Text style={[styles.title]}>총주문량</Text>
                                     <Text style={[styles.content]}>
-                                        {number.putComma(Decimal(volume).toFixed())} {base_symbol}
+                                        {number.putComma(Decimal(volume || 0).toFixed())} {base_symbol}
                                     </Text>
                                 </View>
 
                                 <View style={[styles.row]}>
                                     <Text style={[styles.title]}>미체결량</Text>
                                     <Text style={[styles.content]}>
-                                        {number.putComma(Decimal(volume_remaining).toFixed())} {base_symbol}
+                                        {number.putComma(Decimal(volume_remaining || 0).toFixed())} {base_symbol}
                                     </Text>
                                 </View>
                             </View>
