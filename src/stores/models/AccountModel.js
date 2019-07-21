@@ -45,26 +45,12 @@ class AccountModel extends Model {
         }
     }
 
-
-    @computed
-    get evaluated_in_base_currency() {
-        try {
-            if (this.asset_symbol !== QUOTE_SYMBOL) {
-                return Decimal(this.close_price)
-                    .mul(this.balance || '0')
-                    .toFixed();
-            }
-            return null;
-        } catch (err) {
-            return null;
-        }
-    }
-
     @computed
     get value_bought() {
         try {
             if (this.asset_symbol !== QUOTE_SYMBOL) {
-                return Decimal(this.avg_fiat_buy_price || 1)    .times(this.balance).toFixed();
+                return Decimal(this.avg_fiat_buy_price || 1)
+                    .times(this.balance).toFixed();
             }
             return null;
         } catch (err) {

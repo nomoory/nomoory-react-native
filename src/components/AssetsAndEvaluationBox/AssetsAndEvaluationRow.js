@@ -19,12 +19,10 @@ export default class AssetsAndEvaluationRow extends Component {
             value_present, // 현재 가치
             value_change, // 평가 손익
             value_change_rate, // 수익률
-            asset_close_price // asset의 현재가
         } = this.props.portfolio;
         const valueChange_decimal = Decimal(value_change || '0');
         const isRise = valueChange_decimal.greaterThan(0);
         const isFall = valueChange_decimal.lessThan(0);
-
         return (
             <View style={ styles.container }>
                 <View style={[styles.upperContainer]}>
@@ -107,8 +105,10 @@ export default class AssetsAndEvaluationRow extends Component {
                                         value_bought
                                         ? number.putComma(Decimal(value_bought).toFixed(0))
                                         : '- '
-                                    } </Text>
-                                <Text style={styles.unitText}>
+                                    }
+                                </Text>
+                                <Text
+                                    style={styles.unitText}>
                                     KRW
                                 </Text>
                             </View>

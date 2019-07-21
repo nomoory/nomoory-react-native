@@ -39,13 +39,13 @@ export default class AccountItem extends Component {
             asset_symbol,
             asset_korean_name,
             balance,
-            evaluated_in_base_currency,
+            value_present,
             is_depositable,
         } = account || {}
         let { total_evaluated_price_in_quote } = accountStore.totalAssetsEvaluation || {};
         let balanceWeight = '0';
         if (total_evaluated_price_in_quote && total_evaluated_price_in_quote !== '0') {
-            balanceWeight = Decimal(evaluated_in_base_currency || 0).div(total_evaluated_price_in_quote || 1).mul(100).toFixed(1);
+            balanceWeight = Decimal(value_present || 0).div(total_evaluated_price_in_quote || 1).mul(100).toFixed(1);
         }
 
         return (
@@ -74,7 +74,7 @@ export default class AccountItem extends Component {
                             asset_symbol !== 'KRW' ?
                             <View style={[styles.evaluatedBalanceAmount]}>
                                 <Text style={[styles.evaluatedAmount]}>
-                                    {evaluated_in_base_currency ? `≈ ${number.putComma(number.getFixedPrice(evaluated_in_base_currency, 'KRW'))}` : '-'}
+                                    {value_present ? `≈ ${number.putComma(number.getFixedPrice(value_present, 'KRW'))}` : '-'}
                                 </Text>
                                 <Text style={[styles.evaluatedUnit]}> {'KRW'}</Text>
                             </View> :

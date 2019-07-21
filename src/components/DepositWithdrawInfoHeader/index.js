@@ -11,13 +11,14 @@ import Decimal from '../../utils/decimal';
 export default class DepositWithdrawInfoHeader extends Component {
     render() {
         let { selectedAccount, selectedAccountSymbol } = this.props.accountStore || {};
-        let { 
-            balance, 
-            evaluated_in_base_currency, 
-            pending_withdrawal, 
-            liquid, 
+
+        let {
+            balance,
+            value_present,
+            pending_withdrawal,
+            liquid,
             pending_order_amount,
-            pending_order
+            pending_order,
         } = selectedAccount || {};
         let withdrawable_decimal = Decimal(liquid || 0);
         let withdrawable = '0';
@@ -34,7 +35,7 @@ export default class DepositWithdrawInfoHeader extends Component {
                         <Text style={[styles.balanceText]}>{`${number.putComma(number.getFixedVolume(balance || '0', selectedAccountSymbol))}`} {selectedAccountSymbol}</Text>
                         { 
                             selectedAccountSymbol !== 'KRW' &&
-                            <Text style={[styles.evaluatedBalanceText]}>{`${evaluated_in_base_currency ? '≈' + number.putComma(Decimal(evaluated_in_base_currency).toFixed(0)) : '-'}`} {QUOTE_SYMBOL}</Text>
+                            <Text style={[styles.evaluatedBalanceText]}>{`${value_present ? '≈' + number.putComma(Decimal(value_present).toFixed(0)) : '-'}`} {QUOTE_SYMBOL}</Text>
                         }
                     </View>
                 </View>

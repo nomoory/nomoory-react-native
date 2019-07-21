@@ -76,9 +76,9 @@ class AccountStore {
         let sortedAccounts = null;
         try {
             sortedAccounts = accounts.sort((prev, next) => {
-                if (!next.evaluated_in_base_currency) return -1;
-                if (!prev.evaluated_in_base_currency) return 1;
-                return Decimal(next.evaluated_in_base_currency).minus(prev.evaluated_in_base_currency).toFixed();
+                if (!next.value_present) return -1;
+                if (!prev.value_present) return 1;
+                return Decimal(next.value_present).minus(prev.value_present).toFixed();
             });
         } catch (err) {
             return accounts;
@@ -123,29 +123,14 @@ class AccountStore {
             let trading_pair = tradingPairStore.getTradingPairByName(trading_pair_name) || {};
             if (
                 account.asset_symbol !== QUOTE_SYMBOL //원화가 아니고
-                && account.balance 
+                && account.balance
                 && Decimal(account.balance).greaterThan(0) // balance가 존재할 때
-                && trading_pair.close_price 
-                && Decimal.mul(account.balance, trading_pair.close_price).greaterThan(10)
+                && Decimal(account.value_present).greaterThan(10)
             ) {
-                let value_bought = Decimal(account.avg_fiat_buy_price || 0).times(account.balance);
-                let value_present = trading_pair.close_price ?  Decimal(trading_pair.close_price).times(account.balance) : '';
-                let value_change = value_present ? value_present.minus(value_bought) : '';
-                let value_change_rate = value_change ? (value_bought.equals(0) ? null : value_change.dividedBy(value_bought)) : '';
+                totalBought = totalBought.plus(account.value_bought);
+                totalEvaluation = totalEvaluation.plus(account.value_present);
 
-                totalBought = totalBought.plus(value_bought);
-                if (value_present)
-                    totalEvaluation = totalEvaluation.plus(value_present);
-
-                portfolio.push( {...account, ...{
-                    pending_order_amount: account.pending_order_amount || account.pending_order,
-                    // 해당 asset(ex. 비트코인, 이오스 등)의 close_price를 저장하여 후에 evaluation 시 사용합니다.
-                    asset_close_price: trading_pair.close_price && '',
-                    value_bought: value_bought ? value_bought.toPrecision() : '',
-                    value_present: value_present ? value_present.toPrecision() : '',
-                    value_change: value_change ? value_change.toPrecision() : '',
-                    value_change_rate: value_change_rate ? value_change_rate.toPrecision() : ''
-                }});
+                portfolio.push(account);
             }
         });
         totalChange = totalEvaluation.minus(totalBought);
