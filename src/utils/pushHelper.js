@@ -21,7 +21,7 @@ export const registerForPushNotificationsAsync = async () => {
 
     // Get the token that uniquely identifies this device
     let token = await Notifications.getExpoPushTokenAsync();
-    let os = Platfrom.OS;
+    let os = Platform.OS;
     let permission = null;
 
     // Stop here if the user did not grant permissions
