@@ -51,15 +51,14 @@ export default class AnnouncementDetailScreen extends Component {
             announcement: this.props.announcementStore.getAnnouncementById(uuid)
         });
 
-        if (Obejct.keys(this.state.announcement).length === 0) {
-            this.props.modalStore.openModal({
-                type: 'preset',
-                title: '조회 불가',
-                content: '해당 공지사항을 불러올 수 없습니다.',
+        this.state.announcement.loadAnnouncement()
+            .catch((err) => {
+                this.props.modalStore.openModal({
+                    type: 'preset',
+                    title: '조회 불가',
+                    content: '해당 공지사항을 불러올 수 없습니다.',
+                });
             });
-        } else {
-            await this.state.announcement.loadAnnouncement();
-        }
     }
 
     render() {
