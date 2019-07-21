@@ -31,7 +31,7 @@ class ChatStore {
 
     @action
     appendMessage(messages = []) {
-        this.messages = [...messages, ...this.messages];
+        this.messages = [...messages, ...this.messages].slice(0, 100);
     }
 
     @action
