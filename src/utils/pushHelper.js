@@ -1,5 +1,8 @@
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions'
+import {
+    Platform,
+} from 'react-native';
 
 export const registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
