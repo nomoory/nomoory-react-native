@@ -12,7 +12,7 @@ import TransactionHistoryBox from '../components/TransactionHistoryBox';
 import OrderHistory from '../components/OrderHistory';
 
 @withNavigation
-@inject('userStore', 'transactionHistoryStore', 'authStore')
+@inject('userStore', 'transactionHistoryStore')
 @observer
 export default class InvestmentScreen extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -62,7 +62,7 @@ export default class InvestmentScreen extends Component {
                                 customTabStyles.tabItem,
                                 this.state.index === i ? customTabStyles.selectedTabItem : null
                             ]}
-                            onPress={(e) => {this._onIndexChange(i)}}>
+                            onPress={(e) => { this._onIndexChange(i) }}>
                             <Animated.Text style={[
                                 customTabStyles.tabText,
                                 this.state.index === i ? customTabStyles.selectedTabText : null
@@ -73,7 +73,7 @@ export default class InvestmentScreen extends Component {
             </View>
         );
     };
-    
+
     _onIndexChange = (index) => {
         this.setState({ index });
         try {
@@ -86,20 +86,28 @@ export default class InvestmentScreen extends Component {
             <View style={styles.container}>
                 <TabView
                     navigationState={this.state}
-                    renderScene={SceneMap({
-                        AssetsAndEvaluationBox,
-                        ALL_TRANSACTIONS: () => <TransactionHistoryBox type='ALL_TRANSACTIONS' />,
-                        ORDER_HISTORY: () => <OrderHistory />,
-                    })}
-                    onIndexChange={this._onIndexChange}
-                    renderTabBar={this._renderTabBar}
-                    initialLayout={{ 
-                        width: Dimensions.get('window').width,
-                        height: Dimensions.get('window').height,
+                    renderScene={({ route }) => {
+                        switch (route.key) {
+                            case 'AssetsAndEvaluationBox':
+                                return <AssetsAndEvaluationBox />;
+                            case 'ORDER_HISTORY':
+                                return <OrderHistory />;
+                            case 'ALL_TRANSACTIONS':
+                                return <TransactionHistoryBox type='ALL_TRANSACTIONS' />;
+                            default:
+                                return <AssetsAndEvaluationBox />;
+                        }
                     }}
+
+                    onIndexChange={this._onIndexChange}
+                renderTabBar={this._renderTabBar}
+                initialLayout={{
+                    width: Dimensions.get('window').width,
+                    height: Dimensions.get('window').height,
+                }}
                 />
             </View>
-        )
+        );
     }
 }
 
@@ -123,7 +131,7 @@ const styles = StyleSheet.create({
 const customTabStyles = StyleSheet.create({
     tabBar: {
         flexDirection: 'row',
-        height: 34, 
+        height: 34,
     },
     tabItem: {
         flex: 1,
@@ -136,11 +144,11 @@ const customTabStyles = StyleSheet.create({
         borderBottomColor: commonStyle.color.brandBlue,
     },
     tabText: {
-        fontWeight: '300', 
+        fontWeight: '300',
         fontSize: 14,
     },
     selectedTabText: {
-        fontWeight: '500', 
+        fontWeight: '500',
         color: commonStyle.color.brandBlue,
     },
 })

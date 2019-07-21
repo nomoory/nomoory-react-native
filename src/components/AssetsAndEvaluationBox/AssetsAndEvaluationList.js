@@ -10,8 +10,9 @@ import constants from '../../global/constants';
 @observer
 class AssetsAndEvaluationList extends Component {
     componentDidMount() {
-        if (this.props.userStore.isLoggedIn)
-        this.props.accountStore.loadAccounts()
+        if (this.props.userStore.isLoggedIn) {
+            this.props.accountStore.loadAccounts();
+        }
     }
     
     _onEndReached = () => {

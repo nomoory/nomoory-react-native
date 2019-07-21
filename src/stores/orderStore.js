@@ -201,7 +201,7 @@ class OrderStore {
                 maximumOrderableVolume = Decimal(liquid).mul(rate).toFixed(8, Decimal.ROUND_DOWN);
             }
 
-            this.setVolume(maximumOrderableVolume);
+            this.setVolume(Decimal(maximumOrderableVolume).toFixed());
         } catch (err) {
 
         }
