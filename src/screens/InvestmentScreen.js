@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import headerStyle from '../styles/headerStyle';
 import commonStyle from '../styles/commonStyle';
 import tabStyle from '../styles/tabStyle';
-import { StyleSheet, View, Text, Dimensions, Animated, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { withNavigation } from 'react-navigation';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';

@@ -92,7 +92,6 @@ export default class DailyTradeHistory extends Component {
                         close_price
                     } = item;
                     let [date, time] = momentHelper.getLocaleDatetime(candle_start_date_time).split(' ');
-                    console.log({dailyTrade})
                     signed_change_rate = parseFloat(number.getFixed(signed_change_rate, 2));
                     let sign = '';
 
